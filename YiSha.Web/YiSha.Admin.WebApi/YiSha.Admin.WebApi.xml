@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>YiSha.Admin.WebApi</name>
+    </assembly>
+    <members>
+        <member name="M:YiSha.Admin.WebApi.Controllers.DataDictController.GetList(YiSha.Model.Param.SystemManage.DataDictListParam)">
+            <summary>
+            获取数据字典列表
+            </summary>
+            <param name="param"></param>
+            <returns></returns>
+        </member>
+        <member name="M:YiSha.Admin.WebApi.Controllers.NewsController.GetPageList(YiSha.Model.Param.OrganizationManage.NewsListParam,YiSha.Util.Model.Pagination)">
+            <summary>
+            获取文章列表
+            </summary>
+            <param name="param"></param>
+            <param name="pagination"></param>
+            <returns></returns>
+        </member>
+        <member name="M:YiSha.Admin.WebApi.Controllers.NewsController.GetPageContentList(YiSha.Model.Param.OrganizationManage.NewsListParam,YiSha.Util.Model.Pagination)">
+            <summary>
+            获取文章列表
+            </summary>
+            <param name="param"></param>
+            <param name="pagination"></param>
+            <returns></returns>
+        </member>
+        <member name="M:YiSha.Admin.WebApi.Controllers.NewsController.GetForm(System.Int64)">
+            <summary>
+            获取文章内容
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:YiSha.Admin.WebApi.Controllers.NewsController.SaveForm(YiSha.Entity.OrganizationManage.NewsEntity)">
+            <summary>
+            保存文章
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:YiSha.Admin.WebApi.Controllers.UserController.GetWxOpenId(System.String)">
+            <summary>
+            获取WxOpenId
+            </summary>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
+        <member name="M:YiSha.Admin.WebApi.Controllers.UserController.Login(System.String,System.String)">
+            <summary>
+            用户登录
+            </summary>
+            <param name="userName"></param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:YiSha.Admin.WebApi.Controllers.UserController.LoginOff(System.String)">
+            <summary>
+            用户退出登录
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="T:YiSha.Admin.WebApi.Controllers.AuthorizeFilterAttribute">
+            <summary>
+            验证token和记录日志
+            </summary>
+        </member>
+        <member name="F:YiSha.Admin.WebApi.Controllers.AuthorizeFilterAttribute.IgnoreToken">
+            <summary>
+            忽略token的方法
+            </summary>
+        </member>
+        <member name="M:YiSha.Admin.WebApi.Controllers.AuthorizeFilterAttribute.OnActionExecutionAsync(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext,Microsoft.AspNetCore.Mvc.Filters.ActionExecutionDelegate)">
+            <summary>
+            异步接口日志
+            </summary>
+            <param name="context"></param>
+            <param name="next"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

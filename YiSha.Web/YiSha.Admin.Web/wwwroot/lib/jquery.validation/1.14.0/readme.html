@@ -1,0 +1,13 @@
+﻿This is a known bug in jquery validator plugin. However, this has been fixed now in this pull request, and should be released soon.
+
+Fix 1:
+If you cannot wait for a release, the fix is to put this code at the start of delegate() method. The solution has been made by @svrx.
+
+// Set form expando on contenteditable
+if ( !this.form && this.hasAttribute( "contenteditable" ) ) {
+    this.form = $( this ).closest( "form" )[ 0 ];
+}
+As you can see the fix is simply to set the form to the parent element.
+
+Fix 2:
+As @chrisAtomix said in his comments, don't use the latest jquery validator plugin. Instead use a lower version where contenteditable feature has not been added. He is using v1.14.0.

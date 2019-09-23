@@ -1,0 +1,126 @@
+﻿@{
+    ViewBag.Title = "一沙后台管理系统";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src='@Url.Content("~/yisha/js/yisha-data.js")' type="text/javascript"></script>
+
+<div id="wrapper">
+    <!--左侧导航开始-->
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="nav-close">
+            <i class="fa fa-times-circle"></i>
+        </div>
+        <div class="sidebar-collapse">
+            <ul class="nav" id="side-menu">
+                <li class="logo">一沙后台管理系统</li>
+                <li class="nav-header">
+                    <div class="dropdown profile-element">
+                        <span>
+                            <img alt="image" src='@Url.Content("~" + ViewBag.Portrait)' class="img-circle" height="60" width="60" />
+                        </span>
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="clear">
+                                <span class="block m-t-xs"><strong class="font-bold">@ViewBag.UserName</strong></span>
+                                <span class="text-muted text-xs block"><span>@ViewBag.DepartmentName</span> <b class="caret"></b></span>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                            <li><a class="menuItem" href="#" data-url='@Url.Content("~/OrganizationManage/User/UserDetail")?id=@ViewBag.UserId'>个人信息</a></li>
+                            <li class="divider"></li>
+                            <li><a href='@Url.Content("~/Home/LoginOff")'>退出</a></li>
+                        </ul>
+                    </div>
+                </li>
+                @{
+                    List<MenuEntity> menuList = ViewBag.MenuList;
+                    foreach (MenuEntity menu in menuList.Where(p => p.ParentId == 0).OrderBy(p => p.MenuSort))
+                    {
+                        <li>
+                            <a href="#">
+                                <i class="@menu.MenuIcon"></i>
+                                <span class="nav-label">@menu.MenuName</span>
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level collapse">
+                                @foreach (MenuEntity secondMenu in menuList.Where(p => p.ParentId == menu.Id).OrderBy(p => p.MenuSort))
+                                {
+                                    <li>
+                                        @{
+                                            if (menuList.Where(p => p.ParentId == secondMenu.Id && p.MenuType != (int)MenuTypeEnum.Button).Count() == 0)
+                                            {
+                                                if (secondMenu.MenuUrl.IndexOf('/') > 0)
+                                                {
+                                                    <a class="menuItem" href="#" data-url='@Url.Content("~/" + secondMenu.MenuUrl)'>@secondMenu.MenuName</a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@secondMenu.MenuUrl" target="_blank">@secondMenu.MenuName</a>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <a href="#">@secondMenu.MenuName<span class="fa arrow"></span></a>
+                                                <ul class="nav nav-third-level">
+                                                    @foreach (MenuEntity thirdMenu in menuList.Where(p => p.ParentId == secondMenu.Id).OrderBy(p => p.MenuSort))
+                                                    {
+                                                        <li>
+                                                            <a class="menuItem" href="#" data-url='@Url.Content("~/" + thirdMenu.MenuUrl)'>@thirdMenu.MenuName</a>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            }
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    </nav>
+    <!--左侧导航结束-->
+    <!--右侧部分开始-->
+    <div id="page-wrapper" class="gray-bg dashbard-1">
+        <div class="row">
+            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <a class="navbar-minimalize minimalize-styl-2" href="#" title="收起菜单">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <ul class="nav navbar-top-links navbar-right welcome-message">
+                    <li><a id="fullScreen"><i class="fa fa-arrows-alt"></i>全屏</a></li>
+                    <li><a href='@Url.Content("~/Home/LoginOff")'><i class="fa fa-sign-out"></i>退出</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="row content-tabs">
+            <button class="roll-nav roll-left tabLeft">
+                <i class="fa fa-backward"></i>
+            </button>
+            <nav class="page-tabs menuTabs">
+                <div class="page-tabs-content">
+                    <a href="javascript:;" class="active menuTab" data-id="/system/main">首页</a>
+                </div>
+            </nav>
+            <button class="roll-nav roll-right tabRight">
+                <i class="fa fa-forward"></i>
+            </button>
+            <div class="btn-group roll-nav roll-right">
+                <button class="dropdown J_tabClose" data-toggle="dropdown">
+                    页签操作<span class="caret"></span>
+                </button>
+                <ul role="menu" class="dropdown-menu dropdown-menu-right">
+                    <li><a class="tabCloseCurrent" href="#">关闭当前</a></li>
+                    <li><a class="tabCloseOther" href="#">关闭其他</a></li>
+                    <li><a class="tabCloseAll" href="#">全部关闭</a></li>
+                </ul>
+            </div>
+            <a href="#" class="roll-nav roll-right tabReload"><i class="fa fa-refresh"></i> 刷新</a>
+        </div>
+        <div class="row mainContent" id="content-main">
+            <iframe class="YiSha_iframe" name="iframe0" width="100%" height="100%" data-id="/system/main" src="@Url.Content("~/Home/Welcome")" frameborder="0" seamless></iframe>
+        </div>
+    </div>
+    <!--右侧部分结束-->
+</div>

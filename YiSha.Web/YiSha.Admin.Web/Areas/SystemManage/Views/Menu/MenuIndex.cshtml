@@ -1,0 +1,161 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment HostingEnvironment
+@section header{
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/bootstrap.treetable/1.0/bootstrap-treetable.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/bootstrap.treetable/1.0/bootstrap-treetable.min.js"))
+}
+
+<div class="container-div">
+    <div class="row">
+        <div id="searchDiv" class="col-sm-12 search-collapse">
+            <form>
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            菜单名称：<input id="menuName" col="MenuName" type="text" />
+                        </li>
+                        <li>
+                            菜单状态：<span id="menuStatus" col="MenuStatus"></span>
+                        </li>
+                        <li><a class="btn btn-primary btn-rounded btn-sm" onclick="refreshTreeGrid()"><i class="fa fa-search"></i>&nbsp;搜索</a></li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> 新增</a>
+            <a id="btnEdit" class="btn btn-primary" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> 修改</a>
+            <a id="btnDelete" class="btn btn-danger" onclick="deleteForm()"><i class="fa fa-remove"></i> 删除</a>
+            <a id="btnExpandAll" class="btn btn-info"><i class="fa fa-exchange"></i> 展开/折叠</a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="gridTable" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var parentId = 0;
+    $(function () {
+        initTreeGrid();
+
+        $("#menuStatus").ysComboBox({ data: ys.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+    });
+
+    function initTreeGrid() {
+        var options = {
+            code: "Id",
+            parentCode: "ParentId",
+            uniqueId: "Id",
+            expandAll: false,
+            expandFirst: false,
+            toolbar: '#toolbar',
+            expandColumn: '1',
+            url: '@Url.Content("~/SystemManage/Menu/GetListJson")',
+            modalName: "菜单",
+            columns: [
+                { field: 'selectItem', radio: true },
+                {
+                    field: 'MenuName', title: '菜单名称', width: '20%', formatter: function (value, row, index) {
+                        if (ys.isNullOrEmpty(row.MenuIcon)) {
+                            return row.MenuName;
+                        } else {
+                            return '<i class="' + row.MenuIcon + '"></i> <span class="nav-label">' + row.MenuName + '</span>';
+                        }
+                    }
+                },
+                {
+                    field: 'MenuType', title: '类型', width: '10%', align: "left",
+                    formatter: function (value, item, index) {
+                        if (item.MenuType == "@MenuTypeEnum.Directory.ParseToInt()") {
+                            return '<span class="label label-success">@MenuTypeEnum.Directory.GetDescription()</span>';
+                        }
+                        else if (item.MenuType == "@MenuTypeEnum.Menu.ParseToInt()") {
+                            return '<span class="label label-primary">@MenuTypeEnum.Menu.GetDescription()</span>';
+                        }
+                        else if (item.MenuType == "@MenuTypeEnum.Button.ParseToInt()") {
+                            return '<span class="label label-warning">@MenuTypeEnum.Button.GetDescription()</span>';
+                        }
+                    }
+                },
+                { field: 'MenuSort', title: '显示顺序', width: '10%', align: "left" },
+                { field: 'MenuUrl', title: '请求地址', width: '35%', align: "left" },
+                { field: 'Authorize', title: '权限标识', width: '15%', align: "left" },
+                {
+                    field: 'MenuStatus', title: '状态', width: '10%', align: "left",
+                    formatter: function (value, row, index) {
+                        if (row.MenuStatus == "@StatusEnum.Yes.ParseToInt()") {
+                            return '<span class="badge badge-primary">' + "@StatusEnum.Yes.GetDescription()" + '</span>';
+                        } else {
+                            return '<span class="badge badge-warning">' + "@StatusEnum.No.GetDescription()" + '</span>';
+                        }
+                    }
+                }
+            ]
+        };
+        $('#gridTable').ysTreeTable(options);
+    }
+
+    function refreshTreeGrid() {
+        var param = $("#searchDiv").getWebControls();
+        $('#gridTable').ysTreeTable('refresh', param);
+    }
+
+    function showSaveForm(bAdd) {
+        var id = 0;
+        var parentName = '';
+
+        var selectedRow = $("#gridTable").bootstrapTreeTable("getSelections");
+        if (!bAdd) {
+            if (!ys.checkRowEdit(selectedRow)) {
+                return;
+            }
+            id = selectedRow[0].Id;
+        }
+        if (selectedRow.length > 0) {
+            parentId = selectedRow[0].ParentId;
+            var row = $('#gridTable').ysTreeTable('getRowById', parentId);
+            if (row) {
+                parentName = row.MenuName;
+            }
+        }
+
+        ys.openDialog({
+            title: id > 0 ? "编辑菜单" : "添加菜单",
+            url: '@Url.Content("~/SystemManage/Menu/MenuForm")' + '?id=' + id + '&parentId=' + parentId + '&parentName=' + parentName,
+            width: "780px",
+            height: "500px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+    function deleteForm() {
+        var selectedRow = $("#gridTable").bootstrapTreeTable("getSelections");
+        if (ys.checkRowDelete(selectedRow)) {
+            ys.confirm("确认要删除选中的" + selectedRow.length + "条数据吗？", function () {
+                var ids = ys.getIds(selectedRow);
+                ys.ajax({
+                    url: '@Url.Content("~/SystemManage/Menu/DeleteFormJson")' + '?ids=' + ids,
+                    type: "post",
+                    error: ys.ajaxError,
+                    success: function (obj) {
+                        if (obj.Tag == 1) {
+                            ys.msgSuccess(obj.Message);
+                            refreshTreeGrid();
+                        }
+                        else {
+                            ys.msgError(obj.Message);
+                        }
+                    }
+                });
+            });
+        }
+    }
+</script>

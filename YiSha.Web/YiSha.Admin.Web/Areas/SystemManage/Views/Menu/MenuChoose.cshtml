@@ -1,0 +1,45 @@
+﻿@{
+    Layout = "~/Views/Shared/_SaveWhite.cshtml";
+}
+
+@*<div class="row cl">
+        <div id="menuTree" class="ztree"></div>
+
+    </div>*@
+
+
+<div class="wrapper">
+    @*<div class="treeShowHideButton" onclick="$.tree.toggleSearch();">
+            <label id="btnShow" title="显示搜索" style="display:none;">︾</label>
+            <label id="btnHide" title="隐藏搜索">︽</label>
+        </div>
+        <div class="treeSearchInput" id="search">
+            <label for="keyword">关键字：</label><input type="text" class="empty" id="keyword" maxlength="50">
+            <button class="btn" id="btn" onclick="$.tree.searchNode()"> 搜索 </button>
+        </div>
+        <div class="treeExpandCollapse">
+            <a href="#" onclick="$.tree.expand()">展开</a> /
+            <a href="#" onclick="$.tree.collapse()">折叠</a>
+        </div>*@
+    <input id="treeId" type="hidden" value="" />
+    <input id="treeName" type="hidden" value="" />
+    <div id="menuTree" class="ztree treeselect"></div>
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+        $('#menuTree').ysTree({
+            id: "menuTree",
+            url: '@Url.Content("~/SystemManage/Menu/GetMenuTreeListJson")',
+            check: { enable: false },
+            expandLevel: 0,
+            callback: { onClick: saveChoose }
+        });
+    });
+
+    function saveChoose(event, treeId, treeNode) {
+        $("#treeId").val(treeNode.id);
+        $("#treeName").val(treeNode.name);
+    }
+</script>

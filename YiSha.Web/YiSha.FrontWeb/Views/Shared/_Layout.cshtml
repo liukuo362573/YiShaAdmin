@@ -1,0 +1,148 @@
+﻿@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment HostingEnvironment
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - .Net Core 极速后台开发框架</title>
+    <meta name="keywords" content=".NET Core 极速后台开发框架,一沙软件" />
+    <meta name="description" content="一沙极速后台开发框架是一款基于代码生成器的极速后台开发框架，基于代码生成器的开发方式，可以将编码工作量减少70%以上，为企业提高开发效率，为企业节省项目研发成本，减少开发周期。" />
+    <link rel="shortcut icon" href="~/images/favicon.ico" type="image/x-icon" />
+
+    <!--[if lt IE 9]>
+    <script src="http://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="http://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/css/site.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/js/site.min.js"))
+    @RenderSection("Scripts", required: false)
+</head>
+<body>
+    <!-- Start Header Area -->
+    <header class="header-area">
+        <!-- main menu start -->
+        <div class="main-menu-area sticky">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="main-menu">
+
+                            <!-- main menu navbar start -->
+                            <nav id="mobile-menu">
+                                <ul>
+                                    <li>
+                                        <div style="line-height:65px;margin-right:100px">
+                                            <img src="~/images/logo.png" alt="brand logo" height="30" style="vertical-align: middle;">
+                                        </div>
+                                    </li>
+                                    <li class='@CommonHelper.IsActiveClass(Url.ActionContext.HttpContext.Request.Path, "/Home/Index")'>
+                                        <a href="/Home/Index">首页</a>
+                                    </li>
+                                    <li class='@CommonHelper.IsActiveClass(Url.ActionContext.HttpContext.Request.Path, "/Home/Index")'>
+                                        <a href="/Home/Index">在线文档</a>
+                                    </li>
+                                    @*<li class='@CommonHelper.IsActiveClass(Url.ActionContext.HttpContext.Request.Path, "/Home/Product")'>
+                                            <a href="#">产品中心 <i class="fa fa-angle-down"></i></a>
+                                            <ul class="dropdown">
+                                                <li><a href="/Home/Product#productIntro">产品介绍</a></li>
+                                                <li><a href="/Home/Product#productVersion">版本选择</a></li>
+                                            </ul>
+                                        </li>*@
+                                    <li>
+                                        <a href="http://www.yishasoft.com/admin" target="_blank">产品演示</a>
+                                    </li>
+                                    <li class='@CommonHelper.IsActiveClass(Url.ActionContext.HttpContext.Request.Path, "/News/Index")'>
+                                        <a href="/News/Index">产品案例</a>
+                                    </li>
+                                    @*<li class='@CommonHelper.IsActiveClass(Url.ActionContext.HttpContext.Request.Path, "/Home/Question")'>
+                                        <a href="/Home/Question">常见问题</a>
+                                    </li>*@
+                                    <li class='@CommonHelper.IsActiveClass(Url.ActionContext.HttpContext.Request.Path, "/Home/Contact")'>
+                                        <a href="/Home/Contact">联系我们</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                            <!-- main menu navbar end -->
+                        </div>
+                    </div>
+                    <div class="col-12 d-block d-lg-none">
+                        <div class="mobile-menu"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- main menu end -->
+    </header>
+    <!-- end Header Area -->
+    <!-- main wrapper start -->
+    <main>
+        <!-- breadcrumb area start -->
+        @{
+            var url = Url.ActionContext.HttpContext.Request.Path.ToString().ToLower();
+            if (url == "/home/question" || url == "/home/contact" || url.Contains("/news/detail"))
+            {
+                <div class="breadcrumb-area">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="breadcrumb-wrap text-center">
+                                    <nav aria-label="breadcrumb">
+                                        <h2>@ViewData["Title"]</h2>
+                                        <ul class="breadcrumb">
+                                            <li class="breadcrumb-item"><a href="/Home/Index">首页</a></li>
+                                            @if (url.Contains("/news/detail"))
+                                            {
+                                                <li class="breadcrumb-item active" aria-current="page"><a href="/News/Index">@ViewData["Title"]</a></li>
+                                                <li class="breadcrumb-item active" aria-current="page">详细</li>
+                                            }
+                                            else
+                                            {
+                                                <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+                                            }
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        <!-- breadcrumb area end -->
+        @RenderBody()
+    </main>
+    <!-- main wrapper end -->
+    <!--== Start Footer Area Wrapper ==-->
+    <footer class="footer-wrapper">
+        @*<div class="container">
+                <div class="border-bottom">
+                </div>
+            </div>*@
+        <!-- footer bottom area start -->
+        <div class="footer-bootom bg-gray pt-30 pb-30">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="copyright-text text-center text-md-left">
+                            <p>&copy; 2018 - @DateTime.Now.Year 合肥一沙软件 All rights reserved. <a href="http://www.miitbeian.gov.cn/" style="color:#333" target="_blank">皖ICP备18018970号</a></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="payment-method text-md-right text-center">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- footer bottom area end -->
+    </footer>
+    <!--== End Footer Area Wrapper ==-->
+    <!-- Scroll to top start -->
+    <div class="scroll-top not-visible">
+        <i class="fa fa-angle-up"></i>
+    </div>
+    <!-- Scroll to Top End -->
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/js/active.min.js"))
+</body>
+</html>

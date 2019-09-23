@@ -1,0 +1,184 @@
+/* SmartWizard v4.0.1
+ * jQuery Wizard Plugin
+ * http://www.techlaboratory.net/smartwizard
+ * 
+ * Created by Dipu Raj  
+ * http://dipuraj.me
+ * 
+ * Licensed under the terms of MIT License
+ * https://github.com/techlab/SmartWizard/blob/master/MIT-LICENSE.txt 
+ */
+
+/* SmartWizard Theme: Arrows */
+.sw-theme-arrows{
+    /*box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);*/ 
+}
+.sw-theme-arrows .sw-container {
+    min-height: 200px;
+}
+.sw-theme-arrows .step-content { 
+    padding: 10px 0;     
+    border: 0px solid #D4D4D4;    
+    background-color: #FFF;
+    text-align: left;
+}
+.sw-theme-arrows .sw-toolbar{
+    background: #fff;
+    border-radius: 0 !important; 
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 0 !important;
+}
+.sw-theme-arrows .sw-toolbar-top{
+    border-bottom-color: #fff !important;
+}
+.sw-theme-arrows .sw-toolbar-bottom{
+    border-top-color: #fff !important;
+    border-bottom-color: #ddd !important;
+}
+.sw-theme-arrows > ul.step-anchor{
+    display: block;
+    border: 0px solid #ccc !important;
+    padding: 0px;
+	background: #f5f5f5;
+    border-radius: 5px;
+	list-style: none; 
+	overflow: hidden;
+}
+.sw-theme-arrows > ul.step-anchor li+li:before {
+	padding: 0;
+}
+.sw-theme-arrows > ul.step-anchor > li { 
+	float: left; 
+}
+.sw-theme-arrows > ul.step-anchor > li > a{
+	color: #bbb;
+	text-decoration: none; 
+	padding: 10px 0 10px 45px;
+	position: relative; 
+	display: block;
+	float: left;
+    border-radius: 0;
+    outline-style:none;
+    background: #ddd;
+}
+.sw-theme-arrows > ul.step-anchor > li > a:after { 
+	content: " "; 
+	display: block; 
+	width: 0; 
+	height: 0;
+	border-top: 50px solid transparent;           /* Go big on the size, and let overflow hide */
+	border-bottom: 50px solid transparent;
+	border-left: 30px solid #ddd;
+	position: absolute;
+	top: 50%;
+	margin-top: -50px; 
+	left: 100%;
+	z-index: 2; 
+}
+.sw-theme-arrows > ul.step-anchor > li > a:before { 
+	content: " "; 
+	display: block; 
+	width: 0; 
+	height: 0;
+	border-top: 50px solid transparent;           /* Go big on the size, and let overflow hide */
+	border-bottom: 50px solid transparent;
+	border-left: 30px solid white;
+	position: absolute;
+	top: 50%;
+	margin-top: -50px; 
+	margin-left: 1px;
+	left: 100%;
+	z-index: 1; 
+}	
+.sw-theme-arrows > ul.step-anchor > li:first-child > a {
+	padding-left: 15px;
+}
+.sw-theme-arrows > ul.step-anchor > li > a:hover  { 
+    color: #bbb; 
+    text-decoration: none;
+    outline-style:none;
+    background: #ffc107;
+    border-color: #ffc107; 
+}
+.sw-theme-arrows > ul.step-anchor > li > a:hover:after { 
+    border-left-color: #ffc107; 
+}
+.sw-theme-arrows > ul.step-anchor > li > a small{ 
+}
+.sw-theme-arrows > ul.step-anchor > li.clickable > a:hover {
+    color: #4285F4 !important; 
+	background: #46b8da !important; 
+}
+.sw-theme-arrows > ul.step-anchor > li.active > a { 
+    border-color: #5bc0de !important; 
+    color: #fff !important; 
+	background: #5bc0de !important;
+}
+.sw-theme-arrows > ul.step-anchor > li.active > a:after {
+	border-left: 30px solid #5bc0de !important;
+}
+.sw-theme-arrows > ul.step-anchor > li.done > a { 
+    border-color: #5cb85c !important; 
+    color: #fff !important; 
+    background: #5cb85c !important; 
+}
+.sw-theme-arrows > ul.step-anchor > li.done > a:after {
+	border-left: 30px solid #5cb85c;
+}
+.sw-theme-arrows > ul.step-anchor > li.danger > a { 
+    border-color: #d9534f !important; 
+    color: #d9534f !important; 
+    background: #fff !important; 
+}
+.sw-theme-arrows > ul.step-anchor > li.disabled > a, .sw-theme-arrows > ul.step-anchor > li.disabled > a:hover {
+    color: #eee !important;
+}
+
+/* Loader Animation 
+Courtesy: http://bootsnipp.com/snippets/featured/loading-button-effect-no-js
+*/
+@-webkit-keyframes ld {
+  0%   { transform: rotate(0deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+@-moz-keyframes ld {
+  0%   { transform: rotate(0deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+@-o-keyframes ld {
+  0%   { transform: rotate(0deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+@keyframes ld {
+  0%   { transform: rotate(0deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+.sw-theme-arrows > ul.step-anchor > li.loading:before {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    background: transparent;
+    border-radius: 50%;
+    box-sizing: border-box;
+    border: 2px solid #fff;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: #4285f4;
+    border-right-color: #4285f4;
+    top: 50%;
+    left: 50%;
+    margin-top: -16px;
+    margin-left: -16px;
+    width: 32px;
+    height: 32px;
+    z-index: 99;
+    -webkit-animation: ld 1s ease-in-out infinite;
+    -moz-animation:    ld 1s ease-in-out infinite;
+    -o-animation:      ld 1s ease-in-out infinite;
+    animation:         ld 1s ease-in-out infinite;
+}

@@ -1,0 +1,3 @@
+docsify serve docs
+
+pause

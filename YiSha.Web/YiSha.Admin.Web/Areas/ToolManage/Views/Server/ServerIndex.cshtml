@@ -1,0 +1,225 @@
+﻿@{
+    Layout = "~/Views/Shared/_SaveGray.cshtml";
+}
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment env
+
+<div class="wrapper wrapper-content">
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>CPU</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="close-link"><i class="fa fa-times"></i></a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <table class="table table-hover no-margins">
+                            <thead>
+                                <tr>
+                                    <th>属性</th>
+                                    <th>值</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>核心数</td>
+                                    <td>@Environment.ProcessorCount</td>
+                                </tr>
+                                <tr>
+                                    <td>CPU使用率</td>
+                                    <td><span col="CPURate"></span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>内存</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            <a class="close-link"><i class="fa fa-times"></i></a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <table class="table table-hover no-margins">
+                            <thead>
+                                <tr>
+                                    <th>属性</th>
+                                    <th>内存</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>总内存</td>
+                                    <td><span>@ViewBag.TotalRAM</span></td>
+                                </tr>
+                                <tr>
+                                    <td>内存使用率</td>
+                                    <td><span col="RAMRate"></span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>服务器信息</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table table-hover margin bottom">
+                                    <tbody>
+                                        <tr>
+                                            <td>服务器名称</td>
+                                            <td>@Environment.MachineName</td>
+                                            <td>操作系统</td>
+                                            <td>@Environment.OSVersion</td>
+                                        </tr>
+                                        <tr>
+                                            <td>外网Ip</td>
+                                            <td>
+                                                <span id="wanIp"></span>
+                                            </td>
+                                            <td>局域网Ip</td>
+                                            <td>@NetHelper.GetLanIp()</td>
+                                        </tr>
+                                        <tr>
+                                            <td>系统运行时长</td>
+                                            <td><span col="RunTime"></span></td>
+                                            <td>系统架构</td>
+                                            <td>@Html.Raw(Environment.Is64BitOperatingSystem ? "x64" : "x86")</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>.NET Core信息</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table table-hover margin bottom">
+                                    <tbody>
+                                        <tr>
+                                            <td>环境变量</td>
+                                            <td>@Html.Raw(env.EnvironmentName)</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>ContentRootPath</td>
+                                            <td>@Html.Raw(env.ContentRootPath)</td>
+                                            <td>WebRootPath</td>
+                                            <td>@Html.Raw(env.WebRootPath)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>.NET Core版本</td>
+                                            <td>@Html.Raw($"{Microsoft.Extensions.DependencyModel.DependencyContext.Default.Target.Framework}")</td>
+                                            <td>内存占用</td>
+                                            <td>@Html.Raw(((Double)System.Diagnostics.Process.GetCurrentProcess().WorkingSet64 / 1048576).ToString("N2") + " MB")</td>
+                                        </tr>
+                                        <tr>
+                                            <td>启动时间</td>
+                                            <td>@System.Diagnostics.Process.GetCurrentProcess().StartTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(function () {
+
+        $(".modal").appendTo("body"), $("[data-toggle=popover]").popover(), $(".collapse-link").click(function () {
+            var div_ibox = $(this).closest("div.ibox"),
+                e = $(this).find("i"),
+                i = div_ibox.find("div.ibox-content");
+            i.slideToggle(200),
+                e.toggleClass("fa-chevron-up").toggleClass("fa-chevron-down"),
+                div_ibox.toggleClass("").toggleClass("border-bottom"),
+                setTimeout(function () {
+                    div_ibox.resize();
+                }, 50);
+        }), $(".close-link").click(function () {
+            var div_ibox = $(this).closest("div.ibox");
+            div_ibox.remove()
+        });
+
+        setInterval(function () { GetServer() }, 3000);
+
+        GetServerIp();
+    });
+
+    function GetServer() {
+        $.ajax({
+            url: '@Url.Content("~/ToolManage/Server/GetServerJson")',
+            type: "get",
+            success: function (obj) {
+                if (obj.Tag == 1) {
+                    $(".wrapper").setWebControls(obj.Result);
+                }
+            }
+        });
+    }
+
+    function GetServerIp() {
+        $.ajax({
+            url: '@Url.Content("~/ToolManage/Server/GetServerIpJson")',
+            type: "get",
+            success: function (obj) {
+                if (obj.Tag == 1) {
+                    $("#wanIp").html(obj.Result);
+                }
+            }
+        });
+    }
+</script>

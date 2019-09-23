@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewData["Title"] = "Ip";
+
+    Dictionary<string, string> header = ViewBag.Header as Dictionary<string, string>;
+}
+
+<h5>Ip</h5>
+@ViewBag.Ip
+
+<h5>Header</h5>
+@{
+    <table>
+        @foreach (string key in header.Keys)
+        {
+            <tr>
+                <td  style="word-break:keep-all;white-space:nowrap;">@key</td>
+                <td>:</td>
+                <td>@header[key]</td>
+            </tr>
+        }
+    </table>
+}

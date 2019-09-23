@@ -1,0 +1,51 @@
+﻿<!--登录页和首页模板-->
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment HostingEnvironment
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <meta name="keywords" content="一沙后台管理系统">
+    <meta name="description" content="一沙后台管理系统">
+
+    <link rel="Bookmark" href='@Url.Content("~/favicon.ico")' />
+    <link rel="Shortcut Icon" href='@Url.Content("~/favicon.ico")' />
+
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/bootstrap/3.3.7/css/bootstrap.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fontawesome/4.7.0/css/fontawesome.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/jquery/1.10.2/jquery.min.js"))
+
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/bootstrap/3.3.7/js/bootstrap.min.js"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/layer/3.1.1/layer.min.js"))
+
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/yisha/css/yisha.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/yisha/js/yisha.min.js"))
+
+    <!--首页需要用到的js开始-->
+    <script type="text/javascript" src='@Url.Content("~/yisha/js/yisha-index.js")'></script>
+    <script type="text/javascript" src='@Url.Content("~/lib/jquery.metisMenu/1.1.3/jquery.metisMenu.js")'></script>
+    <script type="text/javascript" src='@Url.Content("~/lib/jquery.slimscroll/1.3.0/jquery.slimscroll.min.js")'></script>
+    <!--首页需要用到的js结束-->
+    @RenderSection("header", false)
+    <title>一沙后台管理系统</title>
+    <style type="text/css">
+        .nav > li:hover .dropdown-menu {
+            display: block;
+        }
+    </style>
+    <script type="text/javascript">
+        var ctx = '@Url.Content("~/")';
+    </script>
+</head>
+<body class="fixed-sidebar full-height-layout gray-bg login" style="overflow-y:auto">
+    @RenderBody()
+    @RenderSection("footer", false)
+
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/yisha/css/yisha-init.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/yisha/js/yisha-init.min.js"))
+</body>
+</html>

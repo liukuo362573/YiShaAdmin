@@ -1,0 +1,236 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment HostingEnvironment
+@section header{
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/zTree/v3/css/metroStyle/metroStyle.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/zTree/v3/js/ztree.min.js"))
+
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/jquery.layout/1.4.4/jquery.layout-latest.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/jquery.layout/1.4.4/jquery.layout-latest.min.js"))
+}
+
+<div class="ui-layout-west">
+    <div class="main-content">
+        <div class="box box-main">
+            <div class="box-header">
+                <div class="box-title">
+                    组织机构
+                </div>
+                <div class="box-tools pull-right">
+                    <a type="button" class="btn btn-box-tool menuItem" href="#" onclick="showDepartmentForm()" title="管理部门"><i class="fa fa-edit"></i></a>
+                    <button type="button" class="btn btn-box-tool" id="btnExpand" title="展开" style="display:none;"><i class="fa fa-chevron-up"></i></button>
+                    <button type="button" class="btn btn-box-tool" id="btnCollapse" title="折叠"><i class="fa fa-chevron-down"></i></button>
+                    <button type="button" class="btn btn-box-tool" id="btnRefresh" title="刷新部门"><i class="fa fa-refresh"></i></button>
+                </div>
+            </div>
+            <div class="ui-layout-content">
+                <div id="departmentTree" class="ztree"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-div ui-layout-center">
+    <div class="row">
+        <div id="searchDiv" class="col-sm-12 search-collapse">
+            <input type="hidden" id="departmentId" col="DepartmentId">
+            <div class="select-list">
+                <ul>
+                    <li>
+                        登录名称：<input id="userName" col="UserName" type="text" />
+                    </li>
+                    <li>
+                        手机号码：<input id="mobile" col="Mobile" type="text" />
+                    </li>
+                    <li>
+                        用户状态：<span id="userStatus" col="UserStatus"></span>
+                    </li>
+                    <li class="select-time">
+                        <label>创建时间： </label>
+                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="开始时间" />
+                        <span>-</span>
+                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="结束时间" />
+                    </li>
+                    <li>
+                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="refreshGrid()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="toolbar" class="btn-group-sm hidden-xs">
+            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> 新增</a>
+            <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> 修改</a>
+            <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> 删除</a>
+            <a id="btnExport" class="btn btn-warning" onclick="exportForm()"><i class="fa fa-download"></i> 导出</a>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="gridTable" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+        initTree();
+
+        $('body').layout({ west__size: 185 });
+
+        laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd' });
+        laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd' });
+
+       $("#userStatus").ysComboBox({ data: ys.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+
+        $('#btnExpand').click(function () {
+            var tree = $.fn.zTree.getZTreeObj("departmentTree");
+            tree.expandAll(true);
+            $(this).hide();
+            $('#btnCollapse').show();
+        });
+
+        $('#btnCollapse').click(function () {
+            var tree = $.fn.zTree.getZTreeObj("departmentTree");
+            tree.expandAll(false);
+            $(this).hide();
+            $('#btnExpand').show();
+        });
+
+        $('#btnRefresh').click(function () {
+            initTree();
+        });
+    });
+
+    function initTree() {
+        $('#departmentTree').ysTree({
+            url: '@Url.Content("~/OrganizationManage/Department/GetDepartmentTreeListJson")',
+            expandLevel: 2,
+            callback: {
+                onClick: function (event, treeId, treeNode) {
+                    $("#departmentId").val(treeNode.id);
+                    refreshGrid();
+                }
+            }
+        });
+    }
+
+    function initGrid() {
+        var queryUrl = '@Url.Content("~/OrganizationManage/User/GetPageListJson")';
+        $('#gridTable').ysTable({
+            url: queryUrl,
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'UserName', title: '登录名', sortable: true },
+                { field: 'RealName', title: '姓名', sortable: false },
+                { field: 'DepartmentName', title: '部门', sortable: false },
+                { field: 'Mobile', title: '手机', sortable: false },
+                {
+                    field: 'UserStatus', title: '状态', formatter: function (value, row, index) {
+                        if (row.UserStatus == "@StatusEnum.Yes.ParseToInt()") {
+                            return '<span class="badge badge-primary">' + "@StatusEnum.Yes.GetDescription()" + '</span>';
+                        } else {
+                            return '<span class="badge badge-warning">' + "@StatusEnum.No.GetDescription()" + '</span>';
+                        }
+                    }
+                },
+                {
+                    field: 'BaseModifyTime', title: '创建时间', formatter: function (value, row, index) {
+                        return ys.formatDate(value, "yyyy-MM-dd HH:mm:ss");
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-warning btn-xs" href="#" onclick="showResetPasswordForm(\'' + row.Id + '\')"><i class="fa fa-key"></i>重置</a>');
+                        return actions.join('');
+                    }
+                }
+            ],
+            queryParams: function (params) {
+                var pagination = $('#gridTable').ysTable('getPagination', params);
+                var queryString = $("#searchDiv").getWebControls(pagination);
+                return queryString;
+            }
+        });
+    }
+
+    function refreshGrid() {
+        $('#gridTable').ysTable('refresh');
+        resetToolbarStatus();
+    }
+
+    function showSaveForm(bAdd) {
+        var id = 0;
+        if (!bAdd) {
+            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+            if (!ys.checkRowEdit(selectedRow)) {
+                return;
+            }
+            else {
+                id = selectedRow[0].Id;
+            }
+        }
+        ys.openDialog({
+            title: id > 0 ? "编辑用户" : "添加用户",
+            url: '@Url.Content("~/OrganizationManage/User/UserForm")' + '?id=' + id,
+            width: "768px",
+            height: "477px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+    function deleteForm() {
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        if (ys.checkRowDelete(selectedRow)) {
+            ys.confirm("确认要删除选中的" + selectedRow.length + "条数据吗？", function () {
+                var ids = ys.getIds(selectedRow);
+                ys.ajax({
+                    url: '@Url.Content("~/OrganizationManage/User/DeleteFormJson")' + '?ids=' + ids,
+                    type: "post",
+                    error: ys.ajaxError,
+                    success: function (obj) {
+                        if (obj.Tag == 1) {
+                            ys.msgSuccess(obj.Message);
+                            refreshGrid();
+                        }
+                        else {
+                            ys.msgError(obj.Message);
+                        }
+                    }
+                });
+            });
+        }
+    }
+
+    function showDepartmentForm() {
+        var url = '@Url.Content("~/OrganizationManage/Department/DepartmentIndex")';
+        createMenuItem(url, "部门管理");
+    }
+
+    function showResetPasswordForm(id) {
+        ys.openDialog({
+            title: "重置密码",
+            url: '@Url.Content("~/OrganizationManage/User/ResetPassword")' + '?id=' + id,
+            width: "768px",
+            height: "220px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+    function exportForm() {
+        var url = '@Url.Content("~/OrganizationManage/User/ExportJson")';
+        var postData = $("#searchDiv").getWebControls();
+        ys.exportExcel(url, postData);
+    }
+</script>

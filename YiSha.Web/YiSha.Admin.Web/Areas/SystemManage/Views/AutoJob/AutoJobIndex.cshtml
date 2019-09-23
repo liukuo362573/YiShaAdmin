@@ -1,0 +1,155 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="container-div">
+    <div class="row">
+        <div id="searchDiv" class="col-sm-12 search-collapse">
+            <div class="select-list">
+                <ul>
+                    <li>
+                        任务名称：<input id="jobName" col="JobName" type="text" />
+                    </li>
+                    <li>
+                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="refreshGrid()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="btn-group-sm hidden-xs" id="toolbar">
+            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> 新增</a>
+            <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> 修改</a>
+            <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> 删除</a>
+            <a id="btnDelete" class="btn btn-info" onclick="showAutoJobLogForm()"><i class="fa fa-list"></i> 日志</a>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="gridTable" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+    });
+
+    function initGrid() {
+        var queryUrl = '@Url.Content("~/SystemManage/AutoJob/GetPageListJson")';
+        $('#gridTable').ysTable({
+            url: queryUrl,
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'JobGroupName', title: '任务组' },
+                { field: 'JobName', title: '任务名称' },
+                { field: 'CronExpression', title: 'Cron表达式' },
+                {
+                    field: 'JobStatus', title: '状态', formatter: function (value, row, index) {
+                        if (row.JobStatus == "@StatusEnum.Yes.ParseToInt()") {
+                            return '<span class="badge badge-primary">' + "运行中" + '</span>';
+                        } else {
+                            return '<span class="badge badge-danger">' + "停止" + '</span>';
+                        }
+                    }
+                },
+                { field: 'StartTime', title: '开始时间' },
+
+                { field: 'EndTime', title: '结束时间' },
+                { field: 'NextStartTime', title: '下次运行时间' },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        if (row.JobStatus == "@StatusEnum.Yes.ParseToInt()") {
+                            actions.push('<a class="btn btn-primary btn-xs" href="#" onclick="ChangeJobStatus(\'' + row.Id + '\',@StatusEnum.No.ParseToInt())"><i class="fa fa-pause-circle-o"></i>暂停</a> ');
+                        } else {
+                            actions.push('<a class="btn btn-primary btn-xs" href="#" onclick="ChangeJobStatus(\'' + row.Id + '\',@StatusEnum.Yes.ParseToInt())"><i class="fa fa-play-circle-o"></i>执行</a> ');
+                        }
+                        return actions.join('');
+                    }
+                }
+            ],
+            queryParams: function (params) {
+                var pagination = $('#gridTable').ysTable('getPagination', params);
+                var queryString = $('#searchDiv').getWebControls(pagination);
+                return queryString;
+            }
+        });
+    }
+
+    function refreshGrid() {
+        $('#gridTable').ysTable('refresh');
+        resetToolbarStatus();
+    }
+
+    function showSaveForm(bAdd) {
+        var id = 0;
+        if (!bAdd) {
+            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+            if (!ys.checkRowEdit(selectedRow)) {
+                return;
+            }
+            else {
+                id = selectedRow[0].Id;
+            }
+        }
+        ys.openDialog({
+            title: id > 0 ? "编辑" : "添加",
+            url: '@Url.Content("~/SystemManage/AutoJob/AutoJobForm")' + '?id=' + id,
+            width: "768px",
+            height: "700px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+    function deleteForm() {
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        if (ys.checkRowDelete(selectedRow)) {
+            ys.confirm("确认要删除选中的" + selectedRow.length + "条数据吗？", function () {
+                var ids = ys.getIds(selectedRow);
+                ys.ajax({
+                    url: '@Url.Content("~/SystemManage/AutoJob/DeleteFormJson")' + '?ids=' + ids,
+                    type: "post",
+                    success: function (obj) {
+                        if (obj.Tag == 1) {
+                            ys.msgSuccess(obj.Message);
+                            refreshGrid();
+                        }
+                        else {
+                            ys.msgError(obj.Message);
+                        }
+                    }
+                });
+            });
+        }
+    }
+
+    function ChangeJobStatus(id, jobStatus) {
+        var postData = {};
+        postData.Id = id;
+        postData.JobStatus = jobStatus;
+        ys.ajax({
+            url: '@Url.Content("~/SystemManage/AutoJob/ChangeJobStatusJson")',
+            type: "post",
+            data: postData,
+            success: function (obj) {
+                if (obj.Tag == 1) {
+                    ys.msgSuccess(obj.Message);
+                    refreshGrid();
+                }
+                else {
+                    ys.msgError(obj.Message);
+                }
+            }
+        });
+    }
+
+    function showAutoJobLogForm() {
+        var url = '@Url.Content("~/SystemManage/AutoJobLog/AutoJobLogIndex")';
+        createMenuItem(url, "任务日志");
+    }
+</script>

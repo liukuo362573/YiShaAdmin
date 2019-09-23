@@ -1,0 +1,76 @@
+﻿@{
+    Layout = "~/Views/Shared/_SaveWhite.cshtml";
+}
+
+<div class="wrapper animated fadeInRight">
+    <form id="form" class="form-horizontal m">
+        <div class="form-group">
+            <label class="col-sm-3 control-label ">AreaCode<font class="red"> *</font></label>
+            <div class="col-sm-8">
+                <input id="areaCode" col="AreaCode" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label ">ParentAreaCode<font class="red"> *</font></label>
+            <div class="col-sm-8">
+                <input id="parentAreaCode" col="ParentAreaCode" type="text" class="form-control" />
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+
+    var id = ys.request("id");
+    $(function () {
+
+        getForm();
+
+        $("#form").validate({
+            rules: {
+                AreaCode: { required: true }
+            }
+        });
+
+    });
+
+    function getForm() {
+        if (id > 0) {
+            ys.ajax({
+                url: '@Url.Content("~/SystemManage/Area/GetFormJson")' + '?id=' + id,
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        $("#form").setWebControls(obj.Result);
+                    }
+                }
+            });
+        }
+        else {
+            var defaultData = {};
+            $("#form").setWebControls(defaultData);
+        }
+    }
+
+    function saveForm(index) {
+        if ($("#form").validate().form()) {
+            var postData = $("#form").getWebControls({ Id: id });
+            ys.ajax({
+                url: '@Url.Content("~/SystemManage/Area/SaveFormJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        ys.msgSuccess(obj.Message);
+                        parent.refreshGrid();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        ys.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    }
+</script>
+

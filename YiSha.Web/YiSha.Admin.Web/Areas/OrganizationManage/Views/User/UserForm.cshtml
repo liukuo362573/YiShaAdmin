@@ -1,0 +1,155 @@
+﻿@{
+    Layout = "~/Views/Shared/_SaveWhite.cshtml";
+}
+
+<div class="wrapper animated fadeInRight">
+    <form id="form" class="form-horizontal m">
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">登录名称<font class="red"> *</font></label>
+            <div class="col-sm-4">
+                <input id="userName" col="UserName" type="text" class="form-control" />
+            </div>
+            <label class="col-sm-2 control-label ">登录密码<font class="red"> *</font></label>
+            <div class="col-sm-4">
+                <input id="password" col="Password" type="password" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">姓名</label>
+            <div class="col-sm-4">
+                <input id="realName" col="RealName" type="text" class="form-control" />
+            </div>
+            <label class="col-sm-2 control-label ">性别</label>
+            <div class="col-sm-4" id="gender" col="Gender"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">生日</label>
+            <div class="col-sm-4">
+                <input id="birthday" col="Birthday" type="text" class="form-control" />
+            </div>
+            <label class="col-sm-2 control-label ">部门</label>
+            <div class="col-sm-4">
+                <div id="departmentId" col="DepartmentId"></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">手机</label>
+            <div class="col-sm-4">
+                <input id="mobile" col="Mobile" type="text" class="form-control" />
+            </div>
+            <label class="col-sm-2 control-label ">职位</label>
+            <div class="col-sm-4">
+                <div id="positionId" col="PositionIds"></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">邮箱</label>
+            <div class="col-sm-4">
+                <input id="email" col="Email" type="text" class="form-control" />
+            </div>
+            <label class="col-sm-2 control-label">状态</label>
+            <div class="col-sm-4" id="userStatus" col="UserStatus"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">角色</label>
+            <div class="col-sm-10" id="role" col="RoleIds"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">备注</label>
+            <div class="col-sm-10">
+                <textarea id="remark" class="form-control" style="height:60px"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    var id = ys.request("id");
+    $(function () {
+
+        $("#userStatus").ysRadioBox({ data: ys.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+        $("#gender").ysRadioBox({ data: ys.getJson(@Html.Raw(typeof(YiSha.Enum.OrganizationManage.GenderTypeEnum).EnumToDictionaryString())) });
+
+        $("#role").ysCheckBox({
+            url: '@Url.Content("~/SystemManage/Role/GetListJson")',
+            dataName: "Result",
+            key: "Id",
+            value: "RoleName"
+        });
+
+        $("#positionId").ysComboBox({
+            url: '@Url.Content("~/OrganizationManage/Position/GetListJson")',
+            dataName: "Result",
+            key: "Id",
+            value: "PositionName",
+            class: "form-control",
+            multiple: true
+        });
+
+        $('#departmentId').ysComboBoxTree({ url: '@Url.Content("~/OrganizationManage/Department/GetDepartmentTreeListJson")' });
+
+        laydate.render({ elem: '#birthday', format: 'yyyy-MM-dd' });
+
+        getForm(id);
+
+        $("#form").validate({
+            rules: {
+                userName: { required: true },
+                password: {
+                    required: true,
+                    minlength: 6,
+                    maxlength: 20
+                },
+                mobile: { isPhone: true},
+                email: { email: true}
+            }
+        });
+
+    });
+
+    function getForm() {
+        if (id > 0) {
+
+            $('#password').attr("readonly", "readonly").attr("disabled", "disabled");
+
+            ys.ajax({
+                url: '@Url.Content("~/OrganizationManage/User/GetFormJson")' + '?id=' + id,
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        var result = obj.Result;
+                        $("#form").setWebControls(result);
+                    }
+                }
+            });
+        }
+        else {
+            var defaultData = {};
+            defaultData.UserName = "";
+            defaultData.Password = ""
+            defaultData.UserStatus = "@StatusEnum.Yes.ParseToInt()";
+            $("#form").setWebControls(defaultData);
+        }
+    }
+
+    function saveForm(index) {
+        if ($("#form").validate().form()) {
+            var postData = $("#form").getWebControls({ Id: id });
+            ys.ajax({
+                url: '@Url.Content("~/OrganizationManage/User/SaveFormJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        ys.msgSuccess(obj.Message);
+                        parent.refreshGrid();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        ys.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    }
+</script>

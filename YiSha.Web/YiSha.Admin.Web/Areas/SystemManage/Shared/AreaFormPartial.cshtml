@@ -1,0 +1,12 @@
+﻿<div class="form-group">
+    <label class='col-sm-@ViewData["Label"] control-label'>所在区域</label>
+    <div class="col-sm-@ViewData["Content"]">
+        <div id="areaId" col="AreaId"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#areaId').ysComboBoxTree({ url: '@Url.Content("~/SystemManage/Area/GetZtreeAreaListJson")', expandLevel: 0 });
+    });
+</script>

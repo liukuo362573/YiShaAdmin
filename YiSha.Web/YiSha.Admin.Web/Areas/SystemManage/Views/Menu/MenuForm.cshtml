@@ -1,0 +1,197 @@
+﻿@{
+    Layout = "~/Views/Shared/_SaveWhite.cshtml";
+}
+
+<div class="wrapper animated fadeInRight">
+    <form id="form" class="form-horizontal m">
+        <div class="form-group">
+            <label class="col-sm-3 control-label ">上级菜单</label>
+            <div class="col-sm-8">
+                <input id="parentId" type="hidden" col="ParentId" />
+                <input id="parentName" col="ParentName" type="text" class="form-control" readonly="readonly" onclick="showChooseForm()" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">菜单类型</label>
+            <div class="col-sm-8">
+                @{
+                    Dictionary<int, string> menuTypeList = typeof(MenuTypeEnum).EnumToDictionary();
+                    foreach (int key in menuTypeList.Keys)
+                    {
+                        <label class="radio-box">
+                            <input id="@Html.Raw("menuType"+key)" col="MenuType" type="radio" value="@key" /> @menuTypeList[key]
+                        </label>
+                    }
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">菜单名称<font class="red"> *</font></label>
+            <div class="col-sm-8">
+                <input id="menuName" col="MenuName" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">权限标识<font class="red"> *</font></label>
+            <div class="col-sm-8">
+                <input id="authorize" col="Authorize" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">请求地址</label>
+            <div class="col-sm-8">
+                <input id="menuUrl" col="MenuUrl" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">显示排序</label>
+            <div class="col-sm-8">
+                <input id="menuSort" col="MenuSort" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">图标</label>
+            <div class="col-sm-8">
+                <input id="menuIcon" col="MenuIcon" class="form-control" type="text" placeholder="选择图标">
+                <div class="ms-parent" style="width: 100%;">
+                    <div class="icon-drop animated flipInX" style="display: none;max-height:200px;overflow-y:auto">
+                        @Html.PartialAsync("MenuIcon").Result
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">菜单状态</label>
+            <div class="col-sm-8">
+                @{
+                    Dictionary<int, string> statusList = typeof(StatusEnum).EnumToDictionary();
+                    foreach (int key in statusList.Keys)
+                    {
+                        <div class="radio-box">
+                            <input id="@Html.Raw("menuStatus"+key)" col="MenuStatus" type="radio" value="@key" />
+                            <label>@statusList[key]</label>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+        var id = ys.request("id");
+    var parentId = ys.request("parentId");
+    var parentName = ys.request("parentName");
+    $(function () {
+        getForm();
+
+        $("#menuIcon").focus(function () {
+            $(".icon-drop").show();
+        });
+        $(".icon-drop").find(".ico-list i").on("click", function () {
+            $('#menuIcon').val($(this).attr('class'));
+            $(".icon-drop").hide();
+        });
+
+        $('input[name=menuType]').on('ifChecked', function (event) {
+            var menuType = $(event.target).val();
+            menuVisible(menuType);
+        });
+        $("#form").validate({
+            rules: {
+                menuName: { required: true }
+            }
+        });
+    });
+
+    function getForm() {
+        if (id > 0) {
+            ys.ajax({
+                url: '@Url.Content("~/SystemManage/Menu/GetFormJson")' + '?id=' + id,
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        $("#form").setWebControls(obj.Result);
+                    }
+                }
+            });
+        }
+        else {
+            ys.ajax({
+                url: '@Url.Content("~/SystemManage/Menu/GetMaxSortJson")' + '?parentId=' + parentId,
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        var defaultData = {};
+                        defaultData.ParentId = parentId;
+                        if (parentName) {
+                            defaultData.ParentName = parentName;
+                        }
+                        else {
+                            defaultData.ParentName = "主目录";
+                        }
+                        defaultData.MenuStatus = "@StatusEnum.Yes.ParseToInt()";
+
+                        defaultData.MenuSort = obj.Result;
+                        $("#form").setWebControls(defaultData);
+                    }
+                }
+            });
+        }
+    }
+
+    function menuVisible(menuType) {
+        if (menuType == "@MenuTypeEnum.Directory.ParseToInt()") {
+            $("#menuUrl").parents(".form-group").hide();
+            $("#authorize").parents(".form-group").hide();
+            $("#menuIcon").parents(".form-group").show();
+        } else if (menuType == "@MenuTypeEnum.Menu.ParseToInt()") {
+            $("#menuUrl").parents(".form-group").show();
+            $("#authorize").parents(".form-group").show();
+            $("#menuIcon").parents(".form-group").hide();
+        } else if (menuType == "@MenuTypeEnum.Button.ParseToInt()") {
+            $("#menuUrl").parents(".form-group").hide();
+            $("#authorize").parents(".form-group").show();
+            $("#menuIcon").parents(".form-group").hide();
+        }
+    }
+
+    function saveForm(index) {
+        if ($("#form").validate().form()) {
+            var postData = $("#form").getWebControls({ Id: id });
+            ys.ajax({
+                url: '@Url.Content("~/SystemManage/Menu/SaveFormJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        ys.msgSuccess(obj.Message);
+                        parent.refreshTreeGrid();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        ys.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    }
+
+    function showChooseForm() {
+        ys.openDialog({
+            title: "菜单选择",
+            url: '@Url.Content("~/SystemManage/Menu/MenuChoose")' + '?id=' + id,
+            width: "300px",
+            height: "390px",
+            shadeClose: true,
+            callback: function (index, layero) {
+                var childFrame = window[layero.find('iframe')[0]['name']];
+                var treeId = $(childFrame.document.body).find('#treeId').val();
+                var treeName = $(childFrame.document.body).find('#treeName').val();
+                $("#parentName").val(treeName);
+                $("#parentId").val(treeId);
+                layer.close(index);
+            }
+        });
+    }
+</script>

@@ -1,0 +1,192 @@
+﻿
+@{
+    ViewData["Title"] = "产品中心";
+}
+<div id="productIntro" class="pt-60">
+    <div class="container ">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-title text-center">
+                    <h2>什么是敏捷开发平台</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div>一沙敏捷开发平台包含 B/S项目开发框架 和 移动端项目开发框架。</div>
+                <div>
+                    <span class="fa fa-circle small-icon">&nbsp;&nbsp;</span>
+                    B/S项目开发框架基于.Net Core技术构建，框架中提供了完善的权限角色管理功能，
+                    快速开发功能等通用的功能模块，以及可扩展的系统机制，美观简洁的UI界面风格。
+                </div>
+                <div>
+                    <div>
+                        <span class="fa fa-circle small-icon">&nbsp;&nbsp;</span>
+                        移动端开发框架，包含H5开发框架、微信小程序开发框架和Android、iOS开发框架
+                    </div>
+                    <div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;1) H5开发框架使用开源的vux作为基础框架，并进行简单的封装。
+                    </div>
+                    <div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;2) 微信小程序开发框架整合了开源的mpvue + iview weapp，实现页面布局和接口调用都相当方便。
+                    </div>
+                    <div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;3) Android、iOS开发框架基于Xamarin，使用C#来完成所有平台共用的，和平台无关的app逻辑部分；由于各个平台的UI和交互不同，再使用由Xamarin封装好的C# API来访问和操控native控件，分别进行不同平台的UI开发。
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 text-center">
+                <img src="~/images/image/一沙敏捷开发平台.png" />
+            </div>
+        </div>
+        @Html.PartialAsync("_WhyChoose").Result
+        <div id="productVersion" class="row mt-70">
+            <div class="col-12">
+                <div class="section-title text-center">
+                    <h2>版本选择</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-xl-3 col-lg-3">
+                <div class="version">
+                    <div>
+                        <h6>企业轻量版</h6>
+                        <div>￥3000元</div>
+                    </div>
+
+                    <div class="text-left">
+                        <div class="title">
+                            <div>产品功能</div>
+                            <div>  <span class="fa fa-check color"></span> Web基础框架</div>
+                            <div>&nbsp;&nbsp;&nbsp;&nbsp;--</div>
+                            <div>&nbsp;&nbsp;&nbsp;&nbsp;--</div>
+                            <div>&nbsp;&nbsp;&nbsp;&nbsp;--</div>
+                            <div>  <span class="fa fa-check color"></span> 权限管理</div>
+                            <div>  <span class="fa fa-check color"></span> 代码生成</div>
+                            <div>  <span class="fa fa-check color"></span> 缓存模块</div>
+                            <div>产品授权</div>
+                            <div>  <span class="fa fa-check color"></span> 面向客户(企业)</div>
+                            <div>  <span class="fa fa-check color"></span> 授权合同/文件</div>
+                            <div>  <span class="fa fa-check color"></span> 允许去除版权标识</div>
+                            <div>  <span class="fa fa-check color"></span> 允许注册知识产权</div>
+
+                            <div>产品服务</div>
+                            <div>  <span class="fa fa-check color"></span> Email与电话技术支持</div>
+                            <div>  <span class="fa fa-check color"></span> 框架内技术支持</div>
+                            <div>  <span class="fa fa-check color"></span> 服务期限(1个月)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3">
+                <div class="version">
+                    <div>
+                        <h6>企业小程序版</h6>
+                        <div>￥5000元</div>
+                    </div>
+
+                    <div class="text-left">
+                        <div class="title">
+                            <div>产品功能</div>
+                            <div>  <span class="fa fa-check color"></span> Web基础框架</div>
+                            <div>  <span class="fa fa-check color"></span> H5框架</div>
+                            <div>  <span class="fa fa-check color"></span> 小程序框架(mpvue)</div>
+                            <div>&nbsp;&nbsp;&nbsp;&nbsp;--</div>
+                            <div>  <span class="fa fa-check color"></span> 权限管理</div>
+                            <div>  <span class="fa fa-check color"></span> 代码生成</div>
+                            <div>  <span class="fa fa-check color"></span> 缓存模块</div>
+                            <div>产品授权</div>
+                            <div>  <span class="fa fa-check color"></span> 面向客户(企业)</div>
+                            <div>  <span class="fa fa-check color"></span> 授权合同/文件</div>
+                            <div>  <span class="fa fa-check color"></span> 允许去除版权标识</div>
+                            <div>  <span class="fa fa-check color"></span> 允许注册知识产权</div>
+
+                            <div>产品服务</div>
+                            <div>  <span class="fa fa-check color"></span> Email与电话技术支持</div>
+                            <div>  <span class="fa fa-check color"></span> 框架内技术支持</div>
+                            <div>  <span class="fa fa-check color"></span> 服务期限(1个月)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3">
+                <div class="version">
+                    <div>
+                        <h6>企业App版</h6>
+                        <div>￥8000元</div>
+                    </div>
+                    <div class="text-left">
+                        <div class="title">
+                            <div>产品功能</div>
+                            <div>  <span class="fa fa-check color"></span> Web基础框架</div>
+                            <div>  <span class="fa fa-check color"></span> H5框架</div>
+                            <div>  <span class="fa fa-check color"></span> 小程序框架(mpvue)</div>
+                            <div>  <span class="fa fa-check color"></span> Android和iOS框架(Xamarin)</div>
+                            <div>  <span class="fa fa-check color"></span> 权限管理</div>
+                            <div>  <span class="fa fa-check color"></span> 代码生成</div>
+                            <div>  <span class="fa fa-check color"></span> 缓存模块</div>
+
+                            <div>产品授权</div>
+                            <div>  <span class="fa fa-check color"></span> 面向客户(企业)</div>
+                            <div>  <span class="fa fa-check color"></span> 授权合同/文件</div>
+                            <div>  <span class="fa fa-check color"></span> 允许去除版权标识</div>
+                            <div>  <span class="fa fa-check color"></span> 允许注册知识产权</div>
+
+                            <div>产品服务</div>
+                            <div>  <span class="fa fa-check color"></span> Email与电话技术支持</div>
+                            <div>  <span class="fa fa-check color"></span> 框架内技术支持</div>
+                            <div>  <span class="fa fa-check color"></span> 服务期限(1个月)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3">
+                <div class="version">
+                    <div>
+                        <h6>企业定制版</h6>
+                        <div>根据需求评估</div>
+                    </div>
+                    <div class="text-left">
+                        <div class="title">
+                            <div>产品功能</div>
+                            <div>  <span class="fa fa-check color"></span> Web基础框架</div>
+                            <div>&nbsp;&nbsp;&nbsp;&nbsp;--</div>
+                            <div>&nbsp;&nbsp;&nbsp;&nbsp;--</div>
+                            <div>&nbsp;&nbsp;&nbsp;&nbsp;--</div>
+                            <div>  <span class="fa fa-check color"></span> 权限管理</div>
+                            <div>  <span class="fa fa-check color"></span> 代码生成</div>
+                            <div>  <span class="fa fa-check color"></span> 缓存模块</div>
+                            <div>  <span class="fa fa-check color"></span> UI组件</div>
+                            <div>产品授权</div>
+                            <div>  <span class="fa fa-check color"></span> 面向客户(企业)</div>
+                            <div>  <span class="fa fa-check color"></span> 授权合同/文件</div>
+                            <div>  <span class="fa fa-check color"></span> 允许去除版权标识</div>
+                            <div>  <span class="fa fa-check color"></span> 允许注册知识产权</div>
+
+                            <div>产品服务</div>
+                            <div>  <span class="fa fa-check color"></span> Email与电话技术支持</div>
+                            <div>  <span class="fa fa-check color"></span> 框架内技术支持</div>
+                            <div>  <span class="fa fa-check color"></span> 服务期限(2个月)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .version {
+        padding: 10px;
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+        .version title {
+            width: 330px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+</style>

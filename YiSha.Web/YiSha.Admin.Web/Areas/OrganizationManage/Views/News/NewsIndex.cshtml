@@ -1,0 +1,111 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="container-div">
+    <div class="row">
+        <div id="searchDiv" class="col-sm-12 search-collapse">
+            <div class="select-list">
+                <ul>
+                    <li>
+                        文章标题：<input id="newsTitle" col="NewsTitle" type="text" />
+                    </li>
+                    <li>
+                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="refreshGrid()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="btn-group-sm hidden-xs" id="toolbar">
+            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> 新增</a>
+            <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> 修改</a>
+            <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> 删除</a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="gridTable" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+    });
+
+    function initGrid() {
+        var queryUrl = '@Url.Content("~/OrganizationManage/News/GetPageListJson")';
+        $('#gridTable').ysTable({
+            url: queryUrl,
+            sortName: 'NewsSort',
+            sortOrder: 'Desc',
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'NewsTitle', title: '文章标题' },
+                {
+                    field: 'NewsType', title: '文章类型', formatter: function (value, row, index) {
+                        return top.getDataDictValue('NewsType', value);
+                    }
+                },
+                { field: 'NewsAuthor', title: '作者' },
+                { field: 'NewsSort', title: '排序' },
+                { field: 'NewsDate', title: '发布时间' },
+                { field: 'ReadCount', title: '阅读量' },
+            ],
+            queryParams: function (params) {
+                var pagination = $('#gridTable').ysTable('getPagination', params);
+                var queryString = $('#searchDiv').getWebControls(pagination);
+                return queryString;
+            }
+        });
+    }
+
+    function refreshGrid() {
+        $('#gridTable').ysTable('refresh');
+        resetToolbarStatus();
+    }
+
+    function showSaveForm(bAdd) {
+        var id = 0;
+        if (!bAdd) {
+            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+            if (!ys.checkRowEdit(selectedRow)) {
+                return;
+            }
+            else {
+                id = selectedRow[0].Id;
+            }
+        }
+        ys.openDialog({
+            title: id > 0 ? "编辑文章" : "添加文章",
+            url: '@Url.Content("~/OrganizationManage/News/NewsForm")' + '?id=' + id,
+            width: "768px",
+            height: "600px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+    function deleteForm() {
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        if (ys.checkRowDelete(selectedRow)) {
+            ys.confirm("确认要删除选中的" + selectedRow.length + "条数据吗？", function () {
+                var ids = ys.getIds(selectedRow);
+                ys.ajax({
+                    url: '@Url.Content("~/OrganizationManage/News/DeleteFormJson")' + '?ids=' + ids,
+                    type: "post",
+                    success: function (obj) {
+                        if (obj.Tag == 1) {
+                            ys.msgSuccess(obj.Message);
+                            refreshGrid();
+                        }
+                        else {
+                            ys.msgError(obj.Message);
+                        }
+                    }
+                });
+            });
+        }
+    }
+</script>

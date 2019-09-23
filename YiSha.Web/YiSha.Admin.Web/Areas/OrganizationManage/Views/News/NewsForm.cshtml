@@ -1,0 +1,196 @@
+﻿@{
+    Layout = "~/Views/Shared/_SaveWhite.cshtml";
+}
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment HostingEnvironment
+@section header{
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/summernote/0.8.8/summernote.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/summernote/0.8.8/summernote.min.js"))
+
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/imageupload/1.0/css/imgup.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/imageupload/1.0/js/imgup.min.js"))
+}
+
+<div class="wrapper animated fadeInRight">
+    <form id="form" class="form-horizontal m">
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">标题 <font class="red"> *</font> </label>
+            <div class="col-sm-10">
+                <input id="newsTitle" col="NewsTitle" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">文章类别<font class="red"> *</font></label>
+            <div class="col-sm-4">
+                <div id="newsType" col="NewsType"></div>
+            </div>
+            <label class="col-sm-2 control-label ">发布时间<font class="red"> *</font></label>
+            <div class="col-sm-4">
+                <input id="newsDate" col="NewsDate" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">作者<font class="red"> *</font></label>
+            <div class="col-sm-4">
+                <input id="newsAuthor" col="NewsAuthor" type="text" class="form-control" />
+            </div>
+            <label class="col-sm-2 control-label ">排序<font class="red"> *</font></label>
+            <div class="col-sm-4">
+                <input id="newsSort" col="NewsSort" type="text" class="form-control" />
+            </div>
+        </div>
+        @await Html.PartialAsync("/Areas/SystemManage/Shared/AreaFormPartial.cshtml", new ViewDataDictionary(this.ViewData) { { "Label", "2" },{ "Content", "10" } })
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">文章标签</label>
+            <div class="col-sm-10">
+                <input id="newsTag" col="NewsTag" type="text" placeholder="多个标签之间用“,”分隔，最多不超过6个" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">
+                <span>缩略图</span><br />
+                <span>(宽高比 1.5：1)</span>
+            </label>
+            <div class="col-sm-10">
+                <div id="thumbImage" class="img-box">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">文章内容 </label>
+            <div class="col-sm-10">
+                <div id="newsContent" class="summernote"></div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    var id = ys.request("id");
+    $(function () {
+        laydate.render({ elem: '#newsDate', type: 'datetime', format: 'yyyy-MM-dd HH:mm' });
+
+        $("#newsType").ysComboBox({
+            data: top.getDataDict("NewsType"),
+            key: "DictKey",
+            value: "DictValue",
+            class: "form-control"
+        });
+
+        $('#newsContent').summernote({
+            height: '220px',
+            lang: 'zh-CN',
+            dialogsInBody: true,
+            callbacks: {
+                onImageUpload: function (files, editor, welEditable) {
+                    uploadNewsImage(files[0], editor, welEditable);
+                }
+            }
+        });
+
+        $("#thumbImage").imageUpload({ uploadImage: 'uploadThumbImage', limit: 1, context: ctx });
+
+        getForm();
+
+        $("#form").validate({
+            rules: {
+                newsTitle: { required: true },
+                newsType_select: { required: true },
+                newsDate: { required: true },
+                newsAuthor: { required: true },
+                newsSort: { required: true }
+            }
+        });
+    });
+
+    function getForm() {
+        if (id > 0) {
+            ys.ajax({
+                url: '@Url.Content("~/OrganizationManage/News/GetFormJson")' + '?id=' + id,
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        obj.Result.NewsDate = ys.formatDate(obj.Result.NewsDate, "yyyy-MM-dd HH:mm");
+                        $("#form").setWebControls(obj.Result);
+                        $("#newsContent").summernote('code', obj.Result.NewsContent);
+                        $("#thumbImage").imageUpload("setImageUrl", obj.Result.ThumbImage);
+                    }
+                }
+            });
+        }
+        else {
+            ys.ajax({
+                url: '@Url.Content("~/OrganizationManage/News/GetMaxSortJson")',
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        var defaultData = {};
+                        defaultData.NewsAuthor = "@ViewBag.OperatorInfo.RealName";
+                        defaultData.NewsDate = ys.formatDate("@DateTime.Now.ToString()", "yyyy-MM-dd HH:mm");
+                        defaultData.NewsSort = obj.Result;
+                        $("#form").setWebControls(defaultData);
+                    }
+                }
+            });
+        }
+    }
+
+    function saveForm(index) {
+        if ($("#form").validate().form()) {
+            var postData = $("#form").getWebControls({ Id: id });
+            postData.NewsContent = $("#newsContent").summernote('code');
+            postData.ThumbImage = $("#thumbImage").imageUpload("getImageUrl");
+            ys.ajax({
+                url: '@Url.Content("~/OrganizationManage/News/SaveFormJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        ys.msgSuccess(obj.Message);
+                        parent.refreshGrid();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        ys.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    }
+
+    function uploadNewsImage(file, editor, welEditable) {
+        var formdata = new FormData();
+        formdata.append("file", file);
+        ys.ajaxUploadFile({
+            url: '@GlobalContext.SystemConfig.HttpFile' + '/File/UploadFile?fileModule=@UploadFileType.News.ParseToInt()',
+            data: formdata,
+            success: function (obj) {
+                if (obj.Tag == 1) {
+                    $("#newsContent").summernote('insertImage', '@GlobalContext.SystemConfig.HttpFile' + obj.Result, '/');
+                }
+                else {
+                    ys.msgError(obj.Message);
+                }
+            }
+        })
+    }
+
+    function uploadThumbImage(file, callback) {
+        var formdata = new FormData();
+        formdata.append("file", file);
+        ys.ajaxUploadFile({
+            url: '@GlobalContext.SystemConfig.HttpFile' + '/File/UploadFile?fileModule=@UploadFileType.News.ParseToInt()',
+            data: formdata,
+            success: function (obj) {
+                if (obj.Tag == 1) {
+                    if (callback) {
+                        callback('@GlobalContext.SystemConfig.HttpFile' + obj.Result);
+                    }
+                }
+                else {
+                    ys.msgError(obj.Message);
+                }
+            }
+        })
+    }
+</script>
+

@@ -1,0 +1,70 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="DataProtection\**" />
+    <Compile Remove="Resource\Export\**" />
+    <Compile Remove="Resource\News\**" />
+    <Compile Remove="Resource\Portrait\**" />
+    <Compile Remove="wwwroot\css\**" />
+    <Compile Remove="wwwroot\resource\**" />
+    <Compile Remove="wwwroot\script\**" />
+    <Content Remove="DataProtection\**" />
+    <Content Remove="Resource\Export\**" />
+    <Content Remove="Resource\News\**" />
+    <Content Remove="Resource\Portrait\**" />
+    <Content Remove="wwwroot\css\**" />
+    <Content Remove="wwwroot\resource\**" />
+    <Content Remove="wwwroot\script\**" />
+    <EmbeddedResource Remove="DataProtection\**" />
+    <EmbeddedResource Remove="Resource\Export\**" />
+    <EmbeddedResource Remove="Resource\News\**" />
+    <EmbeddedResource Remove="Resource\Portrait\**" />
+    <EmbeddedResource Remove="wwwroot\css\**" />
+    <EmbeddedResource Remove="wwwroot\resource\**" />
+    <EmbeddedResource Remove="wwwroot\script\**" />
+    <None Remove="DataProtection\**" />
+    <None Remove="Resource\Export\**" />
+    <None Remove="Resource\News\**" />
+    <None Remove="Resource\Portrait\**" />
+    <None Remove="wwwroot\css\**" />
+    <None Remove="wwwroot\resource\**" />
+    <None Remove="wwwroot\script\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BuildBundlerMinifier" Version="2.8.391" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
+    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.15" />
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.18.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\YiSha.Business\YiSha.Business.AutoJob\YiSha.Business.AutoJob.csproj" />
+    <ProjectReference Include="..\..\YiSha.Business\YiSha.Business\YiSha.Business.csproj" />
+    <ProjectReference Include="..\..\YiSha.Data\YiSha.Data.EF\YiSha.Data.EF.csproj" />
+    <ProjectReference Include="..\..\YiSha.Entity\YiSha.Entity\YiSha.Entity.csproj" />
+    <ProjectReference Include="..\..\YiSha.Entity\YiSha.Model\YiSha.Model.csproj" />
+    <ProjectReference Include="..\..\YiSha.Util\YiSha.CodeGenerator\YiSha.CodeGenerator.csproj" />
+    <ProjectReference Include="..\..\YiSha.Util\YiSha.Util\YiSha.Util.csproj" />
+    <ProjectReference Include="..\YiSha.Web.Code\YiSha.Web.Code.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resource\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="dotnet run.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

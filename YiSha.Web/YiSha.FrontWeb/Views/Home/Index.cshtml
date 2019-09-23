@@ -1,0 +1,116 @@
+﻿@{
+    ViewData["Title"] = "首页";
+}
+
+<!-- hero slider area start -->
+<section class="hero-slider-area">
+    <div class="hero-slider-active slider-arrow-style">
+        <div class="single-slider hero-bg hero-bg__1 d-flex align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="content-inner">
+                            <div class="slider-content">
+                                <h2>.NET Core 极速后台开发框架</h2>
+                                <p>
+                                    一键生成CRUD/一键生成菜单/自动生成API文档<br />
+                                    强大的一键生成功能极速简化你的开发流程,加快你的项目开发<br />
+                                </p>
+                                <a href="https://github.com/liukuo362573" class="btn btn__bg" target="_blank">立即下载</a>
+                            </div>
+                            <div class="slider-img">
+                                <img src="~/images/image/slider1.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="single-slider hero-bg hero-bg__1 d-flex align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="content-inner">
+                            <div class="slider-content">
+                                <h2>
+                                    基础的<br />
+                                    后台管理功能<br />
+                                    无缝集成的Api接口
+                                </h2>
+                                <p>提供基础的用户角色权限管理系统，后台业务和Api业务共享代码</p>
+                                <a href="https://github.com/liukuo362573" class="btn btn__bg" target="_blank">立即下载</a>
+                            </div>
+                            <div class="slider-img">
+                                <img src="~/images/image/slider2.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="single-slider hero-bg hero-bg__1 d-flex align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="content-inner">
+                            <div class="slider-content">
+                                <h2>
+                                    完善的<br />
+                                    日志记录和异常处理
+                                </h2>
+                                <p>每一步操作的输入与输出都有记录，每一个异常都无处隐藏</p>
+                                <a href="https://github.com/liukuo362573" class="btn btn__bg" target="_blank">立即下载</a>
+                            </div>
+                            <div class="slider-img">
+                                <img src="~/images/image/slider3.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- hero slider area start -->
+<!-- service features start -->
+<section class="service-features pt-30">
+    <div class="container">
+        <div class="service-features-inner theme-color">
+            <div class="single-features-item">
+                <div class="features-icon">
+                    <i class="fa fa-life-saver"></i>
+                </div>
+                <div class="features-content">
+                    <h5>快速高效</h5>
+                    <p>基于代码生成，让软件开发极限提速</p>
+                </div>
+            </div>
+            <div class="single-features-item">
+                <div class="features-icon">
+                    <i class="fa fa-shield"></i>
+                </div>
+                <div class="features-content">
+                    <h5>安全稳定</h5>
+                    <p>完善的安全体系，多重安全验证</p>
+                </div>
+            </div>
+            <div class="single-features-item">
+                <div class="features-icon">
+                    <i class="fa fa-cubes"></i>
+                </div>
+                <div class="features-content">
+                    <h5>二次开发</h5>
+                    <p>源码提供可自由扩展生成所需应用</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- service features end -->
+<!-- product tab area start -->
+<section class="product-tab pb-30">
+    <div class="container">
+        @Html.PartialAsync("_WhyChoose").Result
+    </div>
+</section>
+<!-- product tab area end -->

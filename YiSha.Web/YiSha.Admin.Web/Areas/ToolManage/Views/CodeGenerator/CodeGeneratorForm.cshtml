@@ -1,0 +1,686 @@
+﻿@{
+    Layout = "~/Views/Shared/_SaveWhite.cshtml";
+}
+
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment HostingEnvironment
+@section header{
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/bootstrap.treetable/1.0/bootstrap-treetable.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/bootstrap.treetable/1.0/bootstrap-treetable.min.js"))
+
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/jquery.ui/1.12.1/jquery-ui.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/jquery.ui/1.12.1/jquery-ui.min.js"))
+
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/jquery.smartwizard/4.0.1/css/smart_wizard.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/jquery.smartwizard/4.0.1/css/smart_wizard.min.js"))
+
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/highlight/9.13.1/css/vs.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/jquery.ui/1.12.1/highlight.pack.min.js"))
+}
+
+<style>
+    .div-step {
+        overflow: hidden;
+    }
+
+    .div-step-container {
+        height: 400px;
+        overflow-y: auto
+    }
+
+    .droppable-active {
+        background-color: #ffe !important
+    }
+
+    .tools a {
+        cursor: pointer;
+        font-size: 80%;
+        margin-right: 6px;
+    }
+
+    .draggable {
+        cursor: move
+    }
+</style>
+<div style="padding:0 10px;">
+    <div id="smartwizard">
+        <ul>
+            <li><a href="#step-1">1<br />基本配置</a></li>
+            <li><a href="#step-2">2<br />列表页面</a></li>
+            <li><a href="#step-3">3<br />表单页面</a></li>
+            <li><a href="#step-4">4<br />代码预览</a></li>
+            <li><a href="#step-5">5<br />生成完毕</a></li>
+        </ul>
+        <div>
+            <div id="step-1" class="div-step">
+                <div class="div-step-container">
+                    <div class="panel panel-default" style="margin-bottom:5px">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                文件名配置
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <form id="fileConfigForm" class="form-horizontal m">
+                                <div class="form-group">
+                                    <div class="col-sm-4">
+                                        <label class="col-sm-4 control-label ">类名前缀<font class="red"> *</font></label>
+                                        <div class="col-sm-8">
+                                            <input id="classPrefix" col="ClassPrefix" type="text" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label class="col-sm-4 control-label ">类名描述</label>
+                                        <div class="col-sm-8">
+                                            <input id="classDescription" col="ClassDescription" type="text" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label class="col-sm-4 control-label ">创建人员</label>
+                                        <div class="col-sm-8">
+                                            <input id="createName" col="CreateName" type="text" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-4">
+                                        <label class="col-sm-4 control-label ">实体类名<font class="red"> *</font></label>
+                                        <div class="col-sm-8">
+                                            <input id="entityName" col="EntityName" type="text" data-suffix="Entity" readonly="readonly" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label class="col-sm-4 control-label ">映射类名<font class="red"> *</font></label>
+                                        <div class="col-sm-8">
+                                            <input id="entityMapName" col="EntityMapName" type="text" data-suffix="EntityMap" readonly="readonly" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label class="col-sm-4 control-label ">创建日期</label>
+                                        <div class="col-sm-8">
+                                            <input id="createDate" col="CreateDate" type="text" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-4">
+                                        <label class="col-sm-4 control-label ">业务类名<font class="red"> *</font></label>
+                                        <div class="col-sm-8">
+                                            <input id="businessName" col="BusinessName" type="text" data-suffix="BLL" readonly="readonly" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label class="col-sm-4 control-label ">服务类名<font class="red"> *</font></label>
+                                        <div class="col-sm-8">
+                                            <input id="serviceName" col="ServiceName" type="text" data-suffix="Service" readonly="readonly" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label class="col-sm-4 control-label ">查询类名<font class="red"> *</font></label>
+                                        <div class="col-sm-8">
+                                            <input id="entityParamName" col="EntityParamName" type="text" data-suffix="Param" readonly="readonly" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-4">
+                                        <label class="col-sm-4 control-label ">控制器名<font class="red"> *</font></label>
+                                        <div class="col-sm-8">
+                                            <input id="controllerName" col="ControllerName" type="text" data-suffix="Controller" readonly="readonly" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label class="col-sm-4 control-label ">列表页名<font class="red"> *</font></label>
+                                        <div class="col-sm-8">
+                                            <input id="pageIndexName" col="PageIndexName" type="text" data-suffix="Index" readonly="readonly" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label class="col-sm-4 control-label ">表单页名<font class="red"> *</font></label>
+                                        <div class="col-sm-8">
+                                            <input id="pageFormName" col="PageFormName" type="text" data-suffix="Form" readonly="readonly" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default" style="margin-bottom:0px">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                输出目录
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <form id="outputConfigForm" class="form-horizontal m">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label ">输出到所在模块<font class="red"> *</font></label>
+                                    <div class="col-sm-10">
+                                        <div id="outputModule" col="OutputModule"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label ">实体层输出目录<font class="red"> *</font></label>
+                                    <div class="col-sm-10">
+                                        <input id="outputEntity" col="OutputEntity" type="text" readonly="readonly" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label ">业务层输出目录<font class="red"> *</font></label>
+                                    <div class="col-sm-10">
+                                        <input id="outputBusiness" col="OutputBusiness" type="text" readonly="readonly" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label ">应用层输出目录<font class="red"> *</font></label>
+                                    <div class="col-sm-10">
+                                        <input id="outputWeb" col="OutputWeb" type="text" readonly="readonly" class="form-control" />
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="step-2" class="div-step">
+                <div class="div-step-container">
+                    <div class="panel panel-default" style="margin-bottom:5px">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <span><a onclick="showEditSearchForm()">搜索编辑</a></span>
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="divSearch" class="select-list">
+                                <ul>
+                                    <li>
+                                        Name：<input id="searchName" col="SearchName" type="text" readonly="readonly" />
+                                    </li>
+                                    <li>
+                                        <a id="btnSearch" class="btn btn-primary btn-sm disabled"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default" style="margin-bottom:5px">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <span><a onclick="showEditToolbarForm()">工具栏编辑</a></span>
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="btn-group-sm hidden-xs" id="toolbar">
+                                <a id="btnAdd" class="btn btn-success disabled" dis><i class="fa fa-plus"></i> 新增</a>
+                                <a id="btnEdit" class="btn btn-primary disabled"><i class="fa fa-edit"></i> 修改</a>
+                                <a id="btnDelete" class="btn btn-danger disabled"><i class="fa fa-remove"></i> 删除</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default" style="margin-bottom:5px">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <span><a onclick="showEditListForm()">列表编辑</a></span>
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <table id="gridTable" class="table">
+                                <thead><tr></tr></thead>
+                            </table>
+                            <div id="divPagination" class="pull-right pagination" style="margin:0px">
+                                <ul class="pagination" style="margin:0px">
+                                    <li class="page-item page-pre">
+                                        <a class="page-link" href="#">‹</a>
+                                    </li>
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                                    <li class="page-item page-last-separator disabled"><a class="page-link" href="#">...</a></li>
+                                    <li class="page-item page-last"><a class="page-link" href="#">10</a></li>
+                                    <li class="page-item page-next"><a class="page-link" href="#">›</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="step-3" class="div-step">
+                <div class="div-step-container">
+                    <div>
+                        <div class="col-sm-3">
+                            <div id="tableFieldTree" class="ztree"></div>
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>左侧勾选需要在表单中显示的字段</h5>
+                                    <div class="ibox-tools">
+                                        请选择显示的列数：
+                                        <select id="n_columns">
+                                            <option value="1">显示1列</option>
+                                            <option value="2">显示2列</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="ibox-content">
+                                    <div id="divForm" class="row form-body form-horizontal m-t">
+                                        <div id="divInputTemplate" class="form-group draggable ui-draggable dropped" style="display:none">
+                                            <label class="col-sm-3 control-label">FieldName</label>
+                                            <div class="col-sm-8">
+                                                <input id="fieldName" col="FieldName" type="text" class="form-control">
+                                            </div>
+                                            <span class="tools col-sm-5 col-sm-offset-3">
+                                                <a class="edit-link" onclick="editHtml()">编辑HTML</a>
+                                            </span>
+                                        </div>
+                                        <div class="col-md-12 droppable sortable">
+                                        </div>
+                                        <div class="col-md-6 droppable sortable" style="display: none;">
+                                        </div>
+                                        <div class="col-md-6 droppable sortable" style="display: none;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="step-4" class="div-step">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#codeEntity" data-toggle="tab">实体类</a></li>
+                    <li><a href="#codeEntityParam" data-toggle="tab">实体查询类</a></li>
+                    <li><a href="#codeService" data-toggle="tab">服务类</a></li>
+                    <li><a href="#codeBusiness" data-toggle="tab">业务类</a></li>
+                    <li><a href="#codeController" data-toggle="tab">控制器</a></li>
+                    <li><a href="#codeIndex" data-toggle="tab">列表页</a></li>
+                    <li><a href="#codeForm" data-toggle="tab">表单页</a></li>
+                </ul>
+                <div class="div-step-container" style="height:360px">
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="codeEntity" col="CodeEntity">
+                        </div>
+                        <div class="tab-pane fade" id="codeEntityParam" col="CodeEntityParam">
+                        </div>
+                        <div class="tab-pane fade" id="codeService" col="CodeService">
+                        </div>
+                        <div class="tab-pane fade" id="codeBusiness" col="CodeBusiness">
+                        </div>
+                        <div class="tab-pane fade" id="codeController" col="CodeController">
+                        </div>
+                        <div class="tab-pane fade" id="codeIndex" col="CodeIndex">
+                        </div>
+                        <div class="tab-pane fade" id="codeForm" col="CodeForm">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="step-5" class="div-step">
+                <div class="div-step-container">
+                    <h5>输出文件位置：</h5>
+                    <form id="outputListForm" class="form-horizontal m"></form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var tableName = ys.request("tableName");
+    var tableNameUpper = ''; //首字母大写的表名
+    var outputModule = '@ViewBag.OutputModule'; //解决页面刷新后output module值丢失
+    var codeList; //预览的代码
+    $(function () {
+
+        classPrefixChange();
+
+        $("#fileConfigForm").validate({
+            rules: {
+                classPrefix: { required: true }
+            }
+        });
+
+        $("#outputConfigForm").validate({
+            rules: {
+                outputModule_select: { required: true }
+            }
+        });
+
+        setup_draggable();
+
+        loadTableFieldTree();
+
+        loadInitialConfig();
+
+        $("#n_columns").on("change", function () {
+            var v = $(this).val();
+            if (v === "1") {
+                var $col = $(".form-body .col-md-12").toggle(true);
+                $(".form-body .col-md-6 .draggable").each(function (i, el) {
+                    $(this).remove().appendTo($col);
+                });
+                $(".form-body .col-md-6").toggle(false);
+            } else {
+                var $col = $(".form-body .col-md-6").toggle(true);
+
+                $(".form-body .col-md-12 .draggable").each(function (i, el) {
+                    $(this).remove().appendTo(i % 2 ? $col[1] : $col[0]);
+                });
+                $(".form-body .col-md-12").toggle(false);
+            }
+        });
+
+        $("#smartwizard").on("leaveStep", function (e, anchorObject, stepNumber, stepDirection) {
+            switch (stepNumber + 1) {
+                case 1:
+                    if (!$("#step-1").validate().form()) {
+                        return false;
+                    }
+                    break;
+                case 2: break;
+                case 3:
+                    codePreview();
+                    break;
+                case 4:
+                    codeGenerate();
+                    break;
+                case 5: break;
+            }
+            return true;
+        });
+
+        // Smart Wizard
+        $('#smartwizard').smartWizard({
+            selected: 0,
+            theme: 'arrows',
+            transitionEffect: 'fade',
+            toolbarSettings: {
+                toolbarPosition: 'bottom',
+                toolbarExtraButtons: [{ label: ' 完成', css: 'btn-info', onClick: function () { ys.closeDialog(); } }]
+            }
+        });
+
+        $("#reset-btn").on("click", function () {
+            $('#smartwizard').smartWizard("reset");
+            return true;
+        });
+
+        $("#prev-btn").on("click", function () {
+            $('#smartwizard').smartWizard("prev");
+            return true;
+        });
+
+        $("#next-btn").on("click", function () {
+            $('#smartwizard').smartWizard("next");
+            return true;
+        });
+
+    });
+
+    function classPrefixChange() {
+        $("#classPrefix").keyup(function () {
+            var classPrefix = $(this).val();
+            $("#fileConfigForm input").each(function (i, ele) {
+                var suffix = $(ele).attr("data-suffix");
+                if (!ys.isNullOrEmpty(suffix)) {
+                    $(ele).val(classPrefix + $(ele).attr("data-suffix"));
+                }
+            });
+        });
+    }
+
+    function loadTableFieldTree() {
+        $('#tableFieldTree').ysTree({
+            url: '@Url.Content("~/ToolManage/CodeGenerator/GetTableFieldTreePartListJson")' + '?tableName=' + tableName + '&upper=1',
+            async: false,
+            maxHeight: "400px",
+            check: { enable: true },
+            expandLevel: 0,
+            callback: {
+                onCheck: function (event, treeId, treeNode) {
+                    var id = GetFieldId(treeNode.name);
+                    var divId = "#" + "div" + treeNode.name;
+                    if (treeNode.checked && !treeNode.isParent) {
+                        if ($(divId).length == 0) {
+                            var target = null;
+                            if (parseInt($("#n_columns").val()) == 1) {
+                                target = $(".form-body .col-md-12");
+                            }
+                            else {
+                                var firstColumnInput = $(".form-body .col-md-6").first().find("input").length;
+                                var secondColumnInput = $(".form-body .col-md-6").last().find("input").length;
+                                if (firstColumnInput > secondColumnInput) {
+                                    target = $(".form-body .col-md-6").last();
+                                }
+                                else {
+                                    target = $(".form-body .col-md-6").first();
+                                }
+                            }
+                            var html = $("#divInputTemplate").prop("outerHTML");
+                            html = html.replace("FieldName", treeNode.name);
+                            html = html.replace(/fieldName/g, id); // 替换多个
+                            html = html.replace("divInputTemplate", "div" + treeNode.name);
+                            var obj = $(html);
+                            obj.removeAttr("style");
+                            obj.appendTo(target);
+                        }
+                    }
+                    else {
+                        if ($(divId).length > 0) {
+                            $(divId).remove();
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function loadInitialConfig() {
+        ys.ajax({
+            url: '@Url.Content("~/ToolManage/CodeGenerator/GetBaseConfigJson")' + '?tableName=' + tableName,
+            type: "get",
+            success: function (obj) {
+                if (obj.Tag == 1) {
+                    var result = obj.Result;
+                    tableNameUpper = result.TableNameUpper;
+                    $("#fileConfigForm").setWebControls(result.FileConfig);
+                    $("#outputConfigForm").setWebControls(result.OutputConfig);
+
+                    $("#outputModule").ysComboBox({ data: result.OutputConfig.ModuleList, class: "form-control" });
+                    $("select.select2").each(function () {
+                        $(this).select2();
+                        if (!ys.isNullOrEmpty(outputModule)) {
+                            $("#outputModule").ysComboBox('setValue', outputModule);
+                        }
+                        $(this).on("change", function (e) {
+                            outputModule = $("#outputModule").ysComboBox('getValue');
+                            if (!ys.isNullOrEmpty(outputModule)) {
+                                //  window.location.href = ys.changeURLParam(window.location.href, "outputModule", outputModule);
+                            }
+                        });
+                    })
+
+                    for (var i = 0; i < result.PageIndex.ColumnList.length; i++) {
+                        $("#gridTable tr").append("<th>" + result.PageIndex.ColumnList[i] + "</th>");
+                    }
+                    $('#tableFieldTree').ysTree("setCheckedNodesByName", result.PageForm.FieldList.join(","));
+
+                }
+            }
+        });
+    }
+
+     // 把属性名称的第一个字母转为大写
+    function GetFieldId(field) {
+        field = field[0].toLowerCase() + field.substring(1);
+        return field;
+    }
+
+    var setup_draggable = function () {
+        $(".draggable").draggable({
+            appendTo: "body",
+            helper: "clone"
+        });
+        $(".droppable").droppable({
+            accept: ".draggable",
+            helper: "clone",
+            hoverClass: "droppable-active",
+            drop: function (event, ui) {
+                $(".empty-form").remove();
+                var $orig = $(ui.draggable);
+                if (!$(ui.draggable).hasClass("dropped")) {
+                    var $el = $orig.clone().addClass("dropped").css({ "position": "static", "left": null, "right": null }).appendTo(this);
+                    var id = $orig.find(":input").attr("id");
+                    if (id) {
+                        id = id.split("-").slice(0, -1).join("-") + "-" + (parseInt(id.split("-").slice(-1)[0]) + 1);
+                        $orig.find(":input").attr("id", id);
+                        $orig.find("label").attr("for", id)
+                    }
+                    $('<p class="tools col-sm-12 col-sm-offset-3"><a class="edit-link">编辑HTML<a></p>').appendTo($el)
+                } else {
+                    if ($(this)[0] != $orig.parent()[0]) {
+                        var $el = $orig.clone().css({ "position": "static", "left": null, "right": null }).appendTo(this);
+                        $orig.remove()
+                    }
+                }
+            }
+        }).sortable();
+    };
+
+    function codePreview() {
+        var postData = {};
+        postData.TableName = tableName;
+        postData.FileConfig = $("#fileConfigForm").getWebControls();
+        postData.OutputConfig = $("#outputConfigForm").getWebControls();
+        postData.PageIndex = {};
+        postData.PageIndex.ButtonList = [];
+        postData.PageIndex.ColumnList = [];
+
+        if ($("#divSearch").css("display") != "none") {
+            postData.PageIndex.IsSearch = 1;
+        }
+        if ($("#divPagination").css("display") != "none") {
+            postData.PageIndex.IsPagination = 1;
+        }
+        $("#toolbar a:not(.hidden)").each(function (i, ele) {
+            postData.PageIndex.ButtonList.push($(ele).attr("id"));
+        });
+        $("#gridTable th").each(function (i, ele) {
+            postData.PageIndex.ColumnList.push($(ele).html());
+        });
+
+        postData.PageForm = {};
+        postData.PageForm.FieldList = [];
+        postData.PageForm.ShowMode = $("#n_columns").val();
+
+        $("#divForm label:not(.hidden)").each(function (i, ele) {
+            if ($(ele).parent().css("display") != "none") {
+                postData.PageForm.FieldList.push($(ele).html());
+            }
+        });
+
+        ys.ajax({
+            url: '@Url.Content("~/ToolManage/CodeGenerator/CodePreviewJson")',
+            type: "post",
+            async: false,
+            data: postData,
+            success: function (obj) {
+                if (obj.Tag == 1) {
+                    var result = obj.Result;
+                    $("div.tab-pane").each(function (i, ele) {
+                        var col = $(ele).attr("col");
+                        $(this).html("<pre class='no-padding no-margin no-top-border'><code class='csharp'>" + result[col] + "</code></pre>");
+                    });
+                    $('pre code').each(function (i, ele) {
+                        hljs.highlightBlock(ele)
+                    });
+                    codeList = result;
+                }
+                else {
+                    ys.msgError(obj.Message);
+                }
+            }
+        });
+    }
+
+    function codeGenerate() {
+        var postData = {};
+        postData.TableName = tableName;
+        postData.FileConfig = $("#fileConfigForm").getWebControls();
+        postData.OutputConfig = $("#outputConfigForm").getWebControls();
+        postData.Code = encodeURIComponent(JSON.stringify(codeList));
+        ys.ajax({
+            url: '@Url.Content("~/ToolManage/CodeGenerator/CodeGenerateJson")',
+            type: "post",
+            async: false,
+            data: postData,
+            success: function (obj) {
+                $("#outputListForm").find("div").remove();
+                if (obj.Tag == 1) {
+                    for (var i = 0; i < obj.Result.length; i++) {
+                        var html = "<div class='form-group'><label class='col-sm-2 control-label'>" + obj.Result[i].Key + "</label>" +
+                            "<label class='col-sm-10 control-label' style='text-align:left'>" + obj.Result[i].Value + "</label></div>";
+                        $("#outputListForm").append(html);
+                    }
+                }
+                else {
+                    ys.msgError(obj.Message);
+                }
+            }
+        });
+    }
+
+    function showEditSearchForm() {
+        ys.openDialog({
+            title: "搜索编辑",
+            url: '@Url.Content("~/ToolManage/CodeGenerator/CodeGeneratorEditSearch")',
+            width: "768px",
+            height: "130px",
+            btn: [],
+            shadeClose: true,
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+     function showEditToolbarForm() {
+        ys.openDialog({
+            title: "工具栏编辑",
+            url: '@Url.Content("~/ToolManage/CodeGenerator/CodeGeneratorEditToolbar")',
+            width: "768px",
+            height: "220px",
+            btn: [],
+            shadeClose: true,
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+    function showEditListForm() {
+        ys.openDialog({
+            title: "列表编辑",
+            url: '@Url.Content("~/ToolManage/CodeGenerator/CodeGeneratorEditList")' + '?tableName=' + tableName + '&tableNameUpper=' + tableNameUpper,
+            width: "768px",
+            height: "300px",
+            btn: [],
+            shadeClose: true,
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+    function editHtml() {
+        ys.msgWarning("暂时还不能使用");
+    }
+</script>

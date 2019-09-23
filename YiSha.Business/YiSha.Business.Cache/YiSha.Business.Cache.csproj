@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\YiSha.Cache\YiSha.Cache.Factory\YiSha.Cache.Factory.csproj" />
+    <ProjectReference Include="..\..\YiSha.Entity\YiSha.Entity\YiSha.Entity.csproj" />
+    <ProjectReference Include="..\YiSha.Service\YiSha.Service.csproj" />
+  </ItemGroup>
+
+</Project>

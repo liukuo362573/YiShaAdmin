@@ -1,0 +1,64 @@
+﻿@{
+    Layout = "~/Views/Shared/_SaveWhite.cshtml";
+}
+
+<div class="wrapper animated fadeInRight">
+    <form id="form" class="form-horizontal m-t">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">登录信息</label>
+            <div class="form-control-static" col="UserName"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">请求地址</label>
+            <div class="form-control-static" col="ExecuteUrl"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">请求参数</label>
+            <div class="form-control-static">
+                <pre><span col="ExecuteParam"></span></pre>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">状态</label>
+            <div class="form-control-static" col="LogStatus"></div>
+        </div>
+        <div class="form-group" id="exception" style="display:none">
+            <label class="col-sm-2 control-label">异常信息</label>
+            <div class="form-control-static">
+                <pre><span col="ExecuteResult"></span></pre>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    var id = ys.request("id");
+    $(function () {
+        getForm();
+    });
+
+    function getForm() {
+        if (id > 0) {
+            ys.ajax({
+                url: '@Url.Content("~/SystemManage/LogOperate/GetFormJson")' + '?id=' + id,
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        var result = obj.Result;
+                        result.UserName = (ys.isNullOrEmpty(result.UserName) ? "" : result.UserName) + " / ";
+                        result.UserName += (ys.isNullOrEmpty(result.DepartmentName) ? "" : result.DepartmentName) + " / ";
+                        result.UserName += result.IpAddress + " / " + result.IpLocation;
+                        if (result.LogStatus == "@OperateStatusEnum.Success.ParseToInt()") {
+                            $("#exception").hide();
+                            result.LogStatus = '<span class="label label-primary">' + "@OperateStatusEnum.Success.GetDescription()" + '</span>';
+                        } else {
+                            $("#exception").show();
+                            result.LogStatus = '<span class="label label-warning">' + "@OperateStatusEnum.Fail.GetDescription()" + '</span>';
+                        }
+                        $("#form").setWebControls(result);
+                    }
+                }
+            });
+        }
+    }
+</script>

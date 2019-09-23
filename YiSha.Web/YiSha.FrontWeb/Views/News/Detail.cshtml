@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Title"] = "产品案例";
+}
+
+@model NewsEntity
+
+<div class="blog-main-wrapper pt-60 pb-60 pb-md-54 pb-sm-54">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 order-2">
+                <div class="blog-sidebar-wrapper pt-md-60 pt-sm-60">
+                    @*<div class="blog-sidebar">
+                            <h4 class="title">所有标签</h4>
+                            <ul class="blog-tags">
+                                <li><a href="#">camera</a></li>
+                                <li><a href="#">computer</a></li>
+                                <li><a href="#">bag</a></li>
+                                <li><a href="#">watch</a></li>
+                                <li><a href="#">smartphone</a></li>
+                                <li><a href="#">shoes</a></li>
+                            </ul>
+                        </div>*@
+                    <div class="blog-sidebar">
+                        <h4 class="title">推广</h4>
+                        <ul class="blog-archive blog-category">
+                            <li><a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=8lbflttm" target="_blank"><img src="~/images/image/aliyun.jpg" /></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 order-1">
+                <div class="blog-item-wrapper blog-item-wrapper__blog-grid blog-item-wrapper__blog-details">
+                    <div class="blog-inner-content">
+                        <h3>@Model.NewsTitle</h3>
+                        <ul class="blog-meta">
+                            <li><span>@Model.NewsAuthor</span></li>
+                            <li>@Model.NewsDate.Value.ToString("yyyy-MM-dd HH:mm")</li>
+                            <li>@(Model.ViewTimes + 1) 次浏览</li>
+                        </ul>
+                        @if (!string.IsNullOrEmpty(Model.NewsTag))
+                        {
+                            <ul class="blog-meta" style="font-size:12px">
+                                <li>标签：@Model.NewsTag</li>
+                            </ul>
+                        }
+                        <hr />
+                        <div>@Html.Raw(Model.NewsContent)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $.post("/News/SaveViewTimesJson", { id: @Model.Id }, function (result) { });
+    });
+</script>

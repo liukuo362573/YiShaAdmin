@@ -1,0 +1,31 @@
+﻿.nav-main {
+    margin: 0px 10px;
+    border: 1px solid #ccc;
+    border-top: none;
+    height: 100%;
+}
+
+.nav-main-left {
+    height: 100%;
+    padding: 0px;
+}
+
+.nav-main > div > ul {
+    height: 100%;
+    border-right: 1px solid #ccc;
+}
+
+.nav-main-left .nav > li > a {
+    color: #676a6c;
+    font-size: 12px;
+    text-align: center;
+}
+
+.nav-main-left .nav > li.active {
+    border-left: 4px solid #19aa8d;
+    background: #f3f3f4;
+}
+
+    .nav-main-left .nav > li.active > a {
+        color: #676a6c;
+    }
