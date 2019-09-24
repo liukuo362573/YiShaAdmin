@@ -2,4 +2,4 @@
 * text=auto
 *.js linguist-language=C#
 
-.js text
+*.js text eol=crlf
