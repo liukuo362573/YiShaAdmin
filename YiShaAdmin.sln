@@ -59,8 +59,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YiSha.Web.Code", "YiSha.Web
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YiSha.Service", "YiSha.Business\YiSha.Service\YiSha.Service.csproj", "{BC9E46B3-FE71-4BAC-A84D-CE76D59EBE7A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YiSha.FrontWeb", "YiSha.Web\YiSha.FrontWeb\YiSha.FrontWeb.csproj", "{426FF6A5-5860-465A-B495-D6E258F54172}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -299,18 +297,6 @@ Global
 		{BC9E46B3-FE71-4BAC-A84D-CE76D59EBE7A}.Release|iPhone.Build.0 = Release|Any CPU
 		{BC9E46B3-FE71-4BAC-A84D-CE76D59EBE7A}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{BC9E46B3-FE71-4BAC-A84D-CE76D59EBE7A}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
-		{426FF6A5-5860-465A-B495-D6E258F54172}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{426FF6A5-5860-465A-B495-D6E258F54172}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{426FF6A5-5860-465A-B495-D6E258F54172}.Debug|iPhone.ActiveCfg = Debug|Any CPU
-		{426FF6A5-5860-465A-B495-D6E258F54172}.Debug|iPhone.Build.0 = Debug|Any CPU
-		{426FF6A5-5860-465A-B495-D6E258F54172}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
-		{426FF6A5-5860-465A-B495-D6E258F54172}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
-		{426FF6A5-5860-465A-B495-D6E258F54172}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{426FF6A5-5860-465A-B495-D6E258F54172}.Release|Any CPU.Build.0 = Release|Any CPU
-		{426FF6A5-5860-465A-B495-D6E258F54172}.Release|iPhone.ActiveCfg = Release|Any CPU
-		{426FF6A5-5860-465A-B495-D6E258F54172}.Release|iPhone.Build.0 = Release|Any CPU
-		{426FF6A5-5860-465A-B495-D6E258F54172}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{426FF6A5-5860-465A-B495-D6E258F54172}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -337,7 +323,6 @@ Global
 		{984AE6BE-0519-4BAA-A133-7DCB4050DF15} = {733D2669-1EC3-4570-A2AA-655C5250E103}
 		{D69BBD95-A1B8-4F2A-A7B5-F9C57150081B} = {733D2669-1EC3-4570-A2AA-655C5250E103}
 		{BC9E46B3-FE71-4BAC-A84D-CE76D59EBE7A} = {283948F1-48FF-4328-A3DD-07344C7AFF43}
-		{426FF6A5-5860-465A-B495-D6E258F54172} = {733D2669-1EC3-4570-A2AA-655C5250E103}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4873C9CF-80BE-4949-BB7D-A1CA9E3BC77D}

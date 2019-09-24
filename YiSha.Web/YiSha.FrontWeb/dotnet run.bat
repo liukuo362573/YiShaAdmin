@@ -1,1 +1,0 @@
-dotnet YiSha.FrontWeb.dll
