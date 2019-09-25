@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using System;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Caching.Memory;
 using YiSha.Cache.Interface;
 using YiSha.Util;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace YiSha.WebCache
+namespace YiSha.MemoryCache
 {
-    public class WebCacheImp : ICache
+    public class MemoryCacheImp : ICache
     {
         private IMemoryCache cache = GlobalContext.ServiceProvider.GetService<IMemoryCache>();
 

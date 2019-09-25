@@ -1,6 +1,5 @@
-﻿using System;
-using YiSha.Cache.Interface;
-using YiSha.WebCache;
+﻿using YiSha.Cache.Interface;
+using YiSha.MemoryCache;
 
 namespace YiSha.Cache.Factory
 {
@@ -8,7 +7,7 @@ namespace YiSha.Cache.Factory
     {
         public static ICache Cache()
         {
-            return new WebCacheImp();
+            return new MemoryCacheImp();
         }
     }
 }

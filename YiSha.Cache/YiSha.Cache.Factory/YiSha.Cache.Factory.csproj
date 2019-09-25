@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\YiSha.Cache.Interface\YiSha.Cache.Interface.csproj" />
-    <ProjectReference Include="..\YiSha.WebCache\YiSha.WebCache.csproj" />
+    <ProjectReference Include="..\YiSha.MemoryCache\YiSha.MemoryCache.csproj" />
   </ItemGroup>
 
 </Project>
