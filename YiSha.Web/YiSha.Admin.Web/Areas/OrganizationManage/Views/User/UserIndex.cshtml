@@ -53,7 +53,7 @@
                         <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="结束时间" />
                     </li>
                     <li>
-                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="refreshGrid()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                     </li>
                 </ul>
             </div>
@@ -110,7 +110,7 @@
             callback: {
                 onClick: function (event, treeId, treeNode) {
                     $("#departmentId").val(treeNode.id);
-                    refreshGrid();
+                    searchGrid();
                 }
             }
         });
@@ -159,7 +159,7 @@
         });
     }
 
-    function refreshGrid() {
+    function searchGrid() {
         $('#gridTable').ysTable('refresh');
         resetToolbarStatus();
     }
@@ -199,7 +199,7 @@
                     success: function (obj) {
                         if (obj.Tag == 1) {
                             ys.msgSuccess(obj.Message);
-                            refreshGrid();
+                            searchGrid();
                         }
                         else {
                             ys.msgError(obj.Message);

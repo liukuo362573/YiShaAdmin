@@ -10,7 +10,7 @@
                         文章标题：<input id="newsTitle" col="NewsTitle" type="text" />
                     </li>
                     <li>
-                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="refreshGrid()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                     </li>
                 </ul>
             </div>
@@ -59,7 +59,7 @@
         });
     }
 
-    function refreshGrid() {
+    function searchGrid() {
         $('#gridTable').ysTable('refresh');
         resetToolbarStatus();
     }
@@ -98,7 +98,7 @@
                     success: function (obj) {
                         if (obj.Tag == 1) {
                             ys.msgSuccess(obj.Message);
-                            refreshGrid();
+                            searchGrid();
                         }
                         else {
                             ys.msgError(obj.Message);

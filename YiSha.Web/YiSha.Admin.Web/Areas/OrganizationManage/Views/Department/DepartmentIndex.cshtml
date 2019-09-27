@@ -17,7 +17,7 @@
                         部门名称：<input id="departmentName" col="DepartmentName" type="text" />
                     </li>
                     <li>
-                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="refreshTreeGrid()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchTreeGrid()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                     </li>
                 </ul>
             </div>
@@ -67,7 +67,7 @@
         $('#gridTable').ysTreeTable(options);
     }
 
-    function refreshTreeGrid() {
+    function searchTreeGrid() {
         var param = $("#searchDiv").getWebControls();
         $('#gridTable').ysTreeTable('refresh', param);
     }
@@ -107,7 +107,7 @@
                     success: function (obj) {
                         if (obj.Tag == 1) {
                             ys.msgSuccess(obj.Message);
-                            refreshTreeGrid();
+                            searchTreeGrid();
                         }
                         else {
                             ys.msgError(obj.Message);

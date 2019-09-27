@@ -481,7 +481,7 @@ namespace YiSha.CodeGenerator.Template
                 sb.AppendLine("                        " + fieldName + "：<input id=\"" + fieldNameLower + "\" col=\"" + fieldName + "\" type=\"text\" />");
                 sb.AppendLine("                    </li>");
                 sb.AppendLine("                    <li>");
-                sb.AppendLine("                        <a id=\"btnSearch\" class=\"btn btn-primary btn-sm\" onclick=\"refreshGrid()\"><i class=\"fa fa-search\"></i>&nbsp;搜索</a>");
+                sb.AppendLine("                        <a id=\"btnSearch\" class=\"btn btn-primary btn-sm\" onclick=\"searchGrid()\"><i class=\"fa fa-search\"></i>&nbsp;搜索</a>");
                 sb.AppendLine("                    </li>");
                 sb.AppendLine("                </ul>");
                 sb.AppendLine("            </div>");
@@ -546,8 +546,8 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("        });");
             sb.AppendLine("    }");
             sb.AppendLine("");
-            sb.AppendLine("    function refreshGrid() {");
-            sb.AppendLine("        $('#gridTable').ysTable('refresh');");
+            sb.AppendLine("    function searchGrid() {");
+            sb.AppendLine("        $('#gridTable').ysTable('search');");
             sb.AppendLine("        resetToolbarStatus();");
             sb.AppendLine("    }");
             sb.AppendLine("");
@@ -596,7 +596,7 @@ namespace YiSha.CodeGenerator.Template
                 sb.AppendLine("                    success: function (obj) {");
                 sb.AppendLine("                        if (obj.Tag == 1) {");
                 sb.AppendLine("                            ys.msgSuccess(obj.Message);");
-                sb.AppendLine("                            refreshGrid();");
+                sb.AppendLine("                            searchGrid();");
                 sb.AppendLine("                        }");
                 sb.AppendLine("                        else {");
                 sb.AppendLine("                            ys.msgError(obj.Message);");
@@ -722,7 +722,7 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("                success: function (obj) {");
             sb.AppendLine("                    if (obj.Tag == 1) {");
             sb.AppendLine("                        ys.msgSuccess(obj.Message);");
-            sb.AppendLine("                        parent.refreshGrid();");
+            sb.AppendLine("                        parent.searchGrid();");
             sb.AppendLine("                        parent.layer.close(index);");
             sb.AppendLine("                    }");
             sb.AppendLine("                    else {");
