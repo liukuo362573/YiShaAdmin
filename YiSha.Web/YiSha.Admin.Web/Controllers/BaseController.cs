@@ -33,9 +33,9 @@ namespace YiSha.Admin.Web.Controllers
 
             if (GlobalContext.SystemConfig.Demo)
             {
-                if (user?.UserName.ParseToString() == "demo")
+                if (context.HttpContext.Request.Method.ToUpper() == "POST")
                 {
-                    if (context.HttpContext.Request.Method.ToUpper() == "POST" && action.ToUpper() != "LoginJson".ToUpper() && action.ToUpper() != "CodePreviewJson".ToUpper())
+                    if (action.ToUpper() != "LoginJson".ToUpper() && action.ToUpper() != "CodePreviewJson".ToUpper())
                     {
                         TData obj = new TData();
                         obj.Message = "演示模式，不允许操作";
