@@ -17,7 +17,7 @@
                         地点名称：<input id="areaName" col="AreaName" type="text" />
                     </li>
                     <li>
-                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="refreshTreeGrid()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchTreeGrid()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                     </li>
                 </ul>
             </div>
@@ -64,9 +64,9 @@
         $('#gridTable').ysTreeTable(options);
     }
 
-    function refreshTreeGrid() {
+    function searchTreeGrid() {
         var param = $("#searchDiv").getWebControls();
-        $('#gridTable').ysTreeTable('refresh', param);
+        $('#gridTable').ysTreeTable('search', param);
     }
 
     function showSaveForm(bAdd) {

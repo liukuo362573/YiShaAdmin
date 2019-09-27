@@ -14,7 +14,7 @@
     };
 
     $.fn.ysTreeTable.methods = {
-        refresh: function (target, param) {
+        search: function (target, param) {
             return target.bootstrapTreeTable('refresh', param);
         },
         getRowById: function (target, id) {
@@ -33,8 +33,9 @@
     };
 
     $.fn.ysTreeTable.defaults = {
-        type: 'get',
-        ajaxParams: {},
+        method: 'GET',
+        code: "Id",
+        parentCode: "ParentId",
         bordered: true,
         expandColumn: '1',
         expandAll: false,

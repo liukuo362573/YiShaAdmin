@@ -20,7 +20,7 @@
                         <li>
                             菜单状态：<span id="menuStatus" col="MenuStatus"></span>
                         </li>
-                        <li><a class="btn btn-primary btn-rounded btn-sm" onclick="refreshTreeGrid()"><i class="fa fa-search"></i>&nbsp;搜索</a></li>
+                        <li><a class="btn btn-primary btn-rounded btn-sm" onclick="searchTreeGrid()"><i class="fa fa-search"></i>&nbsp;搜索</a></li>
                     </ul>
                 </div>
             </form>
@@ -50,7 +50,6 @@
         var options = {
             code: "Id",
             parentCode: "ParentId",
-            uniqueId: "Id",
             expandAll: false,
             expandFirst: false,
             toolbar: '#toolbar',
@@ -100,9 +99,9 @@
         $('#gridTable').ysTreeTable(options);
     }
 
-    function refreshTreeGrid() {
+    function searchTreeGrid() {
         var param = $("#searchDiv").getWebControls();
-        $('#gridTable').ysTreeTable('refresh', param);
+        $('#gridTable').ysTreeTable('search', param);
     }
 
     function showSaveForm(bAdd) {
@@ -148,7 +147,7 @@
                     success: function (obj) {
                         if (obj.Tag == 1) {
                             ys.msgSuccess(obj.Message);
-                            refreshTreeGrid();
+                            searchTreeGrid();
                         }
                         else {
                             ys.msgError(obj.Message);

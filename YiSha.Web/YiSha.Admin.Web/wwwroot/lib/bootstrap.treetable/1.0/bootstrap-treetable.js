@@ -155,7 +155,7 @@
             $tbody.html($loading);
             if (options.url) {
                 $.ajax({
-                    type: options.type,
+                    type: options.method,
                     url: options.url,
                     data: parms ? parms : options.ajaxParams,
                     dataType: "JSON",
@@ -699,7 +699,7 @@
         parentCode: 'parentCode',  // 用于设置父子关系
         rootIdValue: null,         // 设置根节点id值----可指定根节点，默认为null,"",0,"0"
         data: null,                // 构造table的数据集合
-        type: "GET",               // 请求数据的ajax类型
+        method: "GET",               // 请求数据的ajax类型
         url: null,                 // 请求数据的ajax的url
         ajaxParams: {},            // 请求数据的ajax的data属性
         expandColumn: 0,           // 在哪一列上面显示展开按钮

@@ -60,7 +60,7 @@
     };
     $.fn.ysTree.defaults = {
         url:'',
-        async: true,
+        async: false,
         maxHeight: "300px",
         expandLevel: 0,
         check: { "enable": false },
