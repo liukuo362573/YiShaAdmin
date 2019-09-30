@@ -1,5 +1,5 @@
-# YiShaAdmin
- YiShaAdmin借鉴了很多开源项目的优点，让你开发Web管理系统和移动端Api更简单，所以我也把她开源了。她可以用于所有的Web应用程序，网站管理后台、CMS、CRM、ERP、OA这类的系统和移动端Api。
+## YiShaAdmin
+ YiShaAdmin基于.NET Core Web开发，借鉴了很多开源项目的优点，让你开发Web管理系统和移动端Api更简单，所以我也把她开源了。她可以用于所有的Web应用程序，网站管理后台、CMS、CRM、ERP、OA这类的系统和移动端Api。
  
 ## 内置功能
 
@@ -22,5 +22,6 @@
 1. 项目地址：[https://yishasoft.com/admin](https://yishasoft.com/admin)  
 2. 账号密码：admin 123456
 
-YiShaAdmin交流群
+## YiShaAdmin交流群
+
 QQ群1：428703155
