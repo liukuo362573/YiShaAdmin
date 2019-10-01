@@ -22,6 +22,11 @@
 1. 项目地址：[https://yishasoft.com/admin](https://yishasoft.com/admin)  
 2. 账号密码：admin 123456
 
+## 演示图
+
+![这里随便写文字](https://oscimg.oschina.net/oscnet/25b5e333768d013d45a990c152dbe4d9d6e.jpg)
+![这里随便写文字](https://oscimg.oschina.net/oscnet/e29fd81b2d43b517f99535564af41f9d1d5.jpg)
+
 ## YiShaAdmin交流群
 
 QQ群1：428703155
