@@ -22,6 +22,9 @@
 1. 项目地址：[https://yishasoft.com/admin](https://yishasoft.com/admin)  
 2. 账号密码：admin 123456
 
+## 演示图
+
+
 ## YiShaAdmin交流群
 
 QQ群1：428703155
