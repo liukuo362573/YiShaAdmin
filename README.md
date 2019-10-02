@@ -30,7 +30,7 @@
 
 ## 演示图
 
-![登录页面](https://raw.githubusercontent.com/liukuo362573/YiShaAdmin/master/YiSha.Web/YiSha.Admin.Web/wwwroot/image/demo_1.png)
+![登录页面](https://raw.githubusercontent.com/liukuo362573/YiShaAdmin/master/YiSha.Web/YiSha.Admin.Web/wwwroot/image/demo_1.jpg)
 ![登录进去首页](https://raw.githubusercontent.com/liukuo362573/YiShaAdmin/master/YiSha.Web/YiSha.Admin.Web/wwwroot/image/demo_2.png)
 ![用户列表](https://raw.githubusercontent.com/liukuo362573/YiShaAdmin/master/YiSha.Web/YiSha.Admin.Web/wwwroot/image/demo_3.png)
 ![用户列表修改](https://raw.githubusercontent.com/liukuo362573/YiShaAdmin/master/YiSha.Web/YiSha.Admin.Web/wwwroot/image/demo_4.png)
