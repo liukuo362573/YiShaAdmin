@@ -60,24 +60,11 @@ namespace YiSha.Admin.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult TestUserAgent()
-        {
-            ViewBag.UserAgent = NetHelper.UserAgent;
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult TestGeoLocation()
-        {
-            return View();
-        }
-
-        [HttpGet]
         public IActionResult Login()
         {
             if (GlobalContext.SystemConfig.Demo)
             {
-                ViewBag.UserName = "demo";
+                ViewBag.UserName = "admin";
                 ViewBag.Password = "123456";
             }
             return View();
