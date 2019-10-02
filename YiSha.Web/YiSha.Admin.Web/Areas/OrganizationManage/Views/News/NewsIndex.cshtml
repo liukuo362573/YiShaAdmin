@@ -77,7 +77,7 @@
         }
         ys.openDialog({
             title: id > 0 ? "编辑文章" : "添加文章",
-            url: '@Url.Content("~/OrganizationManage/News/NewsForm")' + '?id=' + id,
+            content: '@Url.Content("~/OrganizationManage/News/NewsForm")' + '?id=' + id,
             width: "768px",
             height: "600px",
             callback: function (index, layero) {

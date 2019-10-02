@@ -82,7 +82,7 @@
         }
         ys.openDialog({
             title: id > 0 ? "编辑" : "添加",
-            url: '@Url.Content("~/SystemManage/Area/AreaForm")' + '?id=' + id,
+            content: '@Url.Content("~/SystemManage/Area/AreaForm")' + '?id=' + id,
             width: "768px",
             height: "550px",
             callback: function (index, layero) {

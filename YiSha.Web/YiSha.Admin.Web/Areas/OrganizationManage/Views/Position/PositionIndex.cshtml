@@ -77,7 +77,7 @@
         }
         ys.openDialog({
             title: id > 0 ? "编辑职位" : "添加职位",
-            url: '@Url.Content("~/OrganizationManage/Position/PositionForm")' + '?id=' + id,
+            content: '@Url.Content("~/OrganizationManage/Position/PositionForm")' + '?id=' + id,
             width: "768px",
             height: "350px",
             callback: function (index, layero) {

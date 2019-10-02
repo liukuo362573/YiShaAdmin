@@ -177,7 +177,7 @@
         }
         ys.openDialog({
             title: id > 0 ? "编辑用户" : "添加用户",
-            url: '@Url.Content("~/OrganizationManage/User/UserForm")' + '?id=' + id,
+            content: '@Url.Content("~/OrganizationManage/User/UserForm")' + '?id=' + id,
             width: "768px",
             height: "477px",
             callback: function (index, layero) {
@@ -218,7 +218,7 @@
     function showResetPasswordForm(id) {
         ys.openDialog({
             title: "重置密码",
-            url: '@Url.Content("~/OrganizationManage/User/ResetPassword")' + '?id=' + id,
+            content: '@Url.Content("~/OrganizationManage/User/ResetPassword")' + '?id=' + id,
             width: "768px",
             height: "220px",
             callback: function (index, layero) {

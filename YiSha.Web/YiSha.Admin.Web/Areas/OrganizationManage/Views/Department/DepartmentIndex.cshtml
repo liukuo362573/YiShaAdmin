@@ -85,7 +85,7 @@
         }
         ys.openDialog({
             title: id > 0 ? "编辑部门" : "添加部门",
-            url: '@Url.Content("~/OrganizationManage/Department/DepartmentForm")' + '?id=' + id,
+            content: '@Url.Content("~/OrganizationManage/Department/DepartmentForm")' + '?id=' + id,
             width: "780px",
             height: "540px",
             callback: function (index, layero) {

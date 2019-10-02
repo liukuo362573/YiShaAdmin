@@ -88,7 +88,7 @@
         }
         ys.openDialog({
             title: id > 0 ? "编辑字典" : "添加字典",
-            url: '@Url.Content("~/SystemManage/DataDict/DataDictForm")' + '?id=' + id,
+            content: '@Url.Content("~/SystemManage/DataDict/DataDictForm")' + '?id=' + id,
             width: "768px",
             height: "280px",
             callback: function (index, layero) {

@@ -5,25 +5,29 @@
     $.extend(ys, {
         openDialog: function (option) {
             var _option = $.extend({
+                type: 2,
                 title: "系统窗口",
                 width: "200px",
                 height: "200px",
-                url: "",
+                content: "",
+                maxmin: true,
                 shade: 0.4,
                 btn: ['确认', '关闭'],
                 callback: null,
-                shadeClose: false
+                shadeClose: false,
+                closeBtn: 1
             }, option);
             layer.open({
-                type: 2,
+                type: _option.type, // 2表示content的值为url，1表示content的值为html
                 area: [_option.width, _option.height],
                 fix: false, //不固定
-                maxmin: true,
+                maxmin: _option.maxmin,
                 shade: _option.shade,
                 title: _option.title,
-                content: _option.url,
+                content: _option.content,
                 btn: _option.btn,
                 shadeClose: _option.shadeClose, // 弹层外区域关闭
+                closeBtn: _option.closeBtn,  // 1表示带关闭，0表示不带
                 yes: _option.callback,
                 cancel: function (index) {
                     return true;
@@ -34,92 +38,7 @@
             var index = parent.layer.getFrameIndex(window.name);
             parent.layer.close(index);
         },
-        // 格式为 yyyy-MM-dd HH:mm:ss
-        formatDate: function (v, format) {
-            if (!v) return "";
-            var d = v;
-            if (typeof v === 'string') {
-                if (v.indexOf("/Date(") > -1)
-                    d = new Date(parseInt(v.replace("/Date(", "").replace(")/", ""), 10));
-                else
-                    d = new Date(Date.parse(v.replace(/-/g, "/").replace("T", " ").split(".")[0]));
-            }
-            var o = {
-                "M+": d.getMonth() + 1,  //month
-                "d+": d.getDate(),       //day
-                "H+": d.getHours(),      //hour
-                "m+": d.getMinutes(),    //minute
-                "s+": d.getSeconds(),    //second
-                "q+": Math.floor((d.getMonth() + 3) / 3),  //quarter
-                "S": d.getMilliseconds() //millisecondjsonca4
-            };
-            if (/(y+)/.test(format)) {
-                format = format.replace(RegExp.$1, (d.getFullYear() + "").substr(4 - RegExp.$1.length));
-            }
-            for (var k in o) {
-                if (new RegExp("(" + k + ")").test(format)) {
-                    format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
-                }
-            }
-            return format;
-        },
-        request: function (name) {
-            var params = decodeURI(window.location.search);
-            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-            var r = params.substr(1).match(reg);
-            if (r != null) {
-                return unescape(r[2]);
-            }
-            return null;
-        },
-        checkRowEdit: function (row) {
-            if (row.length == 0) {
-                ys.msgError("您没有选择任何行！");
-            } else if (row.length > 1) {
-                ys.msgError("您的选择大于1行！");
-            } else if (row.length == 1) {
-                return true;
-            }
-            return false;
-        },
-        checkRowDelete: function (row) {
-            if (row.length == 0) {
-                ys.msgError("您没有选择任何行！");
-            } else if (row.length > 0) {
-                return true;
-            }
-            return false;
-        },
-        getIds: function (row) {
-            var ids = '';
-            $.each(row, function (i, obj) {
-                if (i == 0) {
-                    ids = obj.Id;
-                }
-                else {
-                    ids += "," + obj.Id;
-                }
-            });
-            return ids;
-        },
-        exportExcel: function (url, postData) {
-            ys.ajax({
-                url: url,
-                type: "post",
-                data: postData,
-                success: function (obj) {
-                    if (obj.Tag == 1) {
-                        window.location.href = ctx + "File/DownloadFile?fileName=" + obj.Result + "&delete=1";
-                    }
-                    else {
-                        ys.msgError(obj.Message);
-                    }
-                },
-                beforeSend: function (xhr) {
-                    ys.showLoading("正在导出数据，请稍后...");
-                }
-            });
-        },
+
         msgWarning: function (content) {
             layer.msg(content, { icon: 0, time: 1000, shift: 5 });
         },
@@ -135,6 +54,7 @@
             }
             layer.msg(content, { icon: 2, time: 3000, shift: 5 });
         },
+
         alertWarning: function (content) {
             layer.alert(content, {
                 icon: 0,
@@ -170,12 +90,45 @@
                 callback(true);
             });
         },
+
         showLoading: function (message) {
             $.blockUI({ message: '<div class="loaderbox"><div class="loading-activity"></div> ' + message + '</div>', css: { border: "none", backgroundColor: 'transparent' } });
         },
         closeLoading: function () {
             setTimeout(function () { $.unblockUI(); }, 50);
         },
+
+        getIds: function (row) {
+            var ids = '';
+            $.each(row, function (i, obj) {
+                if (i == 0) {
+                    ids = obj.Id;
+                }
+                else {
+                    ids += "," + obj.Id;
+                }
+            });
+            return ids;
+        },
+        checkRowEdit: function (row) {
+            if (row.length == 0) {
+                ys.msgError("您没有选择任何行！");
+            } else if (row.length > 1) {
+                ys.msgError("您的选择大于1行！");
+            } else if (row.length == 1) {
+                return true;
+            }
+            return false;
+        },
+        checkRowDelete: function (row) {
+            if (row.length == 0) {
+                ys.msgError("您没有选择任何行！");
+            } else if (row.length > 0) {
+                return true;
+            }
+            return false;
+        },
+
         ajax: function (option) {
             var opt = $.extend({
                 url: option.url,
@@ -247,25 +200,26 @@
                 complete: opt.complete
             })
         },
-        isNullOrEmpty: function (obj) {
-            if ((typeof (obj) == "string" && obj == "") || obj == null || obj == undefined) {
-                return true;
-            }
-            else {
-                return false;
-            }
+
+        exportExcel: function (url, postData) {
+            ys.ajax({
+                url: url,
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        window.location.href = ctx + "File/DownloadFile?fileName=" + obj.Result + "&delete=1";
+                    }
+                    else {
+                        ys.msgError(obj.Message);
+                    }
+                },
+                beforeSend: function (xhr) {
+                    ys.showLoading("正在导出数据，请稍后...");
+                }
+            });
         },
-        isNullOrZero: function (obj) {
-            if (ys.isNullOrEmpty(obj)) {
-                return true;
-            }
-            else if (obj == "0") {
-                return true;
-            }
-            else {
-                return false;
-            }
-        },
+
         // Html.Raw()方法会提示语法错误，所以用这个函数包装一下
         getJson: function (value) {
             return value;
@@ -287,6 +241,84 @@
                 }
             });
             return value;
+        },
+        request: function (name) {
+            var params = decodeURI(window.location.search);
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = params.substr(1).match(reg);
+            if (r != null) {
+                return unescape(r[2]);
+            }
+            return null;
+        },
+        getHttpFileName: function (url) {
+            if (url == null || url == '') {
+                return url;
+            }
+            var i = url.lastIndexOf('/');
+            if (i > 0) {
+                return url.substring(i + 1);
+            }
+            return url;
+        },
+        getFileNameWithoutExtension: function (fileName) {
+            if (fileName == null || fileName == '') {
+                return fileName;
+            }
+            var i = fileName.indexOf('.');
+            if (i > 0) {
+                return fileName.substring(0, i);
+            }
+            return fileName;
+        },
+
+        isNullOrEmpty: function (obj) {
+            if ((typeof (obj) == "string" && obj == "") || obj == null || obj == undefined) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        },
+        isNullOrZero: function (obj) {
+            if (ys.isNullOrEmpty(obj)) {
+                return true;
+            }
+            else if (obj == "0") {
+                return true;
+            }
+            else {
+                return false;
+            }
+        },
+        // 格式为 yyyy-MM-dd HH:mm:ss
+        formatDate: function (v, format) {
+            if (!v) return "";
+            var d = v;
+            if (typeof v === 'string') {
+                if (v.indexOf("/Date(") > -1)
+                    d = new Date(parseInt(v.replace("/Date(", "").replace(")/", ""), 10));
+                else
+                    d = new Date(Date.parse(v.replace(/-/g, "/").replace("T", " ").split(".")[0]));
+            }
+            var o = {
+                "M+": d.getMonth() + 1,  //month
+                "d+": d.getDate(),       //day
+                "H+": d.getHours(),      //hour
+                "m+": d.getMinutes(),    //minute
+                "s+": d.getSeconds(),    //second
+                "q+": Math.floor((d.getMonth() + 3) / 3),  //quarter
+                "S": d.getMilliseconds() //millisecondjsonca4
+            };
+            if (/(y+)/.test(format)) {
+                format = format.replace(RegExp.$1, (d.getFullYear() + "").substr(4 - RegExp.$1.length));
+            }
+            for (var k in o) {
+                if (new RegExp("(" + k + ")").test(format)) {
+                    format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+                }
+            }
+            return format;
         },
         changeURLParam: function (url, arg, arg_val) {
             var pattern = arg + '=([^&]*)';
@@ -333,26 +365,6 @@
                 while (rg.test(rawStr.charAt(--i)));
                 return rawStr.slice(0, i + 1);
             }
-        },
-        getHttpFileName: function (url) {
-            if (url == null || url == '') {
-                return url;
-            }
-            var i = url.lastIndexOf('/');
-            if (i > 0) {
-                return url.substring(i + 1);
-            }
-            return url;
-        },
-        getFileNameWithoutExtension: function (fileName) {
-            if (fileName == null || fileName == '') {
-                return fileName;
-            }
-            var i = fileName.indexOf('.');
-            if (i > 0) {
-                return fileName.substring(0, i);
-            }
-            return fileName;
         },
         toString: function (value) {
             if (value == null) {

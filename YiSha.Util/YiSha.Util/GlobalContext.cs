@@ -1,9 +1,9 @@
 ﻿using System;
-using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
-using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using YiSha.Util.Model;
 using Microsoft.AspNetCore.StaticFiles;
 
@@ -26,6 +26,12 @@ namespace YiSha.Util
         public static IHostingEnvironment HostingEnvironment { get; set; }
 
         public static SystemConfig SystemConfig { get; set; }
+
+        public static string GetVersion()
+        {
+            Version version = Assembly.GetEntryAssembly().GetName().Version;
+            return version.Major + "." + version.Minor;
+        }
 
         /// <summary>
         /// 程序启动时，记录目录

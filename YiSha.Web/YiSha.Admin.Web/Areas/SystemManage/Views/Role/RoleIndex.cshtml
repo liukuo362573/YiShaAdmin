@@ -99,7 +99,7 @@
         }
         ys.openDialog({
             title: id > 0 ? "编辑角色" : "添加角色",
-            url: '@Url.Content("~/SystemManage/Role/RoleForm")' + '?id=' + id,
+            content: '@Url.Content("~/SystemManage/Role/RoleForm")' + '?id=' + id,
             width: "780px",
             height: "550px",
             callback: function (index, layero) {

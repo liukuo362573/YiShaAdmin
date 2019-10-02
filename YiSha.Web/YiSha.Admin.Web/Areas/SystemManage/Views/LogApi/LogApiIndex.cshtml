@@ -138,7 +138,7 @@
     function showDetailForm(id) {
         ys.openDialog({
             title: "Api日志详细",
-            url: '@Url.Content("~/SystemManage/LogApi/LogApiDetail")' + '?id=' + id,
+            content: '@Url.Content("~/SystemManage/LogApi/LogApiDetail")' + '?id=' + id,
             width: "768px",
             height: "500px"
         });

@@ -96,7 +96,7 @@
         }
         ys.openDialog({
             title: id > 0 ? "编辑" : "添加",
-            url: '@Url.Content("~/SystemManage/AutoJob/AutoJobForm")' + '?id=' + id,
+            content: '@Url.Content("~/SystemManage/AutoJob/AutoJobForm")' + '?id=' + id,
             width: "768px",
             height: "700px",
             callback: function (index, layero) {

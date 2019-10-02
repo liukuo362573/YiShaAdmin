@@ -142,7 +142,7 @@
     function showDetailForm(id) {
         ys.openDialog({
             title: "操作日志详细",
-            url: '@Url.Content("~/SystemManage/LogOperate/LogOperateDetail")' + '?id=' + id,
+            content: '@Url.Content("~/SystemManage/LogOperate/LogOperateDetail")' + '?id=' + id,
             width: "768px",
             height: "500px"
         });

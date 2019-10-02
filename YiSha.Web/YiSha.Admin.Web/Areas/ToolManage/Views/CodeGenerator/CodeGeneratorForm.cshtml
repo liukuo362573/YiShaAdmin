@@ -638,7 +638,7 @@
     function showEditSearchForm() {
         ys.openDialog({
             title: "搜索编辑",
-            url: '@Url.Content("~/ToolManage/CodeGenerator/CodeGeneratorEditSearch")',
+            content: '@Url.Content("~/ToolManage/CodeGenerator/CodeGeneratorEditSearch")',
             width: "768px",
             height: "130px",
             btn: [],
@@ -653,7 +653,7 @@
      function showEditToolbarForm() {
         ys.openDialog({
             title: "工具栏编辑",
-            url: '@Url.Content("~/ToolManage/CodeGenerator/CodeGeneratorEditToolbar")',
+            content: '@Url.Content("~/ToolManage/CodeGenerator/CodeGeneratorEditToolbar")',
             width: "768px",
             height: "220px",
             btn: [],
@@ -668,7 +668,7 @@
     function showEditListForm() {
         ys.openDialog({
             title: "列表编辑",
-            url: '@Url.Content("~/ToolManage/CodeGenerator/CodeGeneratorEditList")' + '?tableName=' + tableName + '&tableNameUpper=' + tableNameUpper,
+            content: '@Url.Content("~/ToolManage/CodeGenerator/CodeGeneratorEditList")' + '?tableName=' + tableName + '&tableNameUpper=' + tableNameUpper,
             width: "768px",
             height: "300px",
             btn: [],

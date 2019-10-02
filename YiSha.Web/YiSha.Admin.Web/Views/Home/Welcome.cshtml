@@ -29,13 +29,14 @@
                     </div>
                     <div class="ibox-content">
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-12" style="font-size:14px">
                                 <p>
                                     YiShaAdmin 借鉴了很多开源项目的优点，让你开发Web管理系统和移动端Api更简单，所以我也把她开源了。<br />
                                     她适用于开发 <b>网站管理后台</b>、<b>CMS</b>、<b>CRM</b>、<b>ERP</b>、<b>OA</b> 这类的系统和开发<a href="/api/api-doc" target="_blank"><b>移动端Api</b></a>。<br />
                                     代码完全免费开源，易读易懂、界面简洁美观，给你的项目多一种选择与参考。
                                 </p>
-                                <p><span class="label label-warning">¥免费开源</span></p>
+                                <p>当前版本：@YiSha.Util.GlobalContext.GetVersion() &nbsp;&nbsp;<span class="label label-warning">¥免费开源</span></p>
+                                <p></p>
                                 <p>
                                     <a class="btn btn-success btn-outline" href="https://github.com/liukuo362573/YiShaAdmin" target="_blank">
                                         <i class="fa fa-github"> </i> 访问 github
@@ -60,7 +61,7 @@
                             <a class="close-link"><i class="fa fa-times"></i></a>
                         </div>
                     </div>
-                    <div class="ibox-content">
+                    <div class="ibox-content" style="font-size:14px">
                         <ul>
                             <li>1. 前端： Bootstrap 3.3.7</li>
                             <li>2. 核心框架：.Net Core MVC</li>
@@ -117,10 +118,25 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h5 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#version" href="#v220">v2.2.0</a><code class="pull-right">2019.09.27</code>
+                                        </h5>
+                                    </div>
+                                    <div id="v220" class="panel-collapse collapse in">
+                                        <div class="panel-body">
+                                            <ol>
+                                                <li>1. 正式开源YiShaAdmin 2.2</li>
+                                                <li>2. 代码自动生成的时候，根据配置，生成对应菜单</li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h5 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#version" href="#v200">v2.0.0</a><code class="pull-right">2019.02.25</code>
                                         </h5>
                                     </div>
-                                    <div id="v200" class="panel-collapse collapse in">
+                                    <div id="v200" class="panel-collapse collapse">
                                         <div class="panel-body">
                                             <ol>
                                                 <li>后端框架迁移至.Net Core 2.2</li>
@@ -178,7 +194,7 @@
                         </div>
                         <p id="pay-qrcode">
                             <a>
-                                <img src="~/image/pay.png" width="100%" alt="请使用手机支付宝或者微信扫码支付">
+                                <img src="~/image/pay.png" width="100%" alt="请使用手机支付宝或者微信扫码支付" class="img-responsive">
                             </a>
                         </p>
                     </div>
@@ -204,6 +220,22 @@
         }), $(".close-link").click(function () {
             var div_ibox = $(this).closest("div.ibox");
             div_ibox.remove()
+        });
+
+        $('#pay-qrcode').click(function () {
+            var html = $(this).html();
+            ys.openDialog({
+                title: false,
+                type: 1,
+                content: html,
+                closeBtn: 0,
+                shadeClose: true,
+                fix: true,
+                width: '600px',
+                height: '321px',
+                maxmin: false,
+                btn: null
+            });
         });
 
     });
