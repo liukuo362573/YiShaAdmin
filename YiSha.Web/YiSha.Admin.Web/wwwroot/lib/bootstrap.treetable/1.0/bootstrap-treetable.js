@@ -279,6 +279,14 @@
                         recursionNode(item, (lv + 1), _child_row_id, row_id);
                     });
                 }
+                else if (options.expandFirst) {
+                    if (lv == 1) {
+                        $.each(_ls, function (i, item) {
+                            var _child_row_id = row_id + "_" + i;
+                            recursionNode(item, (lv + 1), _child_row_id, row_id);
+                        });
+                    }
+                }
             }
         };
         // 绘制行
