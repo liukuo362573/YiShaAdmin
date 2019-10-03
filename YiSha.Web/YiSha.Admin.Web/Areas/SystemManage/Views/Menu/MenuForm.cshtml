@@ -13,17 +13,7 @@
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">菜单类型</label>
-            <div class="col-sm-8">
-                @{
-                    Dictionary<int, string> menuTypeList = typeof(MenuTypeEnum).EnumToDictionary();
-                    foreach (int key in menuTypeList.Keys)
-                    {
-                        <label class="radio-box">
-                            <input id="@Html.Raw("menuType"+key)" col="MenuType" type="radio" value="@key" /> @menuTypeList[key]
-                        </label>
-                    }
-                }
-            </div>
+            <div class="col-sm-8" id="menuType" col="MenuType"></div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">菜单名称<font class="red"> *</font></label>
@@ -62,24 +52,13 @@
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">菜单状态</label>
-            <div class="col-sm-8">
-                @{
-                    Dictionary<int, string> statusList = typeof(StatusEnum).EnumToDictionary();
-                    foreach (int key in statusList.Keys)
-                    {
-                        <div class="radio-box">
-                            <input id="@Html.Raw("menuStatus"+key)" col="MenuStatus" type="radio" value="@key" />
-                            <label>@statusList[key]</label>
-                        </div>
-                    }
-                }
-            </div>
+            <div class="col-sm-8" id="menuStatus" col="MenuStatus"></div>
         </div>
     </form>
 </div>
 
 <script type="text/javascript">
-        var id = ys.request("id");
+    var id = ys.request("id");
     var parentId = ys.request("parentId");
     var parentName = ys.request("parentName");
     $(function () {
@@ -93,7 +72,10 @@
             $(".icon-drop").hide();
         });
 
-        $('input[name=menuType]').on('ifChecked', function (event) {
+        $("#menuType").ysRadioBox({ data: ys.getJson(@Html.Raw(typeof(MenuTypeEnum).EnumToDictionaryString())) });
+        $("#menuStatus").ysRadioBox({ data: ys.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+
+        $('input[name=menuType_radiobox]').on('ifChecked', function (event) {
             var menuType = $(event.target).val();
             menuVisible(menuType);
         });

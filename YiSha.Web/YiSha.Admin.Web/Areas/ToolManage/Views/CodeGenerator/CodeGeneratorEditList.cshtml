@@ -43,10 +43,10 @@
 
         //默认设置
         if (divPagination.is(':hidden')) {
-            $("#paginationStatus").ysRadioBoxSetValue(@NeedEnum.NotNeed.ParseToInt());
+            $("#paginationStatus").ysRadioBox('setValue',@NeedEnum.NotNeed.ParseToInt());
         }
         else {
-            $("#paginationStatus").ysRadioBoxSetValue(@NeedEnum.Need.ParseToInt());
+            $("#paginationStatus").ysRadioBox('setValue',@NeedEnum.Need.ParseToInt());
         }
         var selectedColumn = '';
         $("#gridTable th", parent.document).each(function (i, ele) {

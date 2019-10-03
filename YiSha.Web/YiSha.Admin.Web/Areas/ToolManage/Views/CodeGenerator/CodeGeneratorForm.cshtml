@@ -197,7 +197,7 @@
                                         Name：<input id="searchName" col="SearchName" type="text" readonly="readonly" />
                                     </li>
                                     <li>
-                                        <a id="btnSearch" class="btn btn-primary btn-sm disabled"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                        <a id="btnSearch" class="btn btn-primary btn-sm disabled"><i class="fa fa-search"></i> 搜索</a>
                                     </li>
                                 </ul>
                             </div>
@@ -300,6 +300,7 @@
                     <li><a href="#codeController" data-toggle="tab">控制器</a></li>
                     <li><a href="#codeIndex" data-toggle="tab">列表页</a></li>
                     <li><a href="#codeForm" data-toggle="tab">表单页</a></li>
+                    <li><a href="#codeMenu" data-toggle="tab">菜单</a></li>
                 </ul>
                 <div class="div-step-container" style="height:360px">
                     <div class="tab-content">
@@ -316,6 +317,8 @@
                         <div class="tab-pane fade" id="codeIndex" col="CodeIndex">
                         </div>
                         <div class="tab-pane fade" id="codeForm" col="CodeForm">
+                        </div>
+                        <div class="tab-pane fade" id="codeMenu" col="CodeMenu">
                         </div>
                     </div>
                 </div>
@@ -557,32 +560,8 @@
         postData.TableName = tableName;
         postData.FileConfig = $("#fileConfigForm").getWebControls();
         postData.OutputConfig = $("#outputConfigForm").getWebControls();
-        postData.PageIndex = {};
-        postData.PageIndex.ButtonList = [];
-        postData.PageIndex.ColumnList = [];
-
-        if ($("#divSearch").css("display") != "none") {
-            postData.PageIndex.IsSearch = 1;
-        }
-        if ($("#divPagination").css("display") != "none") {
-            postData.PageIndex.IsPagination = 1;
-        }
-        $("#toolbar a:not(.hidden)").each(function (i, ele) {
-            postData.PageIndex.ButtonList.push($(ele).attr("id"));
-        });
-        $("#gridTable th").each(function (i, ele) {
-            postData.PageIndex.ColumnList.push($(ele).html());
-        });
-
-        postData.PageForm = {};
-        postData.PageForm.FieldList = [];
-        postData.PageForm.ShowMode = $("#n_columns").val();
-
-        $("#divForm label:not(.hidden)").each(function (i, ele) {
-            if ($(ele).parent().css("display") != "none") {
-                postData.PageForm.FieldList.push($(ele).html());
-            }
-        });
+        postData.PageIndex = getPageIndex();
+        postData.PageForm = getPageForm();
 
         ys.ajax({
             url: '@Url.Content("~/ToolManage/CodeGenerator/CodePreviewJson")',
@@ -594,7 +573,12 @@
                     var result = obj.Result;
                     $("div.tab-pane").each(function (i, ele) {
                         var col = $(ele).attr("col");
-                        $(this).html("<pre class='no-padding no-margin no-top-border'><code class='csharp'>" + result[col] + "</code></pre>");
+                        if (col == "CodeMenu") {
+                               $(this).html("<pre class='no-padding no-margin no-top-border'><code class='html'>" + result[col] + "</code></pre>");
+                        }
+                        else {
+                            $(this).html("<pre class='no-padding no-margin no-top-border'><code class='csharp'>" + result[col] + "</code></pre>");
+                        }
                     });
                     $('pre code').each(function (i, ele) {
                         hljs.highlightBlock(ele)
@@ -613,6 +597,8 @@
         postData.TableName = tableName;
         postData.FileConfig = $("#fileConfigForm").getWebControls();
         postData.OutputConfig = $("#outputConfigForm").getWebControls();
+        postData.PageIndex = getPageIndex();
+        postData.PageForm = getPageForm();
         postData.Code = encodeURIComponent(JSON.stringify(codeList));
         ys.ajax({
             url: '@Url.Content("~/ToolManage/CodeGenerator/CodeGenerateJson")',
@@ -678,6 +664,39 @@
                 iframeWin.saveForm(index);
             }
         });
+    }
+
+    function getPageIndex() {
+        var pageIndex = {};
+        pageIndex.ButtonList = [];
+        pageIndex.ColumnList = [];
+
+        if ($("#divSearch").css("display") != "none") {
+            pageIndex.IsSearch = 1;
+        }
+        if ($("#divPagination").css("display") != "none") {
+            pageIndex.IsPagination = 1;
+        }
+        $("#toolbar a:not(.hidden)").each(function (i, ele) {
+            pageIndex.ButtonList.push($(ele).attr("id"));
+        });
+        $("#gridTable th").each(function (i, ele) {
+            pageIndex.ColumnList.push($(ele).html());
+        });
+        return pageIndex;
+    }
+
+    function getPageForm() {
+        var pageForm = {};
+        pageForm.FieldList = [];
+        pageForm.ShowMode = $("#n_columns").val();
+
+        $("#divForm label:not(.hidden)").each(function (i, ele) {
+            if ($(ele).parent().css("display") != "none") {
+                pageForm.FieldList.push($(ele).html());
+            }
+        });
+        return pageForm;
     }
 
     function editHtml() {

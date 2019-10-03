@@ -120,6 +120,7 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
                 string codeController = template.BuildController(baseConfig);
                 string codeIndex = template.BuildIndex(baseConfig);
                 string codeForm = template.BuildForm(baseConfig);
+                string codeMenu = template.BuildMenu(baseConfig);
 
                 var json = new
                 {
@@ -129,7 +130,8 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
                     CodeBusiness = HttpUtility.HtmlEncode(codeBusiness),
                     CodeController = HttpUtility.HtmlEncode(codeController),
                     CodeIndex = HttpUtility.HtmlEncode(codeIndex),
-                    CodeForm = HttpUtility.HtmlEncode(codeForm)
+                    CodeForm = HttpUtility.HtmlEncode(codeForm),
+                    CodeMenu = HttpUtility.HtmlEncode(codeMenu)
                 };
                 obj.Result = json;
                 obj.Tag = 1;
@@ -139,7 +141,7 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
 
         [HttpPost]
         [AuthorizeFilter("tool:codegenerator:add")]
-        public IActionResult CodeGenerateJson(BaseConfigModel baseConfig, string Code)
+        public async Task<IActionResult> CodeGenerateJson(BaseConfigModel baseConfig, string Code)
         {
             TData<List<KeyValue>> obj = new TData<List<KeyValue>>();
             if (!GlobalContext.SystemConfig.Debug)
@@ -149,7 +151,7 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
             else
             {
                 SingleTableTemplate template = new SingleTableTemplate();
-                List<KeyValue> result = template.CreateCode(baseConfig, HttpUtility.UrlDecode(Code));
+                List<KeyValue> result = await template.CreateCode(baseConfig, HttpUtility.UrlDecode(Code));
                 obj.Result = result;
                 obj.Tag = 1;
             }

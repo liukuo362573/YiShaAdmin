@@ -5,6 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\YiSha.Business\YiSha.Business.Cache\YiSha.Business.Cache.csproj" />
+    <ProjectReference Include="..\..\YiSha.Data\YiSha.Data.Repository\YiSha.Data.Repository.csproj" />
+    <ProjectReference Include="..\..\YiSha.Entity\YiSha.Entity\YiSha.Entity.csproj" />
     <ProjectReference Include="..\YiSha.Util\YiSha.Util.csproj" />
   </ItemGroup>
 
