@@ -1,23 +1,13 @@
-﻿-- --------------------------------------------------------
--- 主机:                           47.92.169.229
--- Server version:               8.0.16 - MySQL Community Server - GPL
--- Server OS:                    Linux
--- HeidiSQL 版本:                  10.1.0.5464
--- --------------------------------------------------------
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+﻿/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-
--- Dumping database structure for yisha_admin
 DROP DATABASE IF EXISTS `yisha_admin`;
 CREATE DATABASE IF NOT EXISTS `yisha_admin` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `yisha_admin`;
 
--- Dumping structure for table yisha_admin.sys_area
 DROP TABLE IF EXISTS `sys_area`;
 CREATE TABLE IF NOT EXISTS `sys_area` (
   `id` bigint(20) NOT NULL,
@@ -35,7 +25,6 @@ CREATE TABLE IF NOT EXISTS `sys_area` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- Dumping data for table yisha_admin.sys_area: ~3,512 rows (approximately)
 DELETE FROM `sys_area`;
 /*!40000 ALTER TABLE `sys_area` DISABLE KEYS */;
 INSERT INTO `sys_area` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `area_code`, `parent_area_code`, `area_name`, `zip_code`, `area_level`) VALUES
@@ -3840,7 +3829,6 @@ INSERT INTO `sys_area` (`id`, `base_is_delete`, `base_create_time`, `base_modify
 	(16508640061124368, 0, '2018-12-24 16:34:02', '2018-12-24 16:34:02', 0, 0, 0, '820301', '820300', '圣方济各堂区', '', 3);
 /*!40000 ALTER TABLE `sys_area` ENABLE KEYS */;
 
--- Dumping structure for table yisha_admin.sys_auto_job
 DROP TABLE IF EXISTS `sys_auto_job`;
 CREATE TABLE IF NOT EXISTS `sys_auto_job` (
   `id` bigint(20) NOT NULL,
@@ -3861,14 +3849,12 @@ CREATE TABLE IF NOT EXISTS `sys_auto_job` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- Dumping data for table yisha_admin.sys_auto_job: ~1 rows (approximately)
 DELETE FROM `sys_auto_job`;
 /*!40000 ALTER TABLE `sys_auto_job` DISABLE KEYS */;
 INSERT INTO `sys_auto_job` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `job_group_name`, `job_name`, `job_status`, `cron_expression`, `start_time`, `end_time`, `next_start_time`, `remark`) VALUES
-	(16508640061124370, 0, '2019-01-03 09:47:04', '2019-09-30 12:16:31', 0, 0, 0, 'YiShaAdmin', '数据库备份', 1, '0 0 3 1/1 * ?', '2019-01-03 10:00:00', '9999-12-31 00:00:00', '2019-10-01 03:00:00', NULL);
+	(16508640061124370, 0, '2019-01-03 09:47:04', '2019-10-03 03:00:01', 0, 0, 0, 'YiShaAdmin', '数据库备份', 1, '0 0 3 1/1 * ?', '2019-01-03 10:00:00', '9999-12-31 00:00:00', '2019-10-04 03:00:00', NULL);
 /*!40000 ALTER TABLE `sys_auto_job` ENABLE KEYS */;
 
--- Dumping structure for table yisha_admin.sys_data_dict
 DROP TABLE IF EXISTS `sys_data_dict`;
 CREATE TABLE IF NOT EXISTS `sys_data_dict` (
   `id` bigint(20) NOT NULL,
@@ -3884,14 +3870,12 @@ CREATE TABLE IF NOT EXISTS `sys_data_dict` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- Dumping data for table yisha_admin.sys_data_dict: ~1 rows (approximately)
 DELETE FROM `sys_data_dict`;
 /*!40000 ALTER TABLE `sys_data_dict` DISABLE KEYS */;
 INSERT INTO `sys_data_dict` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `dict_type`, `dict_sort`, `remark`) VALUES
 	(16508640061124399, 0, '2019-01-05 07:15:41', '2019-01-05 09:30:19', 0, 0, 0, 'NewsType', 1, '新闻类别');
 /*!40000 ALTER TABLE `sys_data_dict` ENABLE KEYS */;
 
--- Dumping structure for table yisha_admin.sys_data_dict_detail
 DROP TABLE IF EXISTS `sys_data_dict_detail`;
 CREATE TABLE IF NOT EXISTS `sys_data_dict_detail` (
   `id` bigint(20) NOT NULL,
@@ -3909,7 +3893,6 @@ CREATE TABLE IF NOT EXISTS `sys_data_dict_detail` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- Dumping data for table yisha_admin.sys_data_dict_detail: ~2 rows (approximately)
 DELETE FROM `sys_data_dict_detail`;
 /*!40000 ALTER TABLE `sys_data_dict_detail` DISABLE KEYS */;
 INSERT INTO `sys_data_dict_detail` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `dict_type`, `dict_sort`, `dict_key`, `dict_value`, `remark`) VALUES
@@ -3917,7 +3900,6 @@ INSERT INTO `sys_data_dict_detail` (`id`, `base_is_delete`, `base_create_time`, 
 	(16508640061124401, 0, '2019-01-05 07:16:25', '2019-01-05 07:16:25', 0, 0, 0, 'NewsType', 2, 2, '行业新闻', '');
 /*!40000 ALTER TABLE `sys_data_dict_detail` ENABLE KEYS */;
 
--- Dumping structure for table yisha_admin.sys_department
 DROP TABLE IF EXISTS `sys_department`;
 CREATE TABLE IF NOT EXISTS `sys_department` (
   `id` bigint(20) NOT NULL,
@@ -3938,7 +3920,6 @@ CREATE TABLE IF NOT EXISTS `sys_department` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- Dumping data for table yisha_admin.sys_department: ~9 rows (approximately)
 DELETE FROM `sys_department`;
 /*!40000 ALTER TABLE `sys_department` DISABLE KEYS */;
 INSERT INTO `sys_department` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `parent_id`, `department_name`, `telephone`, `fax`, `email`, `remark`, `principal_id`, `department_sort`) VALUES
@@ -3953,7 +3934,6 @@ INSERT INTO `sys_department` (`id`, `base_is_delete`, `base_create_time`, `base_
 	(16508640061124410, 0, '2018-12-22 18:48:02', '2018-12-26 17:48:25', 0, 0, 0, 16508640061124403, '行政部', '', '', '', '', 0, 10);
 /*!40000 ALTER TABLE `sys_department` ENABLE KEYS */;
 
--- Dumping structure for table yisha_admin.sys_menu
 DROP TABLE IF EXISTS `sys_menu`;
 CREATE TABLE IF NOT EXISTS `sys_menu` (
   `id` bigint(20) NOT NULL,
@@ -3976,7 +3956,6 @@ CREATE TABLE IF NOT EXISTS `sys_menu` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- Dumping data for table yisha_admin.sys_menu: ~69 rows (approximately)
 DELETE FROM `sys_menu`;
 /*!40000 ALTER TABLE `sys_menu` DISABLE KEYS */;
 INSERT INTO `sys_menu` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `parent_id`, `menu_name`, `menu_icon`, `menu_url`, `menu_target`, `menu_sort`, `menu_type`, `menu_status`, `authorize`, `remark`) VALUES
@@ -3995,63 +3974,62 @@ INSERT INTO `sys_menu` (`id`, `base_is_delete`, `base_create_time`, `base_modify
 	(16508640061130081, 0, '2018-11-30 17:08:00', '2018-12-22 18:57:58', 0, 0, 0, 16508640061130076, '操作日志', '', 'SystemManage/LogOperate/LogOperateIndex', '', 1, 2, 1, 'system:logoperate:view', ''),
 	(16508640061130082, 0, '2018-11-30 17:17:00', '2018-12-13 21:44:42', 0, 0, 0, 16508640061130076, '登录日志', '', 'SystemManage/LogLogin/LogLoginIndex', '', 0, 2, 1, 'system:loglogin:view', ''),
 	(16508640061130083, 0, '2018-12-06 09:14:48', '2019-02-25 14:52:40', 0, 16508640061130151, 0, 16508640061130069, '职位管理', '', 'OrganizationManage/Position/PositionIndex', '', 3, 2, 1, 'organization:position:view', ''),
-	(16508640061130084, 0, '2018-12-12 16:17:41', '2019-04-01 10:40:25', 0, 16508640061130151, 0, 16508640061130072, '员工查询', '', '', '', 1, 3, 1, 'organization:user:list', ''),
+	(16508640061130084, 0, '2018-12-12 16:17:41', '2019-04-01 10:40:25', 0, 16508640061130151, 0, 16508640061130072, '员工查询', '', '', '', 1, 3, 1, 'organization:user:search', ''),
 	(16508640061130085, 0, '2018-12-12 16:21:40', '2019-04-01 10:40:31', 0, 16508640061130151, 0, 16508640061130072, '员工新增', '', '', '', 2, 3, 1, 'organization:user:add', ''),
 	(16508640061130086, 0, '2018-12-12 16:39:46', '2019-04-01 10:40:36', 0, 16508640061130151, 0, 16508640061130072, '员工修改', '', '', '', 3, 3, 1, 'organization:user:edit', ''),
 	(16508640061130087, 0, '2018-12-12 18:26:00', '2019-04-01 10:40:42', 0, 16508640061130151, 0, 16508640061130072, '员工删除', '', '', '', 4, 3, 1, 'organization:user:delete', ''),
 	(16508640061130088, 0, '2018-12-12 18:26:26', '2019-04-01 10:40:48', 0, 16508640061130151, 0, 16508640061130072, '员工导出', '', '', '', 5, 3, 1, 'organization:user:export', ''),
 	(16508640061130089, 0, '2018-12-12 18:27:07', '2018-12-27 18:31:29', 0, 0, 0, 16508640061130072, '重置密码', '', '', '', 6, 3, 1, 'system:user:resetpassword', ''),
-	(16508640061130090, 0, '2018-12-12 18:30:58', '2018-12-12 18:31:11', 0, 0, 0, 16508640061130073, '部门查询', '', '', '', 1, 3, 1, 'organization:department:list', ''),
+	(16508640061130090, 0, '2018-12-12 18:30:58', '2018-12-12 18:31:11', 0, 0, 0, 16508640061130073, '部门查询', '', '', '', 1, 3, 1, 'organization:department:search', ''),
 	(16508640061130091, 0, '2018-12-12 18:32:00', '2018-12-12 18:32:00', 0, 0, 0, 16508640061130073, '部门新增', '', '', '', 2, 3, 1, 'organization:department:add', ''),
 	(16508640061130092, 0, '2018-12-12 18:32:43', '2018-12-12 18:32:43', 0, 0, 0, 16508640061130073, '部门修改', '', '', '', 3, 3, 1, 'organization:department:edit', ''),
 	(16508640061130093, 0, '2018-12-12 18:33:01', '2018-12-12 18:33:01', 0, 0, 0, 16508640061130073, '部门删除', '', '', '', 4, 3, 1, 'organization:department:delete', ''),
-	(16508640061130094, 0, '2018-12-12 18:33:37', '2018-12-12 18:33:59', 0, 0, 0, 16508640061130083, '职位查询', '', '', '', 1, 3, 1, 'organization:position:list', ''),
+	(16508640061130094, 0, '2018-12-12 18:33:37', '2018-12-12 18:33:59', 0, 0, 0, 16508640061130083, '职位查询', '', '', '', 1, 3, 1, 'organization:position:search', ''),
 	(16508640061130095, 0, '2018-12-12 18:34:13', '2018-12-27 06:31:12', 0, 0, 0, 16508640061130083, '职位新增', '', '', '', 2, 3, 1, 'organization:position:add', ''),
 	(16508640061130096, 0, '2018-12-12 18:34:36', '2018-12-12 18:34:36', 0, 0, 0, 16508640061130083, '职位修改', '', '', '', 3, 3, 1, 'organization:position:edit', ''),
 	(16508640061130097, 0, '2018-12-12 18:34:50', '2018-12-12 18:34:50', 0, 0, 0, 16508640061130083, '职位删除', '', '', '', 4, 3, 1, 'organization:position:delete', ''),
-	(16508640061130098, 0, '2018-12-27 06:32:24', '2018-12-27 06:34:20', 0, 0, 0, 16508640061130074, '角色查询', '', '', '', 1, 3, 1, 'system:role:list', ''),
+	(16508640061130098, 0, '2018-12-27 06:32:24', '2018-12-27 06:34:20', 0, 0, 0, 16508640061130074, '角色查询', '', '', '', 1, 3, 1, 'system:role:search', ''),
 	(16508640061130099, 0, '2018-12-27 06:35:22', '2018-12-27 06:35:22', 0, 0, 0, 16508640061130074, '角色新增', '', '', '', 2, 3, 1, 'system:role:add', ''),
 	(16508640061130100, 0, '2018-12-27 06:35:50', '2018-12-27 06:35:50', 0, 0, 0, 16508640061130074, '角色修改', '', '', '', 3, 3, 1, 'system:role:edit', ''),
 	(16508640061130101, 0, '2018-12-27 06:36:13', '2018-12-27 06:36:13', 0, 0, 0, 16508640061130074, '角色删除', '', '', '', 4, 3, 1, 'system:role:delete', ''),
-	(16508640061130102, 0, '2018-12-27 06:37:27', '2018-12-27 06:51:23', 0, 0, 0, 16508640061130075, '菜单查询', '', '', '', 1, 3, 1, 'system:menu:list', ''),
+	(16508640061130102, 0, '2018-12-27 06:37:27', '2018-12-27 06:51:23', 0, 0, 0, 16508640061130075, '菜单查询', '', '', '', 1, 3, 1, 'system:menu:search', ''),
 	(16508640061130103, 0, '2018-12-27 06:37:46', '2018-12-27 06:38:28', 0, 0, 0, 16508640061130075, '菜单新增', '', '', '', 2, 3, 1, 'system:menu:add', ''),
 	(16508640061130104, 0, '2018-12-27 06:39:52', '2018-12-27 06:39:52', 0, 0, 0, 16508640061130075, '菜单修改', '', '', '', 3, 3, 1, 'system:menu:edit', ''),
 	(16508640061130105, 0, '2018-12-27 06:40:12', '2018-12-27 06:40:12', 0, 0, 0, 16508640061130075, '菜单删除', '', '', '', 4, 3, 1, 'system:menu:delete', ''),
-	(16508640061130106, 0, '2018-12-27 06:40:43', '2018-12-27 07:50:29', 0, 0, 0, 16508640061130077, '字典查询', '', '', '', 1, 3, 1, 'system:datadict:list', ''),
+	(16508640061130106, 0, '2018-12-27 06:40:43', '2018-12-27 07:50:29', 0, 0, 0, 16508640061130077, '字典查询', '', '', '', 1, 3, 1, 'system:datadict:search', ''),
 	(16508640061130107, 0, '2018-12-27 06:41:12', '2018-12-27 06:41:12', 0, 0, 0, 16508640061130077, '字典新增', '', '', '', 2, 3, 1, 'system:datadict:add', ''),
 	(16508640061130108, 0, '2018-12-27 06:50:00', '2018-12-27 06:50:00', 0, 0, 0, 16508640061130077, '字典修改', '', '', '', 3, 3, 1, 'system:datadict:edit', ''),
 	(16508640061130109, 0, '2018-12-27 18:19:40', '2018-12-27 18:19:40', 0, 0, 0, 16508640061130077, '字典删除', '', '', '', 4, 3, 1, 'system:datadict:delete', ''),
-	(16508640061130110, 0, '2018-12-27 18:21:29', '2018-12-27 18:21:29', 0, 0, 0, 16508640061130078, '地区查询', '', '', '', 1, 3, 1, 'system:area:list', ''),
+	(16508640061130110, 0, '2018-12-27 18:21:29', '2018-12-27 18:21:29', 0, 0, 0, 16508640061130078, '地区查询', '', '', '', 1, 3, 1, 'system:area:search', ''),
 	(16508640061130111, 0, '2018-12-27 18:21:51', '2018-12-27 18:21:51', 0, 0, 0, 16508640061130078, '地区新增', '', '', '', 2, 3, 1, 'system:area:add', ''),
 	(16508640061130112, 0, '2018-12-27 18:23:18', '2018-12-27 18:23:18', 0, 0, 0, 16508640061130078, '地区修改', '', '', '', 3, 3, 1, 'system:area:edit', ''),
 	(16508640061130113, 0, '2018-12-27 18:23:38', '2018-12-27 18:23:38', 0, 0, 0, 16508640061130078, '地区删除', '', '', '', 4, 3, 1, 'system:area:delete', ''),
-	(16508640061130114, 0, '2018-12-27 18:24:24', '2018-12-27 18:24:39', 0, 0, 0, 16508640061130082, '登录日志查询', '', '', '', 1, 3, 1, 'system:loglogin:list', ''),
-	(16508640061130115, 0, '2018-12-27 18:24:58', '2018-12-27 18:24:58', 0, 0, 0, 16508640061130082, '登录日志删除', '', '', '', 2, 3, 1, 'system:loglogin:list', ''),
-	(16508640061130116, 0, '2018-12-27 18:25:27', '2018-12-27 18:25:27', 0, 0, 0, 16508640061130082, '操作日志查询', '', '', '', 1, 3, 1, 'system:logoperate:list', ''),
+	(16508640061130114, 0, '2018-12-27 18:24:24', '2018-12-27 18:24:39', 0, 0, 0, 16508640061130082, '登录日志查询', '', '', '', 1, 3, 1, 'system:loglogin:search', ''),
+	(16508640061130115, 0, '2018-12-27 18:24:58', '2018-12-27 18:24:58', 0, 0, 0, 16508640061130082, '登录日志删除', '', '', '', 2, 3, 1, 'system:loglogin:search', ''),
+	(16508640061130116, 0, '2018-12-27 18:25:27', '2018-12-27 18:25:27', 0, 0, 0, 16508640061130082, '操作日志查询', '', '', '', 1, 3, 1, 'system:logoperate:search', ''),
 	(16508640061130117, 0, '2018-12-27 18:25:49', '2018-12-27 18:25:49', 0, 0, 0, 16508640061130082, '操作日志删除', '', '', '', 2, 3, 1, 'system:logoperate:delete', ''),
-	(16508640061130118, 0, '2018-12-27 18:26:21', '2018-12-27 18:26:21', 0, 0, 0, 16508640061130079, ' 数据表查询', '', '', '', 1, 3, 1, 'system:datatable:list', ''),
+	(16508640061130118, 0, '2018-12-27 18:26:21', '2018-12-27 18:26:21', 0, 0, 0, 16508640061130079, ' 数据表查询', '', '', '', 1, 3, 1, 'system:datatable:search', ''),
 	(16508640061130119, 0, '2018-12-27 18:27:07', '2018-12-27 18:50:53', 0, 0, 0, 16508640061130080, '代码生成新增', '', '', '', 2, 3, 1, 'tool:codegenerator:add', ''),
-	(16508640061130120, 0, '2018-12-27 18:50:25', '2018-12-27 19:15:37', 0, 0, 0, 16508640061130080, '代码生成查询', '', '', '', 1, 3, 1, 'tool:codegenerator:list', ''),
+	(16508640061130120, 0, '2018-12-27 18:50:25', '2018-12-27 19:15:37', 0, 0, 0, 16508640061130080, '代码生成查询', '', '', '', 1, 3, 1, 'tool:codegenerator:search', ''),
 	(16508640061130121, 0, '2018-12-29 10:35:34', '2019-07-23 18:05:30', 0, 16508640061130151, 0, 16508640061130071, '服务器信息', '', 'ToolManage/Server/ServerIndex', '', 15, 2, 1, 'tool:server:view', ''),
 	(16508640061130122, 0, '2019-01-03 08:16:09', '2019-01-03 11:39:39', 0, 0, 0, 16508640061130070, '定时任务', '', 'SystemManage/AutoJob/AutoJobIndex', '', 12, 2, 1, 'system:autojob:view', ''),
-	(16508640061130123, 0, '2019-01-04 21:58:28', '2019-01-04 21:58:46', 0, 0, 0, 16508640061130122, '定时任务查询', '', '', '', 1, 3, 1, 'system:autojob:list', ''),
+	(16508640061130123, 0, '2019-01-04 21:58:28', '2019-01-04 21:58:46', 0, 0, 0, 16508640061130122, '定时任务查询', '', '', '', 1, 3, 1, 'system:autojob:search', ''),
 	(16508640061130124, 0, '2019-01-04 21:59:23', '2019-01-04 21:59:23', 0, 0, 0, 16508640061130122, '定时任务新增', '', '', '', 2, 3, 1, 'system:autojob:add', ''),
 	(16508640061130125, 0, '2019-01-04 22:00:00', '2019-01-04 22:00:00', 0, 0, 0, 16508640061130122, '定时任务修改', '', '', '', 3, 3, 1, 'system:autojob:edit', ''),
 	(16508640061130126, 0, '2019-01-04 22:00:19', '2019-01-04 22:00:19', 0, 0, 0, 16508640061130122, '定时任务删除', '', '', '', 4, 3, 1, 'system:autojob:delete', ''),
 	(16508640061130127, 0, '2019-01-04 22:05:03', '2019-01-04 22:05:03', 0, 0, 0, 16508640061130122, ' 定时任务暂停', '', '', '', 5, 3, 1, 'system:autojob:pause', ''),
 	(16508640061130128, 0, '2019-01-04 22:06:21', '2019-01-04 22:06:21', 0, 0, 0, 16508640061130122, ' 定时任务日志查看', '', '', '', 6, 3, 1, 'system:autojob:logview', ''),
 	(16508640061130129, 0, '2019-01-05 07:41:19', '2019-02-08 10:30:37', 0, 0, 0, 16508640061130069, '文章中心', '', 'OrganizationManage/News/NewsIndex', '', 4, 2, 1, 'organization:news:view', ''),
-	(16508640061130130, 0, '2019-01-05 07:41:54', '2019-02-08 10:30:44', 0, 0, 0, 16508640061130129, '文章查看', '', '', '', 1, 3, 1, 'organization:news:list', ''),
+	(16508640061130130, 0, '2019-01-05 07:41:54', '2019-02-08 10:30:44', 0, 0, 0, 16508640061130129, '文章查看', '', '', '', 1, 3, 1, 'organization:news:search', ''),
 	(16508640061130131, 0, '2019-01-05 07:42:31', '2019-02-08 10:30:52', 0, 0, 0, 16508640061130129, '文章新增', '', '', '', 2, 3, 1, 'organization:news:add', ''),
 	(16508640061130132, 0, '2019-01-05 07:42:49', '2019-02-08 10:31:01', 0, 0, 0, 16508640061130129, '文章修改', '', '', '', 3, 3, 1, 'organization:news:edit', ''),
 	(16508640061130133, 0, '2019-01-05 07:43:19', '2019-02-08 10:31:08', 0, 0, 0, 16508640061130129, '文章删除', '', '', '', 4, 3, 1, 'organization:news:delete', ''),
 	(16508640061130134, 0, '2019-01-07 13:05:40', '2019-07-28 19:20:06', 0, 16508640061130151, 0, 16508640061130070, '系统api', '', '/api/api-doc', '', 13, 2, 1, 'system:api:view', ''),
 	(16508640061130135, 0, '2019-01-09 17:05:00', '2019-01-09 17:05:00', 0, 0, 0, 16508640061130076, 'Api日志', '', 'SystemManage/LogApi/LogApiIndex', '', 3, 2, 1, 'system:logapi:view', ''),
-	(16508640061130136, 0, '2019-01-09 17:06:11', '2019-01-09 17:06:31', 0, 0, 0, 16508640061130135, 'Api日志查询', '', '', '', 1, 3, 1, 'system:logapi:list', ''),
+	(16508640061130136, 0, '2019-01-09 17:06:11', '2019-01-09 17:06:31', 0, 0, 0, 16508640061130135, 'Api日志查询', '', '', '', 1, 3, 1, 'system:logapi:search', ''),
 	(16508640061130137, 0, '2019-01-09 17:07:24', '2019-01-09 17:07:24', 0, 0, 0, 16508640061130135, 'Api日志删除', '', '', '', 2, 3, 1, 'system:logapi:delete', '');
 /*!40000 ALTER TABLE `sys_menu` ENABLE KEYS */;
 
--- Dumping structure for table yisha_admin.sys_menu_authorize
 DROP TABLE IF EXISTS `sys_menu_authorize`;
 CREATE TABLE IF NOT EXISTS `sys_menu_authorize` (
   `id` bigint(20) NOT NULL,
@@ -4067,7 +4045,6 @@ CREATE TABLE IF NOT EXISTS `sys_menu_authorize` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- Dumping data for table yisha_admin.sys_menu_authorize: ~69 rows (approximately)
 DELETE FROM `sys_menu_authorize`;
 /*!40000 ALTER TABLE `sys_menu_authorize` DISABLE KEYS */;
 INSERT INTO `sys_menu_authorize` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `menu_id`, `authorize_id`, `authorize_type`) VALUES
@@ -4146,7 +4123,6 @@ INSERT INTO `sys_menu_authorize` (`id`, `base_is_delete`, `base_create_time`, `b
 	(95470719483252737, 0, '2019-09-21 10:46:33', '2019-09-21 10:46:33', 16508640061130151, 16508640061130151, 0, 16508640061130085, 16508640061130147, 1);
 /*!40000 ALTER TABLE `sys_menu_authorize` ENABLE KEYS */;
 
--- Dumping structure for table yisha_admin.sys_news
 DROP TABLE IF EXISTS `sys_news`;
 CREATE TABLE IF NOT EXISTS `sys_news` (
   `id` bigint(20) NOT NULL,
@@ -4171,15 +4147,13 @@ CREATE TABLE IF NOT EXISTS `sys_news` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- Dumping data for table yisha_admin.sys_news: ~1 rows (approximately)
 DELETE FROM `sys_news`;
 /*!40000 ALTER TABLE `sys_news` DISABLE KEYS */;
 INSERT INTO `sys_news` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `news_title`, `news_content`, `news_tag`, `province_id`, `city_id`, `county_id`, `thumb_image`, `news_author`, `news_sort`, `news_date`, `news_type`, `view_times`) VALUES
-	(34571912667467776, 0, '2019-04-06 09:36:26', '2019-09-04 21:45:09', 16508640061130151, 16508640061130151, 0, 'UHC健康会', '<p>UHC 健康会，您的健康管家，为您的健康保驾护航。</p><p>\n        <img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/8722abb613cd46b4af5b4ded7ddf5fad.jpg" data-filename="/" style="width: 550px;">\n    </p><p>\n        <img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/1ffc4edd922e4cb195744c13f9eec636.jpg" data-filename="/" style="width: 550px;">\n    </p><p>\n        <img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/e0728828482542f099ab79ba7d3ef701.jpg" data-filename="/" style="width: 550px;">\n\n    </p><p>\n        <img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/57b1153fbf514d9384ba9837a46737cf.jpg" data-filename="/" style="width: 550px;">\n        <br>\n    </p>\n    <p>小程序码</p><p>\n        <img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/46ece527595a408e9e62b2334374b560.jpg" data-filename="/" style="width: 430px;">\n        <br>\n    </p><p><br></p>', '微信小程序，健康会', 0, 0, 0, 'https://www.yishasoft.com/api/Resource/News/2019/07/31/eee642de4d3443779c0670e0da8eeed7.png', '管理员', 1, '2019-04-06 09:29:00', 1, 126),
-	(76797547762421760, 0, '2019-07-31 22:06:02', '2019-09-19 22:03:54', 16508640061130151, 16508640061130151, 0, '58名师', '<p>汇聚同城的各科教师，找老师，就上58名师！</p><p><img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/b0316da26b5546d1bf07fcd05e8889e0.png" data-filename="/" style="width: 270px;"></p><p><br></p><p><img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/ad812ef0248a4fcb94edfa69d1ee5a66.png" data-filename="/" style="width: 269px;"></p><p><img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/b2921e1e08e04b0d92b29485356eacb1.png" data-filename="/" style="width: 273px;"></p><p><img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/a1ee188e3d3b462c8f401a9205ddd10e.png" data-filename="/" style="width: 274px;"></p><p>小程序码</p><p><img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/1c30e2bb681448bab52e566993b82472.jpg" data-filename="/" style="width: 430px;"><br></p><p><br></p>', '微信小程序，找老师', 340000, 340100, 340172, 'https://www.yishasoft.com/api/Resource/News/2019/07/31/a627c3eed0ca428391fa62a841652ea4.png', '管理员', 2, '2019-07-31 21:44:00', 1, 20);
+	(34571912667467776, 0, '2019-04-06 09:36:26', '2019-10-03 06:55:09', 16508640061130151, 16508640061130151, 0, 'UHC健康会', '<p>UHC 健康会，您的健康管家，为您的健康保驾护航。</p><p>\n        <img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/8722abb613cd46b4af5b4ded7ddf5fad.jpg" data-filename="/" style="width: 550px;">\n    </p><p>\n        <img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/1ffc4edd922e4cb195744c13f9eec636.jpg" data-filename="/" style="width: 550px;">\n    </p><p>\n        <img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/e0728828482542f099ab79ba7d3ef701.jpg" data-filename="/" style="width: 550px;">\n\n    </p><p>\n        <img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/57b1153fbf514d9384ba9837a46737cf.jpg" data-filename="/" style="width: 550px;">\n        <br>\n    </p>\n    <p>小程序码</p><p>\n        <img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/46ece527595a408e9e62b2334374b560.jpg" data-filename="/" style="width: 430px;">\n        <br>\n    </p><p><br></p>', '微信小程序，健康会', 0, 0, 0, 'https://www.yishasoft.com/api/Resource/News/2019/07/31/eee642de4d3443779c0670e0da8eeed7.png', '管理员', 1, '2019-04-06 09:29:00', 1, 128),
+	(76797547762421760, 0, '2019-07-31 22:06:02', '2019-10-03 17:40:00', 16508640061130151, 16508640061130151, 0, '58名师', '<p>汇聚同城的各科教师，找老师，就上58名师！</p><p><img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/b0316da26b5546d1bf07fcd05e8889e0.png" data-filename="/" style="width: 270px;"></p><p><br></p><p><img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/ad812ef0248a4fcb94edfa69d1ee5a66.png" data-filename="/" style="width: 269px;"></p><p><img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/b2921e1e08e04b0d92b29485356eacb1.png" data-filename="/" style="width: 273px;"></p><p><img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/a1ee188e3d3b462c8f401a9205ddd10e.png" data-filename="/" style="width: 274px;"></p><p>小程序码</p><p><img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/1c30e2bb681448bab52e566993b82472.jpg" data-filename="/" style="width: 430px;"><br></p><p><br></p>', '微信小程序，找老师', 340000, 340100, 340172, 'https://www.yishasoft.com/api/Resource/News/2019/07/31/a627c3eed0ca428391fa62a841652ea4.png', '管理员', 2, '2019-07-31 21:44:00', 1, 25);
 /*!40000 ALTER TABLE `sys_news` ENABLE KEYS */;
 
--- Dumping structure for table yisha_admin.sys_position
 DROP TABLE IF EXISTS `sys_position`;
 CREATE TABLE IF NOT EXISTS `sys_position` (
   `id` bigint(20) NOT NULL,
@@ -4196,7 +4170,6 @@ CREATE TABLE IF NOT EXISTS `sys_position` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- Dumping data for table yisha_admin.sys_position: ~7 rows (approximately)
 DELETE FROM `sys_position`;
 /*!40000 ALTER TABLE `sys_position` DISABLE KEYS */;
 INSERT INTO `sys_position` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `position_name`, `position_sort`, `position_status`, `remark`) VALUES
@@ -4209,7 +4182,6 @@ INSERT INTO `sys_position` (`id`, `base_is_delete`, `base_create_time`, `base_mo
 	(16508640061130145, 0, '2018-12-22 18:44:32', '2018-12-22 18:44:32', 0, 0, 0, '财务专员', 7, 1, '');
 /*!40000 ALTER TABLE `sys_position` ENABLE KEYS */;
 
--- Dumping structure for table yisha_admin.sys_role
 DROP TABLE IF EXISTS `sys_role`;
 CREATE TABLE IF NOT EXISTS `sys_role` (
   `id` bigint(20) NOT NULL,
@@ -4226,7 +4198,6 @@ CREATE TABLE IF NOT EXISTS `sys_role` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- Dumping data for table yisha_admin.sys_role: ~2 rows (approximately)
 DELETE FROM `sys_role`;
 /*!40000 ALTER TABLE `sys_role` DISABLE KEYS */;
 INSERT INTO `sys_role` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `role_name`, `role_sort`, `role_status`, `remark`) VALUES
@@ -4234,7 +4205,6 @@ INSERT INTO `sys_role` (`id`, `base_is_delete`, `base_create_time`, `base_modify
 	(16508640061130147, 0, '2018-12-04 19:07:53', '2019-09-21 10:46:33', 0, 16508640061130151, 0, '普通角色', 2, 1, '普通角色');
 /*!40000 ALTER TABLE `sys_role` ENABLE KEYS */;
 
--- Dumping structure for table yisha_admin.sys_user
 DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE IF NOT EXISTS `sys_user` (
   `id` bigint(20) NOT NULL,
@@ -4269,20 +4239,17 @@ CREATE TABLE IF NOT EXISTS `sys_user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- Dumping data for table yisha_admin.sys_user: ~7 rows (approximately)
 DELETE FROM `sys_user`;
 /*!40000 ALTER TABLE `sys_user` DISABLE KEYS */;
 INSERT INTO `sys_user` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `user_name`, `password`, `salt`, `real_name`, `department_id`, `gender`, `birthday`, `portrait`, `email`, `mobile`, `qq`, `wechat`, `login_count`, `user_status`, `is_system`, `is_online`, `first_visit`, `previous_visit`, `last_visit`, `remark`, `web_token`, `api_token`) VALUES
 	(16508640061130148, 0, '2018-12-11 18:57:15', '2019-01-05 06:34:41', 0, 0, 0, 'lisi', 'e0dc5bc0da011584308fdc3d5dca04a1', '70212', '李四', 181201190700000005, '1', '', '', '', '16812345678', '', '', 0, 2, 0, 0, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '1970-01-01 00:00:00', '', '', ''),
 	(16508640061130149, 0, '2018-12-12 06:59:29', '2018-12-22 18:50:10', 0, 0, 0, 'zhangsan', '3', '', '张三', 181201190700000004, '0', '', '', '', '18712345678', '', '', 0, 1, 0, 0, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '1970-01-01 00:00:00', '', '', ''),
 	(16508640061130150, 0, '2018-12-12 11:20:47', '2019-09-21 10:47:34', 0, 16508640061130151, 0, 'wangxue', '518cd8c7e019f06ad7bf68f7532a5a73', '8941', '王雪', 181222183600000022, '0', '1993-10-06', '', '', '15612345678', '', '', 1, 1, 0, 1, '2019-09-21 10:48:03', '2019-09-21 10:48:03', '2019-09-21 10:48:03', '', 'a066e89f44894cb284c4dc2920234acb', ''),
-	(16508640061130151, 0, '2018-12-12 15:42:59', '2019-09-28 00:28:30', 0, 16508640061130151, 0, 'admin', '3f0ea22060c164bf4bdc3a67d0e12cdf', '28585', '管理员', 16508640061124402, '0', '2019-01-01', '/image/portrait.png', 'admin@163.com', '15766666666', '', '', 343, 1, 1, 1, '2018-12-12 16:00:10', '2019-09-28 18:57:15', '2019-09-28 18:58:42', '', '265d8570ac504b588c85018c7974a431', 'a5f3d50ab2084821953d4d45925a042a'),
+	(16508640061130151, 0, '2018-12-12 15:42:59', '2019-09-28 00:28:30', 0, 16508640061130151, 0, 'admin', '3f0ea22060c164bf4bdc3a67d0e12cdf', '28585', '管理员', 16508640061124402, '0', '2019-01-01', '/image/portrait.png', 'admin@163.com', '15766666666', '', '', 351, 1, 1, 1, '2018-12-12 16:00:10', '2019-10-02 23:41:42', '2019-10-03 17:01:12', '', '265d8570ac504b588c85018c7974a431', 'a5f3d50ab2084821953d4d45925a042a'),
 	(16508640061130152, 0, '2018-12-22 19:09:34', '2019-01-04 21:50:31', 0, 0, 0, 'liusitan', 'c84603a610bd35a1283d750334da49c7', '59654', '刘斯坦', 181201190700000004, '1', '1987-12-17', '/image/portrait.png', 'test@163.com', '15755176597', '', '', 65, 1, 0, 1, '2018-12-23 06:57:16', '2019-01-10 21:25:27', '2019-02-08 12:13:36', '', '', 'f595873c50bf4ddbac3c2b896e8075c4'),
-	(16508640061130153, 0, '2018-12-26 16:23:22', '2019-09-18 11:58:48', 0, 16508640061130151, 0, 'zhujuanjuan', 'e64939cb927238d770e1f8bd77f84813', '91836', '朱娟', 181201190700000006, '2', '2018-12-10', '', '', '', '', '', 0, 1, 0, 0, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '1970-01-01 00:00:00', '', '', ''),
-	(16508640061130154, 0, '2018-12-28 16:46:19', '2019-09-28 18:57:47', 0, 16508640061130151, 0, 'demo', '51b83fa0cb7a4af2ca04960929554cd7', '67262', '演示账号', 16508640061124407, '0', '2019-01-01', '/image/portrait.png', 'demo@163.com', '15566666666', '', '', 304, 1, 0, 1, '2018-12-28 16:47:26', '2019-09-27 22:13:05', '2019-09-28 02:49:31', '', '77e10e2f47fa4a0f8f3914939b5ae4dc', '');
+	(16508640061130153, 0, '2018-12-26 16:23:22', '2019-09-18 11:58:48', 0, 16508640061130151, 0, 'zhujuanjuan', 'e64939cb927238d770e1f8bd77f84813', '91836', '朱娟', 181201190700000006, '2', '2018-12-10', '', '', '', '', '', 0, 1, 0, 0, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '1970-01-01 00:00:00', '', '', '');
 /*!40000 ALTER TABLE `sys_user` ENABLE KEYS */;
 
--- Dumping structure for table yisha_admin.sys_user_belong
 DROP TABLE IF EXISTS `sys_user_belong`;
 CREATE TABLE IF NOT EXISTS `sys_user_belong` (
   `id` bigint(20) NOT NULL,
@@ -4298,7 +4265,6 @@ CREATE TABLE IF NOT EXISTS `sys_user_belong` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- Dumping data for table yisha_admin.sys_user_belong: ~8 rows (approximately)
 DELETE FROM `sys_user_belong`;
 /*!40000 ALTER TABLE `sys_user_belong` DISABLE KEYS */;
 INSERT INTO `sys_user_belong` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `user_id`, `belong_id`, `belong_type`) VALUES
@@ -4307,9 +4273,7 @@ INSERT INTO `sys_user_belong` (`id`, `base_is_delete`, `base_create_time`, `base
 	(94401737682587648, 0, '2019-09-18 11:58:48', '2019-09-18 11:58:48', 16508640061130151, 16508640061130151, 0, 16508640061130153, 16508640061130140, 1),
 	(94401737682587649, 0, '2019-09-18 11:58:48', '2019-09-18 11:58:48', 16508640061130151, 16508640061130151, 0, 16508640061130153, 16508640061130141, 1),
 	(94401737682587650, 0, '2019-09-18 11:58:48', '2019-09-18 11:58:48', 16508640061130151, 16508640061130151, 0, 16508640061130153, 16508640061130142, 1),
-	(95470936551067648, 0, '2019-09-21 10:47:25', '2019-09-21 10:47:25', 16508640061130151, 16508640061130151, 0, 16508640061130150, 16508640061130147, 2),
-	(98131055038435328, 0, '2019-09-28 18:57:47', '2019-09-28 18:57:47', 16508640061130151, 16508640061130151, 0, 16508640061130154, 16508640061130144, 1),
-	(98131055042629632, 0, '2019-09-28 18:57:47', '2019-09-28 18:57:47', 16508640061130151, 16508640061130151, 0, 16508640061130154, 16508640061130146, 2);
+	(95470936551067648, 0, '2019-09-21 10:47:25', '2019-09-21 10:47:25', 16508640061130151, 16508640061130151, 0, 16508640061130150, 16508640061130147, 2);
 /*!40000 ALTER TABLE `sys_user_belong` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
