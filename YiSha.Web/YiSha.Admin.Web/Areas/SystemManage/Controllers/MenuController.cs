@@ -40,7 +40,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
 
         #region 获取数据
         [HttpGet]
-        [AuthorizeFilter("system:menu:list,system:role:list")]
+        [AuthorizeFilter("system:menu:search,system:role:search")]
         public async Task<IActionResult> GetListJson(MenuListParam param)
         {
             TData<List<MenuEntity>> obj = await sysMenuBLL.GetList(param);
@@ -48,7 +48,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         }
 
         [HttpGet]
-        [AuthorizeFilter("system:menu:list,system:role:list")]
+        [AuthorizeFilter("system:menu:search,system:role:search")]
         public async Task<IActionResult> GetMenuTreeListJson(MenuListParam param)
         {
             TData<List<ZtreeInfo>> obj = await sysMenuBLL.GetZtreeList(param);

@@ -54,7 +54,7 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
 
         #region 获取数据
         [HttpGet]
-        [AuthorizeFilter("tool:codegenerator:list")]
+        [AuthorizeFilter("tool:codegenerator:search")]
         public async Task<IActionResult> GetTableFieldTreeListJson(string tableName)
         {
             TData<List<ZtreeInfo>> obj = await databaseTableBLL.GetTableFieldZtreeList(tableName);
@@ -62,7 +62,7 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
         }
 
         [HttpGet]
-        [AuthorizeFilter("tool:codegenerator:list")]
+        [AuthorizeFilter("tool:codegenerator:search")]
         public async Task<IActionResult> GetTableFieldTreePartListJson(string tableName, int upper = 0)
         {
             TData<List<ZtreeInfo>> obj = await databaseTableBLL.GetTableFieldZtreeList(tableName);
@@ -82,7 +82,7 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
         }
 
         [HttpGet]
-        [AuthorizeFilter("tool:codegenerator:list")]
+        [AuthorizeFilter("tool:codegenerator:search")]
         public async Task<IActionResult> GetBaseConfigJson(string tableName)
         {
             TData<BaseConfigModel> obj = new TData<BaseConfigModel>();
@@ -101,7 +101,7 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
 
         #region 提交数据
         [HttpPost]
-        [AuthorizeFilter("tool:codegenerator:list")]
+        [AuthorizeFilter("tool:codegenerator:add")]
         public async Task<IActionResult> CodePreviewJson(BaseConfigModel baseConfig)
         {
             TData<object> obj = new TData<object>();

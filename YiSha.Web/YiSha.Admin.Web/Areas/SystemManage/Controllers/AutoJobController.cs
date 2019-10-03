@@ -34,14 +34,14 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
 
         #region 获取数据
         [HttpGet]
-        [AuthorizeFilter("system:autojob:list")]
+        [AuthorizeFilter("system:autojob:search")]
         public async Task<IActionResult> GetListJson(AutoJobListParam param)
         {
             TData<List<AutoJobEntity>> obj = await autoJobBLL.GetList(param);
             return Json(obj);
         }
         [HttpGet]
-        [AuthorizeFilter("system:autojob:list")]
+        [AuthorizeFilter("system:autojob:search")]
         public async Task<IActionResult> GetPageListJson(AutoJobListParam param, Pagination pagination)
         {
             TData<List<AutoJobEntity>> obj = await autoJobBLL.GetPageList(param, pagination);

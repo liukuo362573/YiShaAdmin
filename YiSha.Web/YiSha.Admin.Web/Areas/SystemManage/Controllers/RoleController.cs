@@ -35,7 +35,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
 
         #region 获取数据
         [HttpGet]
-        [AuthorizeFilter("system:role:list,organization:user:list")]
+        [AuthorizeFilter("system:role:search,organization:user:search")]
         public async Task<IActionResult> GetListJson(RoleListParam param)
         {
             TData<List<RoleEntity>> obj = await sysRoleBLL.GetList(param);
@@ -43,7 +43,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         }
 
         [HttpGet]
-        [AuthorizeFilter("system:role:list,organization:user:list")]
+        [AuthorizeFilter("system:role:search,organization:user:search")]
         public async Task<IActionResult> GetPageListJson(RoleListParam param, Pagination pagination)
         {
             TData<List<RoleEntity>> obj = await sysRoleBLL.GetPageList(param, pagination);

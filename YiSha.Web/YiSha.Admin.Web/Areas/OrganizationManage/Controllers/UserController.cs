@@ -59,14 +59,14 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
 
         #region 获取数据
         [HttpGet]
-        [AuthorizeFilter("organization:user:list")]
+        [AuthorizeFilter("organization:user:search")]
         public async Task<IActionResult> GetListJson(UserListParam param)
         {
             TData<List<UserEntity>> obj = await userBLL.GetList(param);
             return Json(obj);
         }
         [HttpGet]
-        [AuthorizeFilter("organization:user:list")]
+        [AuthorizeFilter("organization:user:search")]
         public async Task<IActionResult> GetPageListJson(UserListParam param, Pagination pagination)
         {
             TData<List<UserEntity>> obj = await userBLL.GetPageList(param, pagination);

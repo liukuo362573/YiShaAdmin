@@ -36,7 +36,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
 
         #region 获取数据
         [HttpGet]
-        [AuthorizeFilter("system:datadict:list")]
+        [AuthorizeFilter("system:datadict:search")]
         public async Task<IActionResult> GetListJson(DataDictListParam param)
         {
             TData<List<DataDictEntity>> obj = await dataDictBLL.GetList(param);
@@ -44,7 +44,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         }
 
         [HttpGet]
-        [AuthorizeFilter("system:datadict:list")]
+        [AuthorizeFilter("system:datadict:search")]
         public async Task<IActionResult> GetPageListJson(DataDictListParam param, Pagination pagination)
         {
             TData<List<DataDictEntity>> obj = await dataDictBLL.GetPageList(param, pagination);

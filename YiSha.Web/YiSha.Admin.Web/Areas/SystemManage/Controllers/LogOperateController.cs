@@ -33,7 +33,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
 
         #region 获取数据
         [HttpGet]
-        [AuthorizeFilter("system:logoperate:list")]
+        [AuthorizeFilter("system:logoperate:search")]
         public async Task<IActionResult> GetListJson(LogOperateListParam param)
         {
             TData<List<LogOperateEntity>> obj = await sysLogOperateBLL.GetList(param);
@@ -41,7 +41,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         }
 
         [HttpGet]
-        [AuthorizeFilter("system:logoperate:list")]
+        [AuthorizeFilter("system:logoperate:search")]
         public async Task<IActionResult> GetPageListJson(LogOperateListParam param, Pagination pagination)
         {
             TData<List<LogOperateEntity>> obj = await sysLogOperateBLL.GetPageList(param, pagination);

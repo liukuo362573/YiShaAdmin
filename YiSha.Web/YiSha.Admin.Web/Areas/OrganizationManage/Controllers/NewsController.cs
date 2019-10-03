@@ -37,7 +37,7 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
 
         #region 获取数据
         [HttpGet]
-        [AuthorizeFilter("organization:news:list")]
+        [AuthorizeFilter("organization:news:search")]
         public async Task<IActionResult> GetListJson(NewsListParam param)
         {
             TData<List<NewsEntity>> obj = await newsBLL.GetList(param);
@@ -45,7 +45,7 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
         }
 
         [HttpGet]
-        [AuthorizeFilter("organization:news:list")]
+        [AuthorizeFilter("organization:news:search")]
         public async Task<IActionResult> GetPageListJson(NewsListParam param, Pagination pagination)
         {
             TData<List<NewsEntity>> obj = await newsBLL.GetPageList(param, pagination);

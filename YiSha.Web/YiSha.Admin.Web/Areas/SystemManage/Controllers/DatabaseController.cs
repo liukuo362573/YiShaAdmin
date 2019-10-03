@@ -35,14 +35,14 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
 
         #region 获取数据
         [HttpGet]
-        [AuthorizeFilter("system:datatable:list")]
+        [AuthorizeFilter("system:datatable:search")]
         public async Task<IActionResult> GetTableListJson(string tableName)
         {
             TData<List<TableInfo>> obj = await databaseTableBLL.GetTableList(tableName);
             return Json(obj);
         }
         [HttpGet]
-        [AuthorizeFilter("system:datatable:list")]
+        [AuthorizeFilter("system:datatable:search")]
         public async Task<IActionResult> GetTablePageListJson(string tableName, Pagination pagination)
         {
             TData<List<TableInfo>> obj = await databaseTableBLL.GetTablePageList(tableName, pagination);

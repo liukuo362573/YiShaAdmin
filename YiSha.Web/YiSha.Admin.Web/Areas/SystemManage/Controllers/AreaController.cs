@@ -36,7 +36,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
 
         #region 获取数据
         [HttpGet]
-        [AuthorizeFilter("system:area:list")]
+        [AuthorizeFilter("system:area:search")]
         public async Task<IActionResult> GetListJson(AreaListParam param)
         {
             TData<List<AreaEntity>> obj = await areaBLL.GetList(param);
@@ -44,7 +44,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         }
 
         [HttpGet]
-        [AuthorizeFilter("system:area:list")]
+        [AuthorizeFilter("system:area:search")]
         public async Task<IActionResult> GetPageListJson(AreaListParam param, Pagination pagination)
         {
             TData<List<AreaEntity>> obj = await areaBLL.GetPageList(param, pagination);

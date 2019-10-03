@@ -33,7 +33,7 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
 
         #region 获取数据
         [HttpGet]
-        [AuthorizeFilter("organization:position:list")]
+        [AuthorizeFilter("organization:position:search")]
         public async Task<IActionResult> GetListJson(PositionListParam param)
         {
             TData<List<PositionEntity>> obj = await sysPositionBLL.GetList(param);
@@ -41,7 +41,7 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
         }
 
         [HttpGet]
-        [AuthorizeFilter("organization:position:list")]
+        [AuthorizeFilter("organization:position:search")]
         public async Task<IActionResult> GetPageListJson(PositionListParam param, Pagination pagination)
         {
             TData<List<PositionEntity>> obj = await sysPositionBLL.GetPageList(param, pagination);

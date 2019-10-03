@@ -33,7 +33,7 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
 
         #region 获取数据
         [HttpGet]
-        [AuthorizeFilter("organization:department:list,organization:user:list")]
+        [AuthorizeFilter("organization:department:search,organization:user:search")]
         public async Task<IActionResult> GetListJson(DepartmentListParam param)
         {
             TData<List<DepartmentEntity>> obj = await sysDepartmentBLL.GetList(param);
@@ -41,7 +41,7 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
         }
 
         [HttpGet]
-        [AuthorizeFilter("organization:department:list,organization:user:list")]
+        [AuthorizeFilter("organization:department:search,organization:user:search")]
         public async Task<IActionResult> GetDepartmentTreeListJson(DepartmentListParam param)
         {
             TData<List<ZtreeInfo>> obj = await sysDepartmentBLL.GetZtreeDepartmentList(param);

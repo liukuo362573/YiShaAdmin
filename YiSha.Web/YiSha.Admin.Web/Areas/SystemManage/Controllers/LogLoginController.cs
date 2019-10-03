@@ -27,14 +27,14 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
 
         #region 获取数据
         [HttpGet]
-        [AuthorizeFilter("system:loglogin:list")]
+        [AuthorizeFilter("system:loglogin:search")]
         public async Task<IActionResult> GetListJson(LogLoginListParam param)
         {
             TData<List<LogLoginEntity>> obj = await logLoginBLL.GetList(param);
             return Json(obj);
         }
         [HttpGet]
-        [AuthorizeFilter("system:loglogin:list")]
+        [AuthorizeFilter("system:loglogin:search")]
         public async Task<IActionResult> GetPageListJson(LogLoginListParam param, Pagination pagination)
         {
             TData<List<LogLoginEntity>> obj = await logLoginBLL.GetPageList(param, pagination);
