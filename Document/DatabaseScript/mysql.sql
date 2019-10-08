@@ -4276,6 +4276,70 @@ INSERT INTO `sys_user_belong` (`id`, `base_is_delete`, `base_create_time`, `base
 	(95470936551067648, 0, '2019-09-21 10:47:25', '2019-09-21 10:47:25', 16508640061130151, 16508640061130151, 0, 16508640061130150, 16508640061130147, 2);
 /*!40000 ALTER TABLE `sys_user_belong` ENABLE KEYS */;
 
+-- Dumping structure for table yisha_admin.sys_log_api
+DROP TABLE IF EXISTS `sys_log_api`;
+CREATE TABLE IF NOT EXISTS `sys_log_api` (
+  `id` bigint(20) NOT NULL,
+  `base_is_delete` int(11) NOT NULL,
+  `base_create_time` datetime NOT NULL,
+  `base_modify_time` datetime NOT NULL,
+  `base_creator_id` bigint(20) NOT NULL,
+  `base_modifier_id` bigint(20) NOT NULL,
+  `base_version` int(11) NOT NULL,
+  `log_status` int(11) NOT NULL,
+  `remark` varchar(50) COLLATE utf8_bin NOT NULL,
+  `execute_url` varchar(100) COLLATE utf8_bin NOT NULL,
+  `execute_param` text COLLATE utf8_bin NOT NULL,
+  `execute_result` text COLLATE utf8_bin NOT NULL,
+  `execute_time` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Data exporting was unselected.
+-- Dumping structure for table yisha_admin.sys_log_login
+DROP TABLE IF EXISTS `sys_log_login`;
+CREATE TABLE IF NOT EXISTS `sys_log_login` (
+  `id` bigint(20) NOT NULL,
+  `base_is_delete` int(11) NOT NULL,
+  `base_create_time` datetime NOT NULL,
+  `base_modify_time` datetime NOT NULL,
+  `base_creator_id` bigint(20) NOT NULL,
+  `base_modifier_id` bigint(20) NOT NULL,
+  `base_version` int(11) NOT NULL,
+  `log_status` int(11) NOT NULL,
+  `ip_address` varchar(20) COLLATE utf8_bin NOT NULL,
+  `ip_location` varchar(50) COLLATE utf8_bin NOT NULL,
+  `browser` varchar(50) COLLATE utf8_bin NOT NULL,
+  `os` varchar(50) COLLATE utf8_bin NOT NULL,
+  `remark` varchar(50) COLLATE utf8_bin NOT NULL,
+  `extra_remark` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- Data exporting was unselected.
+-- Dumping structure for table yisha_admin.sys_log_operate
+DROP TABLE IF EXISTS `sys_log_operate`;
+CREATE TABLE IF NOT EXISTS `sys_log_operate` (
+  `id` bigint(20) NOT NULL,
+  `base_is_delete` int(11) NOT NULL,
+  `base_create_time` datetime NOT NULL,
+  `base_modify_time` datetime NOT NULL,
+  `base_creator_id` bigint(20) NOT NULL,
+  `base_modifier_id` bigint(20) NOT NULL,
+  `base_version` int(11) NOT NULL,
+  `log_status` int(11) NOT NULL,
+  `ip_address` varchar(20) COLLATE utf8_bin NOT NULL,
+  `ip_location` varchar(50) COLLATE utf8_bin NOT NULL,
+  `remark` varchar(50) COLLATE utf8_bin NOT NULL,
+  `log_type` varchar(50) COLLATE utf8_bin NOT NULL,
+  `business_type` varchar(50) COLLATE utf8_bin NOT NULL,
+  `execute_url` varchar(100) COLLATE utf8_bin NOT NULL,
+  `execute_param` text COLLATE utf8_bin NOT NULL,
+  `execute_result` text COLLATE utf8_bin NOT NULL,
+  `execute_time` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
