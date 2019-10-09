@@ -225,17 +225,10 @@
 
         $('#pay-qrcode').click(function () {
             var html = $(this).html();
-            ys.openDialog({
-                title: false,
-                type: 1,
-                content: html,
-                closeBtn: 0,
-                shadeClose: true,
-                fix: true,
+            ys.openDialogContent({              
+                content: html, 
                 width: '600px',
-                height: '321px',
-                maxmin: false,
-                btn: null
+                height: '321px'
             });
         });
 

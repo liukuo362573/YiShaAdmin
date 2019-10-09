@@ -455,16 +455,19 @@
                         var _key = tr.find("input[type='radio']").val();
                         var lv = row_id.replace("row_id_", "").split('_').length;
                         var _children = target.data_list["_n_" + _key];
-                        var firstRow = null;
+                        var lastRow = null;
                         $.each(_children, function (i, item) {
                             var _child_row_id = row_id + "_" + i;
                             var hasChildren = target.data_list["_n_" + item[options.code]] ? true : false;
                             var $tr = renderRow(item, hasChildren, lv + 1, _child_row_id, row_id, true);
-                            if (firstRow == null) {
+                            if (lastRow == null) {
                                 tr.after($tr);
                             }
                             else {
-                                firstRow.after($tr);
+                                if (i > 0) {
+                                    lastRow = $("#" + row_id + "_" + (i - 1).toString());
+                                }
+                                lastRow.after($tr);
                             }
                             var childRow = $("#" + _child_row_id);
                             childRow.click(function () {
@@ -473,8 +476,8 @@
                             childRow.find(".treetable-expander").click(function () {
                                 target.rowExpandHandler(this);
                             });
-                            if (firstRow == null) {
-                                firstRow = childRow;
+                            if (lastRow == null) {
+                                lastRow = childRow;
                             }
                         });
                     } else {

@@ -6,27 +6,59 @@
         openDialog: function (option) {
             var _option = $.extend({
                 type: 2,
-                title: "系统窗口",
-                width: "200px",
-                height: "200px",
-                content: "",
+                title: '',
+                width: '768px',
+                height: '600px',
+                content: '',
                 maxmin: true,
                 shade: 0.4,
                 btn: ['确认', '关闭'],
                 callback: null,
                 shadeClose: false,
+                fix: false,
                 closeBtn: 1
             }, option);
             layer.open({
                 type: _option.type, // 2表示content的值为url，1表示content的值为html
                 area: [_option.width, _option.height],
-                fix: false, //不固定
                 maxmin: _option.maxmin,
                 shade: _option.shade,
                 title: _option.title,
                 content: _option.content,
                 btn: _option.btn,
+                shadeClose: _option.shadeClose, // 弹层外区域关闭     
+                fix: _option.fix,
+                closeBtn: _option.closeBtn,  // 1表示带关闭，0表示不带
+                yes: _option.callback,
+                cancel: function (index) {
+                    return true;
+                }
+            });
+        },
+        openDialogContent: function (option) {
+            var _option = $.extend({
+                type: 1,
+                title: false,
+                width: '768px',
+                height: '600px',
+                content: '',
+                maxmin: false,
+                shade: 0.4,
+                btn: null,
+                callback: null,
+                shadeClose: true,
+                fix: true,
+                closeBtn: 0
+            }, option);
+            layer.open({
+                type: _option.type, // 2表示content的值为url，1表示content的值为html
+                area: [_option.width, _option.height], maxmin: _option.maxmin,
+                shade: _option.shade,
+                title: _option.title,
+                content: _option.content,
+                btn: _option.btn,
                 shadeClose: _option.shadeClose, // 弹层外区域关闭
+                fix: _option.fix,
                 closeBtn: _option.closeBtn,  // 1表示带关闭，0表示不带
                 yes: _option.callback,
                 cancel: function (index) {
@@ -200,7 +232,6 @@
                 complete: opt.complete
             })
         },
-
         exportExcel: function (url, postData) {
             ys.ajax({
                 url: url,
@@ -218,29 +249,6 @@
                     ys.showLoading("正在导出数据，请稍后...");
                 }
             });
-        },
-
-        // Html.Raw()方法会提示语法错误，所以用这个函数包装一下
-        getJson: function (value) {
-            return value;
-        },
-        getGuid: function () {
-            var guid = "";
-            for (var i = 1; i <= 32; i++) {
-                var n = Math.floor(Math.random() * 16.0).toString(16);
-                guid += n;
-                if ((i == 8) || (i == 12) || (i == 16) || (i == 20)) guid += "-";
-            }
-            return guid;
-        },
-        getValueByKey: function (json, key) {
-            var value = "";
-            $.each(json, function (i, obj) {
-                if (obj.Key == key) {
-                    value = obj.Value;
-                }
-            });
-            return value;
         },
         request: function (name) {
             var params = decodeURI(window.location.search);
@@ -271,6 +279,27 @@
             }
             return fileName;
         },
+        changeURLParam: function (url, arg, arg_val) {
+            var pattern = arg + '=([^&]*)';
+            var replaceText = arg + '=' + arg_val;
+            if (url.match(pattern)) {
+                var tmp = '/(' + arg + '=)([^&]*)/gi';
+                tmp = url.replace(eval(tmp), replaceText);
+                return tmp;
+            } else {
+                if (url.match('[\?]')) {
+                    var arr = url.split('#');
+                    if (arr.length > 1) {
+                        return arr[0] + '&' + replaceText + '#' + arr[1];
+                    }
+                    else {
+                        return url + '&' + replaceText;
+                    }
+                } else {
+                    return url + '?' + replaceText;
+                }
+            }
+        },   
 
         isNullOrEmpty: function (obj) {
             if ((typeof (obj) == "string" && obj == "") || obj == null || obj == undefined) {
@@ -280,17 +309,28 @@
                 return false;
             }
         },
-        isNullOrZero: function (obj) {
-            if (ys.isNullOrEmpty(obj)) {
-                return true;
-            }
-            else if (obj == "0") {
-                return true;
-            }
-            else {
-                return false;
-            }
+        // Html.Raw()方法会提示语法错误，所以用这个函数包装一下
+        getJson: function (value) {
+            return value;
         },
+        getGuid: function () {
+            var guid = "";
+            for (var i = 1; i <= 32; i++) {
+                var n = Math.floor(Math.random() * 16.0).toString(16);
+                guid += n;
+                if ((i == 8) || (i == 12) || (i == 16) || (i == 20)) guid += "-";
+            }
+            return guid;
+        },
+        getValueByKey: function (json, key) {
+            var value = "";
+            $.each(json, function (i, obj) {
+                if (obj.Key == key) {
+                    value = obj.Value;
+                }
+            });
+            return value;
+        },      
         // 格式为 yyyy-MM-dd HH:mm:ss
         formatDate: function (v, format) {
             if (!v) return "";
@@ -319,28 +359,7 @@
                 }
             }
             return format;
-        },
-        changeURLParam: function (url, arg, arg_val) {
-            var pattern = arg + '=([^&]*)';
-            var replaceText = arg + '=' + arg_val;
-            if (url.match(pattern)) {
-                var tmp = '/(' + arg + '=)([^&]*)/gi';
-                tmp = url.replace(eval(tmp), replaceText);
-                return tmp;
-            } else {
-                if (url.match('[\?]')) {
-                    var arr = url.split('#');
-                    if (arr.length > 1) {
-                        return arr[0] + '&' + replaceText + '#' + arr[1];
-                    }
-                    else {
-                        return url + '&' + replaceText;
-                    }
-                } else {
-                    return url + '?' + replaceText;
-                }
-            }
-        },
+        },      
         trimStart: function (rawStr, c) {
             if (c == null || c == '') {
                 var str = rawStr.replace(/^s*/, '');
