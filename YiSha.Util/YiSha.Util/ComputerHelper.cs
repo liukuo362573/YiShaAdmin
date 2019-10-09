@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -10,32 +11,16 @@ namespace YiSha.Util
 {
     public class ComputerHelper
     {
-        //定义内存的信息结构
-        [StructLayout(LayoutKind.Sequential)]
-        private struct MEMORY_INFO
-        {
-            public uint dwLength;
-            public uint dwMemoryLoad;
-            public uint dwTotalPhys;
-            public uint dwAvailPhys;
-            public uint dwTotalPageFile;
-            public uint dwAvailPageFile;
-            public uint dwTotalVirtual;
-            public uint dwAvailVirtual;
-        }
-        [DllImport("kernel32")]
-        private static extern void GlobalMemoryStatus(ref MEMORY_INFO meminfo);
-
         public static ComputerInfo GetComputerInfo()
         {
             ComputerInfo computerInfo = new ComputerInfo();
-
             try
             {
-                //MEMORY_INFO Memory_Info = new MEMORY_INFO();
-                //GlobalMemoryStatus(ref Memory_Info);
-
-                //computerInfo.RAMRate = Memory_Info.dwMemoryLoad.ToString() + " %";
+                MemoryMetricsClient client = new MemoryMetricsClient();
+                MemoryMetrics memoryMetrics = client.GetMetrics();
+                computerInfo.TotalRAM = Math.Ceiling(memoryMetrics.Total / 1024).ToString() + " GB";
+                computerInfo.RAMRate = Math.Ceiling(100 * memoryMetrics.Used / memoryMetrics.Total).ToString() + " %";
+                computerInfo.CPURate = GetCPURate() + " %";
             }
             catch (Exception ex)
             {
@@ -44,38 +29,79 @@ namespace YiSha.Util
             return computerInfo;
         }
 
-        #region 获取系统内存容量
-        /// <summary>
-        /// 获取系统内存容量
-        /// </summary>
-        /// <returns></returns>
-        public static string GetTotalMemory()
+        public static bool IsUnix()
         {
-            //ManagementObjectSearcher searcher = new ManagementObjectSearcher(); //用于查询一些如系统信息的管理对象
-            //searcher.Query = new SelectQuery("Win32_PhysicalMemory", "", new string[] { "Capacity" });//设置查询条件
-            //ManagementObjectCollection collection = searcher.Get(); //获取内存容量
-            //ManagementObjectCollection.ManagementObjectEnumerator em = collection.GetEnumerator();
-            //long capacity = 0;
-            //while (em.MoveNext())
-            //{
-            //    ManagementBaseObject baseObj = em.Current;
-            //    if (baseObj.Properties["Capacity"].Value != null)
-            //    {
-            //        try
-            //        {
-            //            capacity += long.Parse(baseObj.Properties["Capacity"].Value.ToString());
-            //        }
-            //        catch
-            //        {
-
-            //        }
-            //    }
-            //}
-            //return string.Format("{0} GB", capacity / (1024 * 1024 * 1024));
-            return string.Empty;
+            var isUnix = RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+            return isUnix;
         }
-        #endregion
+
+        public static string GetCPURate()
+        {
+            string cpuRate = string.Empty;
+            if (IsUnix())
+            {
+                string output = ShellHelper.Bash("top -b -n1 | grep \"Cpu(s)\" | awk '{print $2 + $4}'");
+                cpuRate = output.Trim();
+            }
+            else
+            {
+                string output = ShellHelper.Cmd("wmic", "cpu get LoadPercentage");
+                cpuRate = output.Replace("LoadPercentage", string.Empty).Trim();
+            }
+            return cpuRate;
+        }
     }
+
+    public class MemoryMetrics
+    {
+        public double Total;
+        public double Used;
+        public double Free;
+    }
+
+    public class MemoryMetricsClient
+    {
+        public MemoryMetrics GetMetrics()
+        {
+            if (ComputerHelper.IsUnix())
+            {
+                return GetUnixMetrics();
+            }
+            return GetWindowsMetrics();
+        }
+
+        private MemoryMetrics GetWindowsMetrics()
+        {
+            string output = ShellHelper.Cmd("wmic", "OS get FreePhysicalMemory,TotalVisibleMemorySize /Value");
+
+            var lines = output.Trim().Split("\n");
+            var freeMemoryParts = lines[0].Split("=", StringSplitOptions.RemoveEmptyEntries);
+            var totalMemoryParts = lines[1].Split("=", StringSplitOptions.RemoveEmptyEntries);
+
+            var metrics = new MemoryMetrics();
+            metrics.Total = Math.Round(double.Parse(totalMemoryParts[1]) / 1024, 0);
+            metrics.Free = Math.Round(double.Parse(freeMemoryParts[1]) / 1024, 0);
+            metrics.Used = metrics.Total - metrics.Free;
+
+            return metrics;
+        }
+
+        private MemoryMetrics GetUnixMetrics()
+        {
+            string output = ShellHelper.Bash("free -m");
+
+            var lines = output.Split("\n");
+            var memory = lines[1].Split(" ", StringSplitOptions.RemoveEmptyEntries);
+
+            var metrics = new MemoryMetrics();
+            metrics.Total = double.Parse(memory[1]);
+            metrics.Used = double.Parse(memory[2]);
+            metrics.Free = double.Parse(memory[3]);
+
+            return metrics;
+        }
+    }
+
     public class ComputerInfo
     {
         /// <summary>

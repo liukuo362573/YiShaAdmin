@@ -34,7 +34,7 @@ namespace YiSha.Util
             string sMilliSecond = milliSecond < 10 ? "0" + milliSecond : "" + milliSecond;//毫秒
             sMilliSecond = milliSecond < 100 ? "0" + sMilliSecond : "" + sMilliSecond;
 
-            return string.Format("{0} 天 {1} 小时 {2} 分 {3}秒", sDay, sHour, sMinute, sMinute);
+            return string.Format("{0} 天 {1} 小时 {2} 分 {3} 秒", sDay, sHour, sMinute, sSecond);
         }
         #endregion
 

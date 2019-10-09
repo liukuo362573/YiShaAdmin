@@ -14,12 +14,9 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
     [Area("ToolManage")]
     public class ServerController : BaseController
     {
-        //private static PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-
         #region 视图功能
         public IActionResult ServerIndex()
         {
-            ViewBag.TotalRAM = ComputerHelper.GetTotalMemory();
             return View();
         }
         #endregion
@@ -33,7 +30,6 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
             try
             {
                 computerInfo = ComputerHelper.GetComputerInfo();
-                //computerInfo.CPURate = Math.Round(cpuCounter.NextValue(), 0) + " %";
                 computerInfo.RunTime = DateTimeHelper.FormatTime(Environment.TickCount);
             }
             catch (Exception ex)
