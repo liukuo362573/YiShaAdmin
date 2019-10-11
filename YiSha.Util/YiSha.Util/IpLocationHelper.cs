@@ -16,21 +16,15 @@ namespace YiSha.Util
             {
                 if (!IsInnerIP(ipAddress))
                 {
-                    int methods = 4;
-                    switch (DateTime.Now.Second % methods)
+                    ipLocation = GetIpLocationFromTaoBao(ipAddress);
+                    if (string.IsNullOrEmpty(ipLocation))
                     {
-                        default:
-                        case 1:
-                            ipLocation = GetIpLocationFromTaoBao(ipAddress);
-                            break;
-                        case 2:
-                            ipLocation = GetIpLocationFromIpIp(ipAddress);
-                            break;
-                        case 3:
-                            ipLocation = GetIpLocationFromPCOnline(ipAddress);
-                            break;
+                        ipLocation = GetIpLocationFromIpIp(ipAddress);
                     }
-
+                    if (string.IsNullOrEmpty(ipLocation))
+                    {
+                        ipLocation = GetIpLocationFromPCOnline(ipAddress);
+                    }
                 }
             }
             catch (Exception ex)
@@ -39,6 +33,7 @@ namespace YiSha.Util
             }
             return ipLocation;
         }
+
         private static string GetIpLocationFromTaoBao(string ipAddress)
         {
             string url = "http://ip.taobao.com/service/getIpInfo2.php";
@@ -54,6 +49,7 @@ namespace YiSha.Util
             }
             return ipLocation;
         }
+
         private static string GetIpLocationFromIpIp(string ipAddress)
         {
             string url = "http://freeapi.ipip.net/" + ipAddress;
@@ -68,6 +64,7 @@ namespace YiSha.Util
             }
             return ipLocation;
         }
+
         private static string GetIpLocationFromPCOnline(string ipAddress)
         {
             HttpResult httpResult = new HttpHelper().GetHtml(new HttpItem
