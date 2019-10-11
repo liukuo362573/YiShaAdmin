@@ -98,7 +98,7 @@
             title: id > 0 ? "编辑" : "添加",
             content: '@Url.Content("~/SystemManage/AutoJob/AutoJobForm")' + '?id=' + id,
             width: "768px",
-            height: "700px",
+            height: "500px",
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 iframeWin.saveForm(index);
