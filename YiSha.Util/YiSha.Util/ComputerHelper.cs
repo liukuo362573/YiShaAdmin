@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using YiSha.Util.Extension;
 
 namespace YiSha.Util
 {
@@ -20,7 +21,7 @@ namespace YiSha.Util
                 MemoryMetrics memoryMetrics = client.GetMetrics();
                 computerInfo.TotalRAM = Math.Ceiling(memoryMetrics.Total / 1024).ToString() + " GB";
                 computerInfo.RAMRate = Math.Ceiling(100 * memoryMetrics.Used / memoryMetrics.Total).ToString() + " %";
-                computerInfo.CPURate = GetCPURate() + " %";
+                computerInfo.CPURate = Math.Ceiling(GetCPURate().ParseToDouble()) + " %";
             }
             catch (Exception ex)
             {
