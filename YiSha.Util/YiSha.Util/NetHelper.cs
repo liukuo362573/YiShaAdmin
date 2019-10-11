@@ -120,7 +120,7 @@ namespace YiSha.Util
                         ip = HttpContext.Request.Headers["X-Forwarded-For"].ToString();
                     }
                 }
-                return ip; 
+                return ip;
             }
             catch (Exception ex)
             {
@@ -129,32 +129,12 @@ namespace YiSha.Util
             return string.Empty;
         }
 
-        public static string Host
-        {
-            get
-            {
-                try
-                {
-                    // return HttpContext.Current == null ? Dns.GetHostName() : GetWebClientHostName();
-                    return string.Empty;
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.WriteWithTime(ex);
-                }
-                return string.Empty;
-            }
-        }
 
         private static string GetWebClientHostName()
         {
             string result = string.Empty;
             try
             {
-                //if (!HttpContext.Current.Request.IsLocal)
-                //{
-                //    return string.Empty;
-                //}
                 string ip = GetWebRemoteIp();
                 result = Dns.GetHostEntry(IPAddress.Parse(ip)).HostName;
                 if (result == "localhost.localdomain")
