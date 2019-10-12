@@ -159,7 +159,7 @@
         setValue: function (target, value) {
             var lastId = '0'; // 取最下面的一个值
             if (value) {
-                var arr = value.split(',');
+                var arr = value.toString().split(',');
                 lastId = arr[arr.length - 1];
             }
             var id = target.attr("id");

@@ -101,6 +101,7 @@
     function saveForm(index) {
         if ($("#form").validate().form()) {
             var postData = $("#form").getWebControls({ Id: id });
+            postData.PrincipalId = ys.getLastValue(postData.PrincipalId);
             ys.ajax({
                 url: '@Url.Content("~/OrganizationManage/Department/SaveFormJson")',
                 type: "post",
