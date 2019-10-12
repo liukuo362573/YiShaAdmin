@@ -126,7 +126,7 @@
                 };
 
                 target.ztree = $.fn.zTree.init($("#" + eleTreeId), _option, data.Result);
-                if (_option.expandLevel > 0) {
+                if (_option.expandLevel >= 0) {
                     for (var level = 0; level <= _option.expandLevel; level++) {
                         var nodes = target.ztree.getNodesByParam("level", level);
                         for (var i = 0; i < nodes.length; i++) {
@@ -159,7 +159,7 @@
         setValue: function (target, value) {
             var lastId = '0'; // 取最下面的一个值
             if (value) {
-                var arr = value.split(',');
+                var arr = value.toString().split(',');
                 lastId = arr[arr.length - 1];
             }
             var id = target.attr("id");

@@ -18,17 +18,7 @@
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label ">状态</label>
-            <div class="col-sm-8">
-                @{
-                    Dictionary<int, string> statusList = typeof(StatusEnum).EnumToDictionary();
-                    foreach (int key in statusList.Keys)
-                    {
-                        <div class="radio-box">
-                            <input id="@Html.Raw("roleStatus"+key)" col="JobStatus" type="radio" value="@key" />
-                            <label>@statusList[key]</label>
-                        </div>
-                    }
-                }
+            <div class="col-sm-8" id="jobStatus" col="JobStatus">
             </div>
         </div>
         <div class="form-group">
@@ -55,6 +45,8 @@
 <script type="text/javascript">
     var id = ys.request("id");
     $(function () {
+        $("#jobStatus").ysRadioBox({ data: ys.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+
         laydate.render({ elem: '#startTime', type: 'datetime', format: 'yyyy-MM-dd HH:mm:ss' });
         laydate.render({ elem: '#endTime', type: 'datetime', format: 'yyyy-MM-dd HH:mm:ss' });
 

@@ -109,7 +109,6 @@
 
     function getForm() {
         if (id > 0) {
-
             $('#password').attr("readonly", "readonly").attr("disabled", "disabled");
 
             ys.ajax({
@@ -135,6 +134,7 @@
     function saveForm(index) {
         if ($("#form").validate().form()) {
             var postData = $("#form").getWebControls({ Id: id });
+            postData.DepartmentId = ys.getLastValue(postData.DepartmentId);
             ys.ajax({
                 url: '@Url.Content("~/OrganizationManage/User/SaveFormJson")',
                 type: "post",

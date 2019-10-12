@@ -330,7 +330,14 @@
                 }
             });
             return value;
-        },      
+        },
+        getLastValue: function (str) {
+            if (!ys.isNullOrEmpty(str)) {
+                var arr = str.toString().split(',');
+                return arr[arr.length - 1];
+            }
+            return '';
+        },
         // 格式为 yyyy-MM-dd HH:mm:ss
         formatDate: function (v, format) {
             if (!v) return "";
