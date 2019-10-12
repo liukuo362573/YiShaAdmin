@@ -126,7 +126,7 @@
                 };
 
                 target.ztree = $.fn.zTree.init($("#" + eleTreeId), _option, data.Result);
-                if (_option.expandLevel > 0) {
+                if (_option.expandLevel >= 0) {
                     for (var level = 0; level <= _option.expandLevel; level++) {
                         var nodes = target.ztree.getNodesByParam("level", level);
                         for (var i = 0; i < nodes.length; i++) {

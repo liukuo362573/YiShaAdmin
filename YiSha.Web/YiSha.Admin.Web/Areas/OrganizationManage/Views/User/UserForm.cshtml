@@ -87,8 +87,7 @@
         });
 
         $('#departmentId').ysComboBoxTree({
-            url: '@Url.Content("~/OrganizationManage/Department/GetDepartmentTreeListJson")',
-            expandLevel: 1
+            url: '@Url.Content("~/OrganizationManage/Department/GetDepartmentTreeListJson")'
         });
 
         laydate.render({ elem: '#birthday', format: 'yyyy-MM-dd' });
@@ -112,7 +111,6 @@
 
     function getForm() {
         if (id > 0) {
-
             $('#password').attr("readonly", "readonly").attr("disabled", "disabled");
 
             ys.ajax({
