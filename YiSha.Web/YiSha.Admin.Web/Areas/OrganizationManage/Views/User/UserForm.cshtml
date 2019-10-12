@@ -86,7 +86,10 @@
             multiple: true
         });
 
-        $('#departmentId').ysComboBoxTree({ url: '@Url.Content("~/OrganizationManage/Department/GetDepartmentTreeListJson")' });
+        $('#departmentId').ysComboBoxTree({
+            url: '@Url.Content("~/OrganizationManage/Department/GetDepartmentTreeListJson")',
+            expandLevel: 1
+        });
 
         laydate.render({ elem: '#birthday', format: 'yyyy-MM-dd' });
 
