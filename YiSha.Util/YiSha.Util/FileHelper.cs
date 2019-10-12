@@ -56,28 +56,33 @@ namespace YiSha.Util
                 obj.Message = "一次只能上传一个文件！";
                 return obj;
             }
-            var file = files[0];
+            TData objCheck = null;
+            IFormFile file = files[0];
             switch (iFileModule)
             {
                 case (int)UploadFileType.Portrait:
+                    objCheck = CheckFileExtension(Path.GetExtension(file.FileName), ".jpg|.jpeg|.gif|.png");
+                    if (objCheck.Tag != 1)
+                    {
+                        obj.Message = objCheck.Message;
+                        return obj;
+                    }
                     dirModule = UploadFileType.Portrait.ToString();
                     break;
 
                 case (int)UploadFileType.News:
-                    dirModule = UploadFileType.News.ToString();
-                    break;
-
-                case (int)UploadFileType.Cert:
                     if (file.Length > 5 * 1024 * 1024) // 5MB
                     {
                         obj.Message = "文件最大限制为 5MB";
                         return obj;
                     }
-                    dirModule = UploadFileType.Cert.ToString();
-                    break;
-
-                case (int)UploadFileType.Paper:
-                    dirModule = UploadFileType.Paper.ToString();
+                    objCheck = CheckFileExtension(Path.GetExtension(file.FileName), ".jpg|.jpeg|.gif|.png");
+                    if (objCheck.Tag != 1)
+                    {
+                        obj.Message = objCheck.Message;
+                        return obj;
+                    }
+                    dirModule = UploadFileType.News.ToString();
                     break;
 
                 default:
@@ -258,6 +263,21 @@ namespace YiSha.Util
             http = http.ParseToString();
             http = http.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
             return http;
+        }
+
+        public static TData CheckFileExtension(string fileExtension, string allowExtension)
+        {
+            TData obj = new TData();
+            string[] allowArr = CommonHelper.SplitToArray<string>(allowExtension.ToLower(), '|');
+            if (allowArr.Where(p => p.Trim() == fileExtension.ParseToString().ToLower()).Any())
+            {
+                obj.Tag = 1;
+            }
+            else
+            {
+                obj.Message = "只有文件扩展名是 " + allowExtension + " 的文件才能上传";
+            }
+            return obj;
         }
     }
 }

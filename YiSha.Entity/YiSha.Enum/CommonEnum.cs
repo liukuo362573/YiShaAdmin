@@ -49,13 +49,7 @@ namespace YiSha.Enum
         Portrait = 1,
 
         [Description("新闻图片")]
-        News = 2,
-
-        [Description("认证图片")]
-        Cert = 3,
-
-        [Description(" 试卷")]
-        Paper = 4,
+        News = 2
     }
 
     public enum PlatformEnum
