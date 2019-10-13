@@ -5,7 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using YiSha.Data;
+using YiSha.Data.EF;
 using YiSha.Data.Repository;
+using YiSha.Entity;
+using YiSha.Entity.OrganizationManage;
+using YiSha.Entity.SystemManage;
 using YiSha.Model.Result.SystemManage;
 using YiSha.Util;
 using YiSha.Util.Model;
@@ -70,6 +74,38 @@ namespace YiSha.Service.SystemManage
             string strSql = string.Format(" backup database [{0}] to disk = '{1}'", database, backupFile);
             var result = await this.BaseRepository().ExecuteBySql(strSql);
             return result > 0 ? true : false;
+        }
+
+        /// <summary>
+        /// 仅用在YiShaAdmin框架里面，同步不同数据库之间的数据，以 MySql 为主库，同步 MySql 的数据到SqlServer和Oracle，保证各个数据库的数据是一样的
+        /// </summary>
+        /// <returns></returns>
+        public async Task SyncDatabase()
+        {
+            #region 同步SqlServer数据库
+            await SyncSqlServerTable<AreaEntity>();
+            await SyncSqlServerTable<AutoJobEntity>();
+            await SyncSqlServerTable<AutoJobLogEntity>();
+            await SyncSqlServerTable<DataDictEntity>();
+            await SyncSqlServerTable<DataDictDetailEntity>();
+            await SyncSqlServerTable<DepartmentEntity>();
+            await SyncSqlServerTable<LogLoginEntity>();
+            await SyncSqlServerTable<MenuEntity>();
+            await SyncSqlServerTable<MenuAuthorizeEntity>();
+            await SyncSqlServerTable<NewsEntity>();
+            await SyncSqlServerTable<PositionEntity>();
+            await SyncSqlServerTable<RoleEntity>();
+            await SyncSqlServerTable<UserEntity>();
+            await SyncSqlServerTable<UserBelongEntity>();
+            #endregion
+        }
+        private async Task SyncSqlServerTable<T>() where T : class, new()
+        {
+            string sqlServerConnectionString = "Server=localhost;Database=yisha_admin;User Id=sa;Password=123456;";
+            IEnumerable<T> list = await this.BaseRepository().FindList<T>();
+
+            await new SqlServerDatabase(sqlServerConnectionString).Delete<T>(p => true);
+            await new SqlServerDatabase(sqlServerConnectionString).Insert<T>(list);
         }
         #endregion
 

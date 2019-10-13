@@ -351,7 +351,7 @@ namespace YiSha.Data.EF
                 }
                 else
                 {
-                    return (total, default(IEnumerable<T>));
+                    return (total, new List<T>());
                 }
             }
         }

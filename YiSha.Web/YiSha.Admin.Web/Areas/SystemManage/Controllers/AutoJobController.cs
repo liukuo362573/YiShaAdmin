@@ -40,6 +40,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
             TData<List<AutoJobEntity>> obj = await autoJobBLL.GetList(param);
             return Json(obj);
         }
+
         [HttpGet]
         [AuthorizeFilter("system:autojob:search")]
         public async Task<IActionResult> GetPageListJson(AutoJobListParam param, Pagination pagination)
@@ -47,6 +48,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
             TData<List<AutoJobEntity>> obj = await autoJobBLL.GetPageList(param, pagination);
             return Json(obj);
         }
+
         [HttpGet]
         public async Task<IActionResult> GetFormJson(long id)
         {
@@ -63,6 +65,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
             TData<string> obj = await autoJobBLL.SaveForm(entity);
             return Json(obj);
         }
+
         [HttpPost]
         [AuthorizeFilter("system:autojob:delete")]
         public async Task<IActionResult> DeleteFormJson(string ids)
@@ -70,6 +73,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
             TData obj = await autoJobBLL.DeleteForm(ids);
             return Json(obj);
         }
+
         [HttpPost]
         [AuthorizeFilter("system:autojob:pause")]
         public async Task<IActionResult> ChangeJobStatusJson(AutoJobEntity entity)

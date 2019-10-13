@@ -123,6 +123,14 @@ namespace YiSha.Business.SystemManage
             await databaseTableService.DatabaseBackup(database, backupPath);
             return backupPath;
         }
+
+        public async Task<TData> SyncDatabase()
+        {
+            TData obj = new TData();
+            await new DatabaseTableMySqlService().SyncDatabase();
+            obj.Tag = 1;
+            return obj;
+        }
         #endregion
     }
 }

@@ -340,8 +340,15 @@ namespace YiSha.Data.EF
                 sb.Append(new DatabasePageExtension().MySqlPageSql(strSql, dbParameter, orderField, isAsc, pageSize, pageIndex));
                 object tempTotal = await new DbHelper(dbConnection).ExecuteScalarAsync(CommandType.Text, new DatabasePageExtension().GetCountSql(strSql), dbParameter);
                 int total = Convert.ToInt32(tempTotal);
-                var IDataReader = await new DbHelper(dbConnection).ExecuteReadeAsync(CommandType.Text, sb.ToString(), dbParameter);
-                return (total, ConvertExtension.IDataReaderToList<T>(IDataReader));
+                if (total > 0)
+                {
+                    var IDataReader = await new DbHelper(dbConnection).ExecuteReadeAsync(CommandType.Text, sb.ToString(), dbParameter);
+                    return (total, ConvertExtension.IDataReaderToList<T>(IDataReader));
+                }
+                else
+                {
+                    return (total, new List<T>());
+                }
             }
         }
         private async Task<(int total, IEnumerable<T> list)> FindList<T>(IQueryable<T> tempData, string orderField, bool isAsc, int pageSize, int pageIndex)

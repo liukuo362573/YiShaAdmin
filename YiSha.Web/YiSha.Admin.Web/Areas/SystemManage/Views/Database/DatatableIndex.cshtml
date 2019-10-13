@@ -20,6 +20,7 @@
         </div>
 
         <div class="btn-group-sm hidden-xs" id="toolbar">
+            <a id="btnSync" class="btn btn-primary" onclick="syncDatabase()"><i class="fa fa-edit"></i> 同步</a>
         </div>
 
         <div class="col-sm-12 select-table table-striped">
@@ -41,7 +42,7 @@
         $('#gridTable').ysTable({
             url: queryUrl,
             detailView: true,
-            sortName: 'TableName',             
+            sortName: 'TableName',
             sortOrder: "Asc",
             columns: [
                 { checkbox: true, visible: true },
@@ -89,25 +90,17 @@
         resetToolbarStatus();
     }
 
-    function showGenerateForm() {
-        var tableName = '';
-        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-        if (!ys.checkRowEdit(selectedRow)) {
-            return;
-        }
-        else {
-            tableName = selectedRow[0].TableName;
-        }
-
-        ys.openDialog({
-            title: "生成代码",
-            content: '@Url.Content("~/ToolManage/CodeGenerator/CodeGeneratorForm")' + '?tableName=' + tableName,
-            width: "1100px",
-            height: "600px",
-            btn: [],
-            callback: function (index, layero) {
-                var iframeWin = window[layero.find('iframe')[0]['name']];
-                iframeWin.saveForm(index);
+    function syncDatabase() {
+        ys.ajax({
+            url: '@Url.Content("~/SystemManage/Database/SyncDatabaseJson")',
+            type: "post",
+            success: function (obj) {
+                if (obj.Tag == 1) {
+                    ys.msgSuccess('同步完成');
+                }
+                else {
+                    ys.msgError(obj.Message);
+                }
             }
         });
     }
