@@ -94,12 +94,26 @@ $(function () {
         }
     });
 
+    // 校验按钮权限，没有权限的按钮就隐藏
+    if (top.getButtonAuthority) {
+        var buttonList = [];
+        $('#toolbar').find('a').each(function (i, ele) {
+            buttonList.push(ele.id);
+        });
+        var removeButtonList = top.getButtonAuthority(window.location.href, buttonList);
+        if (removeButtonList) {
+            $.each(removeButtonList, function (i, val) {
+                $("#" + val).remove();
+            });
+        }
+    }
+
     // input,select 的id赋值给name，因为jquery.validation验证组件使用的是name
     $("input:text, input:radio, select").each(function (i, ele) {
         if (ele.id) {
             $(ele).attr("name", ele.id);
         }
-    });    
+    });
 });
 
 function resetToolbarStatus() {

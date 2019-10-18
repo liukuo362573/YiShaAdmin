@@ -18,18 +18,15 @@ namespace YiSha.Business.SystemManage
 {
     public class MenuAuthorizeBLL
     {
-        private MenuAuthorizeService menuAuthorizeService = new MenuAuthorizeService();
-
-        private UserBLL userBLL = new UserBLL();
-
         private MenuAuthorizeCache menuAuthorizeCache = new MenuAuthorizeCache();
         private MenuCache menuCache = new MenuCache();
 
         #region 获取数据
-        public async Task<List<MenuAuthorizeInfo>> GetAuthorizeList(OperatorInfo user)
+        public async Task<TData<List<MenuAuthorizeInfo>>> GetAuthorizeList(OperatorInfo user)
         {
-            List<MenuAuthorizeInfo> authorizeInfoList = new List<MenuAuthorizeInfo>();
-
+            TData<List<MenuAuthorizeInfo>> obj = new TData<List<MenuAuthorizeInfo>>();
+            obj.Result = new List<MenuAuthorizeInfo>();
+        
             List<MenuAuthorizeEntity> authorizeList = new List<MenuAuthorizeEntity>();
             List<MenuAuthorizeEntity> userAuthorizeList = null;
             List<MenuAuthorizeEntity> roleAuthorizeList = null;
@@ -60,7 +57,7 @@ namespace YiSha.Business.SystemManage
             List<MenuEntity> menuList = await menuCache.GetList();
             foreach (MenuAuthorizeEntity authorize in authorizeList)
             {
-                authorizeInfoList.Add(new MenuAuthorizeInfo
+                obj.Result.Add(new MenuAuthorizeInfo
                 {
                     MenuId = authorize.MenuId,
                     AuthorizeId = authorize.AuthorizeId,
@@ -68,7 +65,8 @@ namespace YiSha.Business.SystemManage
                     Authorize = menuList.Where(t => t.Id == authorize.MenuId).Select(t => t.Authorize).FirstOrDefault()
                 });
             }
-            return authorizeInfoList;
+            obj.Tag = 1;
+            return obj;
         }
         #endregion
     }

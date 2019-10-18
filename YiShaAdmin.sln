@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02 DataAccess数据库核�
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03 Business 业务逻辑层", "03 Business 业务逻辑层", "{283948F1-48FF-4328-A3DD-07344C7AFF43}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cache 数据缓存层", "Cache 数据缓存层", "{DE45D774-2013-4CA1-BD7C-CDDD73582A12}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cache 数据缓存接口", "Cache 数据缓存接口", "{DE45D774-2013-4CA1-BD7C-CDDD73582A12}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YiSha.Cache.Factory", "YiSha.Cache\YiSha.Cache.Factory\YiSha.Cache.Factory.csproj", "{1190CE54-FEF7-4ACA-9430-7D38A06C48A9}"
 EndProject

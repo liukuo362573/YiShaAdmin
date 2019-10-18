@@ -40,8 +40,8 @@ namespace YiSha.Admin.Web.Controllers
 
             if (operatorInfo.IsSystem != 1)
             {
-                List<MenuAuthorizeInfo> menuAuthorizeInfoList = await new MenuAuthorizeBLL().GetAuthorizeList(operatorInfo);
-                List<long?> authorizeMenuIdList = menuAuthorizeInfoList.Select(p => p.MenuId).ToList();
+                TData<List<MenuAuthorizeInfo>> objMenuAuthorize = await new MenuAuthorizeBLL().GetAuthorizeList(operatorInfo);
+                List<long?> authorizeMenuIdList = objMenuAuthorize.Result.Select(p => p.MenuId).ToList();
                 menuList = menuList.Where(p => authorizeMenuIdList.Contains(p.Id)).ToList();
             }
 
