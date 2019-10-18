@@ -73,15 +73,39 @@ namespace YiSha.Service.SystemManage
         #region 提交数据
         public async Task SaveForm(DataDictEntity entity)
         {
-            if (entity.Id.IsNullOrZero())
+            var db = this.BaseRepository().BeginTrans();
+            try
             {
-                await entity.Create();
-                await this.BaseRepository().Insert<DataDictEntity>(entity);
+                if (!entity.Id.IsNullOrZero())
+                {
+                    var dbEntity = await db.FindEntity<DataDictEntity>(entity.Id.Value);
+                    if (dbEntity.DictType != entity.DictType)
+                    {
+                        // 更新子表的DictType，因为2个表用DictType进行关联
+                        IEnumerable<DataDictDetailEntity> detailList = await db.FindList<DataDictDetailEntity>(p => p.DictType == dbEntity.DictType);
+                        foreach (DataDictDetailEntity detailEntity in detailList)
+                        {
+                            detailEntity.DictType = entity.DictType;
+                            await detailEntity.Modify();
+                        }
+                    }
+                    dbEntity.DictType = entity.DictType;
+                    dbEntity.Remark = entity.Remark;
+                    dbEntity.DictSort = entity.DictSort;
+                    await dbEntity.Modify();
+                    await db.Update<DataDictEntity>(dbEntity);
+                }
+                else
+                {
+                    await entity.Create();
+                    await db.Insert<DataDictEntity>(entity);
+                }
+                await db.Commit();
             }
-            else
+            catch
             {
-                await entity.Modify();
-                await this.BaseRepository().Update<DataDictEntity>(entity);
+                db.Rollback();
+                throw;
             }
         }
 
