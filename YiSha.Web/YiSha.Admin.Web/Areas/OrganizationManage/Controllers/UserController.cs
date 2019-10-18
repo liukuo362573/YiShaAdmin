@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
+using Microsoft.AspNetCore.Mvc;
 using YiSha.Admin.Web.Controllers;
 using YiSha.Business.OrganizationManage;
+using YiSha.Business.SystemManage;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Model;
 using YiSha.Model.Param.OrganizationManage;
+using YiSha.Model.Result;
+using YiSha.Model.Result.SystemManage;
 using YiSha.Util;
 using YiSha.Util.Export;
 using YiSha.Util.Model;
@@ -76,6 +77,22 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
         public async Task<IActionResult> GetFormJson(long id)
         {
             TData<UserEntity> obj = await userBLL.GetEntity(id);
+            return Json(obj);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUserAuthorizeJson()
+        {
+            TData<UserAuthorizeInfo> obj = new TData<UserAuthorizeInfo>();
+            OperatorInfo operatorInfo = await Operator.Instance.Current();
+            TData<List<MenuAuthorizeInfo>> objMenuAuthorizeInfo = await new MenuAuthorizeBLL().GetAuthorizeList(operatorInfo);
+            obj.Result = new UserAuthorizeInfo();
+            obj.Result.IsSystem = operatorInfo.IsSystem;
+            if (objMenuAuthorizeInfo.Tag == 1)
+            {
+                obj.Result.MenuAuthorize = objMenuAuthorizeInfo.Result;
+            }
+            obj.Tag = 1;
             return Json(obj);
         }
         #endregion

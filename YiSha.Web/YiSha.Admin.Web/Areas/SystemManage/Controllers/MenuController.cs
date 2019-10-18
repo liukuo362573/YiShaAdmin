@@ -8,7 +8,6 @@ using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Model.Result;
 using YiSha.Util.Model;
-using YiSha.Web.Code;
 
 namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
 {
@@ -53,14 +52,6 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         public async Task<IActionResult> GetMenuTreeListJson(MenuListParam param)
         {
             TData<List<ZtreeInfo>> obj = await sysMenuBLL.GetZtreeList(param);
-            return Json(obj);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetMenuAuthorizeListJson()
-        {
-            OperatorInfo operatorInfo = await Operator.Instance.Current();
-            TData<List<MenuAuthorizeInfo>> obj = await new MenuAuthorizeBLL().GetAuthorizeList(operatorInfo);
             return Json(obj);
         }
 

@@ -4,7 +4,7 @@
     // 存放数据库里面所有的数据字典，获取字典类型列表或是字典值 例如top.getDataDict('NewsType')或top.getDataDictValue('NewsType' , 1)
     var dataDict = {};
     // 存放当前用户所拥有的权限
-    var dataAuthority = [];
+    var dataAuthority = {};
 
     function initDataDict() {
         ys.ajax({
@@ -35,7 +35,7 @@
 
     function initDataAuthority() {
         ys.ajax({
-            url: ctx + 'SystemManage/Menu/GetMenuAuthorizeListJson',
+            url: ctx + 'OrganizationManage/User/GetUserAuthorizeJson',
             type: "get",
             success: function (obj) {
                 if (obj.Tag == 1) {
@@ -46,26 +46,31 @@
     }
     function getButtonAuthority(url, buttonList) {
         var noAuthorize = [];
-        var regex = /([a-zA-Z]+)Manage\/(.*)\//;  //match url like http://localhost:5000/OrganizationManage/User/UserIndex
-        var matches = regex.exec(url);
-        if (matches && matches.length >= 3) {
-            var module = matches[1];
-            var page = matches[2];
-            buttonList.forEach(function (btn, btnIndex) {
-                var authorize = module.toLowerCase() + ":" + page.toLowerCase() + ":" + btn.toString().replace("btn", "").toLowerCase();
-                var hasAuthority = false;
+        if (dataAuthority) {
+            // 超级用户不验证
+            if (dataAuthority.IsSystem != 1) {
+                var regex = /([a-zA-Z]+)Manage\/(.*)\//;  //match url like http://localhost:5000/OrganizationManage/User/UserIndex
+                var matches = regex.exec(url);
+                if (matches && matches.length >= 3) {
+                    var module = matches[1];
+                    var page = matches[2];
+                    buttonList.forEach(function (btn, btnIndex) {
+                        var authorize = module.toLowerCase() + ':' + page.toLowerCase() + ':' + btn.toString().replace('btn', '').toLowerCase();
+                        var hasAuthority = false;
 
-                dataAuthority.forEach(function (authority, authorityIndex) {
-                    if (authority.Authorize == authorize) {
-                        hasAuthority = true;
-                        return false;
-                    }
-                });
+                        dataAuthority.MenuAuthorize.forEach(function (authority, authorityIndex) {
+                            if (authority.Authorize == authorize) {
+                                hasAuthority = true;
+                                return false;
+                            }
+                        });
 
-                if (!hasAuthority) {
-                    noAuthorize.push(btn);
+                        if (!hasAuthority) {
+                            noAuthorize.push(btn);
+                        }
+                    });
                 }
-            });
+            }
         }
         return noAuthorize;
     }
