@@ -12,6 +12,7 @@ namespace YiSha.Util.Browser
             _agent = agent.ToLower();
 
             var ie10 = "msie";
+            var rv = "rv:";
             if (_agent.Contains(ie10))
             {
                 var first = _agent.IndexOf(ie10);
@@ -25,6 +26,18 @@ namespace YiSha.Util.Browser
             {
                 Type = BrowserType.IE;
                 Version = new System.Version("11.0");
+            }
+
+            if (_agent.Contains(rv))
+            {
+                var first = _agent.IndexOf(rv);
+                var last = _agent.IndexOf(")", first);
+                if (first > 0 && last > 0)
+                {
+                    Type = BrowserType.IE;
+                    var version = _agent.Substring(first + rv.Length, last - first - rv.Length);
+                    Version = new System.Version(version);
+                }
             }
         }
     }
