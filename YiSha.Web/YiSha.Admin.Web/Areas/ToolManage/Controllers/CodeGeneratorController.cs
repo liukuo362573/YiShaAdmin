@@ -97,6 +97,26 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
             obj.Tag = 1;
             return Json(obj);
         }
+
+        [HttpGet]
+        [AuthorizeFilter("tool:codegenerator:search")]
+        public async Task<IActionResult> CheckTableRule(string tableName)
+        {
+            TData obj = new TData();
+
+            // 检查table是否有必须的基础字段
+            TData<List<TableFieldInfo>> tDataTableField = await databaseTableBLL.GetTableFieldList(tableName);
+            List<string> columnList = tDataTableField.Result.Where(p => BaseEntityExtension.BaseFields.Contains(p.TableColumn)).Select(p => p.TableColumn).ToList();
+            if (columnList.Count == BaseEntityExtension.BaseFields.Length)
+            {
+                obj.Tag = 1;
+            }
+            else
+            {
+                obj.Message = "数据库表必须含有" + BaseEntityExtension.BaseFields.Length + "个基础字段 " + string.Join(",", BaseEntityExtension.BaseFields);
+            }
+            return Json(obj);
+        }
         #endregion
 
         #region 提交数据
