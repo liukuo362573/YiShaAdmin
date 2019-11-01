@@ -17,7 +17,17 @@
                 <li class="nav-header">
                     <div class="dropdown profile-element">
                         <span>
-                            <img alt="image" src='@Url.Content("~" + ViewBag.Portrait)' class="img-circle" height="60" width="60" />
+                            @{
+                                if (ViewBag.Portrait == null || string.IsNullOrEmpty(ViewBag.Portrait))
+                                {
+                                    ViewBag.Portrait = "/image/portrait.png";
+                                }
+                                else
+                                {
+                                    ViewBag.Portrait = GlobalContext.SystemConfig.HttpFile + ViewBag.Portrait;
+                                }
+                                <img alt="image" src='@ViewBag.Portrait' class="img-circle" height="60" width="60" />
+                            }
                         </span>
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="clear">

@@ -49,7 +49,7 @@ namespace YiSha.Admin.Web.Controllers
             ViewBag.UserId = operatorInfo.UserId;
             ViewBag.UserName = operatorInfo.UserName;
             ViewBag.DepartmentName = operatorInfo.DepartmentName;
-            ViewBag.Portrait = string.IsNullOrEmpty(operatorInfo.Portrait) ? "/" : operatorInfo.Portrait;
+            ViewBag.Portrait = operatorInfo.Portrait;
             return View();
         }
 

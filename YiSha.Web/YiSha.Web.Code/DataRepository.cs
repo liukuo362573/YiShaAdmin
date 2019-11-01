@@ -36,8 +36,6 @@ namespace YiSha.Web.Code
             var operatorInfo = await BaseRepository().FindObject<OperatorInfo>(strSql.ToString());
             if (operatorInfo != null)
             {
-                operatorInfo.Portrait = CommonHelper.GetCustomValueWhenEmpty(operatorInfo.Portrait, "/image/portrait.png");
-
                 #region 角色
                 strSql.Clear();
                 strSql.Append(@"SELECT  a.belong_id as RoleId

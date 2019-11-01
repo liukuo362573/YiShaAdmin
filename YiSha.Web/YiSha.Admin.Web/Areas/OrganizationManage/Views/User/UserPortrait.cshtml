@@ -29,9 +29,16 @@
 <script type="text/javascript">
     var id = ys.request("id");
     var cropper;
+    var imgFileName;
 
     $(function () {
-        var portrait = '@Url.Content("~/" + ViewBag.OperatorInfo.Portrait)';
+        var portrait = '@ViewBag.OperatorInfo.Portrait';
+        if (ys.isNullOrEmpty(portrait)) {
+            portrait = ctx + 'image/portrait.png';
+        }
+        else {
+            portrait = '@GlobalContext.SystemConfig.HttpFile' + portrait;
+        }
         var options = {
             thumbBox: '.thumbBox',
             spinner: '.spinner',
@@ -39,6 +46,7 @@
         };
         cropper = $('.imageBox').cropbox(options);
         $('#portrait').on('change', function () {
+            var file = this.files[0];
             var reader = new FileReader();
             reader.onload = function (e) {
                 options.imgSrc = e.target.result;
@@ -49,12 +57,16 @@
                     cropper = $('.imageBox').cropbox(options);
                 }
             }
-            reader.readAsDataURL(this.files[0]);
+            reader.readAsDataURL(file);
+            imgFileName = file.name;
         });
         $('#btnSave').on('click', function () {
             saveForm(parent.layer.getFrameIndex(window.name));
         });
         $('#btnCrop').on('click', function () {
+            if (!checkImageFileName()) {
+                return;
+            }
             var img = cropper.getDataURL();
             $('.cropped').html('');
             $('.cropped').append('<img src="' + img + '" align="absmiddle" style="width:64px;margin-top:4px;border-radius:64px;box-shadow:0px 0px 12px #7E7E7E;" ><p>64px*64px</p>');
@@ -70,9 +82,12 @@
     });
 
     function saveForm(index) {
+        if (!checkImageFileName()) {
+            return;
+        }
         var img = cropper.getBlob();
         var formdata = new FormData();
-        formdata.append("file", img);
+        formdata.append("file", img, imgFileName);
         ys.ajaxUploadFile({
             url: '@GlobalContext.SystemConfig.HttpFile' + '/File/UploadFile?fileModule=@UploadFileType.Portrait.ParseToInt()',
             data: formdata,
@@ -98,7 +113,7 @@
             success: function (obj) {
                 if (obj.Tag == 1) {
                     ys.msgSuccess(obj.Message);
-                    $("#portrait", parent.document).attr("src", ctx + ys.trimStart(data.Result, '/'));
+                    $("#portrait", parent.document).attr("src", '@GlobalContext.SystemConfig.HttpFile' + data.Result);
                     ys.closeDialog();
                 }
                 else {
@@ -106,5 +121,15 @@
                 }
             }
         });
+    }
+
+    function checkImageFileName() {
+        if (ys.isNullOrEmpty(imgFileName)) {
+            ys.msgError("请先上传图片");
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 </script>

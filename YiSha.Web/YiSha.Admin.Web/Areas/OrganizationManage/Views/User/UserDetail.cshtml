@@ -59,8 +59,15 @@
                     if (obj.Tag == 1) {
                         var result = obj.Result;
                         result.Gender = ys.getValueByKey(@Html.Raw(typeof(GenderTypeEnum).EnumToDictionaryString()), result.Gender);
-                        $("#userInfo").setWebControls(result);                       
-                        $("#portrait").attr("src", ctx + ys.trimStart(result.Portrait, '/'));
+                        $("#userInfo").setWebControls(result);
+
+                        if (ys.isNullOrEmpty(result.Portrait)) {
+                            result.Portrait = ctx + 'image/portrait.png';
+                        }
+                        else {
+                            result.Portrait = '@GlobalContext.SystemConfig.HttpFile' + result.Portrait;
+                        }
+                        $("#portrait").attr("src", result.Portrait);
 
                         getDepartmentName(result.DepartmentId);
                         getRoleName(result.RoleIds);

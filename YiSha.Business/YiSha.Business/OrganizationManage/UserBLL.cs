@@ -78,7 +78,6 @@ namespace YiSha.Business.OrganizationManage
                     obj.Result.DepartmentName = departmentEntity.DepartmentName;
                 }
             }
-            obj.Result.Portrait = CommonHelper.GetCustomValueWhenEmpty(obj.Result.Portrait, "image/portrait.png");
 
             obj.Tag = 1;
             return obj;
