@@ -20,7 +20,7 @@
                             @{
                                 if (ViewBag.Portrait == null || string.IsNullOrEmpty(ViewBag.Portrait))
                                 {
-                                    ViewBag.Portrait = "/image/portrait.png";
+                                    ViewBag.Portrait = Url.Content("~/image/portrait.png");
                                 }
                                 else
                                 {
