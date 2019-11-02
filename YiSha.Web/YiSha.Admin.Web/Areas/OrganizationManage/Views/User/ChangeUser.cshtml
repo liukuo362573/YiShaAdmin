@@ -107,6 +107,8 @@
                 success: function (obj) {
                     if (obj.Tag == 1) {
                         ys.msgSuccess(obj.Message);
+
+                        parent.getForm();
                         parent.layer.close(index);
                     }
                     else {
