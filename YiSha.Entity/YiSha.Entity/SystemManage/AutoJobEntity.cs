@@ -6,7 +6,7 @@ using YiSha.Util;
 namespace YiSha.Entity.SystemManage
 {
     [Table("sys_auto_job")]
-    public class AutoJobEntity : BaseEntity
+    public class AutoJobEntity : BaseExtensionEntity
     {
         /// <summary>
         /// 

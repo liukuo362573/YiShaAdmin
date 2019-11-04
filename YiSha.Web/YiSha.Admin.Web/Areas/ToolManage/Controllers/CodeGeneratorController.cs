@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using YiSha.Admin.Web.Controllers;
 using YiSha.Business.SystemManage;
@@ -69,7 +70,7 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
             if (obj.Result != null)
             {
                 // 基础字段不显示出来
-                obj.Result.RemoveAll(p => BaseEntityExtension.BaseFields.Contains(p.name));
+                obj.Result.RemoveAll(p => BaseField.BaseFieldList.Contains(p.name));
                 if (upper == 1)
                 {
                     foreach (ZtreeInfo field in obj.Result)
@@ -89,32 +90,12 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
 
             string tableDescription = string.Empty;
             TData<List<TableFieldInfo>> tDataTableField = await databaseTableBLL.GetTableFieldList(tableName);
-            List<string> columnList = tDataTableField.Result.Where(p => !BaseEntityExtension.BaseFields.Contains(p.TableColumn)).Select(p => p.TableColumn).ToList();
+            List<string> columnList = tDataTableField.Result.Where(p => !BaseField.BaseFieldList.Contains(p.TableColumn)).Select(p => p.TableColumn).ToList();
 
             OperatorInfo operatorInfo = await Operator.Instance.Current();
             string serverPath = GlobalContext.HostingEnvironment.ContentRootPath;
             obj.Result = new SingleTableTemplate().GetBaseConfig(serverPath, operatorInfo.UserName, tableName, tableDescription, columnList);
             obj.Tag = 1;
-            return Json(obj);
-        }
-
-        [HttpGet]
-        [AuthorizeFilter("tool:codegenerator:search")]
-        public async Task<IActionResult> CheckTableRule(string tableName)
-        {
-            TData obj = new TData();
-
-            // 检查table是否有必须的基础字段
-            TData<List<TableFieldInfo>> tDataTableField = await databaseTableBLL.GetTableFieldList(tableName);
-            List<string> columnList = tDataTableField.Result.Where(p => BaseEntityExtension.BaseFields.Contains(p.TableColumn)).Select(p => p.TableColumn).ToList();
-            if (columnList.Count == BaseEntityExtension.BaseFields.Length)
-            {
-                obj.Tag = 1;
-            }
-            else
-            {
-                obj.Message = "数据库表必须含有" + BaseEntityExtension.BaseFields.Length + "个基础字段 " + string.Join(",", BaseEntityExtension.BaseFields);
-            }
             return Json(obj);
         }
         #endregion
@@ -132,10 +113,11 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
             else
             {
                 SingleTableTemplate template = new SingleTableTemplate();
-                TData<List<TableFieldInfo>> tTable = await databaseTableBLL.GetTableFieldPartList(baseConfig.TableName);
-                string codeEntity = template.BuildEntity(baseConfig, DataHelper.ListToDataTable(tTable.Result)); // 用DataTable类型，避免依赖
+                TData<List<TableFieldInfo>> objTable = await databaseTableBLL.GetTableFieldList(baseConfig.TableName);
+                DataTable dt = DataHelper.ListToDataTable(objTable.Result);  // 用DataTable类型，避免依赖
+                string codeEntity = template.BuildEntity(baseConfig, dt);
                 string codeEntityParam = template.BuildEntityParam(baseConfig);
-                string codeService = template.BuildService(baseConfig);
+                string codeService = template.BuildService(baseConfig, dt);
                 string codeBusiness = template.BuildBusiness(baseConfig);
                 string codeController = template.BuildController(baseConfig);
                 string codeIndex = template.BuildIndex(baseConfig);

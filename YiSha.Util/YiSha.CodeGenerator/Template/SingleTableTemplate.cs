@@ -15,6 +15,7 @@ using YiSha.Util.Model;
 using YiSha.Entity.SystemManage;
 using YiSha.Enum.SystemManage;
 using YiSha.Business.Cache;
+using YiSha.Entity;
 
 namespace YiSha.CodeGenerator.Template
 {
@@ -104,8 +105,8 @@ namespace YiSha.CodeGenerator.Template
 
             SetClassDescription("实体类", baseConfigModel, sb);
 
-            sb.AppendLine("     [Table(\"" + baseConfigModel.TableName + "\")]");
-            sb.AppendLine("    public class " + baseConfigModel.FileConfig.EntityName + " : BaseEntity");
+            sb.AppendLine("    [Table(\"" + baseConfigModel.TableName + "\")]");
+            sb.AppendLine("    public class " + baseConfigModel.FileConfig.EntityName + " : " + GetBaseEntity(dt));
             sb.AppendLine("    {");
 
             string column = string.Empty;
@@ -114,6 +115,12 @@ namespace YiSha.CodeGenerator.Template
             foreach (DataRow dr in dt.Rows)
             {
                 column = dr["TableColumn"].ToString();
+                if (BaseField.BaseFieldList.Where(p => p == column.ToLower()).Any())
+                {
+                    // 基础字段不需要生成，继承合适的BaseEntity即可。
+                    continue;
+                }
+
                 remark = dr["Remark"].ToString();
                 datatype = dr["Datatype"].ToString();
 
@@ -170,8 +177,10 @@ namespace YiSha.CodeGenerator.Template
         #endregion
 
         #region BuildService
-        public string BuildService(BaseConfigModel baseConfigModel)
+        public string BuildService(BaseConfigModel baseConfigModel, DataTable dt)
         {
+            string baseEntity = GetBaseEntity(dt);
+
             StringBuilder sb = new StringBuilder();
             string method = string.Empty;
             sb.AppendLine("using System;");
@@ -224,12 +233,12 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("        {");
             sb.AppendLine("            if (entity.Id.IsNullOrZero())");
             sb.AppendLine("            {");
-            sb.AppendLine("                await entity.Create();");
+            sb.AppendLine("                " + GetSaveFormCreate(baseEntity));
             sb.AppendLine("                await this.BaseRepository().Insert(entity);");
             sb.AppendLine("            }");
             sb.AppendLine("            else");
             sb.AppendLine("            {");
-            sb.AppendLine("                await entity.Modify();");
+            sb.AppendLine("                " + GetSaveFormModify(baseEntity));
             sb.AppendLine("                await this.BaseRepository().Update(entity);");
             sb.AppendLine("            }");
             sb.AppendLine("        }");
@@ -959,7 +968,90 @@ namespace YiSha.CodeGenerator.Template
         {
             return baseConfigModel.OutputConfig.OutputModule.Replace("Manage", string.Empty).ToLower();
         }
-        #endregion
 
+        private string GetBaseEntity(DataTable dt)
+        {
+            string entity = string.Empty;
+            var columnList = dt.AsEnumerable().Select(p => p["TableColumn"].ParseToString()).ToList();
+
+            bool id = columnList.Where(p => p == "id").Any();
+            bool baseIsDelete = columnList.Where(p => p == "base_is_delete").Any();
+            bool baseVersion = columnList.Where(p => p == "base_version").Any();
+            bool baseModifyTime = columnList.Where(p => p == "base_modify_time").Any();
+            bool baseModifierId = columnList.Where(p => p == "base_modifier_id").Any();
+            bool baseCreateTime = columnList.Where(p => p == "base_create_time").Any();
+            bool baseCreatorId = columnList.Where(p => p == "base_creator_id").Any();
+
+            if (!id)
+            {
+                throw new Exception("数据库表必须有主键id字段");
+            }
+            if (baseIsDelete && baseVersion && baseModifyTime && baseModifierId && baseCreateTime && baseCreatorId)
+            {
+                entity = "BaseExtensionEntity";
+            }
+            else if (baseVersion && baseModifyTime && baseModifierId && baseCreateTime && baseCreatorId)
+            {
+                entity = "BaseModifyEntity";
+            }
+            else if (baseCreateTime && baseCreatorId)
+            {
+                entity = "BaseCreateEntity";
+            }
+            else
+            {
+                entity = "BaseEntity";
+            }
+            return entity;
+        }
+
+        private string GetSaveFormCreate(string entity)
+        {
+            string line = string.Empty;
+            switch (entity)
+            {
+                case "BaseEntity":
+                    line = "entity.Create();";
+                    break;
+
+                case "BaseCreateEntity":
+                    line = "await entity.Create();";
+                    break;
+
+                case "BaseModifyEntity":
+                    line = "await entity.Create();";
+                    break;
+
+                case "BaseExtensionEntity":
+                    line = "await entity.Create();";
+                    break;
+            }
+            return line;
+        }
+
+        private string GetSaveFormModify(string entity)
+        {
+            string line = string.Empty;
+            switch (entity)
+            {
+                case "BaseEntity":
+                    line = string.Empty;
+                    break;
+
+                case "BaseCreateEntity":
+                    line = string.Empty;
+                    break;
+
+                case "BaseModifyEntity":
+                    line = "await entity.Modify();";
+                    break;
+
+                case "BaseExtensionEntity":
+                    line = "await entity.Modify();";
+                    break;
+            }
+            return line;
+        }
+        #endregion
     }
 }

@@ -10,7 +10,7 @@ using YiSha.Util;
 namespace YiSha.Entity.OrganizationManage
 {
     [Table("sys_department")]
-    public class DepartmentEntity : BaseEntity
+    public class DepartmentEntity : BaseExtensionEntity
     {
         [JsonConverter(typeof(StringJsonConverter))]
         public long? ParentId { get; set; }

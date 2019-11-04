@@ -85,7 +85,7 @@ namespace YiSha.Business.SystemManage
             TData<List<TableFieldInfo>> obj = new TData<List<TableFieldInfo>>();
             List<TableFieldInfo> list = await databaseTableService.GetTableFieldList(tableName);
             obj.Result = list;
-            obj.Result.RemoveAll(p => BaseEntityExtension.BaseFields.Contains(p.TableColumn));
+            obj.Result.RemoveAll(p => BaseField.BaseFieldList.Contains(p.TableColumn));
             obj.Tag = 1;
             return obj;
         }

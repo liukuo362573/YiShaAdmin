@@ -10,7 +10,7 @@ using YiSha.Util;
 namespace YiSha.Entity.OrganizationManage
 {
     [Table("sys_user")]
-    public class UserEntity : BaseEntity
+    public class UserEntity : BaseExtensionEntity
     {
         public string UserName { get; set; }
         public string Password { get; set; }
