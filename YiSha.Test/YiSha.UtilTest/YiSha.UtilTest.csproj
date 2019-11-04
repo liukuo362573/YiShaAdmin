@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nunit" Version="3.11.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.11.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\YiSha.Util\YiSha.CodeGenerator\YiSha.CodeGenerator.csproj" />
+    <ProjectReference Include="..\..\YiSha.Util\YiSha.IdGenerator\YiSha.IdGenerator.csproj" />
+    <ProjectReference Include="..\..\YiSha.Util\YiSha.Util\YiSha.Util.csproj" />
+  </ItemGroup>
+
+</Project>
