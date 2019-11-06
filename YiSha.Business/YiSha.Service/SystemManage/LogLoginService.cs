@@ -80,7 +80,7 @@ namespace YiSha.Service.SystemManage
                                     a.remark as Remark,
                                     b.user_name as UserName
                             FROM    sys_log_login a
-                                    LEFT JOIN sys_user b ON a.base_modifier_id = b.id
+                                    LEFT JOIN sys_user b ON a.base_creator_id = b.id
                             WHERE   1 = 1");
             var parameter = new List<DbParameter>();
             if (param != null)

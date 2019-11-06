@@ -81,7 +81,7 @@ namespace YiSha.Service.SystemManage
                                     b.user_name as UserName,
                                     c.department_name as DepartmentName
                             FROM    sys_log_api a
-                                    LEFT JOIN sys_user b ON a.base_modifier_id = b.id
+                                    LEFT JOIN sys_user b ON a.base_creator_id = b.id
                                     LEFT JOIN sys_department c ON b.department_id = c.id
                             WHERE   1 = 1");
             var parameter = new List<DbParameter>();
