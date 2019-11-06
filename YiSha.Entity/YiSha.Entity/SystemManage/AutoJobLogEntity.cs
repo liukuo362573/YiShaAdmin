@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace YiSha.Entity.SystemManage
 {
     [Table("sys_auto_job_log")]
-    public class AutoJobLogEntity : BaseExtensionEntity
+    public class AutoJobLogEntity : BaseCreateEntity
     {
         /// <summary>
         /// 

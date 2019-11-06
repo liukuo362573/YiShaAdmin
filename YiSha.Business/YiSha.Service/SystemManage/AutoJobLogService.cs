@@ -45,7 +45,6 @@ namespace YiSha.Service.SystemManage
             }
             else
             {
-                await entity.Modify();
                 await this.BaseRepository().Update<AutoJobLogEntity>(entity);
             }
         }

@@ -93,8 +93,7 @@ namespace YiSha.Admin.Web.Controllers
                     Browser = NetHelper.Browser,
                     OS = NetHelper.GetOSVersion(),
                     ExtraRemark = NetHelper.UserAgent,
-                    BaseCreatorId = user.UserId,
-                    BaseModifierId = user.UserId
+                    BaseCreatorId = user.UserId
                 });
 
                 Operator.Instance.RemoveCurrent();
@@ -173,13 +172,11 @@ namespace YiSha.Admin.Web.Controllers
                      Browser = browser,
                      OS = os,
                      ExtraRemark = userAgent,
-                     BaseCreatorId = userObj.Result?.Id,
-                     BaseModifierId = userObj.Result?.Id
+                     BaseCreatorId = userObj.Result?.Id
                  };
 
                  // 让底层不用获取HttpContext
                  logLoginEntity.BaseCreatorId = logLoginEntity.BaseCreatorId ?? 0;
-                 logLoginEntity.BaseModifierId = logLoginEntity.BaseModifierId ?? 0;
 
                  await new LogLoginBLL().SaveForm(logLoginEntity);
              };

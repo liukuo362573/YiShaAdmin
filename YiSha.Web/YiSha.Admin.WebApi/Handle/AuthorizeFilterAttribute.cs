@@ -116,7 +116,6 @@ namespace YiSha.Admin.WebApi.Controllers
             if (user != null)
             {
                 logApiEntity.BaseCreatorId = user.UserId;
-                logApiEntity.BaseModifierId = user.UserId;
             }
             logApiEntity.ExecuteParam = CommonHelper.GetSubString(logApiEntity.ExecuteParam, 4000);
             logApiEntity.ExecuteResult = CommonHelper.GetSubString(logApiEntity.ExecuteResult, 4000);
@@ -126,7 +125,6 @@ namespace YiSha.Admin.WebApi.Controllers
              {
                  // 让底层不用获取HttpContext
                  logApiEntity.BaseCreatorId = logApiEntity.BaseCreatorId ?? 0;
-                 logApiEntity.BaseModifierId = logApiEntity.BaseModifierId ?? 0;
 
                  await new LogApiBLL().SaveForm(logApiEntity);
              };

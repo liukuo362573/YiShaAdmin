@@ -124,7 +124,6 @@ namespace YiSha.Admin.Web.Controllers
                 if (user != null)
                 {
                     operateEntity.BaseCreatorId = user.UserId;
-                    operateEntity.BaseModifierId = user.UserId;
                 }
 
                 operateEntity.ExecuteTime = sw.ElapsedMilliseconds.ParseToInt();
@@ -137,7 +136,6 @@ namespace YiSha.Admin.Web.Controllers
                 {
                     // 让底层不用获取HttpContext
                     operateEntity.BaseCreatorId = operateEntity.BaseCreatorId ?? 0;
-                    operateEntity.BaseModifierId = operateEntity.BaseModifierId ?? 0;
 
                     // 耗时的任务异步完成
                     operateEntity.IpLocation = IpLocationHelper.GetIpLocation(ip);
