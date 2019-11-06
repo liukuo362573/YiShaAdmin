@@ -23,7 +23,7 @@ namespace YiSha.Util
     }
     #endregion
 
-    #region StringJsonConverter
+    #region JsonConverter
     /// <summary>
     /// Json数据返回到前端js的时候，把数值很大的long类型转成字符串
     /// </summary>
