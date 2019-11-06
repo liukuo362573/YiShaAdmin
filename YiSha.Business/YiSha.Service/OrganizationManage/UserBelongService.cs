@@ -47,7 +47,6 @@ namespace YiSha.Service.OrganizationManage
             }
             else
             {
-                await entity.Modify();
                 await this.BaseRepository().Update(entity);
             }
         }

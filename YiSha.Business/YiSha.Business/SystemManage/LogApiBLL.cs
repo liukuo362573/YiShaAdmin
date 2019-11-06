@@ -42,7 +42,7 @@ namespace YiSha.Business.SystemManage
             obj.Result = await logApiService.GetEntity(id);
             if (obj.Result != null)
             {
-                UserEntity userEntity = await new UserService().GetEntity(obj.Result.BaseModifierId.Value);
+                UserEntity userEntity = await new UserService().GetEntity(obj.Result.BaseCreatorId.Value);
                 if (userEntity != null)
                 {
                     obj.Result.UserName = userEntity.UserName;

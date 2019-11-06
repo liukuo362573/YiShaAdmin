@@ -18,7 +18,6 @@ namespace YiSha.Business.SystemManage
     public class LogOperateBLL
     {
         private LogOperateService logOperateService = new LogOperateService();
-        private DepartmentService departmentService = new DepartmentService();
 
         #region 获取数据
         public async Task<TData<List<LogOperateEntity>>> GetList(LogOperateListParam param)
@@ -45,7 +44,7 @@ namespace YiSha.Business.SystemManage
             obj.Result = await logOperateService.GetEntity(id);
             if (obj.Result != null)
             {
-                UserEntity userEntity = await new UserService().GetEntity(obj.Result.BaseModifierId.Value);
+                UserEntity userEntity = await new UserService().GetEntity(obj.Result.BaseCreatorId.Value);
                 if (userEntity != null)
                 {
                     obj.Result.UserName = userEntity.UserName;

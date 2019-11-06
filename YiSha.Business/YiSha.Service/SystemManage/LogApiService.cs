@@ -50,7 +50,6 @@ namespace YiSha.Service.SystemManage
             }
             else
             {
-                await entity.Modify();
                 await this.BaseRepository().Update<LogApiEntity>(entity);
             }
         }
@@ -71,8 +70,8 @@ namespace YiSha.Service.SystemManage
         private List<DbParameter> ListFilter(LogApiListParam param, StringBuilder strSql)
         {
             strSql.Append(@"SELECT  a.id as Id,
-                                    a.base_modify_time as BaseModifyTime,
-                                    a.base_modifier_id as BaseModifierId,
+                                    a.base_create_time as BaseCreateTime,
+                                    a.base_creator_id as BaseCreatorId,
                                     a.log_status as LogStatus,
                                     a.remark as Remark,
                                     a.execute_url as ExecuteUrl,
@@ -82,7 +81,7 @@ namespace YiSha.Service.SystemManage
                                     b.user_name as UserName,
                                     c.department_name as DepartmentName
                             FROM    sys_log_api a
-                                    LEFT JOIN sys_user b ON a.base_modifier_id = b.id
+                                    LEFT JOIN sys_user b ON a.base_creator_id = b.id
                                     LEFT JOIN sys_department c ON b.department_id = c.id
                             WHERE   1 = 1");
             var parameter = new List<DbParameter>();

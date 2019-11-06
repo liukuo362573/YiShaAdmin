@@ -6,7 +6,7 @@ using YiSha.Util;
 namespace YiSha.Entity.SystemManage
 {
     [Table("sys_log_api")]
-    public class LogApiEntity : BaseExtensionEntity
+    public class LogApiEntity : BaseCreateEntity
     {
         /// <summary>
         /// 
