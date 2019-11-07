@@ -160,28 +160,6 @@ namespace YiSha.Util
         }
         #endregion
 
-        public static void DeleteFolder(string path)
-        {
-            try
-            {
-                if (Directory.Exists(path)) //如果存在这个文件夹删除之 
-                {
-                    foreach (string d in Directory.GetFileSystemEntries(path))
-                    {
-                        if (File.Exists(d))
-                            File.Delete(d); //直接删除其中的文件                        
-                        else
-                            DeleteFolder(d); //递归删除子文件夹 
-                    }
-                    Directory.Delete(path, true); //删除已空文件夹                 
-                }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteWithTime(ex);
-            }
-        }
-
         #region 下载文件
         /// <summary>
         /// 下载文件
@@ -248,6 +226,28 @@ namespace YiSha.Util
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
+            }
+        }
+
+        public static void DeleteDirectory(string path)
+        {
+            try
+            {
+                if (Directory.Exists(path)) //如果存在这个文件夹删除之 
+                {
+                    foreach (string d in Directory.GetFileSystemEntries(path))
+                    {
+                        if (File.Exists(d))
+                            File.Delete(d); //直接删除其中的文件                        
+                        else
+                            DeleteDirectory(d); //递归删除子文件夹 
+                    }
+                    Directory.Delete(path, true); //删除已空文件夹                 
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteWithTime(ex);
             }
         }
 
