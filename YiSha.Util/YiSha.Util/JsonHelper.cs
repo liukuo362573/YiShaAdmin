@@ -16,6 +16,7 @@ namespace YiSha.Util
             Json = Json.Replace("&nbsp;", "");
             return Json == null ? default(T) : JsonConvert.DeserializeObject<T>(Json);
         }
+
         public static JObject ToJObject(this string Json)
         {
             return Json == null ? JObject.Parse("{}") : JObject.Parse(Json.Replace("&nbsp;", ""));

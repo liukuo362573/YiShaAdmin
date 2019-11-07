@@ -15,6 +15,7 @@ using YiSha.Model.Result.SystemManage;
 using YiSha.Util;
 using YiSha.Util.Model;
 using YiSha.Web.Code;
+using YiSha.CodeGenerator;
 
 namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
 {
@@ -75,7 +76,7 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
                 {
                     foreach (ZtreeInfo field in obj.Result)
                     {
-                        field.name = CommonHelper.ConvertToUppercase(field.name);
+                        field.name = TableMappingHelper.ConvertToUppercase(field.name);
                     }
                 }
             }
