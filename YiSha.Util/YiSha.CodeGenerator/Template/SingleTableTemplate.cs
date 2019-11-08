@@ -54,20 +54,10 @@ namespace YiSha.CodeGenerator.Template
             #region OutputConfigModel
             baseConfigModel.OutputConfig = new OutputConfigModel();
             baseConfigModel.OutputConfig.OutputModule = string.Empty;
-            if (GlobalContext.SystemConfig.Debug)
-            {
-                baseConfigModel.OutputConfig.OutputEntity = string.Format("{0}\\YiSha.Entity", path);
-                baseConfigModel.OutputConfig.OutputBusiness = string.Format("{0}\\YiSha.Business", path);
-                baseConfigModel.OutputConfig.OutputWeb = string.Format("{0}\\YiSha.Web\\YiSha.Admin.Web", path);
-                baseConfigModel.OutputConfig.ModuleList = Directory.GetDirectories(baseConfigModel.OutputConfig.OutputWeb + "\\" + "Areas").Select(p => p.Substring(p.LastIndexOf('\\') + 1)).ToList();
-            }
-            else
-            {
-                baseConfigModel.OutputConfig.OutputEntity = string.Format("{0}\\CodeGenerator", path);
-                baseConfigModel.OutputConfig.OutputBusiness = string.Format("{0}\\CodeGenerator", path);
-                baseConfigModel.OutputConfig.OutputWeb = string.Format("{0}", path);
-                baseConfigModel.OutputConfig.ModuleList = new List<string> { "DemoManage" };
-            }
+            baseConfigModel.OutputConfig.OutputEntity = string.Format("{0}\\YiSha.Entity", path);
+            baseConfigModel.OutputConfig.OutputBusiness = string.Format("{0}\\YiSha.Business", path);
+            baseConfigModel.OutputConfig.OutputWeb = string.Format("{0}\\YiSha.Web\\YiSha.Admin.Web", path);
+            baseConfigModel.OutputConfig.ModuleList = Directory.GetDirectories(baseConfigModel.OutputConfig.OutputWeb + "\\" + "Areas").Select(p => p.Substring(p.LastIndexOf('\\') + 1)).ToList();
             #endregion
 
             #region PageIndexModel
