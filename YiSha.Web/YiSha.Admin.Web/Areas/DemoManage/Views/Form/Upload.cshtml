@@ -1,0 +1,48 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormGray.cshtml";
+}
+
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment HostingEnvironment
+@section header{
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/css/fileinput.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/js/fileinput.min.js"))
+}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>文件上传控件 <small>https://github.com/kartik-v/bootstrap-fileinput</small></h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="form-group">
+                        <label class="font-noraml">简单示例</label>
+                        <div class="file-loading">
+                            <input class="file" type="file" multiple data-min-file-count="1" data-theme="fas">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="font-noraml">多文件上传</label>
+                        <div class="file-loading">
+                            <input id="fileinput-demo-1" type="file" multiple>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#fileinput-demo-1").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': '#',
+            overwriteInitial: false,
+            initialPreviewAsData: true,
+            initialPreview: ['@Url.Content("~/image/portrait.png")']
+        });
+    });
+</script>
