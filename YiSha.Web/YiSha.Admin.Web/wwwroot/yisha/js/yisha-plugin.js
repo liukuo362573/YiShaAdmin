@@ -13,7 +13,7 @@
         var _option = $.extend({
             url: null,
             key: "Key",
-            value: "Value",          
+            value: "Value",
             data: null, // 数据源            
             dataName: 'Result' // 数据名称
         }, option);
@@ -234,12 +234,20 @@
                     }
 
                     var option = '';
-                    if (!setting.class) {
-                        // 没有form-control这个class，就加一个全部选项，应该是查询条件
-                        option += "<option value='-1'>全部</option>";
-                    } else {
-                        if (!setting.multiple) {
-                            option += "<option value='' selected='selected'>请选择</option>";
+
+                    var groupOption = false; // 是否有分组
+                    if (setting.data.length > 0) {
+                        groupOption = setting.data[0][setting.value] instanceof Array;
+                    }
+
+                    if (!groupOption) {
+                        if (!setting.class) {
+                            // 没有form-control这个class，就加一个全部选项，应该是查询条件
+                            option += "<option value='-1'>全部</option>";
+                        } else {
+                            if (!setting.multiple) {
+                                option += "<option value='' selected='selected'>请选择</option>";
+                            }
                         }
                     }
 
@@ -248,7 +256,17 @@
                         if (typeof row == 'string') {
                             option += "<option value='" + row + "'>" + row + "</option>";
                         } else {
-                            option += "<option value='" + row[setting.key] + "'>" + row[setting.value] + "</option>";
+                            if (row[setting.value] instanceof Array) {
+                                // 分组的选项
+                                option += "<optgroup label='--" + row[setting.key] + "--'>";
+                                $.each(row[setting.value], function (j) {
+                                    var childRow = row[setting.value][j];
+                                    option += "<option value='" + childRow[setting.key] + "'>" + childRow[setting.value] + "</option>";
+                                });
+                            }
+                            else {
+                                option += "<option value='" + row[setting.key] + "'>" + row[setting.value] + "</option>";
+                            }
                         }
                     });
                     if (selectExist) {

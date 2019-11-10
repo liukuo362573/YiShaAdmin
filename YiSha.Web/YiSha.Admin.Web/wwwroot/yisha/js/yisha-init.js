@@ -5,15 +5,17 @@ $(function () {
         $(".check-box").iCheck({
             checkboxClass: 'icheckbox-blue',
             radioClass: 'iradio-blue',
-        })
+        });
     }
+
     // radio 事件绑定
     if ($(".radio-box").length > 0) {
         $(".radio-box").iCheck({
             checkboxClass: 'icheckbox-blue',
             radioClass: 'iradio-blue',
-        })
+        });
     }
+
     // laydate 时间控件绑定
     if ($(".select-time").length > 10) {
         layui.use('laydate', function () {
@@ -56,6 +58,7 @@ $(function () {
             });
         });
     }
+
     // tree 关键字搜索绑定
     if ($("#keyword").length > 0) {
         $("#keyword").bind("focus", function focusKey(e) {
@@ -79,7 +82,7 @@ $(function () {
             $('#gridTable').bootstrapTreeTable('collapseAll');
         }
         expandFlag = expandFlag ? false : true;
-    })
+    });
 
     // 复选框后按钮样式状态变更
     $("#gridTable").on("check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table", function () {
@@ -87,6 +90,15 @@ $(function () {
         $('#btnDelete').toggleClass('disabled', !ids.length);
         $('#btnEdit').toggleClass('disabled', ids.length != 1);
     });
+
+    // select2复选框事件绑定
+    if ($.fn.select2 !== undefined) {
+        $("select.form-control.select2").each(function () {
+            $(this).select2().on("change", function () {
+                $(this).valid();
+            });
+        });
+    }
 
     $("#searchDiv").keyup(function (e) {
         if (e.which === 13) {
