@@ -34,12 +34,27 @@ namespace YiSha.Admin.Web.Areas.DemoManage.Controllers
             return View();
         }
 
-        public IActionResult Cards()
+        public IActionResult Card()
+        {
+            return View();
+        }
+
+        public IActionResult Tab()
+        {
+            return View();
+        }
+
+        public IActionResult Panel()
         {
             return View();
         }
 
         public IActionResult Upload()
+        {
+            return View();
+        }
+
+        public IActionResult Datetime()
         {
             return View();
         }
