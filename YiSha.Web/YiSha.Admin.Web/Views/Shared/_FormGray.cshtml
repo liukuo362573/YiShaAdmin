@@ -20,6 +20,7 @@
     @RenderBody()
     @RenderSection("footer", false)
 
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/yisha/css/yisha.min.css"))
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/yisha/js/yisha-init.min.js"))
 </body>
 </html>
