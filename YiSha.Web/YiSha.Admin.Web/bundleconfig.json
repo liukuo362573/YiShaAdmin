@@ -2,11 +2,10 @@
 // More info at https://go.microsoft.com/fwlink/?LinkId=808241
 [
   {
-    "outputFileName": "wwwroot/yisha/css/yisha.min.css",
+    "outputFileName": "wwwroot/yisha/css/style.min.css",
     "inputFiles": [
       "wwwroot/yisha/css/animate.css",
-      "wwwroot/yisha/css/style.css",
-      "wwwroot/yisha/css/yisha-vertical-tab.css"
+      "wwwroot/yisha/css/style.css"
     ],
     "minify": {
       "enabled": false,
@@ -26,9 +25,9 @@
   },
 
   {
-    "outputFileName": "wwwroot/yisha/css/yisha-init.min.css",
+    "outputFileName": "wwwroot/yisha/css/yisha.min.css",
     "inputFiles": [
-      "wwwroot/yisha/css/yisha-init.css"
+      "wwwroot/yisha/css/yisha.css"
     ],
     "minify": {
       "enabled": true,

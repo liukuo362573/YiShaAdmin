@@ -46,10 +46,7 @@ namespace YiSha.Admin.Web.Controllers
             }
 
             ViewBag.MenuList = menuList;
-            ViewBag.UserId = operatorInfo.UserId;
-            ViewBag.UserName = operatorInfo.UserName;
-            ViewBag.DepartmentName = operatorInfo.DepartmentName;
-            ViewBag.Portrait = operatorInfo.Portrait;
+            ViewBag.OperatorInfo = operatorInfo;
             return View();
         }
 
@@ -112,13 +109,6 @@ namespace YiSha.Admin.Web.Controllers
         public IActionResult Error(string message)
         {
             ViewBag.Message = message;
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult IdGenerator()
-        {
-            ViewBag.Id = IdGeneratorHelper.Instance.GetId();
             return View();
         }
         #endregion

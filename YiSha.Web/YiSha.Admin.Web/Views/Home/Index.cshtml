@@ -1,6 +1,17 @@
 ﻿@{
     ViewBag.Title = "一沙后台管理系统";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    OperatorInfo operatorInfo = ViewBag.OperatorInfo;
+    String portrait = operatorInfo.Portrait;
+    if (portrait == null || string.IsNullOrEmpty(portrait))
+    {
+        portrait = Url.Content("~/image/portrait.png");
+    }
+    else
+    {
+        portrait = GlobalContext.SystemConfig.HttpFile + ViewBag.Portrait;
+    }
 }
 
 <script src='@Url.Content("~/yisha/js/yisha-data.js")' type="text/javascript"></script>
@@ -18,25 +29,17 @@
                     <div class="dropdown profile-element">
                         <span>
                             @{
-                                if (ViewBag.Portrait == null || string.IsNullOrEmpty(ViewBag.Portrait))
-                                {
-                                    ViewBag.Portrait = Url.Content("~/image/portrait.png");
-                                }
-                                else
-                                {
-                                    ViewBag.Portrait = GlobalContext.SystemConfig.HttpFile + ViewBag.Portrait;
-                                }
-                                <img alt="image" src='@ViewBag.Portrait' class="img-circle" height="60" width="60" />
+                                <img alt="image" src='@portrait' class="img-circle" height="60" width="60" />
                             }
                         </span>
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="clear">
-                                <span class="block m-t-xs"><strong class="font-bold">@ViewBag.UserName</strong></span>
-                                <span class="text-muted text-xs block"><span>@ViewBag.DepartmentName</span> <b class="caret"></b></span>
+                                <span class="block m-t-xs"><strong class="font-bold">@operatorInfo.UserName</strong></span>
+                                <span class="text-muted text-xs block"><span>@operatorInfo.DepartmentName</span> <b class="caret"></b></span>
                             </span>
                         </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <li><a class="menuItem" href="#" data-url='@Url.Content("~/OrganizationManage/User/UserDetail")?id=@ViewBag.UserId'>个人信息</a></li>
+                            <li><a class="menuItem" href="#" data-url='@Url.Content("~/OrganizationManage/User/UserDetail")?id=@operatorInfo.UserId'>个人信息</a></li>
                             <li class="divider"></li>
                             <li><a href='@Url.Content("~/Home/LoginOff")'>退出</a></li>
                         </ul>
@@ -100,7 +103,35 @@
                 </a>
                 <ul class="nav navbar-top-links navbar-right welcome-message">
                     <li><a id="fullScreen"><i class="fa fa-arrows-alt"></i>全屏</a></li>
-                    <li><a href='@Url.Content("~/Home/LoginOff")'><i class="fa fa-sign-out"></i>退出</a></li>
+                    <li class="dropdown user-menu">
+                        <a href="javascript:void(0)" class="dropdown-toggle" data-hover="dropdown">
+                            <img src="@portrait" class="user-image">
+                            <span class="hidden-xs">@operatorInfo.RealName</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="mt5">
+                                <a th:href="@@{/system/user/profile}" class="menuItem">
+                                    <i class="fa fa-user"></i> 个人中心
+                                </a>
+                            </li>
+                            <li>
+                                <a onclick="resetPwd()">
+                                    <i class="fa fa-key"></i> 修改密码
+                                </a>
+                            </li>
+                            <li>
+                                <a onclick="switchSkin()">
+                                    <i class="fa fa-dashboard"></i> 切换主题
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="@Url.Content("~/Home/LoginOff")">
+                                    <i class="fa fa-sign-out"></i> 退出登录
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
         </div>

@@ -282,6 +282,9 @@
                         }
                     }
                     $("#" + id).select2();
+
+                    // hack 搜索的select保持和其他元素的宽度一致
+                    $("#" + targetId).find(".select2-container").width(280);
                 }
             }
         };
