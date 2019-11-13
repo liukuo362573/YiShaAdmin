@@ -26,7 +26,6 @@ namespace YiSha.CodeGenerator.Template
         {
             path = GetProjectRootPath(path);
 
-
             string tableNameUpper = TableMappingHelper.ConvertToUppercase(tableName);
             List<string> tableFieldUpperList = tableFieldList.Select(p => TableMappingHelper.ConvertToUppercase(p)).ToList();
             int defaultField = 2; // 默认显示2个字段
@@ -52,13 +51,13 @@ namespace YiSha.CodeGenerator.Template
             baseConfigModel.FileConfig.PageFormName = string.Format("{0}Form", baseConfigModel.FileConfig.ClassPrefix);
             #endregion
 
-            #region OutputConfigModel
-            string areasModule = baseConfigModel.OutputConfig.OutputWeb + "\\" + "Areas";
+            #region OutputConfigModel          
             baseConfigModel.OutputConfig = new OutputConfigModel();
             baseConfigModel.OutputConfig.OutputModule = string.Empty;
             baseConfigModel.OutputConfig.OutputEntity = string.Format("{0}\\YiSha.Entity", path);
             baseConfigModel.OutputConfig.OutputBusiness = string.Format("{0}\\YiSha.Business", path);
             baseConfigModel.OutputConfig.OutputWeb = string.Format("{0}\\YiSha.Web\\YiSha.Admin.Web", path);
+            string areasModule = baseConfigModel.OutputConfig.OutputWeb + "\\" + "Areas";
             if (Directory.Exists(areasModule))
             {
                 baseConfigModel.OutputConfig.ModuleList = Directory.GetDirectories(areasModule).Select(p => p.Substring(p.LastIndexOf('\\') + 1)).ToList();
