@@ -121,7 +121,7 @@ $(function () {
     }
 
     // input,select 的id赋值给name，因为jquery.validation验证组件使用的是name
-    $("input:text, input:radio, select").each(function (i, ele) {
+    $("input:text, input:password, input:radio, select").each(function (i, ele) {
         if (ele.id) {
             $(ele).attr("name", ele.id);
         }
