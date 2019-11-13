@@ -5,7 +5,8 @@
     "outputFileName": "wwwroot/yisha/css/style.min.css",
     "inputFiles": [
       "wwwroot/yisha/css/animate.css",
-      "wwwroot/yisha/css/style.css"
+      "wwwroot/yisha/css/style.css",
+      "wwwroot/yisha/css/skins.css"
     ],
     "minify": {
       "enabled": false,

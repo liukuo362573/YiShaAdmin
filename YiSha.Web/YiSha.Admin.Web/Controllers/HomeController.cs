@@ -111,6 +111,12 @@ namespace YiSha.Admin.Web.Controllers
             ViewBag.Message = message;
             return View();
         }
+
+        [HttpGet]
+        public IActionResult Skin()
+        {
+            return View();
+        }
         #endregion
 
         #region 获取数据

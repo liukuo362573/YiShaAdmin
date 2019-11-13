@@ -64,18 +64,18 @@
 </div>
 <script type="text/javascript">
     $(function () {
-        if ($.cookie('remember') == 1) {
+        if ($.cookie('RememberMe') == 1) {
             $("#rememberMe").prop("checked", true);
-            if (!ys.isNullOrEmpty($.cookie('yisha_token'))) {
+            if (!ys.isNullOrEmpty($.cookie('UserToken'))) {
                 redirectToIndex();
             }
         }
         $("#rememberMe").click(function () {
             if ($(this).prop("checked")) {
-                $.cookie('remember', 1);
+                $.cookie('RememberMe', 1);
             }
             else {
-                $.cookie('remember', 0);
+                $.cookie('RememberMe', 0, { path: '/' });
             }
         });
 

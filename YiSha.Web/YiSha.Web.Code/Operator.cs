@@ -20,7 +20,7 @@ namespace YiSha.Web.Code
         }
 
         private string LoginProvider = GlobalContext.Configuration.GetSection("SystemConfig:LoginProvider").Value;
-        private string TokenName = "yisha_token"; //cookie name or session name
+        private string TokenName = "UserToken"; //cookie name or session name
 
         public async Task AddCurrent(string token)
         {
