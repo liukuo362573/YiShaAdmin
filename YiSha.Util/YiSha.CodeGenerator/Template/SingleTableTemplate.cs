@@ -26,7 +26,7 @@ namespace YiSha.CodeGenerator.Template
         {
             path = GetProjectRootPath(path);
 
-            string areasModule = baseConfigModel.OutputConfig.OutputWeb + "\\" + "Areas";
+
             string tableNameUpper = TableMappingHelper.ConvertToUppercase(tableName);
             List<string> tableFieldUpperList = tableFieldList.Select(p => TableMappingHelper.ConvertToUppercase(p)).ToList();
             int defaultField = 2; // 默认显示2个字段
@@ -53,6 +53,7 @@ namespace YiSha.CodeGenerator.Template
             #endregion
 
             #region OutputConfigModel
+            string areasModule = baseConfigModel.OutputConfig.OutputWeb + "\\" + "Areas";
             baseConfigModel.OutputConfig = new OutputConfigModel();
             baseConfigModel.OutputConfig.OutputModule = string.Empty;
             baseConfigModel.OutputConfig.OutputEntity = string.Format("{0}\\YiSha.Entity", path);
