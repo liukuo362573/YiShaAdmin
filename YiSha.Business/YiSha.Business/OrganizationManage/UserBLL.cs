@@ -234,6 +234,11 @@ namespace YiSha.Business.OrganizationManage
             TData<long> obj = new TData<long>();
             if (param.Id > 0)
             {
+                if (string.IsNullOrEmpty(param.Password) || string.IsNullOrEmpty(param.NewPassword))
+                {
+                    obj.Message = "新密码不能为空";
+                    return obj;
+                }
                 UserEntity dbUserEntity = await userService.GetEntity(param.Id.Value);
                 if (dbUserEntity.Password != EncryptUserPassword(param.Password, dbUserEntity.Salt))
                 {
