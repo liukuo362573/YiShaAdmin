@@ -60,7 +60,7 @@ namespace YiSha.CodeGenerator.Template
             string areasModule = baseConfigModel.OutputConfig.OutputWeb + "\\" + "Areas";
             if (Directory.Exists(areasModule))
             {
-                baseConfigModel.OutputConfig.ModuleList = Directory.GetDirectories(areasModule).Select(p => p.Substring(p.LastIndexOf('\\') + 1)).ToList();
+                baseConfigModel.OutputConfig.ModuleList = Directory.GetDirectories(areasModule).Select(p => p.Substring(p.LastIndexOf('\\') + 1)).Where(p => p != "DemoManage").ToList();
             }
             else
             {
