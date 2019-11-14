@@ -50,6 +50,7 @@ a:focus {
     color: #a7b1c2;
     padding: 12px 20px 12px 15px;
     font-size: 13px;
+    font-weight: 600;
 }
 
     .nav > li > a:hover {
