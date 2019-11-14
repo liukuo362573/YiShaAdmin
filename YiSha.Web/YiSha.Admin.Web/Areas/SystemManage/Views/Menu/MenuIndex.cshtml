@@ -125,7 +125,7 @@
 
         ys.openDialog({
             title: id > 0 ? "编辑菜单" : "添加菜单",
-            content: '@Url.Content("~/SystemManage/Menu/MenuForm")' + '?id=' + id + '&parentId=' + parentId + '&parentName=' + parentName,
+            content: '@Url.Content("~/SystemManage/Menu/MenuForm")' + '?id=' + id + '&parentId=' + parentId + '&parentName=' + encodeURIComponent(parentName),
             width: "780px",
             height: "500px",
             callback: function (index, layero) {
