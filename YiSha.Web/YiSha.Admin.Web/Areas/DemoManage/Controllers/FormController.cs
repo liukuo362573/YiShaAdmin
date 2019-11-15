@@ -58,5 +58,10 @@ namespace YiSha.Admin.Web.Areas.DemoManage.Controllers
         {
             return View();
         }
+
+        public IActionResult Editor()
+        {
+            return View();
+        }
     }
 }
