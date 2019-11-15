@@ -45,8 +45,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "05 Web前端", "05 Web前�
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "07 插件", "07 插件", "{E3C7D56C-B89F-4360-8DD8-DCFF34443263}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "08 测试", "08 测试", "{F041583B-5E26-41E0-A834-C784A7086DF9}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YiSha.Admin.Web", "YiSha.Web\YiSha.Admin.Web\YiSha.Admin.Web.csproj", "{06F9BBCA-932B-4AB1-940C-E604AC82FA0F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YiSha.Admin.WebApi", "YiSha.Web\YiSha.Admin.WebApi\YiSha.Admin.WebApi.csproj", "{984AE6BE-0519-4BAA-A133-7DCB4050DF15}"
@@ -59,7 +57,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YiSha.MemoryCache", "YiSha.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "10 测试", "10 测试", "{A89606FB-495E-4E40-96B1-D346C5741C3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YiSha.UtilTest", "YiSha.Test\YiSha.UtilTest\YiSha.UtilTest.csproj", "{1C6693E6-5203-43D6-B0C6-AECCE88E0388}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YiSha.UtilTest", "YiSha.Test\YiSha.UtilTest\YiSha.UtilTest.csproj", "{1C6693E6-5203-43D6-B0C6-AECCE88E0388}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
