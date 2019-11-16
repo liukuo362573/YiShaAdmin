@@ -138,6 +138,6 @@
             });
             parent.$("body").addClass(skin.split('|')[0]);
             parent.$("body").addClass(skin.split('|')[1]);
-            $.cookie('Skin', skin, { path: '/' });
+            $.cookie('Skin', skin, { expires: 365, path: '/' });
         });
 </script>
