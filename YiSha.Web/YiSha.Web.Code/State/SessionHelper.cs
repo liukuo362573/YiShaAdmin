@@ -53,6 +53,7 @@ namespace YiSha.Util
             IHttpContextAccessor hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
             return hca?.HttpContext?.Session.GetString(key) as string;
         }
+
         /// <summary>
         /// 删除指定Session
         /// </summary>

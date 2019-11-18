@@ -72,10 +72,7 @@
         }
         $("#rememberMe").click(function () {
             if ($(this).prop("checked")) {
-                $.cookie('RememberMe', 1);
-            }
-            else {
-                $.cookie('RememberMe', 0, { expires: 30, path: '/' });
+                $.cookie('RememberMe', 1, { expires: 30, path: '/' });
             }
         });
 

@@ -24,6 +24,7 @@ namespace YiSha.Util
             option.Expires = DateTime.Now.AddDays(30);
             hca?.HttpContext?.Response.Cookies.Append(sName, sValue, option);
         }
+
         /// <summary>
         /// 写cookie值
         /// </summary>
@@ -37,6 +38,7 @@ namespace YiSha.Util
             option.Expires = DateTime.Now.AddMinutes(expires);
             hca?.HttpContext?.Response.Cookies.Append(sName, sValue, option);
         }
+
         /// <summary>
         /// 读cookie值
         /// </summary>
@@ -47,6 +49,7 @@ namespace YiSha.Util
             IHttpContextAccessor hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
             return hca?.HttpContext?.Request.Cookies[sName];
         }
+
         /// <summary>
         /// 删除Cookie对象
         /// </summary>

@@ -94,6 +94,7 @@ namespace YiSha.Admin.Web.Controllers
                 });
 
                 Operator.Instance.RemoveCurrent();
+                new CookieHelper().RemoveCookie("RememberMe");
             }
             #endregion
             return View(nameof(Login));
