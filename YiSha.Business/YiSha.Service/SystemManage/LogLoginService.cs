@@ -56,7 +56,7 @@ namespace YiSha.Service.SystemManage
 
         public async Task DeleteForm(string ids)
         {
-            long[] idArr = CommonHelper.SplitToArray<long>(ids, ',');
+            long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
             await this.BaseRepository().Delete<LogLoginEntity>(idArr);
         }
 

@@ -133,7 +133,7 @@ namespace YiSha.Business.OrganizationManage
         public async Task<TData> DeleteForm(string ids)
         {
             TData obj = new TData();
-            foreach (long id in CommonHelper.SplitToArray<long>(ids, ','))
+            foreach (long id in TextHelper.SplitToArray<long>(ids, ','))
             {
                 if (departmentService.ExistChildrenDepartment(id))
                 {

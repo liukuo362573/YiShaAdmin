@@ -243,7 +243,7 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine();
             sb.AppendLine("        public async Task DeleteForm(string ids)");
             sb.AppendLine("        {");
-            sb.AppendLine("            long[] idArr = CommonHelper.SplitToArray<long>(ids, ',');");
+            sb.AppendLine("            long[] idArr = TextHelper.SplitToArray<long>(ids, ',');");
             sb.AppendLine("            await this.BaseRepository().Delete<" + baseConfigModel.FileConfig.EntityName + ">(idArr);");
             sb.AppendLine("        }");
             sb.AppendLine("        #endregion");
@@ -468,7 +468,7 @@ namespace YiSha.CodeGenerator.Template
             #region 是否显示搜索
             if (baseConfigModel.PageIndex.IsSearch == 1)
             {
-                string fieldName = CommonHelper.GetCustomValueWhenEmpty(baseConfigModel.PageIndex.ColumnList.FirstOrDefault(), "fieldName");
+                string fieldName = TextHelper.GetCustomValue(baseConfigModel.PageIndex.ColumnList.FirstOrDefault(), "fieldName");
                 string fieldNameLower = TableMappingHelper.FirstLetterLowercase(fieldName);
                 sb.AppendLine("        <div id=\"searchDiv\" class=\"col-sm-12 search-collapse\">");
                 sb.AppendLine("            <div class=\"select-list\">");
@@ -685,7 +685,7 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("");
             sb.AppendLine("        $('#form').validate({");
             sb.AppendLine("            rules: {");
-            sb.AppendLine("                " + CommonHelper.GetCustomValueWhenEmpty(TableMappingHelper.FirstLetterLowercase(baseConfigModel.PageForm.FieldList.FirstOrDefault()), "fieldName") + ": { required: true }");
+            sb.AppendLine("                " + TextHelper.GetCustomValue(TableMappingHelper.FirstLetterLowercase(baseConfigModel.PageForm.FieldList.FirstOrDefault()), "fieldName") + ": { required: true }");
             sb.AppendLine("            }");
             sb.AppendLine("        });");
             sb.AppendLine("    });");

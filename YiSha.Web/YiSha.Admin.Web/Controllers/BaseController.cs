@@ -90,7 +90,7 @@ namespace YiSha.Admin.Web.Controllers
                         if (param.Count > 0)
                         {
                             operateEntity.ExecuteUrl += context.HttpContext.Request.QueryString.Value.ParseToString();
-                            operateEntity.ExecuteParam = CommonHelper.GetSubString(JsonConvert.SerializeObject(param), 8000);
+                            operateEntity.ExecuteParam = TextHelper.GetSubString(JsonConvert.SerializeObject(param), 8000);
                         }
                         else
                         {
@@ -129,7 +129,7 @@ namespace YiSha.Admin.Web.Controllers
                 operateEntity.ExecuteTime = sw.ElapsedMilliseconds.ParseToInt();
                 operateEntity.IpAddress = ip;
                 operateEntity.ExecuteUrl = currentUrl.Replace("//", "/");
-                operateEntity.ExecuteResult = CommonHelper.GetSubString(sbException.ToString(), 4000);
+                operateEntity.ExecuteResult = TextHelper.GetSubString(sbException.ToString(), 4000);
                 #endregion
 
                 Action taskAction = async () =>

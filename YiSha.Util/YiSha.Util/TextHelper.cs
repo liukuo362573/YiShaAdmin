@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using YiSha.Util.Extension;
 
 namespace YiSha.Util
 {
-    public class CommonHelper
+    public class TextHelper
     {
         /// <summary>
         /// 获取默认值
@@ -16,7 +14,7 @@ namespace YiSha.Util
         /// <param name="value"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
-        public static string GetCustomValueWhenEmpty(string value, string defaultValue)
+        public static string GetCustomValue(string value, string defaultValue)
         {
             if (string.IsNullOrEmpty(value))
             {
@@ -57,19 +55,6 @@ namespace YiSha.Util
         {
             T[] arr = value.Split(new string[] { split.ToString() }, StringSplitOptions.RemoveEmptyEntries).CastSuper<T>().ToArray();
             return arr;
-        }
-
-        public static string IsActiveClass(string url, string current)
-        {
-            if (url == "/" && current.ToLower() == "/home/index")
-            {
-                return "active";
-            }
-            else if (url.ToLower() == current.ToLower())
-            {
-                return "active";
-            }
-            return string.Empty;
         }
     }
 }

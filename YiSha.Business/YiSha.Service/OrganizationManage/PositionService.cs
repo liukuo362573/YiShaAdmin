@@ -75,7 +75,7 @@ namespace YiSha.Service.OrganizationManage
 
         public async Task DeleteForm(string ids)
         {
-            long[] idArr = CommonHelper.SplitToArray<long>(ids, ',');
+            long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
             await this.BaseRepository().Delete<PositionEntity>(idArr);
         }
         #endregion
@@ -92,7 +92,7 @@ namespace YiSha.Service.OrganizationManage
                 }
                 if (!string.IsNullOrEmpty(param.PositionIds))
                 {
-                    long[] positionIdArr = CommonHelper.SplitToArray<long>(param.PositionIds, ',');
+                    long[] positionIdArr = TextHelper.SplitToArray<long>(param.PositionIds, ',');
                     expression = expression.And(t => positionIdArr.Contains(t.Id.Value));
                 }
             }

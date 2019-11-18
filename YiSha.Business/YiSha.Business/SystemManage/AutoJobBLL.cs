@@ -62,7 +62,7 @@ namespace YiSha.Business.SystemManage
         public async Task<TData> DeleteForm(string ids)
         {
             TData<long> obj = new TData<long>();
-            foreach (long id in CommonHelper.SplitToArray<long>(ids, ','))
+            foreach (long id in TextHelper.SplitToArray<long>(ids, ','))
             {
                 AutoJobEntity dbEntity = await autoJobService.GetEntity(id);
                 if (dbEntity.JobStatus == StatusEnum.Yes.ParseToInt())

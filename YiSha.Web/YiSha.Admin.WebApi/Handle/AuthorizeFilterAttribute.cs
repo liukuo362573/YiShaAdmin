@@ -76,7 +76,7 @@ namespace YiSha.Admin.WebApi.Controllers
                     if (param.Count > 0)
                     {
                         logApiEntity.ExecuteUrl += context.HttpContext.Request.QueryString.Value.ParseToString();
-                        logApiEntity.ExecuteParam = CommonHelper.GetSubString(JsonConvert.SerializeObject(param), 4000);
+                        logApiEntity.ExecuteParam = TextHelper.GetSubString(JsonConvert.SerializeObject(param), 4000);
                     }
                     else
                     {
@@ -97,7 +97,7 @@ namespace YiSha.Admin.WebApi.Controllers
                     sbException.AppendLine(exception.InnerException.Message);
                     exception = exception.InnerException;
                 }
-                sbException.AppendLine(CommonHelper.GetSubString(resultContext.Exception.StackTrace, 8000));
+                sbException.AppendLine(TextHelper.GetSubString(resultContext.Exception.StackTrace, 8000));
                 #endregion
 
                 logApiEntity.ExecuteResult = sbException.ToString();
@@ -117,8 +117,8 @@ namespace YiSha.Admin.WebApi.Controllers
             {
                 logApiEntity.BaseCreatorId = user.UserId;
             }
-            logApiEntity.ExecuteParam = CommonHelper.GetSubString(logApiEntity.ExecuteParam, 4000);
-            logApiEntity.ExecuteResult = CommonHelper.GetSubString(logApiEntity.ExecuteResult, 4000);
+            logApiEntity.ExecuteParam = TextHelper.GetSubString(logApiEntity.ExecuteParam, 4000);
+            logApiEntity.ExecuteResult = TextHelper.GetSubString(logApiEntity.ExecuteResult, 4000);
             logApiEntity.ExecuteTime = sw.ElapsedMilliseconds.ParseToInt();
 
             Action taskAction = async () =>

@@ -96,7 +96,7 @@ namespace YiSha.Service.OrganizationManage
                 // 职位
                 if (!string.IsNullOrEmpty(entity.PositionIds))
                 {
-                    foreach (long positionId in CommonHelper.SplitToArray<long>(entity.PositionIds, ','))
+                    foreach (long positionId in TextHelper.SplitToArray<long>(entity.PositionIds, ','))
                     {
                         UserBelongEntity positionBelongEntity = new UserBelongEntity();
                         positionBelongEntity.UserId = entity.Id;
@@ -109,7 +109,7 @@ namespace YiSha.Service.OrganizationManage
                 // 角色
                 if (!string.IsNullOrEmpty(entity.RoleIds))
                 {
-                    foreach (long roleId in CommonHelper.SplitToArray<long>(entity.RoleIds, ','))
+                    foreach (long roleId in TextHelper.SplitToArray<long>(entity.RoleIds, ','))
                     {
                         UserBelongEntity departmentBelongEntity = new UserBelongEntity();
                         departmentBelongEntity.UserId = entity.Id;
@@ -133,7 +133,7 @@ namespace YiSha.Service.OrganizationManage
             var db = this.BaseRepository().BeginTrans();
             try
             {
-                long[] idArr = CommonHelper.SplitToArray<long>(ids, ',');
+                long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
                 await db.Delete<UserEntity>(idArr);
                 await db.Delete<UserBelongEntity>(t => idArr.Contains(t.UserId.Value));
                 await db.Commit();
@@ -170,7 +170,7 @@ namespace YiSha.Service.OrganizationManage
                 }
                 if (!string.IsNullOrEmpty(param.UserIds))
                 {
-                    long[] userIdList = CommonHelper.SplitToArray<long>(param.UserIds, ',');
+                    long[] userIdList = TextHelper.SplitToArray<long>(param.UserIds, ',');
                     expression = expression.And(t => userIdList.Contains(t.Id.Value));
                 }
                 if (!string.IsNullOrEmpty(param.Mobile))

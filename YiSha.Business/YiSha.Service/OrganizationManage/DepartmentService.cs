@@ -90,7 +90,7 @@ namespace YiSha.Service.OrganizationManage
             var db = this.BaseRepository().BeginTrans();
             try
             {
-                long[] idArr = CommonHelper.SplitToArray<long>(ids, ',');
+                long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
                 await db.Delete<DepartmentEntity>(idArr);
                 await db.Commit();
             }

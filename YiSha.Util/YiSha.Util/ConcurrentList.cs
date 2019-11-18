@@ -56,12 +56,12 @@ namespace KingDragorse.Util
 
         public int IndexOf(T item)
         {
-            throw new NotImplementedException();
+            return _interalList.IndexOf(item);
         }
 
         public void Insert(int index, T item)
         {
-            throw new NotImplementedException();
+            _interalList.Insert(index, item);
         }
 
         public void RemoveAt(int index)
@@ -87,6 +87,7 @@ namespace KingDragorse.Util
                 Add(item);
             }
         }
+
         public void Clear()
         {
             lock (_lock)
@@ -97,12 +98,12 @@ namespace KingDragorse.Util
 
         public bool Contains(T item)
         {
-            throw new NotImplementedException();
+            return _interalList.Contains(item);
         }
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            throw new NotImplementedException();
+            _interalList.CopyTo(array, arrayIndex);
         }
 
         public bool Remove(T item)

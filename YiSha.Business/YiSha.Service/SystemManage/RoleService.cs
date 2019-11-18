@@ -79,7 +79,7 @@ namespace YiSha.Service.SystemManage
                 // 角色对应的菜单、页面和按钮权限
                 if (!string.IsNullOrEmpty(entity.MenuIds))
                 {
-                    foreach (long menuId in CommonHelper.SplitToArray<long>(entity.MenuIds, ','))
+                    foreach (long menuId in TextHelper.SplitToArray<long>(entity.MenuIds, ','))
                     {
                         MenuAuthorizeEntity menuAuthorizeEntity = new MenuAuthorizeEntity();
                         menuAuthorizeEntity.AuthorizeId = entity.Id;
@@ -100,7 +100,7 @@ namespace YiSha.Service.SystemManage
 
         public async Task DeleteForm(string ids)
         {
-            long[] idArr = CommonHelper.SplitToArray<long>(ids, ',');
+            long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
             await this.BaseRepository().Delete<RoleEntity>(idArr);
         }
         #endregion
@@ -117,7 +117,7 @@ namespace YiSha.Service.SystemManage
                 }
                 if (!string.IsNullOrEmpty(param.RoleIds))
                 {
-                    long[] roleIdArr = CommonHelper.SplitToArray<long>(param.RoleIds, ',');
+                    long[] roleIdArr = TextHelper.SplitToArray<long>(param.RoleIds, ',');
                     expression = expression.And(t => roleIdArr.Contains(t.Id.Value));
                 }
                 if (!string.IsNullOrEmpty(param.RoleName))

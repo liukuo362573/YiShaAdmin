@@ -89,7 +89,7 @@ namespace YiSha.Util
                     obj.Message = "请指定上传到的模块";
                     return obj;
             }
-            string fileExtension = CommonHelper.GetCustomValueWhenEmpty(Path.GetExtension(file.FileName), ".png");
+            string fileExtension = TextHelper.GetCustomValue(Path.GetExtension(file.FileName), ".png");
 
             string newFileName = SecurityHelper.GetGuid() + fileExtension;
             string dir = "Resource" + Path.DirectorySeparatorChar + dirModule + Path.DirectorySeparatorChar + DateTime.Now.ToString("yyyy-MM-dd").Replace('-', Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
@@ -109,7 +109,7 @@ namespace YiSha.Util
                     fs.Flush();
                 }
                 obj.Result = Path.AltDirectorySeparatorChar + ConvertDirectoryToHttp(dir) + newFileName;
-                obj.Message = Path.GetFileNameWithoutExtension(CommonHelper.GetCustomValueWhenEmpty(file.FileName, newFileName));
+                obj.Message = Path.GetFileNameWithoutExtension(TextHelper.GetCustomValue(file.FileName, newFileName));
                 obj.Description = (file.Length / 1024).ToString(); // KB
                 obj.Tag = 1;
             }
@@ -268,7 +268,7 @@ namespace YiSha.Util
         public static TData CheckFileExtension(string fileExtension, string allowExtension)
         {
             TData obj = new TData();
-            string[] allowArr = CommonHelper.SplitToArray<string>(allowExtension.ToLower(), '|');
+            string[] allowArr = TextHelper.SplitToArray<string>(allowExtension.ToLower(), '|');
             if (allowArr.Where(p => p.Trim() == fileExtension.ParseToString().ToLower()).Any())
             {
                 obj.Tag = 1;

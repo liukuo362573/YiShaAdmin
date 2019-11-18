@@ -104,7 +104,7 @@ namespace YiSha.Business.SystemManage
         public async Task<TData> DeleteForm(string ids)
         {
             TData obj = new TData();
-            foreach (long id in CommonHelper.SplitToArray<long>(ids, ','))
+            foreach (long id in TextHelper.SplitToArray<long>(ids, ','))
             {
                 DataDictEntity dbEntity = await dataDictService.GetEntity(id);
                 if (dataDictService.ExistDictDetail(dbEntity.DictType))
