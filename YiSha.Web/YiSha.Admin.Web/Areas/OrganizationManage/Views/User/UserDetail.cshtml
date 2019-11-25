@@ -65,7 +65,7 @@
                             result.Portrait = ctx + 'image/portrait.png';
                         }
                         else {
-                            result.Portrait = '@GlobalContext.SystemConfig.HttpFile' + result.Portrait;
+                            result.Portrait = '@GlobalContext.SystemConfig.ApiSite' + result.Portrait;
                         }
                         $("#portrait").attr("src", result.Portrait);
 

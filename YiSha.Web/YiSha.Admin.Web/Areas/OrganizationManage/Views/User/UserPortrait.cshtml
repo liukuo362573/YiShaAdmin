@@ -37,7 +37,7 @@
             portrait = ctx + 'image/portrait.png';
         }
         else {
-            portrait = '@GlobalContext.SystemConfig.HttpFile' + portrait;
+            portrait = '@GlobalContext.SystemConfig.ApiSite' + portrait;
         }
         var options = {
             thumbBox: '.thumbBox',
@@ -89,7 +89,7 @@
         var formdata = new FormData();
         formdata.append("file", img, imgFileName);
         ys.ajaxUploadFile({
-            url: '@GlobalContext.SystemConfig.HttpFile' + '/File/UploadFile?fileModule=@UploadFileType.Portrait.ParseToInt()',
+            url: '@GlobalContext.SystemConfig.ApiSite' + '/File/UploadFile?fileModule=@UploadFileType.Portrait.ParseToInt()',
             data: formdata,
             success: function (obj) {
                 if (obj.Tag == 1) {
@@ -113,7 +113,7 @@
             success: function (obj) {
                 if (obj.Tag == 1) {
                     ys.msgSuccess(obj.Message);
-                    $("#portrait", parent.document).attr("src", '@GlobalContext.SystemConfig.HttpFile' + data.Result);
+                    $("#portrait", parent.document).attr("src", '@GlobalContext.SystemConfig.ApiSite' + data.Result);
                     ys.closeDialog();
                 }
                 else {

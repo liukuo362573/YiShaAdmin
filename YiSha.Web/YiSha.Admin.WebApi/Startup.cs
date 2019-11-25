@@ -98,7 +98,7 @@ namespace YiSha.Admin.WebApi
 
             app.UseCors(builder =>
             {
-                builder.WithOrigins(GlobalContext.SystemConfig.AllowCorsSite).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                builder.WithOrigins(GlobalContext.SystemConfig.AllowCorsSite.Split(',')).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
             });
             app.UseMvc();
 

@@ -161,11 +161,11 @@
         var formdata = new FormData();
         formdata.append("file", file);
         ys.ajaxUploadFile({
-            url: '@GlobalContext.SystemConfig.HttpFile' + '/File/UploadFile?fileModule=@UploadFileType.News.ParseToInt()',
+            url: '@GlobalContext.SystemConfig.ApiSite' + '/File/UploadFile?fileModule=@UploadFileType.News.ParseToInt()',
             data: formdata,
             success: function (obj) {
                 if (obj.Tag == 1) {
-                    $("#newsContent").summernote('insertImage', '@GlobalContext.SystemConfig.HttpFile' + obj.Result, '/');
+                    $("#newsContent").summernote('insertImage', '@GlobalContext.SystemConfig.ApiSite' + obj.Result, '/');
                 }
                 else {
                     ys.msgError(obj.Message);
@@ -178,12 +178,12 @@
         var formdata = new FormData();
         formdata.append("file", file);
         ys.ajaxUploadFile({
-            url: '@GlobalContext.SystemConfig.HttpFile' + '/File/UploadFile?fileModule=@UploadFileType.News.ParseToInt()',
+            url: '@GlobalContext.SystemConfig.ApiSite' + '/File/UploadFile?fileModule=@UploadFileType.News.ParseToInt()',
             data: formdata,
             success: function (obj) {
                 if (obj.Tag == 1) {
                     if (callback) {
-                        callback('@GlobalContext.SystemConfig.HttpFile' + obj.Result);
+                        callback('@GlobalContext.SystemConfig.ApiSite' + obj.Result);
                     }
                 }
                 else {

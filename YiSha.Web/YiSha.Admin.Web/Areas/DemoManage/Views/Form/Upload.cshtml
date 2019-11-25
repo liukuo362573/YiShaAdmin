@@ -39,7 +39,7 @@
     $(document).ready(function () {
         $("#fileinput-demo-1").fileinput({
             'theme': 'explorer-fas',
-            'uploadUrl': '@GlobalContext.SystemConfig.HttpFile' + '/File/UploadFile?fileModule=@UploadFileType.News.ParseToInt()',
+            'uploadUrl': '@GlobalContext.SystemConfig.ApiSite' + '/File/UploadFile?fileModule=@UploadFileType.News.ParseToInt()',
             overwriteInitial: false,
             initialPreviewAsData: true,
             initialPreview: ['@Url.Content("~/image/portrait.png")']

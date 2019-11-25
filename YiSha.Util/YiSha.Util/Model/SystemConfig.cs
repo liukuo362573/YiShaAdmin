@@ -28,9 +28,9 @@ namespace YiSha.Util.Model
         /// </summary>
         public int SnowFlakeWorkerId { get; set; }
         /// <summary>
-        /// 上传文件地址
+        /// api地址
         /// </summary>
-        public string HttpFile { get; set; }
+        public string ApiSite { get; set; }
         /// <summary>
         /// 允许跨域的站点
         /// </summary>
