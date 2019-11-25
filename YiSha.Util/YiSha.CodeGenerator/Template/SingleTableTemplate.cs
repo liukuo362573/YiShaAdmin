@@ -621,7 +621,7 @@ namespace YiSha.CodeGenerator.Template
             #endregion
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("@{");
-            sb.AppendLine("    Layout = \"~/Views/Shared/_SaveWhite.cshtml\";");
+            sb.AppendLine("    Layout = \"~/Views/Shared/_FormWhite.cshtml\";");
             sb.AppendLine("}");
             sb.AppendLine("");
             sb.AppendLine("<div class=\"wrapper animated fadeInRight\">");
