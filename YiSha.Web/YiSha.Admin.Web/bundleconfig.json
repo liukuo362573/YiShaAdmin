@@ -404,5 +404,26 @@
       "enabled": true,
       "renameLocals": true
     }
+  },
+  {
+    "outputFileName": "wwwroot/lib/report/echarts/echarts.min.js",
+    "inputFiles": [
+      "wwwroot/lib/report/echarts/echarts.js",
+      "wwwroot/lib/report/echarts/china.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/lib/report/peity/jquery.peity.min.js",
+    "inputFiles": [
+      "wwwroot/lib/report/peity/jquery.peity.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
   }
 ]
