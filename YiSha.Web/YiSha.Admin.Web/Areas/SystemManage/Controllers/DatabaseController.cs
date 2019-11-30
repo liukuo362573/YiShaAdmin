@@ -58,7 +58,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
 
         #region 提交数据
         [HttpPost]
-        public async Task<IActionResult> SyncDatabaseJson(AutoJobEntity entity)
+        public async Task<IActionResult> SyncDatabaseJson()
         {
             TData obj = await databaseTableBLL.SyncDatabase();
             return Json(obj);
