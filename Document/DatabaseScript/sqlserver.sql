@@ -1,74 +1,8 @@
-﻿USE [master]
-GO
-ALTER DATABASE [yisha_admin] SET ANSI_NULL_DEFAULT OFF 
-GO
-ALTER DATABASE [yisha_admin] SET ANSI_NULLS OFF 
-GO
-ALTER DATABASE [yisha_admin] SET ANSI_PADDING OFF 
-GO
-ALTER DATABASE [yisha_admin] SET ANSI_WARNINGS OFF 
-GO
-ALTER DATABASE [yisha_admin] SET ARITHABORT OFF 
-GO
-ALTER DATABASE [yisha_admin] SET AUTO_CLOSE OFF 
-GO
-ALTER DATABASE [yisha_admin] SET AUTO_CREATE_STATISTICS ON 
-GO
-ALTER DATABASE [yisha_admin] SET AUTO_SHRINK OFF 
-GO
-ALTER DATABASE [yisha_admin] SET AUTO_UPDATE_STATISTICS ON 
-GO
-ALTER DATABASE [yisha_admin] SET CURSOR_CLOSE_ON_COMMIT OFF 
-GO
-ALTER DATABASE [yisha_admin] SET CURSOR_DEFAULT  GLOBAL 
-GO
-ALTER DATABASE [yisha_admin] SET CONCAT_NULL_YIELDS_NULL OFF 
-GO
-ALTER DATABASE [yisha_admin] SET NUMERIC_ROUNDABORT OFF 
-GO
-ALTER DATABASE [yisha_admin] SET QUOTED_IDENTIFIER OFF 
-GO
-ALTER DATABASE [yisha_admin] SET RECURSIVE_TRIGGERS OFF 
-GO
-ALTER DATABASE [yisha_admin] SET  DISABLE_BROKER 
-GO
-ALTER DATABASE [yisha_admin] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
-GO
-ALTER DATABASE [yisha_admin] SET DATE_CORRELATION_OPTIMIZATION OFF 
-GO
-ALTER DATABASE [yisha_admin] SET TRUSTWORTHY OFF 
-GO
-ALTER DATABASE [yisha_admin] SET ALLOW_SNAPSHOT_ISOLATION OFF 
-GO
-ALTER DATABASE [yisha_admin] SET PARAMETERIZATION SIMPLE 
-GO
-ALTER DATABASE [yisha_admin] SET READ_COMMITTED_SNAPSHOT OFF 
-GO
-ALTER DATABASE [yisha_admin] SET HONOR_BROKER_PRIORITY OFF 
-GO
-ALTER DATABASE [yisha_admin] SET RECOVERY SIMPLE 
-GO
-ALTER DATABASE [yisha_admin] SET  MULTI_USER 
-GO
-ALTER DATABASE [yisha_admin] SET PAGE_VERIFY CHECKSUM  
-GO
-ALTER DATABASE [yisha_admin] SET DB_CHAINING OFF 
-GO
-ALTER DATABASE [yisha_admin] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
-GO
-ALTER DATABASE [yisha_admin] SET TARGET_RECOVERY_TIME = 0 SECONDS 
-GO
-EXEC sys.sp_db_vardecimal_storage_format N'yisha_admin', N'ON'
-GO
-USE [yisha_admin]
-GO
-/****** Object:  Table [dbo].[sys_area]    Script Date: 2019/10/13 17:35:27 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-SET ANSI_PADDING ON
-GO
+﻿
+/* 执行脚本前，请先选择数据库，脚本会先删除表，然后再创建表，写入数据，请谨慎执行！！！ */
+/* use [yisha_admin] */
+
+IF OBJECT_ID('[dbo].[sys_area]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_area]; 
 CREATE TABLE [dbo].[sys_area](
 	[id] [bigint] NOT NULL,
 	[base_is_delete] [int] NOT NULL,
@@ -98,6 +32,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_auto_job]', 'U') IS NOT NULL DROP TABLE [dbo].sys_auto_job; 
 CREATE TABLE [dbo].[sys_auto_job](
 	[id] [bigint] NOT NULL,
 	[base_is_delete] [int] NOT NULL,
@@ -130,6 +65,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_auto_job_log]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_auto_job_log]; 
 CREATE TABLE [dbo].[sys_auto_job_log](
 	[id] [bigint] NOT NULL,
 	[base_create_time] [datetime] NOT NULL,
@@ -154,6 +90,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_data_dict]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_data_dict]; 
 CREATE TABLE [dbo].[sys_data_dict](
 	[id] [bigint] NOT NULL,
 	[base_is_delete] [int] NOT NULL,
@@ -181,6 +118,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_data_dict_detail]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_data_dict_detail]; 
 CREATE TABLE [dbo].[sys_data_dict_detail](
 	[id] [bigint] NOT NULL,
 	[base_is_delete] [int] NOT NULL,
@@ -210,6 +148,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_department]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_department]; 
 CREATE TABLE [dbo].[sys_department](
 	[id] [bigint] NOT NULL,
 	[base_is_delete] [int] NOT NULL,
@@ -242,6 +181,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_log_api]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_log_api]; 
 CREATE TABLE [dbo].[sys_log_api](
 	[id] [bigint] NOT NULL,
 	[base_create_time] [datetime] NOT NULL,
@@ -268,6 +208,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_log_login]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_log_login]; 
 CREATE TABLE [dbo].[sys_log_login](
 	[id] [bigint] NOT NULL,
 	[base_create_time] [datetime] NOT NULL,
@@ -295,6 +236,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_log_operate]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_log_operate]; 
 CREATE TABLE [dbo].[sys_log_operate](
 	[id] [bigint] NOT NULL,
 	[base_create_time] [datetime] NOT NULL,
@@ -325,6 +267,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_menu]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_menu]; 
 CREATE TABLE [dbo].[sys_menu](
 	[id] [bigint] NOT NULL,
 	[base_is_delete] [int] NOT NULL,
@@ -357,6 +300,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+IF OBJECT_ID('[dbo].[sys_menu_authorize]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_menu_authorize]; 
 CREATE TABLE [dbo].[sys_menu_authorize](
 	[id] [bigint] NOT NULL,
 	[base_create_time] [datetime] NOT NULL,
@@ -378,6 +322,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_news]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_news]; 
 CREATE TABLE [dbo].[sys_news](
 	[id] [bigint] NOT NULL,
 	[base_is_delete] [int] NOT NULL,
@@ -414,6 +359,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_position]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_position]; 
 CREATE TABLE [dbo].[sys_position](
 	[id] [bigint] NOT NULL,
 	[base_is_delete] [int] NOT NULL,
@@ -442,6 +388,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_role]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_role]; 
 CREATE TABLE [dbo].[sys_role](
 	[id] [bigint] NOT NULL,
 	[base_is_delete] [int] NOT NULL,
@@ -470,6 +417,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_user]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_user]; 
 CREATE TABLE [dbo].[sys_user](
 	[id] [bigint] NOT NULL,
 	[base_is_delete] [int] NOT NULL,
@@ -514,6 +462,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+IF OBJECT_ID('[dbo].[sys_user_belong]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_user_belong]; 
 CREATE TABLE [dbo].[sys_user_belong](
 	[id] [bigint] NOT NULL,
 	[base_create_time] [datetime] NOT NULL,
@@ -4694,8 +4643,4 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'department_id 或者 role_id' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'sys_user_belong', @level2type=N'COLUMN',@level2name=N'belong_id'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'角色或者职位' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'sys_user_belong', @level2type=N'COLUMN',@level2name=N'belong_type'
-GO
-USE [master]
-GO
-ALTER DATABASE [yisha_admin] SET  READ_WRITE 
 GO
