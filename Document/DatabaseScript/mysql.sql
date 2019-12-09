@@ -1,4 +1,7 @@
-﻿/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/* 执行脚本前，请先选择数据库，脚本会先删除表，然后再创建表，写入数据，请谨慎执行！！！ */;
+/* use yisha_admin; */;
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
@@ -21,7 +24,6 @@ CREATE TABLE IF NOT EXISTS `sys_area` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-DELETE FROM `sys_area`;
 /*!40000 ALTER TABLE `sys_area` DISABLE KEYS */;
 INSERT INTO `sys_area` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `area_code`, `parent_area_code`, `area_name`, `zip_code`, `area_level`) VALUES
 	(16508640061120570, 0, '2018-12-24 16:33:59', '2018-12-24 16:33:59', 0, 0, 0, '110000', '0', '北京', '', 1),
@@ -3845,7 +3847,6 @@ CREATE TABLE IF NOT EXISTS `sys_auto_job` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-DELETE FROM `sys_auto_job`;
 /*!40000 ALTER TABLE `sys_auto_job` DISABLE KEYS */;
 INSERT INTO `sys_auto_job` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `job_group_name`, `job_name`, `job_status`, `cron_expression`, `start_time`, `end_time`, `next_start_time`, `remark`) VALUES
 	(16508640061124370, 0, '2019-01-03 09:47:04', '2019-10-13 03:00:00', 0, 0, 0, 'YiShaAdmin', '数据库备份', 1, '0 0 3 1/1 * ?', '2019-01-03 10:00:00', '9999-12-31 00:00:00', '2019-10-14 03:00:00', NULL);
@@ -3866,7 +3867,6 @@ CREATE TABLE IF NOT EXISTS `sys_data_dict` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-DELETE FROM `sys_data_dict`;
 /*!40000 ALTER TABLE `sys_data_dict` DISABLE KEYS */;
 INSERT INTO `sys_data_dict` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `dict_type`, `dict_sort`, `remark`) VALUES
 	(16508640061124399, 0, '2019-01-05 07:15:41', '2019-01-05 09:30:19', 0, 0, 0, 'NewsType', 1, '新闻类别');
@@ -3889,7 +3889,6 @@ CREATE TABLE IF NOT EXISTS `sys_data_dict_detail` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-DELETE FROM `sys_data_dict_detail`;
 /*!40000 ALTER TABLE `sys_data_dict_detail` DISABLE KEYS */;
 INSERT INTO `sys_data_dict_detail` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `dict_type`, `dict_sort`, `dict_key`, `dict_value`, `remark`) VALUES
 	(16508640061124400, 0, '2019-01-05 07:16:12', '2019-10-12 18:21:48', 0, 16508640061130151, 0, 'NewsType', 1, 1, '产品案例', ''),
@@ -3916,7 +3915,6 @@ CREATE TABLE IF NOT EXISTS `sys_department` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-DELETE FROM `sys_department`;
 /*!40000 ALTER TABLE `sys_department` DISABLE KEYS */;
 INSERT INTO `sys_department` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `parent_id`, `department_name`, `telephone`, `fax`, `email`, `remark`, `principal_id`, `department_sort`) VALUES
 	(16508640061124402, 0, '2019-01-04 17:38:23', '2019-10-12 18:20:23', 0, 16508640061130151, 0, 0, '一沙软件', '0551-6666666', '0551-8888888', '', '', 16508640061130152, 1),
@@ -3952,7 +3950,6 @@ CREATE TABLE IF NOT EXISTS `sys_menu` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-DELETE FROM `sys_menu`;
 /*!40000 ALTER TABLE `sys_menu` DISABLE KEYS */;
 INSERT INTO `sys_menu` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `parent_id`, `menu_name`, `menu_icon`, `menu_url`, `menu_target`, `menu_sort`, `menu_type`, `menu_status`, `authorize`, `remark`) VALUES
 	(16508640061130069, 0, '2018-11-04 01:01:00', '2019-01-02 10:05:49', 0, 0, 0, 0, '单位组织', 'fa fa-home', '', '', 1, 1, 1, '', ''),
@@ -4023,7 +4020,25 @@ INSERT INTO `sys_menu` (`id`, `base_is_delete`, `base_create_time`, `base_modify
 	(16508640061130134, 0, '2019-01-07 13:05:40', '2019-07-28 19:20:06', 0, 16508640061130151, 0, 16508640061130070, '系统api', '', '/api/api-doc', '', 13, 2, 1, 'system:api:view', ''),
 	(16508640061130135, 0, '2019-01-09 17:05:00', '2019-01-09 17:05:00', 0, 0, 0, 16508640061130076, 'Api日志', '', 'SystemManage/LogApi/LogApiIndex', '', 3, 2, 1, 'system:logapi:view', ''),
 	(16508640061130136, 0, '2019-01-09 17:06:11', '2019-01-09 17:06:31', 0, 0, 0, 16508640061130135, 'Api日志查询', '', '', '', 1, 3, 1, 'system:logapi:search', ''),
-	(16508640061130137, 0, '2019-01-09 17:07:24', '2019-01-09 17:07:24', 0, 0, 0, 16508640061130135, 'Api日志删除', '', '', '', 2, 3, 1, 'system:logapi:delete', '');
+	(16508640061130137, 0, '2019-01-09 17:07:24', '2019-01-09 17:07:24', 0, 0, 0, 16508640061130135, 'Api日志删除', '', '', '', 2, 3, 1, 'system:logapi:delete', ''),
+	(112911997946826752, 0, '2019-11-08 13:51:58', '2019-11-10 19:53:57', 16508640061130151, 16508640061130151, 0, 0, '实例演示', 'fa fa-square-o', '', '', 16, 1, 1, '', ''),
+	(112912256928321536, 0, '2019-11-08 13:53:00', '2019-11-10 18:32:40', 16508640061130151, 16508640061130151, 0, 113707268142272512, '按钮', '', 'DemoManage/Form/Button', '', 17, 2, 1, '', ''),
+	(112943305909604352, 0, '2019-11-08 15:56:23', '2019-11-10 18:32:46', 16508640061130151, 16508640061130151, 0, 113707268142272512, '栅栏', '', 'DemoManage/Form/Grid', '', 18, 2, 1, '', ''),
+	(112943568473034752, 0, '2019-11-08 15:57:25', '2019-11-10 18:32:30', 16508640061130151, 16508640061130151, 0, 113707268142272512, '文件上传', '', 'DemoManage/Form/Upload', '', 30, 2, 1, '', ''),
+	(112955374490882048, 0, '2019-11-08 16:44:20', '2019-11-10 18:32:54', 16508640061130151, 16508640061130151, 0, 113707268142272512, '下拉框', '', 'DemoManage/Form/Select', '', 20, 2, 1, '', ''),
+	(113706370221477888, 0, '2019-11-10 18:28:31', '2019-11-10 18:32:17', 16508640061130151, 16508640061130151, 0, 113707268142272512, '时间轴', '', 'DemoManage/Form/Timeline', '', 31, 2, 1, '', ''),
+	(113707268142272512, 0, '2019-11-10 18:32:05', '2019-11-10 18:32:05', 16508640061130151, 16508640061130151, 0, 112911997946826752, '表单', '', '', '', 32, 1, 1, '', ''),
+	(113708424717406208, 0, '2019-11-10 18:36:41', '2019-11-11 09:49:48', 16508640061130151, 16508640061130151, 0, 113707268142272512, '卡片列表', '', 'DemoManage/Form/Card', '', 32, 2, 1, '', ''),
+	(113733108645236736, 0, '2019-11-10 20:14:46', '2019-11-10 20:14:46', 16508640061130151, 16508640061130151, 0, 113707268142272512, '选项卡', '', 'DemoManage/Form/Tab', '', 33, 2, 1, '', ''),
+	(113733191331745792, 0, '2019-11-10 20:15:06', '2019-11-10 20:15:06', 16508640061130151, 16508640061130151, 0, 113707268142272512, '面板', '', 'DemoManage/Form/Panel', '', 34, 2, 1, '', ''),
+	(113734387522080768, 0, '2019-11-10 20:19:51', '2019-11-10 20:19:51', 16508640061130151, 16508640061130151, 0, 113707268142272512, '日期与时间', '', 'DemoManage/Form/Datetime', '', 35, 2, 1, '', ''),
+	(113942846855188480, 0, '2019-11-11 10:08:12', '2019-11-11 10:08:12', 16508640061130151, 16508640061130151, 0, 112911997946826752, '图标', '', '', '', 36, 1, 1, '', ''),
+	(113946356757827584, 0, '2019-11-11 10:22:08', '2019-11-11 10:22:08', 16508640061130151, 16508640061130151, 0, 113942846855188480, 'FontAwesome', '', 'DemoManage/Icon/FontAwesome', '', 37, 2, 1, '', ''),
+	(115420512615665664, 0, '2019-11-15 11:59:55', '2019-11-15 11:59:55', 16508640061130151, 16508640061130151, 0, 113707268142272512, '富文本编辑器', '', 'DemoManage/Form/Editor', '', 36, 2, 1, '', ''),
+	(115427643100237824, 0, '2019-11-15 12:28:15', '2019-11-16 11:44:59', 16508640061130151, 16508640061130151, 0, 113707268142272512, '输入自动提示', '', 'DemoManage/Form/AutoComplete', '', 37, 2, 0, '', ''),
+	(119408151295430656, 0, '2019-11-26 12:05:22', '2019-11-26 12:05:37', 16508640061130151, 16508640061130151, 0, 112911997946826752, '报表', '', '', '', 34, 1, 1, '', ''),
+	(119408346968100864, 0, '2019-11-26 12:06:08', '2019-11-26 12:06:25', 16508640061130151, 16508640061130151, 0, 119408151295430656, 'ECharts', '', 'DemoManage/Report/ECharts', '', 37, 2, 1, '', ''),
+	(119409432990846976, 0, '2019-11-26 12:10:27', '2019-11-26 12:10:27', 16508640061130151, 16508640061130151, 0, 119408151295430656, 'Peity', '', 'DemoManage/Report/Peity', '', 38, 2, 1, '', '');
 /*!40000 ALTER TABLE `sys_menu` ENABLE KEYS */;
 
 DROP TABLE IF EXISTS `sys_menu_authorize`;
@@ -4037,7 +4052,6 @@ CREATE TABLE IF NOT EXISTS `sys_menu_authorize` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-DELETE FROM `sys_menu_authorize`;
 /*!40000 ALTER TABLE `sys_menu_authorize` DISABLE KEYS */;
 INSERT INTO `sys_menu_authorize` (`id`, `base_create_time`, `base_creator_id`, `menu_id`, `authorize_id`, `authorize_type`) VALUES
 	(21485199565000704, '2019-03-01 06:54:31', 16508640061130151, 16508640061130069, 16508640061130146, 1),
@@ -4162,7 +4176,6 @@ CREATE TABLE IF NOT EXISTS `sys_news` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-DELETE FROM `sys_news`;
 /*!40000 ALTER TABLE `sys_news` DISABLE KEYS */;
 INSERT INTO `sys_news` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `news_title`, `news_content`, `news_tag`, `province_id`, `city_id`, `county_id`, `thumb_image`, `news_author`, `news_sort`, `news_date`, `news_type`, `view_times`) VALUES
 	(34571912667467776, 0, '2019-04-06 09:36:26', '2019-10-10 12:22:22', 16508640061130151, 16508640061130151, 0, 'UHC健康会', '<p>UHC 健康会，您的健康管家，为您的健康保驾护航。</p><p>\n        <img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/8722abb613cd46b4af5b4ded7ddf5fad.jpg" data-filename="/" style="width: 550px;">\n    </p><p>\n        <img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/1ffc4edd922e4cb195744c13f9eec636.jpg" data-filename="/" style="width: 550px;">\n    </p><p>\n        <img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/e0728828482542f099ab79ba7d3ef701.jpg" data-filename="/" style="width: 550px;">\n\n    </p><p>\n        <img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/57b1153fbf514d9384ba9837a46737cf.jpg" data-filename="/" style="width: 550px;">\n        <br>\n    </p>\n    <p>小程序码</p><p>\n        <img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/46ece527595a408e9e62b2334374b560.jpg" data-filename="/" style="width: 430px;">\n        <br>\n    </p><p><br></p>', '微信小程序，健康会', 0, 0, 0, 'https://www.yishasoft.com/api/Resource/News/2019/07/31/eee642de4d3443779c0670e0da8eeed7.png', '管理员', 1, '2019-04-06 09:29:00', 1, 138),
@@ -4185,7 +4198,6 @@ CREATE TABLE IF NOT EXISTS `sys_position` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-DELETE FROM `sys_position`;
 /*!40000 ALTER TABLE `sys_position` DISABLE KEYS */;
 INSERT INTO `sys_position` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `position_name`, `position_sort`, `position_status`, `remark`) VALUES
 	(16508640061130139, 0, '2018-12-06 09:43:34', '2019-04-02 17:03:42', 0, 16508640061130151, 0, '董事长', 1, 1, 'CEO'),
@@ -4213,7 +4225,6 @@ CREATE TABLE IF NOT EXISTS `sys_role` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-DELETE FROM `sys_role`;
 /*!40000 ALTER TABLE `sys_role` DISABLE KEYS */;
 INSERT INTO `sys_role` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `role_name`, `role_sort`, `role_status`, `remark`) VALUES
 	(16508640061130146, 0, '2018-12-04 19:04:57', '2019-03-01 06:54:31', 0, 16508640061130151, 0, '管理员', 1, 1, '管理员角色'),
@@ -4254,7 +4265,6 @@ CREATE TABLE IF NOT EXISTS `sys_user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-DELETE FROM `sys_user`;
 /*!40000 ALTER TABLE `sys_user` DISABLE KEYS */;
 INSERT INTO `sys_user` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `user_name`, `password`, `salt`, `real_name`, `department_id`, `gender`, `birthday`, `portrait`, `email`, `mobile`, `qq`, `wechat`, `login_count`, `user_status`, `is_system`, `is_online`, `first_visit`, `previous_visit`, `last_visit`, `remark`, `web_token`, `api_token`) VALUES
 	(16508640061130148, 0, '2018-12-11 18:57:15', '2019-01-05 06:34:41', 0, 0, 0, 'lisi', 'e0dc5bc0da011584308fdc3d5dca04a1', '70212', '李四', 181201190700000005, 1, '', '', '', '16812345678', '', '', 0, 2, 0, 0, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '1970-01-01 00:00:00', '', '', ''),
@@ -4276,7 +4286,6 @@ CREATE TABLE IF NOT EXISTS `sys_user_belong` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-DELETE FROM `sys_user_belong`;
 /*!40000 ALTER TABLE `sys_user_belong` DISABLE KEYS */;
 INSERT INTO `sys_user_belong` (`id`, `base_create_time`, `base_creator_id`, `user_id`, `belong_id`, `belong_type`) VALUES
 	(20152771193868288, '2019-02-25 14:39:55', 16508640061130151, 16508640061130151, 16508640061130139, 1),
@@ -4356,8 +4365,3 @@ CREATE TABLE IF NOT EXISTS `sys_log_operate` (
   `execute_time` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-

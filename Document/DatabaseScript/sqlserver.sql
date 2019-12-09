@@ -1,74 +1,8 @@
-﻿USE [master]
-GO
-ALTER DATABASE [yisha_admin] SET ANSI_NULL_DEFAULT OFF 
-GO
-ALTER DATABASE [yisha_admin] SET ANSI_NULLS OFF 
-GO
-ALTER DATABASE [yisha_admin] SET ANSI_PADDING OFF 
-GO
-ALTER DATABASE [yisha_admin] SET ANSI_WARNINGS OFF 
-GO
-ALTER DATABASE [yisha_admin] SET ARITHABORT OFF 
-GO
-ALTER DATABASE [yisha_admin] SET AUTO_CLOSE OFF 
-GO
-ALTER DATABASE [yisha_admin] SET AUTO_CREATE_STATISTICS ON 
-GO
-ALTER DATABASE [yisha_admin] SET AUTO_SHRINK OFF 
-GO
-ALTER DATABASE [yisha_admin] SET AUTO_UPDATE_STATISTICS ON 
-GO
-ALTER DATABASE [yisha_admin] SET CURSOR_CLOSE_ON_COMMIT OFF 
-GO
-ALTER DATABASE [yisha_admin] SET CURSOR_DEFAULT  GLOBAL 
-GO
-ALTER DATABASE [yisha_admin] SET CONCAT_NULL_YIELDS_NULL OFF 
-GO
-ALTER DATABASE [yisha_admin] SET NUMERIC_ROUNDABORT OFF 
-GO
-ALTER DATABASE [yisha_admin] SET QUOTED_IDENTIFIER OFF 
-GO
-ALTER DATABASE [yisha_admin] SET RECURSIVE_TRIGGERS OFF 
-GO
-ALTER DATABASE [yisha_admin] SET  DISABLE_BROKER 
-GO
-ALTER DATABASE [yisha_admin] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
-GO
-ALTER DATABASE [yisha_admin] SET DATE_CORRELATION_OPTIMIZATION OFF 
-GO
-ALTER DATABASE [yisha_admin] SET TRUSTWORTHY OFF 
-GO
-ALTER DATABASE [yisha_admin] SET ALLOW_SNAPSHOT_ISOLATION OFF 
-GO
-ALTER DATABASE [yisha_admin] SET PARAMETERIZATION SIMPLE 
-GO
-ALTER DATABASE [yisha_admin] SET READ_COMMITTED_SNAPSHOT OFF 
-GO
-ALTER DATABASE [yisha_admin] SET HONOR_BROKER_PRIORITY OFF 
-GO
-ALTER DATABASE [yisha_admin] SET RECOVERY SIMPLE 
-GO
-ALTER DATABASE [yisha_admin] SET  MULTI_USER 
-GO
-ALTER DATABASE [yisha_admin] SET PAGE_VERIFY CHECKSUM  
-GO
-ALTER DATABASE [yisha_admin] SET DB_CHAINING OFF 
-GO
-ALTER DATABASE [yisha_admin] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
-GO
-ALTER DATABASE [yisha_admin] SET TARGET_RECOVERY_TIME = 0 SECONDS 
-GO
-EXEC sys.sp_db_vardecimal_storage_format N'yisha_admin', N'ON'
-GO
-USE [yisha_admin]
-GO
-/****** Object:  Table [dbo].[sys_area]    Script Date: 2019/10/13 17:35:27 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-SET ANSI_PADDING ON
-GO
+﻿
+/* 执行脚本前，请先选择数据库，脚本会先删除表，然后再创建表，写入数据，请谨慎执行！！！ */
+/* use [yisha_admin] */
+
+IF OBJECT_ID('[dbo].[sys_area]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_area]; 
 CREATE TABLE [dbo].[sys_area](
 	[id] [bigint] NOT NULL,
 	[base_is_delete] [int] NOT NULL,
@@ -98,6 +32,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_auto_job]', 'U') IS NOT NULL DROP TABLE [dbo].sys_auto_job; 
 CREATE TABLE [dbo].[sys_auto_job](
 	[id] [bigint] NOT NULL,
 	[base_is_delete] [int] NOT NULL,
@@ -130,6 +65,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_auto_job_log]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_auto_job_log]; 
 CREATE TABLE [dbo].[sys_auto_job_log](
 	[id] [bigint] NOT NULL,
 	[base_create_time] [datetime] NOT NULL,
@@ -154,6 +90,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_data_dict]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_data_dict]; 
 CREATE TABLE [dbo].[sys_data_dict](
 	[id] [bigint] NOT NULL,
 	[base_is_delete] [int] NOT NULL,
@@ -181,6 +118,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_data_dict_detail]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_data_dict_detail]; 
 CREATE TABLE [dbo].[sys_data_dict_detail](
 	[id] [bigint] NOT NULL,
 	[base_is_delete] [int] NOT NULL,
@@ -210,6 +148,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_department]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_department]; 
 CREATE TABLE [dbo].[sys_department](
 	[id] [bigint] NOT NULL,
 	[base_is_delete] [int] NOT NULL,
@@ -242,6 +181,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_log_api]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_log_api]; 
 CREATE TABLE [dbo].[sys_log_api](
 	[id] [bigint] NOT NULL,
 	[base_create_time] [datetime] NOT NULL,
@@ -268,6 +208,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_log_login]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_log_login]; 
 CREATE TABLE [dbo].[sys_log_login](
 	[id] [bigint] NOT NULL,
 	[base_create_time] [datetime] NOT NULL,
@@ -295,6 +236,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_log_operate]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_log_operate]; 
 CREATE TABLE [dbo].[sys_log_operate](
 	[id] [bigint] NOT NULL,
 	[base_create_time] [datetime] NOT NULL,
@@ -325,6 +267,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_menu]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_menu]; 
 CREATE TABLE [dbo].[sys_menu](
 	[id] [bigint] NOT NULL,
 	[base_is_delete] [int] NOT NULL,
@@ -357,6 +300,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+IF OBJECT_ID('[dbo].[sys_menu_authorize]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_menu_authorize]; 
 CREATE TABLE [dbo].[sys_menu_authorize](
 	[id] [bigint] NOT NULL,
 	[base_create_time] [datetime] NOT NULL,
@@ -378,6 +322,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_news]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_news]; 
 CREATE TABLE [dbo].[sys_news](
 	[id] [bigint] NOT NULL,
 	[base_is_delete] [int] NOT NULL,
@@ -414,6 +359,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_position]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_position]; 
 CREATE TABLE [dbo].[sys_position](
 	[id] [bigint] NOT NULL,
 	[base_is_delete] [int] NOT NULL,
@@ -442,6 +388,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_role]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_role]; 
 CREATE TABLE [dbo].[sys_role](
 	[id] [bigint] NOT NULL,
 	[base_is_delete] [int] NOT NULL,
@@ -470,6 +417,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
+IF OBJECT_ID('[dbo].[sys_user]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_user]; 
 CREATE TABLE [dbo].[sys_user](
 	[id] [bigint] NOT NULL,
 	[base_is_delete] [int] NOT NULL,
@@ -514,6 +462,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+IF OBJECT_ID('[dbo].[sys_user_belong]', 'U') IS NOT NULL DROP TABLE [dbo].[sys_user_belong]; 
 CREATE TABLE [dbo].[sys_user_belong](
 	[id] [bigint] NOT NULL,
 	[base_create_time] [datetime] NOT NULL,
@@ -4446,6 +4395,24 @@ INSERT [dbo].[sys_menu] ([id], [base_is_delete], [base_create_time], [base_modif
 INSERT [dbo].[sys_menu] ([id], [base_is_delete], [base_create_time], [base_modify_time], [base_creator_id], [base_modifier_id], [base_version], [parent_id], [menu_name], [menu_icon], [menu_url], [menu_target], [menu_sort], [menu_type], [menu_status], [authorize], [remark]) VALUES (16508640061130135, 0, CAST(0x0000A9D001198650 AS DateTime), CAST(0x0000A9D001198650 AS DateTime), 0, 0, 0, 16508640061130076, N'Api日志', N'', N'SystemManage/LogApi/LogApiIndex', N'', 3, 2, 1, N'system:logapi:view', N'')
 INSERT [dbo].[sys_menu] ([id], [base_is_delete], [base_create_time], [base_modify_time], [base_creator_id], [base_modifier_id], [base_version], [parent_id], [menu_name], [menu_icon], [menu_url], [menu_target], [menu_sort], [menu_type], [menu_status], [authorize], [remark]) VALUES (16508640061130136, 0, CAST(0x0000A9D00119D984 AS DateTime), CAST(0x0000A9D00119F0F4 AS DateTime), 0, 0, 0, 16508640061130135, N'Api日志查询', N'', N'', N'', 1, 3, 1, N'system:logapi:search', N'')
 INSERT [dbo].[sys_menu] ([id], [base_is_delete], [base_create_time], [base_modify_time], [base_creator_id], [base_modifier_id], [base_version], [parent_id], [menu_name], [menu_icon], [menu_url], [menu_target], [menu_sort], [menu_type], [menu_status], [authorize], [remark]) VALUES (16508640061130137, 0, CAST(0x0000A9D0011A2F10 AS DateTime), CAST(0x0000A9D0011A2F10 AS DateTime), 0, 0, 0, 16508640061130135, N'Api日志删除', N'', N'', N'', 2, 3, 1, N'system:logapi:delete', N'')
+INSERT [dbo].[sys_menu] ([id], [base_is_delete], [base_create_time], [base_modify_time], [base_creator_id], [base_modifier_id], [base_version], [parent_id], [menu_name], [menu_icon], [menu_url], [menu_target], [menu_sort], [menu_type], [menu_status], [authorize], [remark]) VALUES (112911997946826752, 0, CAST(0x0000AAFF00E481A8 AS DateTime), CAST(0x0000AB010147ED9C AS DateTime), 16508640061130151, 16508640061130151, 0, 0, N'实例演示', N'fa fa-square-o', N'', N'', 16, 1, 1, N'', N'')
+INSERT [dbo].[sys_menu] ([id], [base_is_delete], [base_create_time], [base_modify_time], [base_creator_id], [base_modifier_id], [base_version], [parent_id], [menu_name], [menu_icon], [menu_url], [menu_target], [menu_sort], [menu_type], [menu_status], [authorize], [remark]) VALUES (112912256928321536, 0, CAST(0x0000AAFF00E4CA50 AS DateTime), CAST(0x0000AB0101319A60 AS DateTime), 16508640061130151, 16508640061130151, 0, 113707268142272512, N'按钮', N'', N'DemoManage/Form/Button', N'', 17, 2, 1, N'', N'')
+INSERT [dbo].[sys_menu] ([id], [base_is_delete], [base_create_time], [base_modify_time], [base_creator_id], [base_modifier_id], [base_version], [parent_id], [menu_name], [menu_icon], [menu_url], [menu_target], [menu_sort], [menu_type], [menu_status], [authorize], [remark]) VALUES (112943305909604352, 0, CAST(0x0000AAFF0106ADB4 AS DateTime), CAST(0x0000AB010131A168 AS DateTime), 16508640061130151, 16508640061130151, 0, 113707268142272512, N'栅栏', N'', N'DemoManage/Form/Grid', N'', 18, 2, 1, N'', N'')
+INSERT [dbo].[sys_menu] ([id], [base_is_delete], [base_create_time], [base_modify_time], [base_creator_id], [base_modifier_id], [base_version], [parent_id], [menu_name], [menu_icon], [menu_url], [menu_target], [menu_sort], [menu_type], [menu_status], [authorize], [remark]) VALUES (112943568473034752, 0, CAST(0x0000AAFF0106F65C AS DateTime), CAST(0x0000AB0101318EA8 AS DateTime), 16508640061130151, 16508640061130151, 0, 113707268142272512, N'文件上传', N'', N'DemoManage/Form/Upload', N'', 30, 2, 1, N'', N'')
+INSERT [dbo].[sys_menu] ([id], [base_is_delete], [base_create_time], [base_modify_time], [base_creator_id], [base_modifier_id], [base_version], [parent_id], [menu_name], [menu_icon], [menu_url], [menu_target], [menu_sort], [menu_type], [menu_status], [authorize], [remark]) VALUES (112955374490882048, 0, CAST(0x0000AAFF0113D930 AS DateTime), CAST(0x0000AB010131AAC8 AS DateTime), 16508640061130151, 16508640061130151, 0, 113707268142272512, N'下拉框', N'', N'DemoManage/Form/Select', N'', 20, 2, 1, N'', N'')
+INSERT [dbo].[sys_menu] ([id], [base_is_delete], [base_create_time], [base_modify_time], [base_creator_id], [base_modifier_id], [base_version], [parent_id], [menu_name], [menu_icon], [menu_url], [menu_target], [menu_sort], [menu_type], [menu_status], [authorize], [remark]) VALUES (113706370221477888, 0, CAST(0x0000AB0101307694 AS DateTime), CAST(0x0000AB0101317F6C AS DateTime), 16508640061130151, 16508640061130151, 0, 113707268142272512, N'时间轴', N'', N'DemoManage/Form/Timeline', N'', 31, 2, 1, N'', N'')
+INSERT [dbo].[sys_menu] ([id], [base_is_delete], [base_create_time], [base_modify_time], [base_creator_id], [base_modifier_id], [base_version], [parent_id], [menu_name], [menu_icon], [menu_url], [menu_target], [menu_sort], [menu_type], [menu_status], [authorize], [remark]) VALUES (113707268142272512, 0, CAST(0x0000AB010131715C AS DateTime), CAST(0x0000AB010131715C AS DateTime), 16508640061130151, 16508640061130151, 0, 112911997946826752, N'表单', N'', N'', N'', 32, 1, 1, N'', N'')
+INSERT [dbo].[sys_menu] ([id], [base_is_delete], [base_create_time], [base_modify_time], [base_creator_id], [base_modifier_id], [base_version], [parent_id], [menu_name], [menu_icon], [menu_url], [menu_target], [menu_sort], [menu_type], [menu_status], [authorize], [remark]) VALUES (113708424717406208, 0, CAST(0x0000AB010132B4CC AS DateTime), CAST(0x0000AB0200A1FE50 AS DateTime), 16508640061130151, 16508640061130151, 0, 113707268142272512, N'卡片列表', N'', N'DemoManage/Form/Card', N'', 32, 2, 1, N'', N'')
+INSERT [dbo].[sys_menu] ([id], [base_is_delete], [base_create_time], [base_modify_time], [base_creator_id], [base_modifier_id], [base_version], [parent_id], [menu_name], [menu_icon], [menu_url], [menu_target], [menu_sort], [menu_type], [menu_status], [authorize], [remark]) VALUES (113733108645236736, 0, CAST(0x0000AB01014DA548 AS DateTime), CAST(0x0000AB01014DA548 AS DateTime), 16508640061130151, 16508640061130151, 0, 113707268142272512, N'选项卡', N'', N'DemoManage/Form/Tab', N'', 33, 2, 1, N'', N'')
+INSERT [dbo].[sys_menu] ([id], [base_is_delete], [base_create_time], [base_modify_time], [base_creator_id], [base_modifier_id], [base_version], [parent_id], [menu_name], [menu_icon], [menu_url], [menu_target], [menu_sort], [menu_type], [menu_status], [authorize], [remark]) VALUES (113733191331745792, 0, CAST(0x0000AB01014DBCB8 AS DateTime), CAST(0x0000AB01014DBCB8 AS DateTime), 16508640061130151, 16508640061130151, 0, 113707268142272512, N'面板', N'', N'DemoManage/Form/Panel', N'', 34, 2, 1, N'', N'')
+INSERT [dbo].[sys_menu] ([id], [base_is_delete], [base_create_time], [base_modify_time], [base_creator_id], [base_modifier_id], [base_version], [parent_id], [menu_name], [menu_icon], [menu_url], [menu_target], [menu_sort], [menu_type], [menu_status], [authorize], [remark]) VALUES (113734387522080768, 0, CAST(0x0000AB01014F0AB4 AS DateTime), CAST(0x0000AB01014F0AB4 AS DateTime), 16508640061130151, 16508640061130151, 0, 113707268142272512, N'日期与时间', N'', N'DemoManage/Form/Datetime', N'', 35, 2, 1, N'', N'')
+INSERT [dbo].[sys_menu] ([id], [base_is_delete], [base_create_time], [base_modify_time], [base_creator_id], [base_modifier_id], [base_version], [parent_id], [menu_name], [menu_icon], [menu_url], [menu_target], [menu_sort], [menu_type], [menu_status], [authorize], [remark]) VALUES (113942846855188480, 0, CAST(0x0000AB0200A70C10 AS DateTime), CAST(0x0000AB0200A70C10 AS DateTime), 16508640061130151, 16508640061130151, 0, 112911997946826752, N'图标', N'', N'', N'', 36, 1, 1, N'', N'')
+INSERT [dbo].[sys_menu] ([id], [base_is_delete], [base_create_time], [base_modify_time], [base_creator_id], [base_modifier_id], [base_version], [parent_id], [menu_name], [menu_icon], [menu_url], [menu_target], [menu_sort], [menu_type], [menu_status], [authorize], [remark]) VALUES (113946356757827584, 0, CAST(0x0000AB0200AADFC0 AS DateTime), CAST(0x0000AB0200AADFC0 AS DateTime), 16508640061130151, 16508640061130151, 0, 113942846855188480, N'FontAwesome', N'', N'DemoManage/Icon/FontAwesome', N'', 37, 2, 1, N'', N'')
+INSERT [dbo].[sys_menu] ([id], [base_is_delete], [base_create_time], [base_modify_time], [base_creator_id], [base_modifier_id], [base_version], [parent_id], [menu_name], [menu_icon], [menu_url], [menu_target], [menu_sort], [menu_type], [menu_status], [authorize], [remark]) VALUES (115420512615665664, 0, CAST(0x0000AB0600C5BB24 AS DateTime), CAST(0x0000AB0600C5BB24 AS DateTime), 16508640061130151, 16508640061130151, 0, 113707268142272512, N'富文本编辑器', N'', N'DemoManage/Form/Editor', N'', 36, 2, 1, N'', N'')
+INSERT [dbo].[sys_menu] ([id], [base_is_delete], [base_create_time], [base_modify_time], [base_creator_id], [base_modifier_id], [base_version], [parent_id], [menu_name], [menu_icon], [menu_url], [menu_target], [menu_sort], [menu_type], [menu_status], [authorize], [remark]) VALUES (115427643100237824, 0, CAST(0x0000AB0600CD8354 AS DateTime), CAST(0x0000AB0700C1A124 AS DateTime), 16508640061130151, 16508640061130151, 0, 113707268142272512, N'输入自动提示', N'', N'DemoManage/Form/AutoComplete', N'', 37, 2, 0, N'', N'')
+INSERT [dbo].[sys_menu] ([id], [base_is_delete], [base_create_time], [base_modify_time], [base_creator_id], [base_modifier_id], [base_version], [parent_id], [menu_name], [menu_icon], [menu_url], [menu_target], [menu_sort], [menu_type], [menu_status], [authorize], [remark]) VALUES (119408151295430656, 0, CAST(0x0000AB1100C73A58 AS DateTime), CAST(0x0000AB1100C74BEC AS DateTime), 16508640061130151, 16508640061130151, 0, 112911997946826752, N'报表', N'', N'', N'', 34, 1, 1, N'', N'')
+INSERT [dbo].[sys_menu] ([id], [base_is_delete], [base_create_time], [base_modify_time], [base_creator_id], [base_modifier_id], [base_version], [parent_id], [menu_name], [menu_icon], [menu_url], [menu_target], [menu_sort], [menu_type], [menu_status], [authorize], [remark]) VALUES (119408346968100864, 0, CAST(0x0000AB1100C77040 AS DateTime), CAST(0x0000AB1100C7842C AS DateTime), 16508640061130151, 16508640061130151, 0, 119408151295430656, N'ECharts', N'', N'DemoManage/Report/ECharts', N'', 37, 2, 1, N'', N'')
+INSERT [dbo].[sys_menu] ([id], [base_is_delete], [base_create_time], [base_modify_time], [base_creator_id], [base_modifier_id], [base_version], [parent_id], [menu_name], [menu_icon], [menu_url], [menu_target], [menu_sort], [menu_type], [menu_status], [authorize], [remark]) VALUES (119409432990846976, 0, CAST(0x0000AB1100C89FC4 AS DateTime), CAST(0x0000AB1100C89FC4 AS DateTime), 16508640061130151, 16508640061130151, 0, 119408151295430656, N'Peity', N'', N'DemoManage/Report/Peity', N'', 38, 2, 1, N'', N'')
 
 INSERT [dbo].[sys_menu_authorize] ([id], [base_create_time], [base_creator_id], [menu_id], [authorize_id], [authorize_type]) VALUES (21485199565000704, CAST(0x0000AA030071D9B4 AS DateTime), 16508640061130151, 16508640061130069, 16508640061130146, 1)
 INSERT [dbo].[sys_menu_authorize] ([id], [base_create_time], [base_creator_id], [menu_id], [authorize_id], [authorize_type]) VALUES (21485199573389312, CAST(0x0000AA030071D9B4 AS DateTime), 16508640061130151, 16508640061130072, 16508640061130146, 1)
@@ -4676,8 +4643,4 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'department_id 或者 role_id' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'sys_user_belong', @level2type=N'COLUMN',@level2name=N'belong_id'
 GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'角色或者职位' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'sys_user_belong', @level2type=N'COLUMN',@level2name=N'belong_type'
-GO
-USE [master]
-GO
-ALTER DATABASE [yisha_admin] SET  READ_WRITE 
 GO
