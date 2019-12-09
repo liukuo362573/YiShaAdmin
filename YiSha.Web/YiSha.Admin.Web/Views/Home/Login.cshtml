@@ -7,7 +7,8 @@
     <link href='@Url.Content("~/yisha/css/login.css")' rel="stylesheet" />
     <script>
         if (window.top !== window.self) { window.top.location = window.location };
-    </script>
+
+/**/</script>
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/jquery.validation/1.14.0/jquery.validate.min.js"))
 }
 <div class="login-panel">
@@ -66,8 +67,13 @@
     $(function () {
         if ($.cookie('RememberMe') == 1) {
             $("#rememberMe").prop("checked", true);
-            if (!ys.isNullOrEmpty($.cookie('UserToken'))) {
-                redirectToIndex();
+            if ("@GlobalContext.SystemConfig.LoginProvider" == "Cookie") {
+                if (!ys.isNullOrEmpty($.cookie('UserToken'))) {
+                    redirectToIndex();
+                }
+            }
+            else {
+                $.removeCookie("UserToken", { path: '/' });
             }
         }
         $("#rememberMe").click(function () {

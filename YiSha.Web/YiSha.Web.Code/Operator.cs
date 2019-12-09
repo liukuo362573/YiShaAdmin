@@ -106,6 +106,7 @@ namespace YiSha.Web.Code
             {
                 return user;
             }
+            token = token.Trim('"');
             user = CacheFactory.Cache().GetCache<OperatorInfo>(token);
             if (user == null)
             {
