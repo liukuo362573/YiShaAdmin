@@ -81,6 +81,7 @@
                         var result = obj.Result;
                         $("#form").setWebControls(result);
                         $('#parentId').ysComboBoxTree("setValue", result.ParentId);
+                        $('#principalId').ysComboBoxTree("setValue", result.PrincipalId);
                     }
                 }
             });
@@ -101,6 +102,7 @@
     function saveForm(index) {
         if ($("#form").validate().form()) {
             var postData = $("#form").getWebControls({ Id: id });
+            postData.ParentId = ys.getLastValue(postData.ParentId);
             postData.PrincipalId = ys.getLastValue(postData.PrincipalId);
             ys.ajax({
                 url: '@Url.Content("~/OrganizationManage/Department/SaveFormJson")',

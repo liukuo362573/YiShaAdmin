@@ -18,6 +18,7 @@ namespace YiSha.Entity.OrganizationManage
         public string Telephone { get; set; }
         public string Fax { get; set; }
         public string Email { get; set; }
+        [JsonConverter(typeof(StringJsonConverter))]
         public long? PrincipalId { get; set; }
         public int? DepartmentSort { get; set; }
         public string Remark { get; set; }
