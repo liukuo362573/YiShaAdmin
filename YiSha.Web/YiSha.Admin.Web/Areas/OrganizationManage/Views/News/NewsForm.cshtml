@@ -125,7 +125,7 @@
                     if (obj.Tag == 1) {
                         var defaultData = {};
                         defaultData.NewsAuthor = "@ViewBag.OperatorInfo.RealName";
-                        defaultData.NewsDate = ys.formatDate("@DateTime.Now.ToString()", "yyyy-MM-dd HH:mm");
+                        defaultData.NewsDate = '@DateTime.Now.ToString("yyyy-MM-dd HH:mm")';
                         defaultData.NewsSort = obj.Result;
                         $("#form").setWebControls(defaultData);
                     }
