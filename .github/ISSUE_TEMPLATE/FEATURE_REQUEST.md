@@ -1,9 +1,10 @@
----
+﻿---
 name: Feature request
 about: Suggest an idea to improve
 labels: feature request
 ---
 
+<!-- 当然，你可以用中文写。 -->
 <!-- PLEASE READ THE FOLLOWING INSTRUCTIONS -->
 
 <!--

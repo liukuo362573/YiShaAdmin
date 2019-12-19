@@ -1,5 +1,7 @@
 > Thanks for contributing!
 
+<!-- 当然，你可以用中文写。 -->
+
 # Raising an Issue
 
 * Make sure the issue hasn't been raised yet
