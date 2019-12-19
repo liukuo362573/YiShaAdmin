@@ -80,34 +80,27 @@ namespace YiSha.Web.Code
         public async Task<OperatorInfo> Current(string apiToken = "")
         {
             IHttpContextAccessor hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
-            OperatorInfo user = null;
+            if (hca == null || hca.HttpContext == null) return null;
+
             string token = string.Empty;
             switch (LoginProvider)
             {
                 case "Cookie":
-                    if (hca.HttpContext != null)
-                    {
-                        token = new CookieHelper().GetCookie(TokenName);
-                    }
+                    token = new CookieHelper().GetCookie(TokenName);
                     break;
 
                 case "Session":
-                    if (hca.HttpContext != null)
-                    {
-                        token = new SessionHelper().GetSession(TokenName);
-                    }
+                    token = new SessionHelper().GetSession(TokenName);
                     break;
 
                 case "WebApi":
                     token = apiToken;
                     break;
             }
-            if (string.IsNullOrEmpty(token))
-            {
-                return user;
-            }
-            token = token.Trim('"');
-            user = CacheFactory.Cache().GetCache<OperatorInfo>(token);
+            if (string.IsNullOrEmpty(token)) return null;
+            else token = token.Trim('"');
+
+            OperatorInfo user = CacheFactory.Cache().GetCache<OperatorInfo>(token);
             if (user == null)
             {
                 user = await new DataRepository().GetUserByToken(token);
