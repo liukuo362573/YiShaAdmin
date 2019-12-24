@@ -104,13 +104,13 @@ namespace YiSha.Service.SystemManage
                 }
                 if (!string.IsNullOrEmpty(param.StartTime.ParseToString()))
                 {
-                    strSql.Append(" AND a.base_modify_time >= @StartTime");
+                    strSql.Append(" AND a.base_create_time >= @StartTime");
                     parameter.Add(DbParameterExtension.CreateDbParameter("@StartTime", param.StartTime));
                 }
                 if (!string.IsNullOrEmpty(param.EndTime.ParseToString()))
                 {
                     param.EndTime = (param.EndTime.Value.ToString("yyyy-MM-dd") + " 23:59:59").ParseToDateTime();
-                    strSql.Append(" AND a.base_modify_time <= @EndTime");
+                    strSql.Append(" AND a.base_create_time <= @EndTime");
                     parameter.Add(DbParameterExtension.CreateDbParameter("@EndTime", param.EndTime));
                 }
             }
