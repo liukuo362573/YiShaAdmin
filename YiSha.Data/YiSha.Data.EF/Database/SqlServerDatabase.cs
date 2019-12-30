@@ -251,8 +251,6 @@ namespace YiSha.Data.EF
 
                 if (value != null)
                 {
-                    if (value.ToString() == "&nbsp;")
-                        dbcontext.Entry(entity).Property(item).CurrentValue = null;
                     dbcontext.Entry(entity).Property(item).IsModified = true;
                 }
             }

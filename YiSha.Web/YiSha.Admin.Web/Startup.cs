@@ -56,6 +56,7 @@ namespace YiSha.Admin.Web
             services.AddMvc(options =>
             {
                 options.Filters.Add<GlobalExceptionFilter>();
+                options.ModelMetadataDetailsProviders.Add(new ModelBindingMetadataProvider());
             });
 
             services.AddSession();
