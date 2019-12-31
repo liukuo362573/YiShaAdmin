@@ -1,7 +1,7 @@
 /**
  * bootstrapTreeTable
  *
- * @author swifly yishasoft
+ * @author swifly YiShaAdmin
  */
 (function ($) {
     "use strict";
@@ -241,6 +241,9 @@
         }
         // 缓存并格式化数据
         var formatData = function (data) {
+            if (!target.data_list["_root_"]) {
+                target.data_list["_root_"] = [];
+            }
             var _root = options.rootIdValue ? options.rootIdValue : null
             $.each(data, function (index, item) {
                 // 添加一个默认属性，用来判断当前节点有没有被显示
@@ -249,13 +252,18 @@
                 // 默认的几种判断
                 var _defaultRootFlag = target.getRootFlag(item);
                 if (!item[options.parentCode] || (_root ? (item[options.parentCode] == options.rootIdValue) : _defaultRootFlag)) {
-                    if (!target.data_list["_root_"]) {
-                        target.data_list["_root_"] = [];
-                    }
                     if (!target.data_obj["id_" + item[options.code]]) {
+
                         target.data_list["_root_"].push(item);
                     }
                 } else {
+                    var rootNode = recursionQueryRootNode(data, item);
+                    if (rootNode) {
+                        if (!target.data_obj["id_" + rootNode[options.code]]) {
+                            target.data_obj["id_" + rootNode[options.code]] = rootNode
+                            target.data_list["_root_"].push(rootNode);
+                        }
+                    }
                     if (!target.data_list["_n_" + item[options.parentCode]]) {
                         target.data_list["_n_" + item[options.parentCode]] = [];
                     }
@@ -263,8 +271,21 @@
                         target.data_list["_n_" + item[options.parentCode]].push(item);
                     }
                 }
-                target.data_obj["id_" + item[options.code]] = item;
+                if (!target.data_obj["id_" + item[options.code]]) {
+                    target.data_obj["id_" + item[options.code]] = item;
+                }
             });
+        }
+        // 递归获取节点的根节点
+        var recursionQueryRootNode = function (data, node) {
+            for (let i = 0; i < data.length; i++) {
+                if (data[i][options.code] == node[options.parentCode]) {
+                    return recursionQueryRootNode(data, data[i]);
+                }
+                if (i == data.length - 1) {
+                    return node;
+                }
+            }
         }
         // 递归获取子节点并且设置子节点
         var recursionNode = function (parentNode, lv, row_id, p_id) {

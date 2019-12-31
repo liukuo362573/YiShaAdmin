@@ -126,7 +126,7 @@ namespace YiSha.Business.SystemManage
             {
                 if (!string.IsNullOrEmpty(param.MenuName))
                 {
-                    list = list.Where(p => p.MenuName == param.MenuName).ToList();
+                    list = list.Where(p => p.MenuName.Contains(param.MenuName)).ToList();
                 }
                 if (param.MenuStatus > 0)
                 {
