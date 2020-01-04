@@ -149,47 +149,49 @@ namespace YiSha.Util.Export
                     string drValue = properties[columnIndex].GetValue(list[rowIndex], null).ParseToString();
                     switch (properties[columnIndex].PropertyType.ToString())
                     {
-                        case "System.String"://字符串类型  
+                        case "System.String":
                             newCell.SetCellValue(drValue);
                             break;
 
-                        case "System.DateTime"://日期类型  
+                        case "System.DateTime":
                         case "System.Nullable`1[System.DateTime]":
-                            DateTime dateV;
-                            DateTime.TryParse(drValue, out dateV);
-                            newCell.SetCellValue(dateV);
+                            newCell.SetCellValue(drValue.ParseToDateTime());
+                            newCell.CellStyle = dateStyle; //格式化显示  
+                            break;
 
-                            newCell.CellStyle = dateStyle;//格式化显示  
-                            break;
-                        case "System.Boolean"://布尔型  
+                        case "System.Boolean":
                         case "System.Nullable`1[System.Boolean]":
-                            bool boolV = false;
-                            bool.TryParse(drValue, out boolV);
-                            newCell.SetCellValue(boolV);
+                            newCell.SetCellValue(drValue.ParseToBool());
                             break;
-                        case "System.Int16"://整型  
+
+                        case "System.Byte":
+                        case "System.Nullable`1[System.Byte]":
+                        case "System.Int16":
                         case "System.Nullable`1[System.Int16]":
                         case "System.Int32":
                         case "System.Nullable`1[System.Int32]":
+                            newCell.SetCellValue(drValue.ParseToInt());
+                            break;
+
                         case "System.Int64":
                         case "System.Nullable`1[System.Int64]":
-                        case "System.Byte":
-                        case "System.Nullable`1[System.Byte]":
-                            int intV = 0;
-                            int.TryParse(drValue, out intV);
-                            newCell.SetCellValue(intV);
+                            newCell.SetCellValue(drValue.ParseToString());
                             break;
-                        case "System.Decimal"://浮点型  
-                        case "System.Nullable`1[System.Decimal]":
+
                         case "System.Double":
                         case "System.Nullable`1[System.Double]":
-                            double doubV = 0;
-                            double.TryParse(drValue, out doubV);
-                            newCell.SetCellValue(doubV);
+                            newCell.SetCellValue(drValue.ParseToDouble());
                             break;
-                        case "System.DBNull"://空值处理  
+
+                        case "System.Decimal":
+                        case "System.Nullable`1[System.Decimal]":
+                            newCell.SetCellValue(drValue.ParseToDouble());
+                            break;
+
+                        case "System.DBNull":
                             newCell.SetCellValue(string.Empty);
                             break;
+
                         default:
                             newCell.SetCellValue(string.Empty);
                             break;
