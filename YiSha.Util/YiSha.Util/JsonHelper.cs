@@ -1,10 +1,11 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using YiSha.Util.Extension;
 
 namespace YiSha.Util
 {
@@ -36,8 +37,7 @@ namespace YiSha.Util
         {
             try
             {
-                string sValue = reader.Value.ToString();
-                return long.Parse(sValue);
+                return reader.Value.ParseToLong();
             }
             catch (Exception ex)
             {
