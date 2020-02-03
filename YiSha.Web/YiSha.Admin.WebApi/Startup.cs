@@ -50,7 +50,7 @@ namespace YiSha.Admin.WebApi
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSwaggerGen(config =>
             {
-                config.SwaggerDoc("v1", new Info { Title = "YiShaAdmin Api", Version = "v1" });
+                config.SwaggerDoc("v1", new Info { Title = "YiSha Api", Version = "v1" });
             });
 
             services.AddOptions();
@@ -112,7 +112,7 @@ namespace YiSha.Admin.WebApi
             app.UseSwaggerUI(c =>
             {
                 c.RoutePrefix = "api-doc";
-                c.SwaggerEndpoint("v1/swagger.json", "YiShaAdmin Api v1");
+                c.SwaggerEndpoint("v1/swagger.json", "YiSha Api v1");
             });
 
             new JobCenter().Start(); // 定时任务

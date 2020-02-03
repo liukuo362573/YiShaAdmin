@@ -347,7 +347,7 @@ healthchecksdb
 
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
 MigrationBackup/
-Publish
+
 YiSha.Web/YiSha.Admin.Web/DataProtection
 YiSha.Web/YiSha.Admin.WebApi/DataProtection
 YiSha.Web/YiSha.Admin.Web/Resource
