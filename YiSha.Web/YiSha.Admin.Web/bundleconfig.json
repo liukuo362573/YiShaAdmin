@@ -425,5 +425,27 @@
       "enabled": true,
       "renameLocals": true
     }
+  },
+
+  {
+    "outputFileName": "wwwroot/lib/bootstrap.tagsinput/0.8.0/bootstrap-tagsinput.min.css",
+    "inputFiles": [
+      "wwwroot/lib/bootstrap.tagsinput/0.8.0/bootstrap-tagsinput.css",
+      "wwwroot/lib/bootstrap.tagsinput/0.8.0/bootstrap-tagsinput-typeahead.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/lib/bootstrap.tagsinput/0.8.0/bootstrap-tagsinput.min.js",
+    "inputFiles": [
+      "wwwroot/lib/bootstrap.tagsinput/0.8.0/bootstrap-tagsinput.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
   }
 ]

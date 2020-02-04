@@ -8,6 +8,9 @@
 
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/imageupload/1.0/css/imgup.min.css"))
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/imageupload/1.0/js/imgup.min.js"))
+
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/bootstrap.tagsinput/0.8.0/bootstrap-tagsinput.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/bootstrap.tagsinput/0.8.0/bootstrap-tagsinput.min.js"))
 }
 
 <div class="wrapper animated fadeInRight">
@@ -42,7 +45,7 @@
         <div class="form-group">
             <label class="col-sm-2 control-label ">文章标签</label>
             <div class="col-sm-10">
-                <input id="newsTag" col="NewsTag" type="text" placeholder="多个标签之间用“,”分隔，最多不超过6个" class="form-control" />
+                <input id="newsTag" col="NewsTag" type="text" class="form-control" />
             </div>
         </div>
         <div class="form-group">
@@ -68,6 +71,8 @@
     var id = ys.request("id");
     $(function () {
         laydate.render({ elem: '#newsDate', type: 'datetime', format: 'yyyy-MM-dd HH:mm' });
+
+        $('#newsTag').tagsinput({ trimValue: true });
 
         $("#newsType").ysComboBox({
             data: top.getDataDict("NewsType"),
@@ -113,6 +118,10 @@
                         $("#form").setWebControls(obj.Result);
                         $("#newsContent").summernote('code', obj.Result.NewsContent);
                         $("#thumbImage").imageUpload("setImageUrl", obj.Result.ThumbImage);
+                      
+                        $.each(obj.Result.NewsTag.split(','), function (index,val) {
+                             $('#newsTag').tagsinput('add', val);
+                        });
                     }
                 }
             });
