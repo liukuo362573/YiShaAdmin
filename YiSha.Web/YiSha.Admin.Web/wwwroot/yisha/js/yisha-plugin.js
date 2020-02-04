@@ -15,7 +15,8 @@
             key: "Key",
             value: "Value",
             data: null, // 数据源            
-            dataName: 'Result' // 数据名称
+            dataName: 'Result', // 数据名称
+            default: undefined
         }, option);
 
         var dom = {
@@ -37,7 +38,7 @@
                         },
                         error: function (xhr, status, obj) {
                             throw exception;
-                        },
+                        }
                     });
                 }
             },
@@ -51,8 +52,15 @@
                         html += "<label class='radio-box'>";
                         html += "<input type='radio' name='" + name + "' value='" + row[setting.key] + "' ref='" + ref + "' /> " + row[setting.value];
                         html += "</label>";
+
+                        if (row.IsDefault == 1) {
+                            setting.default = row[setting.key];
+                        }
                     });
                     target.append(html);
+                }
+                if (setting.default != undefined) {
+                    target.ysRadioBox("setValue", setting.default);
                 }
             }
         };
@@ -79,6 +87,9 @@
             if (typeof value != 'string') {
                 value = value.toString();
             }
+            $(target).find("div").each(function (i, ele) {
+                $(ele).removeClass('checked');
+            });
             var ids = value.split(',');
             $.each(ids, function (i, val) {
                 var radiobox = $(target).find('input[type=radio][value=' + val + ']');
@@ -102,7 +113,8 @@
             key: "Key",
             value: "Value",
             data: null, //数据源
-            dataName: false //数据名称
+            dataName: false, //数据名称
+            default: undefined
         }, option);
 
         var dom = {
@@ -119,7 +131,7 @@
                         },
                         error: function (xhr, status, obj) {
                             throw exception;
-                        },
+                        }
                     });
                     if (_option.dataName) {
                         if (_option.data != null) {
@@ -137,8 +149,15 @@
                         html += "<label class='check-box'>";
                         html += "<input name='" + name + "' type='checkbox' value='" + row[setting.key] + "'>" + row[setting.value] + "</input>";
                         html += "</label>";
+
+                        if (row.IsDefault == 1) {
+                            setting.default = row[setting.key];
+                        }
                     });
                     target.append(html);
+                }
+                if (setting.default != undefined) {
+                    target.ysCheckBox("setValue", setting.default);
                 }
             }
         };
@@ -193,7 +212,8 @@
             multiple: false,
             data: null, // 数据源          
             dataName: 'Result',  // 数据名称
-            onChange: null
+            onChange: null,
+            default: undefined
         }, option);
 
         var dom = {
@@ -262,10 +282,18 @@
                                 $.each(row[setting.value], function (j) {
                                     var childRow = row[setting.value][j];
                                     option += "<option value='" + childRow[setting.key] + "'>" + childRow[setting.value] + "</option>";
+
+                                    if (row.IsDefault == 1) {
+                                        setting.default = row[setting.key];
+                                    }
                                 });
                             }
                             else {
                                 option += "<option value='" + row[setting.key] + "'>" + row[setting.value] + "</option>";
+
+                                if (row.IsDefault == 1) {
+                                    setting.default = row[setting.key];
+                                }
                             }
                         }
                     });
@@ -285,6 +313,10 @@
 
                     // hack 搜索的select保持和其他元素的宽度一致
                     $("#" + targetId).find(".select2-container").width(280);
+
+                    if (setting.default != undefined) {
+                        target.ysComboBox("setValue", setting.default);
+                    }
                 }
             }
         };

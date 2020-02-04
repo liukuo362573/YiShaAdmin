@@ -9,11 +9,11 @@ namespace YiSha.Enum
 {
     public enum StatusEnum
     {
+        [Description("启用")]
+        Yes = 1,
+
         [Description("禁用")]
         No = 0,
-
-        [Description("启用")]
-        Yes = 1
     }
 
     public enum IsEnum

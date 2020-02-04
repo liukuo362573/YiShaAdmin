@@ -70,6 +70,9 @@ namespace YiSha.Business.SystemManage
                 {
                     DictKey = p.DictKey,
                     DictValue = p.DictValue,
+                    ListClass = p.ListClass,
+                    IsDefault = p.IsDefault,
+                    DictStatus = p.DictStatus,
                     Remark = p.Remark
                 }).ToList();
                 dataDictInfoList.Add(new DataDictInfo

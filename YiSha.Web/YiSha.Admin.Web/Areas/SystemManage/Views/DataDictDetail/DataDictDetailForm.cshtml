@@ -13,10 +13,10 @@
         <div class="form-group">
             <label class="col-sm-3 control-label ">字典键<font class="red"> *</font></label>
             <div class="col-sm-8">
-                <div style="position:relative;display:inline-block;width:60%">
-                    <input id="dictKey" col="DictKey" type="text" class="form-control" style="display:inline-block;" />
+                <div>
+                    <input id="dictKey" col="DictKey" type="text" class="form-control" />
                 </div>
-                <span class="m-l-sm">第一个键一般从1开始</span>
+                <span><i class="fa fa-info-circle"></i> 第一个键一般从1开始</span>
             </div>
         </div>
         <div class="form-group">
@@ -32,9 +32,24 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="col-sm-3 control-label ">显示样式</label>
+            <div class="col-sm-8">
+                <div id="listClass" col="ListClass"></div>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> table表格字典列显示样式属性</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label ">系统默认</label>
+            <div id="isDefault" col="IsDefault" class="col-sm-8"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label ">状态</label>
+            <div id="dictStatus" col="DictStatus" class="col-sm-8"></div>
+        </div>
+        <div class="form-group">
             <label class="col-sm-3 control-label ">备注</label>
             <div class="col-sm-8">
-                <input id="remark" col="Remark" type="text" class="form-control" />
+                <input id="remark" col="Remark" type="text" class="form-control" style="height:50px" />
             </div>
         </div>
     </form>
@@ -44,6 +59,13 @@
     var id = ys.request("id");
     var dictType = ys.request("dictType");
     $(function () {
+        $("#dictStatus").ysRadioBox({ data: ys.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())), default: '@StatusEnum.Yes.ParseToInt()' });
+        $("#isDefault").ysRadioBox({ data: ys.getJson(@Html.Raw(typeof(IsEnum).EnumToDictionaryString())) , default: '@IsEnum.No.ParseToInt()'  });
+        $("#listClass").ysComboBox({
+            data: [{ Key: 'default', Value: '默认' }, { Key: 'primary', Value: '主要' }, { Key: 'success', Value: '成功' }, { Key: 'info', Value: '信息' }, { Key: 'warning', Value: '警告' }, { Key: 'danger', Value: '危险' }],
+            class: "form-control"
+        });
+
         getForm();
 
         $("#form").validate({
@@ -91,6 +113,9 @@
                 data: postData,
                 success: function (obj) {
                     if (obj.Tag == 1) {
+                        if (top.initDataDict) {
+                            top.initDataDict();
+                        }
                         ys.msgSuccess(obj.Message);
                         parent.searchGrid();
                         parent.layer.close(index);

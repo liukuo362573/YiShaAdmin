@@ -26,6 +26,9 @@ namespace YiSha.Model.Result.SystemManage
         /// 字典值
         /// </summary>
         public string DictValue { get; set; }
+        public string ListClass { get; set; }
+        public int? DictStatus { get; set; }
+        public int? IsDefault { get; set; }
         /// <summary>
         /// 备注
         /// </summary>

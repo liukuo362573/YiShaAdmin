@@ -40,7 +40,7 @@
     $(function () {
         $("#dictType").val(dictType);
 
-        initGrid();      
+        initGrid();
     });
 
     function initGrid() {
@@ -54,7 +54,27 @@
                 { field: 'Id', title: 'Id', visible: false },
                 { field: 'DictKey', title: '字典键' },
                 { field: 'DictValue', title: '字典值' },
-                { field: 'DictSort', title: '排序' },
+                {
+                    field: 'IsDefault', title: '系统默认', formatter: function (value, row, index) {
+                        return ys.getValueByKey(ys.getJson(@Html.Raw(typeof(IsEnum).EnumToDictionaryString())), value);
+                    }
+                },
+                {
+                    field: 'ListClass', title: '显示样式', formatter: function (value, row, index) {
+                        if (value) {
+                            return '<span class="badge badge-' + value + '">&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+                        }
+                    }
+                },
+                {
+                    field: 'DictStatus', title: '状态', formatter: function (value, row, index) {
+                        if (row.DictStatus == "@StatusEnum.Yes.ParseToInt()") {
+                            return '<span class="badge badge-primary">' + "@StatusEnum.Yes.GetDescription()" + '</span>';
+                        } else {
+                            return '<span class="badge badge-warning">' + "@StatusEnum.No.GetDescription()" + '</span>';
+                        }
+                    }
+                },
                 {
                     field: 'BaseModifyTime', title: '创建时间', formatter: function (value, row, index) {
                         return ys.formatDate(value, "yyyy-MM-dd HH:mm:ss");
@@ -66,7 +86,7 @@
                 var queryString = $('#searchDiv').getWebControls(pagination);
                 return queryString;
             }
-        });
+        })
     }
 
     function searchGrid() {
@@ -89,7 +109,7 @@
             title: id > 0 ? "编辑字典数据" : "添加字典数据",
             content: '@Url.Content("~/SystemManage/DataDictDetail/DataDictDetailForm")' + '?id=' + id + '&dictType=' + dictType,
             width: "768px",
-            height: "360px",
+            height: "600px",
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 iframeWin.saveForm(index);
