@@ -64,8 +64,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resource\Template\" />
     <Folder Include="wwwroot\lib\bootstrap.tagsinput\0.8.0\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\template\导入用户模板.xls" />
   </ItemGroup>
 
   <ItemGroup>
