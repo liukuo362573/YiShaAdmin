@@ -13,7 +13,7 @@ namespace YiSha.Enum
         Yes = 1,
 
         [Description("禁用")]
-        No = 0,
+        No = 0
     }
 
     public enum IsEnum
