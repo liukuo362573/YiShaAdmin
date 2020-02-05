@@ -3885,14 +3885,17 @@ CREATE TABLE IF NOT EXISTS `sys_data_dict_detail` (
   `dict_sort` int(11) NOT NULL,
   `dict_key` int(11) NOT NULL,
   `dict_value` varchar(50) COLLATE utf8_bin NOT NULL,
+  `list_class` varchar(50) COLLATE utf8_bin NOT NULL,
+  `dict_status` int(11) NOT NULL,
+  `is_default` int(11) NOT NULL,
   `remark` varchar(50) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 /*!40000 ALTER TABLE `sys_data_dict_detail` DISABLE KEYS */;
-INSERT INTO `sys_data_dict_detail` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `dict_type`, `dict_sort`, `dict_key`, `dict_value`, `remark`) VALUES
-	(16508640061124400, 0, '2019-01-05 07:16:12', '2019-10-12 18:21:48', 0, 16508640061130151, 0, 'NewsType', 1, 1, '产品案例', ''),
-	(16508640061124401, 0, '2019-01-05 07:16:25', '2019-01-05 07:16:25', 0, 0, 0, 'NewsType', 2, 2, '行业新闻', '');
+INSERT INTO `sys_data_dict_detail` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `dict_type`, `dict_sort`, `dict_key`, `dict_value`, `list_class`, `dict_status`, `is_default`, `remark`) VALUES
+	(16508640061124400, 0, '2019-01-05 07:16:12', '2019-10-12 18:21:48', 0, 16508640061130151, 0, 'NewsType', 1, 1, '产品案例', 'primary', 1, 1, ''),
+	(16508640061124401, 0, '2019-01-05 07:16:25', '2019-01-05 07:16:25', 0, 0, 0, 'NewsType', 2, 2, '行业新闻', 'warning', 1, 0, '');
 /*!40000 ALTER TABLE `sys_data_dict_detail` ENABLE KEYS */;
 
 DROP TABLE IF EXISTS `sys_department`;
