@@ -11,6 +11,7 @@ using YiSha.Entity.SystemManage;
 using YiSha.Enum;
 using YiSha.Enum.OrganizationManage;
 using YiSha.Model;
+using YiSha.Model.Param;
 using YiSha.Model.Param.OrganizationManage;
 using YiSha.Service.OrganizationManage;
 using YiSha.Util;
@@ -285,6 +286,39 @@ namespace YiSha.Business.OrganizationManage
             obj.Tag = 1;
             return obj;
         }
+
+        public async Task<TData> ImportUser(ImportParam param, List<UserEntity> list)
+        {
+            TData obj = new TData();
+            if (list.Any())
+            {
+                foreach (UserEntity entity in list)
+                {
+                    UserEntity dbEntity = await userService.GetEntity(entity.UserName);
+                    if (dbEntity != null)
+                    {
+                        entity.Id = dbEntity.Id;
+                        if (param.IsOverride == 1)
+                        {
+                            await userService.SaveForm(entity);
+                            await RemoveCacheByToken(entity.Id.Value);
+                        }
+                    }
+                    else
+                    {
+                        await userService.SaveForm(entity);
+                        await RemoveCacheByToken(entity.Id.Value);
+                    }
+                }
+                obj.Tag = 1;
+            }
+            else
+            {
+                obj.Message = " 未找到导入的数据";
+            }
+            return obj;
+        }
+
         #endregion
 
         #region 私有方法

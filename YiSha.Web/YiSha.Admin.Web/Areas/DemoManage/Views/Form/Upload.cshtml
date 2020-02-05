@@ -19,14 +19,14 @@
                     <div class="form-group">
                         <label class="font-noraml">简单示例</label>
                         <div class="file-loading">
-                            <input class="file" type="file" multiple data-min-file-count="1" data-theme="fas">
+                            <input id="fileinput-demo-1" type="file">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="font-noraml">多文件上传</label>
                         <div class="file-loading">
-                            <input id="fileinput-demo-1" type="file" multiple>
+                            <input id="fileinput-demo-2" type="file" multiple>
                         </div>
                     </div>
                 </div>
@@ -38,7 +38,13 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#fileinput-demo-1").fileinput({
-            'theme': 'explorer-fas',
+            language: 'zh',
+            'uploadUrl': '@GlobalContext.SystemConfig.ApiSite' + '/File/UploadFile?fileModule=@UploadFileType.News.ParseToInt()',
+            showPreview: false
+        });
+
+        $("#fileinput-demo-2").fileinput({
+            language: 'zh',
             'uploadUrl': '@GlobalContext.SystemConfig.ApiSite' + '/File/UploadFile?fileModule=@UploadFileType.News.ParseToInt()',
             overwriteInitial: false,
             initialPreviewAsData: true,

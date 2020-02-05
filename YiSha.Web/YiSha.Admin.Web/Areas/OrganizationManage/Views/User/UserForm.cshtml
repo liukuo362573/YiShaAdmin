@@ -66,7 +66,6 @@
 <script type="text/javascript">
     var id = ys.request("id");
     $(function () {
-
         $("#userStatus").ysRadioBox({ data: ys.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
         $("#gender").ysRadioBox({ data: ys.getJson(@Html.Raw(typeof(YiSha.Enum.OrganizationManage.GenderTypeEnum).EnumToDictionaryString())) });
 
@@ -104,7 +103,6 @@
                 email: { email: true}
             }
         });
-
     });
 
     function getForm() {

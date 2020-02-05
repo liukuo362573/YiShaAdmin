@@ -1,7 +1,4 @@
-﻿using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
-using NPOI.SS.Util;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,16 +6,18 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Web;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.SS.Util;
 using YiSha.Util.Extension;
 
-namespace YiSha.Util.Export
+namespace YiSha.Util
 {
     /// <summary>
     /// List导出到Excel文件
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class ExcelHelper<T>
+    public class ExcelHelper<T> where T : new()
     {
         #region List导出到Excel文件
         /// <summary>
@@ -27,7 +26,7 @@ namespace YiSha.Util.Export
         /// <param name="sFileName"></param>
         /// <param name="sHeaderText"></param>
         /// <param name="list"></param>
-        public string ExportToFile(string sFileName, string sHeaderText, List<T> list, string[] columns)
+        public string ExportToExcel(string sFileName, string sHeaderText, List<T> list, string[] columns)
         {
             sFileName = string.Format("{0}_{1}", SecurityHelper.GetGuid(), sFileName);
             string sRoot = GlobalContext.HostingEnvironment.ContentRootPath;
@@ -38,7 +37,7 @@ namespace YiSha.Util.Export
             {
                 Directory.CreateDirectory(sDirectory);
             }
-            using (MemoryStream ms = Export(list, sHeaderText, columns))
+            using (MemoryStream ms = CreateExportMemoryStream(list, sHeaderText, columns))
             {
                 using (FileStream fs = new FileStream(sFilePath, FileMode.Create, FileAccess.Write))
                 {
@@ -49,16 +48,14 @@ namespace YiSha.Util.Export
             }
             return partDirectory + Path.DirectorySeparatorChar + sFileName;
         }
-        #endregion
 
-        #region List导出到Excel的MemoryStream  
         /// <summary>  
         /// List导出到Excel的MemoryStream  
         /// </summary>  
         /// <param name="list">数据源</param>  
         /// <param name="sHeaderText">表头文本</param>  
         /// <param name="columns">需要导出的属性</param>  
-        private MemoryStream Export(List<T> list, string sHeaderText, string[] columns)
+        private MemoryStream CreateExportMemoryStream(List<T> list, string sHeaderText, string[] columns)
         {
             HSSFWorkbook workbook = new HSSFWorkbook();
             ISheet sheet = workbook.CreateSheet();
@@ -210,48 +207,126 @@ namespace YiSha.Util.Export
         }
         #endregion
 
-        #region Excel导入到DataTable
+        #region Excel导入
         /// <summary>
-        /// Excel导入到DataTable
+        /// Excel导入
         /// </summary>
-        /// <param name="sFileName"></param>
+        /// <param name="filePath"></param>
         /// <returns></returns>
-        public DataTable Import(string sFileName)
+        public List<T> ImportFromExcel(string filePath)
         {
-            DataTable dt = new DataTable();
-
-            HSSFWorkbook hssfworkbook;
-            using (FileStream file = new FileStream(sFileName, FileMode.Open, FileAccess.Read))
+            string absoluteFilePath = GlobalContext.HostingEnvironment.ContentRootPath + filePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+            List<T> list = new List<T>();
+            HSSFWorkbook hssfworkbook = null;
+            using (FileStream file = new FileStream(absoluteFilePath, FileMode.Open, FileAccess.Read))
             {
                 hssfworkbook = new HSSFWorkbook(file);
             }
             ISheet sheet = hssfworkbook.GetSheetAt(0);
-            System.Collections.IEnumerator rows = sheet.GetRowEnumerator();
-
-            IRow headerRow = sheet.GetRow(0);
-            int cellCount = headerRow.LastCellNum;
-
-            for (int j = 0; j < cellCount; j++)
+            IRow columnRow = sheet.GetRow(1); // 第二行为字段名
+            Dictionary<int, PropertyInfo> mapPropertyInfoDict = new Dictionary<int, PropertyInfo>();
+            for (int j = 0; j < columnRow.LastCellNum; j++)
             {
-                ICell cell = headerRow.GetCell(j);
-                dt.Columns.Add(cell.ToString());
+                ICell cell = columnRow.GetCell(j);
+                PropertyInfo propertyInfo = MapPropertyInfo(cell.ParseToString());
+                if (propertyInfo != null)
+                {
+                    mapPropertyInfoDict.Add(j, propertyInfo);
+                }
             }
 
-            for (int i = (sheet.FirstRowNum + 1); i <= sheet.LastRowNum; i++)
+            for (int i = (sheet.FirstRowNum + 2); i <= sheet.LastRowNum; i++)
             {
                 IRow row = sheet.GetRow(i);
-                DataRow dataRow = dt.NewRow();
-
-                for (int j = row.FirstCellNum; j < cellCount; j++)
+                T entity = new T();
+                for (int j = row.FirstCellNum; j < columnRow.LastCellNum; j++)
                 {
-                    if (row.GetCell(j) != null)
+                    if (mapPropertyInfoDict.ContainsKey(j))
                     {
-                        dataRow[j] = row.GetCell(j).ToString();
+                        if (row.GetCell(j) != null)
+                        {
+                            PropertyInfo propertyInfo = mapPropertyInfoDict[j];
+                            switch (propertyInfo.PropertyType.ToString())
+                            {
+                                case "System.DateTime":
+                                case "System.Nullable`1[System.DateTime]":
+                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ParseToString().ParseToDateTime());
+                                    break;
+
+                                case "System.Boolean":
+                                case "System.Nullable`1[System.Boolean]":
+                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ParseToString().ParseToBool());
+                                    break;
+
+                                case "System.Byte":
+                                case "System.Nullable`1[System.Byte]":
+                                    mapPropertyInfoDict[j].SetValue(entity, Byte.Parse(row.GetCell(j).ParseToString()));
+                                    break;
+                                case "System.Int16":
+                                case "System.Nullable`1[System.Int16]":
+                                    mapPropertyInfoDict[j].SetValue(entity, Int16.Parse(row.GetCell(j).ParseToString()));
+                                    break;
+                                case "System.Int32":
+                                case "System.Nullable`1[System.Int32]":
+                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ParseToString().ParseToInt());
+                                    break;
+
+                                case "System.Int64":
+                                case "System.Nullable`1[System.Int64]":
+                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ParseToString().ParseToLong());
+                                    break;
+
+                                case "System.Double":
+                                case "System.Nullable`1[System.Double]":
+                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ParseToString().ParseToDouble());
+                                    break;
+
+                                case "System.Decimal":
+                                case "System.Nullable`1[System.Decimal]":
+                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ParseToString().ParseToDecimal());
+                                    break;
+
+                                default:
+                                case "System.String":
+                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ParseToString());
+                                    break;
+                            }
+                        }
                     }
                 }
-                dt.Rows.Add(dataRow);
+                list.Add(entity);
             }
-            return dt;
+            return list;
+        }
+
+        /// <summary>
+        /// 查找Excel列名对应的实体属性
+        /// </summary>
+        /// <param name="columnName"></param>
+        /// <returns></returns>
+        private PropertyInfo MapPropertyInfo(string columnName)
+        {
+            PropertyInfo[] propertyList = ReflectionHelper.GetProperties(typeof(T));
+            PropertyInfo propertyInfo = propertyList.Where(p => p.Name == columnName).FirstOrDefault();
+            if (propertyInfo != null)
+            {
+                return propertyInfo;
+            }
+            else
+            {
+                foreach (PropertyInfo tempPropertyInfo in propertyList)
+                {
+                    DescriptionAttribute[] attributes = (DescriptionAttribute[])tempPropertyInfo.GetCustomAttributes(typeof(DescriptionAttribute), false);
+                    if (attributes.Length > 0)
+                    {
+                        if (attributes[0].Description == columnName)
+                        {
+                            return tempPropertyInfo;
+                        }
+                    }
+                }
+            }
+            return null;
         }
         #endregion
     }

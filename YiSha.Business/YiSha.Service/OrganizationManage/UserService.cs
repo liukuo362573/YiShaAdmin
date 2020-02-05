@@ -43,6 +43,11 @@ namespace YiSha.Service.OrganizationManage
             return await this.BaseRepository().FindEntity<UserEntity>(id);
         }
 
+        public async Task<UserEntity> GetEntity(string userName)
+        {
+            return await this.BaseRepository().FindEntity<UserEntity>(p => p.UserName == userName);
+        }
+
         public async Task<UserEntity> CheckLogin(string userName)
         {
             var expression = LinqExtensions.True<UserEntity>();

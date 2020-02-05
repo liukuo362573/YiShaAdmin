@@ -85,6 +85,16 @@ namespace YiSha.Util
                     dirModule = UploadFileType.News.ToString();
                     break;
 
+                case (int)UploadFileType.Import:
+                    objCheck = CheckFileExtension(Path.GetExtension(file.FileName), ".xls|.xlsx");
+                    if (objCheck.Tag != 1)
+                    {
+                        obj.Message = objCheck.Message;
+                        return obj;
+                    }
+                    dirModule = UploadFileType.Import.ToString();
+                    break;
+
                 default:
                     obj.Message = "请指定上传到的模块";
                     return obj;
