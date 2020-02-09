@@ -244,6 +244,7 @@
             if (!target.data_list["_root_"]) {
                 target.data_list["_root_"] = [];
             }
+            var tempRoot = [];  // 根目录根据数据的原始顺序排序
             var _root = options.rootIdValue ? options.rootIdValue : null
             $.each(data, function (index, item) {
                 // 添加一个默认属性，用来判断当前节点有没有被显示
@@ -253,15 +254,14 @@
                 var _defaultRootFlag = target.getRootFlag(item);
                 if (!item[options.parentCode] || (_root ? (item[options.parentCode] == options.rootIdValue) : _defaultRootFlag)) {
                     if (!target.data_obj["id_" + item[options.code]]) {
-
-                        target.data_list["_root_"].push(item);
+                        tempRoot.push({ 'index': index, 'node': item })
                     }
                 } else {
                     var rootNode = recursionQueryRootNode(data, item);
-                    if (rootNode) {
-                        if (!target.data_obj["id_" + rootNode[options.code]]) {
-                            target.data_obj["id_" + rootNode[options.code]] = rootNode
-                            target.data_list["_root_"].push(rootNode);
+                    if (rootNode && rootNode.node) {
+                        if (!target.data_obj["id_" + rootNode.node[options.code]]) {
+                            target.data_obj["id_" + rootNode.node[options.code]] = rootNode.node
+                            tempRoot.push(rootNode)
                         }
                     }
                     if (!target.data_list["_n_" + item[options.parentCode]]) {
@@ -275,6 +275,12 @@
                     target.data_obj["id_" + item[options.code]] = item;
                 }
             });
+            tempRoot = tempRoot.sort(function (a, b) {
+                return a.index - b.index
+            });
+            $.each(tempRoot, function (index, item) {
+                target.data_list["_root_"].push(item.node);
+            })
         }
         // 递归获取节点的根节点
         var recursionQueryRootNode = function (data, node) {
@@ -283,7 +289,7 @@
                     return recursionQueryRootNode(data, data[i]);
                 }
                 if (i == data.length - 1) {
-                    return node;
+                    return { 'index': i, 'node': node };
                 }
             }
         }
