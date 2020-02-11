@@ -3202,7 +3202,7 @@
                 outData = self._getOutData(formdata, jqXHR, data);
                 $.extend(true, params, outData);
                 setTimeout(function () {
-                    if ($h.isEmpty(data) || $h.isEmpty(data.error)) {
+                    if ($h.isEmpty(data) || data.Tag == 1) {
                         if (self.showPreview) {
                             self._setThumbStatus($thumb, 'Success');
                             $btnUpload.hide();
@@ -3217,7 +3217,12 @@
                         }
                     } else {
                         uploadFailed = true;
-                        errMsg = self._parseError(op, jqXHR, self.msgUploadError, self.fileManager.getFileName(id));
+                        if (data.Message) {
+                            errMsg = data.Message
+                        }
+                        else {
+                            errMsg = self._parseError(op, jqXHR, self.msgUploadError, self.fileManager.getFileName(id));
+                        }
                         self._showFileError(errMsg, params);
                         self._setPreviewError($thumb, true);
                         if (!self.retryErrorUploads) {
@@ -3318,7 +3323,7 @@
                     $thumbs = self._getThumbs(':not(.file-preview-success)'),
                     keys = $h.isEmpty(data) || $h.isEmpty(data.errorkeys) ? [] : data.errorkeys;
 
-                if ($h.isEmpty(data) || $h.isEmpty(data.error)) {
+                if ($h.isEmpty(data) || data.Tag == 1) {
                     self._raise('filebatchuploadsuccess', [outData]);
                     setAllUploaded();
                     if (self.showPreview) {
@@ -3357,7 +3362,12 @@
                         });
                         self._initUploadSuccess(data);
                     }
-                    errMsg = self._parseError(op, jqXHR, self.msgUploadError);
+                    if (data.Message) {
+                        errMsg = data.Message
+                    }
+                    else {
+                        errMsg = self._parseError(op, jqXHR, self.msgUploadError);
+                    }
                     self._showFileError(errMsg, outData, 'filebatchuploaderror');
                     self._setProgress(101, self.$progress, self.msgUploadError);
                 }
@@ -3417,13 +3427,18 @@
             };
             fnSuccess = function (data, textStatus, jqXHR) {
                 var outData = self._getOutData(formdata, jqXHR, data);
-                if ($h.isEmpty(data) || $h.isEmpty(data.error)) {
+                if ($h.isEmpty(data) || data.Tag == 1) {
                     self._raise('filebatchuploadsuccess', [outData]);
                     self._clearFileInput();
                     self._initUploadSuccess(data);
                     self._setProgress(101);
                 } else {
-                    errMsg = self._parseError(op, jqXHR, self.msgUploadError);
+                    if (data.Message) {
+                        errMsg = data.Message
+                    }
+                    else {
+                        errMsg = self._parseError(op, jqXHR, self.msgUploadError);
+                    }
                     self._showFileError(errMsg, outData, 'filebatchuploaderror');
                 }
             };
