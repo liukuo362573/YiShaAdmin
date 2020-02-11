@@ -257,10 +257,11 @@
                         tempRoot.push({ 'index': index, 'node': item })
                     }
                 } else {
-                    var rootNode = recursionQueryRootNode(data, item);
+                    var rootNode = recursionQueryRootNode(data, 0, item);
                     if (rootNode && rootNode.node) {
                         if (!target.data_obj["id_" + rootNode.node[options.code]]) {
                             target.data_obj["id_" + rootNode.node[options.code]] = rootNode.node
+
                             tempRoot.push(rootNode)
                         }
                     }
@@ -283,13 +284,13 @@
             })
         }
         // 递归获取节点的根节点
-        var recursionQueryRootNode = function (data, node) {
+        var recursionQueryRootNode = function (data, index, node) {
             for (let i = 0; i < data.length; i++) {
                 if (data[i][options.code] == node[options.parentCode]) {
-                    return recursionQueryRootNode(data, data[i]);
+                    return recursionQueryRootNode(data, i, data[i]);
                 }
                 if (i == data.length - 1) {
-                    return { 'index': i, 'node': node };
+                    return { 'index': index, 'node': node };
                 }
             }
         }
