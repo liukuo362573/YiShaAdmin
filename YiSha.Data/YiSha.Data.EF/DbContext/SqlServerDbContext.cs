@@ -55,7 +55,7 @@ namespace YiSha.Data.EF
             foreach (var entity in modelBuilder.Model.GetEntityTypes())
             {
                 PrimaryKeyConvention.SetPrimaryKey(modelBuilder, entity.Name);
-                var currentTableName = modelBuilder.Entity(entity.Name).Metadata.Relational().TableName;
+                var currentTableName = modelBuilder.Entity(entity.Name).Metadata.GetTableName();
                 modelBuilder.Entity(entity.Name).ToTable(currentTableName.ToLower());
 
                 var properties = entity.GetProperties();

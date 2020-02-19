@@ -4,14 +4,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Dynamic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using YiSha.Util;
 
 namespace YiSha.Data
 {
-    public class ConvertExtension
+    public class DatabasesExtension
     {
         /// <summary>
         /// 将DataReader数据转为Dynamic对象
@@ -37,6 +35,7 @@ namespace YiSha.Data
                 return d;
             }
         }
+
         /// <summary>
         /// 获取模型对象集合
         /// </summary>
@@ -59,8 +58,9 @@ namespace YiSha.Data
                 return list;
             }
         }
+
         /// <summary>
-        /// 将IDataReader转换为 集合
+        /// 将IDataReader转换为集合
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="reader"></param>
@@ -95,6 +95,7 @@ namespace YiSha.Data
                 return list;
             }
         }
+
         /// <summary>
         ///  将IDataReader转换为DataTable
         /// </summary>
@@ -123,6 +124,7 @@ namespace YiSha.Data
                 return objDataTable;
             }
         }
+
         /// <summary>
         /// 获取实体类键值（缓存）
         /// </summary>
@@ -131,40 +133,28 @@ namespace YiSha.Data
         /// <returns></returns>
         public static Hashtable GetPropertyInfo<T>(T entity)
         {
-            Type type = entity.GetType();
-            //object CacheEntity = CacheHelper.GetCache("CacheEntity_" + EntityAttribute.GetEntityTable<T>());
-            object CacheEntity = null;
-            if (CacheEntity == null)
+            Hashtable ht = new Hashtable();
+            PropertyInfo[] props = ReflectionHelper.GetProperties(entity.GetType());
+            foreach (PropertyInfo prop in props)
             {
-                Hashtable ht = new Hashtable();
-                PropertyInfo[] props = type.GetProperties();
-                foreach (PropertyInfo prop in props)
+                bool flag = true;
+                foreach (Attribute attr in prop.GetCustomAttributes(true))
                 {
-                    bool flag = true;
-                    foreach (Attribute attr in prop.GetCustomAttributes(true))
+                    NotMappedAttribute notMapped = attr as NotMappedAttribute;
+                    if (notMapped != null)
                     {
-                        NotMappedAttribute notMapped = attr as NotMappedAttribute;
-                        if (notMapped != null)
-                        {
-                            flag = false;
-                            break;
-                        }
-                    }
-
-                    if (flag)
-                    {
-                        string name = prop.Name;
-                        object value = prop.GetValue(entity, null);
-                        ht[name] = value;
+                        flag = false;
+                        break;
                     }
                 }
-                //CacheHelper.SetCache("CacheEntity_" + EntityAttribute.GetEntityTable<T>(), ht);
-                return ht;
+                if (flag)
+                {
+                    string name = prop.Name;
+                    object value = prop.GetValue(entity, null);
+                    ht[name] = value;
+                }
             }
-            else
-            {
-                return (Hashtable)CacheEntity;
-            }
+            return ht;
         }
 
         //这个类对可空类型进行判断转换，要不然会报错
@@ -179,6 +169,7 @@ namespace YiSha.Data
             }
             return Convert.ChangeType(value, conversionType);
         }
+
         public static bool IsNullOrDBNull(object obj)
         {
             return ((obj is DBNull) || string.IsNullOrEmpty(obj.ToString())) ? true : false;

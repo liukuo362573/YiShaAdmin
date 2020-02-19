@@ -3,14 +3,13 @@ using System.IO;
 using System.Web;
 using System.Text;
 using System.Linq;
-using System.Text.RegularExpressions;
-using YiSha.Util.Model;
-using YiSha.Enum;
-using YiSha.Util.Extension;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using YiSha.Enum;
+using YiSha.Util.Model;
+using YiSha.Util.Extension;
 
 namespace YiSha.Util
 {
@@ -39,10 +38,10 @@ namespace YiSha.Util
         /// <summary>
         /// 上传单个文件
         /// </summary>
-        /// <param name="iFileModule"></param>
+        /// <param name="fileModule"></param>
         /// <param name="fileCollection"></param>
         /// <returns></returns>
-        public async static Task<TData<string>> UploadFile(int iFileModule, IFormFileCollection files)
+        public async static Task<TData<string>> UploadFile(int fileModule, IFormFileCollection files)
         {
             string dirModule = string.Empty;
             TData<string> obj = new TData<string>();
@@ -58,7 +57,7 @@ namespace YiSha.Util
             }
             TData objCheck = null;
             IFormFile file = files[0];
-            switch (iFileModule)
+            switch (fileModule)
             {
                 case (int)UploadFileType.Portrait:
                     objCheck = CheckFileExtension(Path.GetExtension(file.FileName), ".jpg|.jpeg|.gif|.png");
@@ -135,21 +134,21 @@ namespace YiSha.Util
         /// <summary>
         /// 删除单个文件
         /// </summary>
-        /// <param name="iFileModule"></param>
-        /// <param name="path"></param>
+        /// <param name="fileModule"></param>
+        /// <param name="filePath"></param>
         /// <returns></returns>
-        public static TData<string> DeleteFile(int iFileModule, string path)
+        public static TData<string> DeleteFile(int fileModule, string filePath)
         {
             TData<string> obj = new TData<string>();
-            string dirModule = iFileModule.GetDescriptionByEnum<UploadFileType>();
+            string dirModule = fileModule.GetDescriptionByEnum<UploadFileType>();
 
-            if (string.IsNullOrEmpty(path))
+            if (string.IsNullOrEmpty(filePath))
             {
                 obj.Message = "请先选择文件！";
                 return obj;
             }
-            path = "Resource" + Path.DirectorySeparatorChar + dirModule + Path.DirectorySeparatorChar + path;
-            string absoluteDir = Path.Combine(GlobalContext.HostingEnvironment.ContentRootPath, path);
+            filePath = "Resource" + Path.DirectorySeparatorChar + dirModule + Path.DirectorySeparatorChar + filePath;
+            string absoluteDir = Path.Combine(GlobalContext.HostingEnvironment.ContentRootPath, filePath);
             try
             {
                 if (File.Exists(absoluteDir))
@@ -174,28 +173,34 @@ namespace YiSha.Util
         /// <summary>
         /// 下载文件
         /// </summary>
-        /// <param name="httpContext"></param>
-        /// <param name="sFileName"></param>
-        /// <param name="sFilePath"></param>
-        public static void DownLoadFile(HttpContext httpContext, string sFileName, string sFilePath)
+        /// <param name="filePath"></param>
+        /// <param name="delete"></param>
+        /// <returns></returns>
+        public static TData<FileContentResult> DownloadFile(string filePath, int delete)
         {
-            string[] fileNameArr = sFileName.Split('_');
-            sFileName = fileNameArr[fileNameArr.Length - 1];
-
-            httpContext.Response.Headers["Content-Type"] = GetContentType(sFileName);
-            httpContext.Response.Headers["Content-Disposition"] = "attachment; filename=" + HttpUtility.UrlEncode(sFileName);
-
-            using (FileStream fs = new FileStream(sFilePath, FileMode.Open))
+            TData<FileContentResult> obj = new TData<FileContentResult>();
+            string absoluteFilePath = GlobalContext.HostingEnvironment.ContentRootPath + Path.DirectorySeparatorChar + filePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+            byte[] fileBytes = File.ReadAllBytes(absoluteFilePath);
+            if (delete == 1)
             {
-                byte[] bytes = new byte[(int)fs.Length];
-                fs.Read(bytes, 0, (int)fs.Length);
-
-                httpContext.Response.Headers.ContentLength = fs.Length;
-                httpContext.Response.Body.Write(bytes, 0, bytes.Length);
-                httpContext.Response.Body.Flush();
+                File.Delete(absoluteFilePath);
             }
+            string fileNamePrefix = DateTime.Now.ToString("yyyyMMddHHmmss");
+            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
+            string title = string.Empty;
+            if (fileNameWithoutExtension.Contains("_"))
+            {
+                title = fileNameWithoutExtension.Split('_')[1].Trim();
+            }
+            string fileExtensionName = Path.GetExtension(filePath);
+            obj.Result = new FileContentResult(fileBytes, "application/octet-stream")
+            {
+                FileDownloadName = string.Format("{0}_{1}{2}", fileNamePrefix, title, fileExtensionName)
+            };
+            obj.Tag = 1;
+            return obj;
         }
-        #endregion
+        #endregion 
 
         #region GetContentType
         public static string GetContentType(string path)
@@ -231,28 +236,28 @@ namespace YiSha.Util
         }
         #endregion
 
-        public static void CreateDirectory(string dir)
+        public static void CreateDirectory(string directory)
         {
-            if (!Directory.Exists(dir))
+            if (!Directory.Exists(directory))
             {
-                Directory.CreateDirectory(dir);
+                Directory.CreateDirectory(directory);
             }
         }
 
-        public static void DeleteDirectory(string path)
+        public static void DeleteDirectory(string filePath)
         {
             try
             {
-                if (Directory.Exists(path)) //如果存在这个文件夹删除之 
+                if (Directory.Exists(filePath)) //如果存在这个文件夹删除之 
                 {
-                    foreach (string d in Directory.GetFileSystemEntries(path))
+                    foreach (string d in Directory.GetFileSystemEntries(filePath))
                     {
                         if (File.Exists(d))
                             File.Delete(d); //直接删除其中的文件                        
                         else
                             DeleteDirectory(d); //递归删除子文件夹 
                     }
-                    Directory.Delete(path, true); //删除已空文件夹                 
+                    Directory.Delete(filePath, true); //删除已空文件夹                 
                 }
             }
             catch (Exception ex)

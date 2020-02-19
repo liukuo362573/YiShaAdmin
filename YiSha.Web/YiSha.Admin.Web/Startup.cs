@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,35 +15,19 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using YiSha.Util;
 using YiSha.Util.Model;
-using YiSha.Util.Extension;
 using YiSha.Admin.Web.Controllers;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
-using YiSha.Business.AutoJob;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.HttpOverrides;
 
 namespace YiSha.Admin.Web
 {
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        public IConfigurationRoot ConfigurationRoot { get; }
 
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
-
             GlobalContext.LogWhenStart(env);
-
             GlobalContext.HostingEnvironment = env;
-
-            var builder = new ConfigurationBuilder().SetBasePath(env.ContentRootPath)
-                                                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                                                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                                                    .AddEnvironmentVariables();
-            ConfigurationRoot = builder.Build();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -57,7 +46,7 @@ namespace YiSha.Admin.Web
             {
                 options.Filters.Add<GlobalExceptionFilter>();
                 options.ModelMetadataDetailsProviders.Add(new ModelBindingMetadataProvider());
-            });
+            }).AddNewtonsoftJson();
 
             services.AddSession();
             services.AddHttpContextAccessor();
@@ -65,16 +54,14 @@ namespace YiSha.Admin.Web
             services.AddOptions();
 
             services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(GlobalContext.HostingEnvironment.ContentRootPath + Path.DirectorySeparatorChar + "DataProtection"));
-
+            GlobalContext.SystemConfig = Configuration.GetSection("SystemConfig").Get<SystemConfig>();
             GlobalContext.Services = services;
-            GlobalContext.ServiceProvider = services.BuildServiceProvider();
             GlobalContext.Configuration = Configuration;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            GlobalContext.SystemConfig = Configuration.GetSection("SystemConfig").Get<SystemConfig>();
             if (!string.IsNullOrEmpty(GlobalContext.SystemConfig.VirtualDirectory))
             {
                 app.UsePathBase(new PathString(GlobalContext.SystemConfig.VirtualDirectory)); // 让 Pathbase 中间件成为第一个处理请求的中间件， 才能正确的模拟虚拟路径
@@ -90,10 +77,8 @@ namespace YiSha.Admin.Web
             }
 
             string resource = Path.Combine(env.ContentRootPath, "Resource");
-            if (!Directory.Exists(resource))
-            {
-                Directory.CreateDirectory(resource);
-            }
+            FileHelper.CreateDirectory(resource);
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = GlobalContext.SetCacheControl
@@ -105,19 +90,13 @@ namespace YiSha.Admin.Web
                 OnPrepareResponse = GlobalContext.SetCacheControl
             });
             app.UseSession();
-
-            // app.UseMiddleware<RequestResponseLoggingMiddleware>();
-            app.UseMvc(routes =>
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                   name: "areas",
-                   template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-                 );
-
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute("areas", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
+            GlobalContext.ServiceProvider = app.ApplicationServices;
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 
 namespace YiSha.Data.EF
 {
@@ -19,7 +19,7 @@ namespace YiSha.Data.EF
         #region 重载
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySQL(ConnectionString);
+            optionsBuilder.UseMySql(ConnectionString);
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,7 +34,7 @@ namespace YiSha.Data.EF
             foreach (var entity in modelBuilder.Model.GetEntityTypes())
             {
                 PrimaryKeyConvention.SetPrimaryKey(modelBuilder, entity.Name);
-                var currentTableName = modelBuilder.Entity(entity.Name).Metadata.Relational().TableName;
+                var currentTableName = modelBuilder.Entity(entity.Name).Metadata.GetTableName();
                 modelBuilder.Entity(entity.Name).ToTable(currentTableName.ToLower());
 
                 var properties = entity.GetProperties();

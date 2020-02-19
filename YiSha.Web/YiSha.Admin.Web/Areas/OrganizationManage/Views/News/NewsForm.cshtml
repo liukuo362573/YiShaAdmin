@@ -1,11 +1,9 @@
 ﻿@{
     Layout = "~/Views/Shared/_FormWhite.cshtml";
 }
-@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment HostingEnvironment
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
 @section header{
-    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/summernote/0.8.8/summernote.min.css"))
-    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/summernote/0.8.8/summernote.min.js"))
-
+ 
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/imageupload/1.0/css/imgup.min.css"))
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/imageupload/1.0/js/imgup.min.js"))
 
@@ -168,7 +166,7 @@
 
     function uploadNewsImage(file, editor, welEditable) {
         var formdata = new FormData();
-        formdata.append("file", file);
+        formdata.append("fileList", file);
         ys.ajaxUploadFile({
             url: '@GlobalContext.SystemConfig.ApiSite' + '/File/UploadFile?fileModule=@UploadFileType.News.ParseToInt()',
             data: formdata,
@@ -185,7 +183,7 @@
 
     function uploadThumbImage(file, callback) {
         var formdata = new FormData();
-        formdata.append("file", file);
+        formdata.append("fileList", file);
         ys.ajaxUploadFile({
             url: '@GlobalContext.SystemConfig.ApiSite' + '/File/UploadFile?fileModule=@UploadFileType.News.ParseToInt()',
             data: formdata,

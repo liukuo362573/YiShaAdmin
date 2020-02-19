@@ -35,14 +35,7 @@ namespace YiSha.Util
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            try
-            {
-                return reader.Value.ParseToLong();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return reader.Value.ParseToLong();
         }
 
         public override bool CanConvert(Type objectType)
@@ -76,22 +69,7 @@ namespace YiSha.Util
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            try
-            {
-                object dt = reader.Value;
-                if (dt != null)
-                {
-                    return DateTime.Parse(dt.ToString());
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return reader.Value.ParseToString().ParseToDateTime();
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

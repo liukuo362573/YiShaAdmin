@@ -1,14 +1,9 @@
-﻿using MySql.Data.MySqlClient;
-using Oracle.ManagedDataAccess.Client;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Data;
 using System.Data.Common;
-using System.Data.OleDb;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Oracle.ManagedDataAccess.Client;
+using MySql.Data.MySqlClient;
 
 namespace YiSha.Data
 {
@@ -38,6 +33,7 @@ namespace YiSha.Data
             }
             return character;
         }
+
         /// <summary>
         /// 根据配置文件中所配置的数据库类型
         /// 来创建相应数据库的参数对象
@@ -47,6 +43,7 @@ namespace YiSha.Data
         {
             return new SqlParameter();
         }
+
         /// <summary>
         /// 根据配置文件中所配置的数据库类型
         /// 来创建相应数据库的参数对象
@@ -59,6 +56,7 @@ namespace YiSha.Data
             param.Value = value;
             return param;
         }
+
         /// <summary>
         /// 根据配置文件中所配置的数据库类型
         /// 来创建相应数据库的参数对象
@@ -66,12 +64,11 @@ namespace YiSha.Data
         /// <returns></returns>
         public static DbParameter CreateDbParameter(string paramName, object value, DbType dbType)
         {
-            DbParameter param = DbParameterExtension.CreateDbParameter();
+            DbParameter param = CreateDbParameter(paramName, value);
             param.DbType = dbType;
-            param.ParameterName = paramName;
-            param.Value = value;
             return param;
         }
+
         /// <summary>
         /// 转换对应的数据库参数
         /// </summary>
@@ -112,26 +109,6 @@ namespace YiSha.Data
                     throw new Exception("数据库类型目前不支持！");
             }
             return _dbParameter;
-        }
-        /// <summary>
-        /// 转换SQL语句参数标识符
-        /// </summary>
-        /// <param name="cmdText"></param>
-        /// <returns></returns>
-        public static string ToDbSql(string cmdText)
-        {
-            switch (DbHelper.DbType)
-            {
-                case DatabaseType.MySql:
-                    cmdText = cmdText.Replace("@", "?");
-                    break;
-                case DatabaseType.Oracle:
-                    cmdText = cmdText.Replace("@", ":");
-                    break;
-                default:
-                    break;
-            }
-            return cmdText;
         }
     }
 }

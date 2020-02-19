@@ -339,29 +339,7 @@
       "enabled": true,
       "renameLocals": true
     }
-  },
-
-  {
-    "outputFileName": "wwwroot/lib/summernote/0.8.8/summernote.min.css",
-    "inputFiles": [
-      "wwwroot/lib/summernote/0.8.8/summernote.css"
-    ],
-    "minify": {
-      "enabled": true,
-      "renameLocals": true
-    }
-  },
-  {
-    "outputFileName": "wwwroot/lib/summernote/0.8.8/summernote.min.js",
-    "inputFiles": [
-      "wwwroot/lib/summernote/0.8.8/summernote.js",
-      "wwwroot/lib/summernote/0.8.8/lang/summernote-zh-CN.js"
-    ],
-    "minify": {
-      "enabled": true,
-      "renameLocals": true
-    }
-  },
+  },   
 
   {
     "outputFileName": "wwwroot/lib/imageupload/1.0/css/imgup.min.css",

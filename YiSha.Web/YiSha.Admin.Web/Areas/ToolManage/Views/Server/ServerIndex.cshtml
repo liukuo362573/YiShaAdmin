@@ -1,7 +1,7 @@
 ﻿@{
     Layout = "~/Views/Shared/_FormGray.cshtml";
 }
-@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment env
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment env
 
 <div class="wrapper wrapper-content">
     <div class="col-sm-12">
@@ -96,7 +96,7 @@
                                             <td>服务器名称</td>
                                             <td>@Environment.MachineName</td>
                                             <td>操作系统</td>
-                                            <td>@Environment.OSVersion</td>
+                                            <td>@System.Runtime.InteropServices.RuntimeInformation.OSDescription</td>
                                         </tr>
                                         <tr>
                                             <td>外网Ip</td>
@@ -110,7 +110,7 @@
                                             <td>系统运行时长</td>
                                             <td><span col="RunTime"></span></td>
                                             <td>系统架构</td>
-                                            <td>@Html.Raw(Environment.Is64BitOperatingSystem ? "x64" : "x86")</td>
+                                            <td>@System.Runtime.InteropServices.RuntimeInformation.OSArchitecture</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -153,7 +153,7 @@
                                         </tr>
                                         <tr>
                                             <td>.NET Core版本</td>
-                                            <td>@Html.Raw($"{Microsoft.Extensions.DependencyModel.DependencyContext.Default.Target.Framework}")</td>
+                                            <td>@Html.Raw(System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription)</td>
                                             <td>内存占用</td>
                                             <td>@Html.Raw(((Double)System.Diagnostics.Process.GetCurrentProcess().WorkingSet64 / 1048576).ToString("N2") + " MB")</td>
                                         </tr>
@@ -177,7 +177,6 @@
 
 <script>
     $(function () {
-
         $(".modal").appendTo("body"), $("[data-toggle=popover]").popover(), $(".collapse-link").click(function () {
             var div_ibox = $(this).closest("div.ibox"),
                 e = $(this).find("i"),

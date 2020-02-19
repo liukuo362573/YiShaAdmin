@@ -22,9 +22,10 @@ namespace YiSha.Data.EF
         /// <returns></returns>
         public static string DeleteSql(string tableName)
         {
-            StringBuilder strSql = new StringBuilder("delete from " + tableName + "");
+            StringBuilder strSql = new StringBuilder("DELETE FROM " + tableName + "");
             return strSql.ToString();
         }
+
         /// <summary>
         /// 拼接删除SQL语句
         /// </summary>
@@ -34,9 +35,10 @@ namespace YiSha.Data.EF
         /// <returns></returns>
         public static string DeleteSql(string tableName, string propertyName, long propertyValue)
         {
-            StringBuilder strSql = new StringBuilder("delete from " + tableName + " where " + propertyName + " = " + propertyValue + "");
+            StringBuilder strSql = new StringBuilder("DELETE FROM " + tableName + " WHERE " + propertyName + " = " + propertyValue + "");
             return strSql.ToString();
         }
+
         /// <summary>
         /// 拼接批量删除SQL语句
         /// </summary>
@@ -46,7 +48,7 @@ namespace YiSha.Data.EF
         /// <returns></returns>
         public static string DeleteSql(string tableName, string propertyName, long[] propertyValue)
         {
-            StringBuilder strSql = new StringBuilder("delete from " + tableName + " where " + propertyName + " IN (");
+            StringBuilder strSql = new StringBuilder("DELETE FROM " + tableName + " WHERE " + propertyName + " IN (");
             for (long i = 0; i < propertyValue.Length; i++)
             {
                 if (i == 0)
@@ -72,6 +74,7 @@ namespace YiSha.Data.EF
         {
             return dbcontext.Model.FindEntityType(typeof(T));
         }
+
         /// <summary>
         /// 存储过程语句
         /// </summary>

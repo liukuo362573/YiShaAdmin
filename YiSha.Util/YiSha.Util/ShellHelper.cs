@@ -24,6 +24,7 @@ namespace YiSha.Util
             process.Start();
             string result = process.StandardOutput.ReadToEnd();
             process.WaitForExit();
+            process.Dispose();
             return result;
         }
 

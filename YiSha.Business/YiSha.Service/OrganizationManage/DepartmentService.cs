@@ -87,16 +87,16 @@ namespace YiSha.Service.OrganizationManage
 
         public async Task DeleteForm(string ids)
         {
-            var db = this.BaseRepository().BeginTrans();
+            var db = await this.BaseRepository().BeginTrans();
             try
             {
                 long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
                 await db.Delete<DepartmentEntity>(idArr);
-                await db.Commit();
+                await db.CommitTrans();
             }
             catch
             {
-                db.Rollback();
+                await db.RollbackTrans();
                 throw;
             }
         }

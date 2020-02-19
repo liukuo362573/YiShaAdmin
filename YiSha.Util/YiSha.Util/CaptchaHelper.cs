@@ -84,54 +84,63 @@ namespace YiSha.Util
                 Point p3 = new Point(random.Next(map.Width), random.Next(map.Height));
                 Point p4 = new Point(map.Width, random.Next(map.Height));
                 Point[] p = { p1, p2, p3, p4 };
-                Pen pen = new Pen(Color.Gray, 1);
-                graph.DrawBeziers(pen, p);
+                using (Pen pen = new Pen(Color.Gray, 1))
+                {
+                    graph.DrawBeziers(pen, p);
+                }
             }
 
             //文字距中
-            StringFormat format = new StringFormat(StringFormatFlags.NoClip);
-            format.Alignment = StringAlignment.Center;
-            format.LineAlignment = StringAlignment.Center;
-
-            //定义颜色
-            Color[] c = { Color.Black, Color.Red, Color.DarkBlue, Color.Green, Color.Orange, Color.Brown, Color.DarkCyan, Color.Purple };
-            //定义字体
-            string[] fonts = { "Verdana", "Microsoft Sans Serif", "Comic Sans MS", "Arial", "宋体" };
-            int cindex = random.Next(7);
-
-            //验证码旋转，防止机器识别
-            char[] chars = randomCode.ToCharArray();//拆散字符串成单字符数组
-            foreach (char t in chars)
+            using (StringFormat format = new StringFormat(StringFormatFlags.NoClip))
             {
-                int findex = random.Next(5);
-                Font font = new Font(fonts[findex], 14, FontStyle.Bold);//字体样式(参数2为字体大小)
-                Brush brush = new SolidBrush(c[cindex]);
+                format.Alignment = StringAlignment.Center;
+                format.LineAlignment = StringAlignment.Center;
 
-                Point dot = new Point(14, 14);
-                float angle = random.Next(-randAngle, randAngle);//转动的度数
-                if (t == '+' || t == '-' || t == '*')
+                //定义颜色
+                Color[] c = { Color.Black, Color.Red, Color.DarkBlue, Color.Green, Color.Orange, Color.Brown, Color.DarkCyan, Color.Purple };
+                //定义字体
+                string[] fonts = { "Verdana", "Microsoft Sans Serif", "Comic Sans MS", "Arial", "宋体" };
+                int cindex = random.Next(7);
+
+                //验证码旋转，防止机器识别
+                char[] chars = randomCode.ToCharArray();//拆散字符串成单字符数组
+                foreach (char t in chars)
                 {
-                    //加减乘运算符不进行旋转
-                    graph.TranslateTransform(dot.X, dot.Y);//移动光标到指定位置
-                    graph.DrawString(t.ToString(), font, brush, 1, 1, format);
-                    graph.TranslateTransform(-2, -dot.Y);//移动光标到指定位置，每个字符紧凑显示，避免被软件识别
-                }
-                else
-                {
-                    graph.TranslateTransform(dot.X, dot.Y);//移动光标到指定位置
-                    graph.RotateTransform(angle);
-                    graph.DrawString(t.ToString(), font, brush, 1, 1, format);
-                    graph.RotateTransform(-angle);//转回去
-                    graph.TranslateTransform(-2, -dot.Y);//移动光标到指定位置，每个字符紧凑显示，避免被软件识别
+                    int findex = random.Next(5);
+                    using (Font font = new Font(fonts[findex], 14, FontStyle.Bold))//字体样式(参数2为字体大小)
+                    {
+                        using (Brush brush = new SolidBrush(c[cindex]))
+                        {
+                            Point dot = new Point(14, 14);
+                            float angle = random.Next(-randAngle, randAngle);//转动的度数
+                            if (t == '+' || t == '-' || t == '*')
+                            {
+                                //加减乘运算符不进行旋转
+                                graph.TranslateTransform(dot.X, dot.Y);//移动光标到指定位置
+                                graph.DrawString(t.ToString(), font, brush, 1, 1, format);
+                                graph.TranslateTransform(-2, -dot.Y);//移动光标到指定位置，每个字符紧凑显示，避免被软件识别
+                            }
+                            else
+                            {
+                                graph.TranslateTransform(dot.X, dot.Y);//移动光标到指定位置
+                                graph.RotateTransform(angle);
+                                graph.DrawString(t.ToString(), font, brush, 1, 1, format);
+                                graph.RotateTransform(-angle);//转回去
+                                graph.TranslateTransform(-2, -dot.Y);//移动光标到指定位置，每个字符紧凑显示，避免被软件识别
+                            }
+                        }
+                    }
                 }
             }
             //生成图片
-            MemoryStream ms = new MemoryStream();
-            map.Save(ms, ImageFormat.Gif);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                map.Save(ms, ImageFormat.Gif);
 
-            graph.Dispose();
-            map.Dispose();
-            return ms.GetBuffer();
+                graph.Dispose();
+                map.Dispose();
+                return ms.GetBuffer();
+            }
         }
         #endregion
     }

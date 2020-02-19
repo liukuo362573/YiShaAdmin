@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KingDragorse.Util
+namespace YiSha.Util
 {
     public class ConcurrentList<T> : IList<T>
     {

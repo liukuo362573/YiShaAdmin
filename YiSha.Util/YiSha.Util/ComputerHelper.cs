@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using YiSha.Util.Extension;
 
 namespace YiSha.Util
@@ -22,6 +21,7 @@ namespace YiSha.Util
                 computerInfo.TotalRAM = Math.Ceiling(memoryMetrics.Total / 1024).ToString() + " GB";
                 computerInfo.RAMRate = Math.Ceiling(100 * memoryMetrics.Used / memoryMetrics.Total).ToString() + " %";
                 computerInfo.CPURate = Math.Ceiling(GetCPURate().ParseToDouble()) + " %";
+                computerInfo.RunTime = GetRunTime();
             }
             catch (Exception ex)
             {
@@ -51,13 +51,41 @@ namespace YiSha.Util
             }
             return cpuRate;
         }
+
+        public static string GetRunTime()
+        {
+            string runTime = string.Empty;
+            try
+            {
+                if (IsUnix())
+                {
+                    string output = ShellHelper.Bash("uptime -s");
+                    output = output.Trim();
+                    runTime = DateTimeHelper.FormatTime((DateTime.Now - output.ParseToDateTime()).TotalMilliseconds.ToString().Split('.')[0].ParseToLong());
+                }
+                else
+                {
+                    string output = ShellHelper.Cmd("wmic", "OS get LastBootUpTime/Value");
+                    string[] outputArr = output.Split("=", StringSplitOptions.RemoveEmptyEntries);
+                    if (outputArr.Length == 2)
+                    {
+                        runTime = DateTimeHelper.FormatTime((DateTime.Now - outputArr[1].Split('.')[0].ParseToDateTime()).TotalMilliseconds.ToString().Split('.')[0].ParseToLong());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteWithTime(ex);
+            }
+            return runTime;
+        }
     }
 
     public class MemoryMetrics
     {
-        public double Total;
-        public double Used;
-        public double Free;
+        public double Total { get; set; }
+        public double Used { get; set; }
+        public double Free { get; set; }
     }
 
     public class MemoryMetricsClient

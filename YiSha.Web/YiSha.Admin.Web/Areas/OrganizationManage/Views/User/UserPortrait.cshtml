@@ -2,7 +2,7 @@
     Layout = "~/Views/Shared/_FormWhite.cshtml";
 }
 
-@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment HostingEnvironment
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
 @section header{
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/cropbox/1.0/cropbox.min.css"))
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/cropbox/1.0/cropbox.min.js"))
@@ -87,7 +87,7 @@
         }
         var img = cropper.getBlob();
         var formdata = new FormData();
-        formdata.append("file", img, imgFileName);
+        formdata.append("fileList", img, imgFileName);
         ys.ajaxUploadFile({
             url: '@GlobalContext.SystemConfig.ApiSite' + '/File/UploadFile?fileModule=@UploadFileType.Portrait.ParseToInt()',
             data: formdata,

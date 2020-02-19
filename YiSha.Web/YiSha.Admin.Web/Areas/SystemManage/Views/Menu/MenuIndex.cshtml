@@ -2,7 +2,7 @@
     Layout = "~/Views/Shared/_Index.cshtml";
 }
 
-@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment HostingEnvironment
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
 @section header{
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/bootstrap.treetable/1.0/bootstrap-treetable.min.css"))
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/bootstrap.treetable/1.0/bootstrap-treetable.min.js"))

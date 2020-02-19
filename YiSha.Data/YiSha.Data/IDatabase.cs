@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -11,9 +13,12 @@ namespace YiSha.Data
     public interface IDatabase
     {
         Task<IDatabase> BeginTrans();
-        Task<int> Commit();
-        void Rollback();
-        void Close();
+        Task<int> CommitTrans();
+        Task RollbackTrans();
+        Task Close();
+
+        DbContext dbContext { get; set; } // 当前使用的数据访问上下文对象
+        IDbContextTransaction dbContextTransaction { get; set; }  // 事务对象
 
         Task<int> ExecuteBySql(string strSql);
         Task<int> ExecuteBySql(string strSql, params DbParameter[] dbParameter);

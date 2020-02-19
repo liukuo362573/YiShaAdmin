@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace YiSha.Util
 {
-    public static class DataHelper
+    public static class DataTableHelper
     {
         public static DataTable ListToDataTable<T>(List<T> entitys)
         {
@@ -44,14 +44,6 @@ namespace YiSha.Util
                 dt.Rows.Add(entityValues);
             }
             return dt;
-        }
-
-        public static IEnumerable<DataRow> AsEnumerable(this DataTable table)
-        {
-            for (int i = 0; i < table.Rows.Count; i++)
-            {
-                yield return table.Rows[i];
-            }
         }
     }
 }

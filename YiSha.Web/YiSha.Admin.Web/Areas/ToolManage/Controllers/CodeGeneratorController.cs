@@ -115,7 +115,7 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
             {
                 SingleTableTemplate template = new SingleTableTemplate();
                 TData<List<TableFieldInfo>> objTable = await databaseTableBLL.GetTableFieldList(baseConfig.TableName);
-                DataTable dt = DataHelper.ListToDataTable(objTable.Result);  // 用DataTable类型，避免依赖
+                DataTable dt = DataTableHelper.ListToDataTable(objTable.Result);  // 用DataTable类型，避免依赖
                 string codeEntity = template.BuildEntity(baseConfig, dt);
                 string codeEntityParam = template.BuildEntityParam(baseConfig);
                 string codeService = template.BuildService(baseConfig, dt);

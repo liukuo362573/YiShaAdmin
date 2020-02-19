@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +31,6 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
             try
             {
                 computerInfo = ComputerHelper.GetComputerInfo();
-                computerInfo.RunTime = DateTimeHelper.FormatTime(Environment.TickCount);
             }
             catch (Exception ex)
             {
@@ -51,7 +51,6 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
             obj.Tag = 1;
             return Json(obj);
         }
-        #endregion
-
+        #endregion    　
     }
 }

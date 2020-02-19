@@ -30,18 +30,18 @@ namespace YiSha.Data.Repository
         #endregion
 
         #region 事务提交
-        public Repository BeginTrans()
+        public async Task<Repository> BeginTrans()
         {
-            db.BeginTrans();
+            await db.BeginTrans();
             return this;
         }
-        public async Task<int> Commit()
+        public async Task<int> CommitTrans()
         {
-            return await db.Commit();
+            return await db.CommitTrans();
         }
-        public void Rollback()
+        public async Task RollbackTrans()
         {
-            db.Rollback();
+            await db.RollbackTrans();
         }
         #endregion
 

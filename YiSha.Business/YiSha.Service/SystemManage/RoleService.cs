@@ -62,7 +62,7 @@ namespace YiSha.Service.SystemManage
         #region 提交数据
         public async Task SaveForm(RoleEntity entity)
         {
-            var db = this.BaseRepository().BeginTrans();
+            var db = await this.BaseRepository().BeginTrans();
             try
             {
                 if (entity.Id.IsNullOrZero())
@@ -89,11 +89,11 @@ namespace YiSha.Service.SystemManage
                         await db.Insert(menuAuthorizeEntity);
                     }
                 }
-                await db.Commit();
+                await db.CommitTrans();
             }
             catch
             {
-                db.Rollback();
+                await db.RollbackTrans();
                 throw;
             }
         }

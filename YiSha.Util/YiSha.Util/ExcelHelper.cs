@@ -72,7 +72,7 @@ namespace YiSha.Util
             for (int columnIndex = 0; columnIndex < properties.Length; columnIndex++)
             {
                 //GBK对应的code page是CP936
-                arrColWidth[columnIndex] = Encoding.GetEncoding(936).GetBytes(properties[columnIndex].Name).Length;
+                arrColWidth[columnIndex] = properties[columnIndex].Name.Length;
             }
             #endregion
             for (int rowIndex = 0; rowIndex < list.Count; rowIndex++)
@@ -100,7 +100,7 @@ namespace YiSha.Util
 
                         headerRow.GetCell(0).CellStyle = headStyle;
 
-                        sheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, properties.Count() - 1));
+                        sheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, properties.Length - 1));
                     }
                     #endregion
 

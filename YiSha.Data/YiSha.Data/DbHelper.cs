@@ -57,9 +57,9 @@ namespace YiSha.Data
         /// <returns></returns>
         public async Task<IDataReader> ExecuteReadeAsync(CommandType cmdType, string strSql)
         {
-            //Oracle.DataAccess.Client
             return await ExecuteReadeAsync(cmdType, strSql, null);
         }
+
         /// <summary>
         /// 执行SQL返回 DataReader
         /// </summary>
@@ -81,6 +81,7 @@ namespace YiSha.Data
                 throw;
             }
         }
+
         /// <summary>
         /// 执行查询，并返回查询所返回的结果集
         /// </summary>
@@ -91,6 +92,7 @@ namespace YiSha.Data
         {
             return await ExecuteScalarAsync(cmdType, strSql);
         }
+
         /// <summary>
         /// 执行查询，并返回查询所返回的结果集
         /// </summary>
@@ -113,6 +115,7 @@ namespace YiSha.Data
                 throw;
             }
         }
+
         /// <summary>
         /// 为即将执行准备一个命令
         /// </summary>
@@ -127,7 +130,7 @@ namespace YiSha.Data
             if (conn.State != ConnectionState.Open)
                 conn.Open();
             cmd.Connection = conn;
-            cmd.CommandText = strSql; // DbParameters.ToDbSql(cmdText);
+            cmd.CommandText = strSql;
             if (isOpenTrans != null)
                 cmd.Transaction = isOpenTrans;
             cmd.CommandType = cmdType;

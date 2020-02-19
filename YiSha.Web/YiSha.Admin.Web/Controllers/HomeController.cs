@@ -123,7 +123,8 @@ namespace YiSha.Admin.Web.Controllers
         #region 获取数据
         public IActionResult GetCaptchaImage()
         {
-            var test = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>().HttpContext.Session.Id;
+            string sessionId = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>().HttpContext.Session.Id;
+
             Tuple<string, int> captchaCode = CaptchaHelper.GetCaptchaCode();
             byte[] bytes = CaptchaHelper.CreateCaptchaImage(captchaCode.Item1);
             new SessionHelper().WriteSession("CaptchaCode", captchaCode.Item2);

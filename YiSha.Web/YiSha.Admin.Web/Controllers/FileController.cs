@@ -15,37 +15,34 @@ namespace YiSha.Admin.Web.Controllers
     {
         #region 上传单个文件
         [HttpPost]
-        public async Task<IActionResult> UploadFile(int fileModule, IFormCollection files)
+        public async Task<TData<string>> UploadFile(int fileModule, IFormCollection fileList)
         {
-            TData<string> obj = await FileHelper.UploadFile(fileModule, files.Files);
-            return Json(obj);
+            TData<string> obj = await FileHelper.UploadFile(fileModule, fileList.Files);
+            return obj;
         }
         #endregion
 
         #region 删除单个文件
         [HttpPost]
-        public IActionResult DeleteFile(int fileModule, string path)
+        public TData<string> DeleteFile(int fileModule, string filePath)
         {
-            TData<string> obj = FileHelper.DeleteFile(fileModule, path);
-            return Json(obj);
+            TData<string> obj = FileHelper.DeleteFile(fileModule, filePath);
+            return obj;
         }
         #endregion
 
         #region 下载文件
         [HttpGet]
-        public void DownloadFile(string fileName, int delete = 1)
+        public FileContentResult DownloadFile(string filePath, int delete = 1)
         {
-            fileName = fileName.ParseToString();
-            string filePath = Path.Combine(GlobalContext.HostingEnvironment.ContentRootPath, fileName);
-            if (!System.IO.File.Exists(filePath))
+            TData<FileContentResult> obj = FileHelper.DownloadFile(filePath, delete);
+            if (obj.Tag == 1)
             {
-                throw new FileNotFoundException("文件不存在：" + filePath);
+                return obj.Result;
             }
-            fileName = Path.GetFileName(fileName);
-            FileHelper.DownLoadFile(HttpContext, fileName, filePath);
-            if (delete == 1)
+            else
             {
-                System.IO.File.Delete(filePath);
+                throw new Exception("下载失败：" + obj.Message);
             }
         }
         #endregion
