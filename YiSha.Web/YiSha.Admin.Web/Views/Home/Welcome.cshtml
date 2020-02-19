@@ -118,10 +118,24 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h5 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#version" href="#v310">v3.1.0</a><code class="pull-right">2020.02.20</code>
+                                        </h5>
+                                    </div>
+                                    <div id="v310" class="panel-collapse collapse in">
+                                        <div class="panel-body">
+                                            <ol>
+                                                <li>1. 框架由.NET Core 2.2升级到.NET Core 3.1</li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h5 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#version" href="#v220">v2.2.0</a><code class="pull-right">2019.09.27</code>
                                         </h5>
                                     </div>
-                                    <div id="v220" class="panel-collapse collapse in">
+                                    <div id="v220" class="panel-collapse collapse">
                                         <div class="panel-body">
                                             <ol>
                                                 <li>1. 正式开源YiShaAdmin 2.2</li>
@@ -137,20 +151,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                @*<div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h5 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#version" href="#v200">v2.0.0</a><code class="pull-right">2019.02.25</code>
-                                        </h5>
-                                    </div>
-                                    <div id="v200" class="panel-collapse collapse">
-                                        <div class="panel-body">
-                                            <ol>
-                                                <li>后端框架迁移至.Net Core 2.2</li>
-                                            </ol>
-                                        </div>
-                                    </div>
-                                </div>*@
                             </div>
                         </div>
                     </div>
@@ -203,8 +203,8 @@
 
         $('#pay-qrcode').click(function () {
             var html = $(this).html();
-            ys.openDialogContent({              
-                content: html, 
+            ys.openDialogContent({
+                content: html,
                 width: '600px',
                 height: '321px'
             });
