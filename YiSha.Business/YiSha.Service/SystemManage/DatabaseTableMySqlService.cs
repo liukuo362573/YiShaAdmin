@@ -28,7 +28,7 @@ namespace YiSha.Service.SystemManage
             {
                 list = list.Where(p => p.TableName.Contains(tableName));
             }
-            SetTableDetail(list);
+            await SetTableDetail(list);
             return list.ToList();
         }
 
@@ -45,7 +45,7 @@ namespace YiSha.Service.SystemManage
             }
 
             IEnumerable<TableInfo> list = await this.BaseRepository().FindList<TableInfo>(strSql.ToString(), parameter.ToArray(), pagination);
-            SetTableDetail(list);
+            await SetTableDetail(list);
             return list.ToList();
         }
 
@@ -129,7 +129,7 @@ namespace YiSha.Service.SystemManage
         /// 赋值表的主键、主键名称、记录数
         /// </summary>
         /// <param name="list"></param>
-        private async void SetTableDetail(IEnumerable<TableInfo> list)
+        private async Task SetTableDetail(IEnumerable<TableInfo> list)
         {
             List<TableInfo> detailList = await GetTableDetailList();
             foreach (TableInfo table in list)
