@@ -42,7 +42,7 @@ namespace YiSha.Admin.Web
 
             services.AddSingleton(HtmlEncoder.Create(UnicodeRanges.All));
 
-            services.AddMvc(options =>
+            services.AddControllersWithViews(options =>
             {
                 options.Filters.Add<GlobalExceptionFilter>();
                 options.ModelMetadataDetailsProviders.Add(new ModelBindingMetadataProvider());
