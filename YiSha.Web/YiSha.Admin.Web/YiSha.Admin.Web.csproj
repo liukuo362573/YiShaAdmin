@@ -7,38 +7,13 @@
     <Company>YiSha.Admin.Web</Company>
     <Authors>YiSha.Admin.Web</Authors>
     <Product>YiShaAdmin</Product>
-    <Copyright>yishasoft</Copyright>
+    <Copyright>YiShaAdmin</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="DataProtection\**" />
-    <Compile Remove="Resource\Export\**" />
-    <Compile Remove="Resource\News\**" />
-    <Compile Remove="Resource\Portrait\**" />
-    <Compile Remove="wwwroot\css\**" />
-    <Compile Remove="wwwroot\resource\**" />
-    <Compile Remove="wwwroot\script\**" />
-    <Content Remove="DataProtection\**" />
-    <Content Remove="Resource\Export\**" />
-    <Content Remove="Resource\News\**" />
-    <Content Remove="Resource\Portrait\**" />
-    <Content Remove="wwwroot\css\**" />
-    <Content Remove="wwwroot\resource\**" />
-    <Content Remove="wwwroot\script\**" />
-    <EmbeddedResource Remove="DataProtection\**" />
-    <EmbeddedResource Remove="Resource\Export\**" />
-    <EmbeddedResource Remove="Resource\News\**" />
-    <EmbeddedResource Remove="Resource\Portrait\**" />
-    <EmbeddedResource Remove="wwwroot\css\**" />
-    <EmbeddedResource Remove="wwwroot\resource\**" />
-    <EmbeddedResource Remove="wwwroot\script\**" />
-    <None Remove="DataProtection\**" />
-    <None Remove="Resource\Export\**" />
-    <None Remove="Resource\News\**" />
-    <None Remove="Resource\Portrait\**" />
-    <None Remove="wwwroot\css\**" />
-    <None Remove="wwwroot\resource\**" />
-    <None Remove="wwwroot\script\**" />
+    <Content Include="dotnet_run.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -56,19 +31,4 @@
     <ProjectReference Include="..\..\YiSha.Util\YiSha.Util\YiSha.Util.csproj" />
     <ProjectReference Include="..\YiSha.Web.Code\YiSha.Web.Code.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\lib\bootstrap.tagsinput\0.8.0\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\template\导入用户模板.xls" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="dotnet run.bat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>
