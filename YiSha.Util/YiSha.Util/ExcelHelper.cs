@@ -5,8 +5,8 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using NPOI.HSSF.UserModel;
+using NPOI.XSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using YiSha.Util.Extension;
@@ -217,12 +217,27 @@ namespace YiSha.Util
         {
             string absoluteFilePath = GlobalContext.HostingEnvironment.ContentRootPath + filePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
             List<T> list = new List<T>();
-            HSSFWorkbook hssfworkbook = null;
+            HSSFWorkbook hssfWorkbook = null;
+            XSSFWorkbook xssWorkbook = null;
+            ISheet sheet = null;
             using (FileStream file = new FileStream(absoluteFilePath, FileMode.Open, FileAccess.Read))
             {
-                hssfworkbook = new HSSFWorkbook(file);
+                switch (Path.GetExtension(filePath))
+                {
+                    case ".xls":
+                        hssfWorkbook = new HSSFWorkbook(file);
+                        sheet = hssfWorkbook.GetSheetAt(0);
+                        break;
+
+                    case ".xlsx":
+                        xssWorkbook = new XSSFWorkbook(file);
+                        sheet = xssWorkbook.GetSheetAt(0);
+                        break;
+
+                    default:
+                        throw new Exception("不支持的文件格式");
+                }
             }
-            ISheet sheet = hssfworkbook.GetSheetAt(0);
             IRow columnRow = sheet.GetRow(1); // 第二行为字段名
             Dictionary<int, PropertyInfo> mapPropertyInfoDict = new Dictionary<int, PropertyInfo>();
             for (int j = 0; j < columnRow.LastCellNum; j++)
