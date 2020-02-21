@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using Newtonsoft.Json.Serialization;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Hosting;
@@ -46,7 +47,11 @@ namespace YiSha.Admin.Web
             {
                 options.Filters.Add<GlobalExceptionFilter>();
                 options.ModelMetadataDetailsProviders.Add(new ModelBindingMetadataProvider());
-            }).AddNewtonsoftJson();
+            }).AddNewtonsoftJson(options =>
+            {
+                // 返回数据首字母不小写，CamelCasePropertyNamesContractResolver是小写
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+            });
 
             services.AddSession();
             services.AddHttpContextAccessor();
