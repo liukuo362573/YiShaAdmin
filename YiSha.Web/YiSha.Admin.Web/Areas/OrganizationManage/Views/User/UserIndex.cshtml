@@ -107,6 +107,7 @@
     function initTree() {
         $('#departmentTree').ysTree({
             url: '@Url.Content("~/OrganizationManage/Department/GetDepartmentTreeListJson")',
+            async: true,
             expandLevel: 2,
             callback: {
                 onClick: function (event, treeId, treeNode) {
