@@ -8,20 +8,19 @@ using YiSha.Service.SystemManage;
 
 namespace YiSha.Business.Cache
 {
-    public class MenuCache
+    public class MenuCache : BaseBusinessCache<MenuEntity>
     {
-        private string cacheKey = typeof(MenuCache).Name;
-
         private MenuService menuService = new MenuService();
 
-        public async Task<List<MenuEntity>> GetList()
+        public override string CacheKey => this.GetType().Name;
+
+        public override async Task<List<MenuEntity>> GetList()
         {
-            var cacheList = CacheFactory.Cache().GetCache<List<MenuEntity>>(cacheKey);
+            var cacheList = CacheFactory.Cache().GetCache<List<MenuEntity>>(CacheKey);
             if (cacheList == null)
             {
-                var data = await menuService.GetList(null);
-                var list = data.ToList();
-                CacheFactory.Cache().AddCache(cacheKey, list);
+                var list = await menuService.GetList(null);
+                CacheFactory.Cache().SetCache(CacheKey, list);
                 return list;
             }
             else
@@ -29,11 +28,5 @@ namespace YiSha.Business.Cache
                 return cacheList;
             }
         }
-
-        public void Remove()
-        {
-            CacheFactory.Cache().RemoveCache(cacheKey);
-        }
-
     }
 }

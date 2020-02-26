@@ -45,6 +45,7 @@ namespace YiSha.Admin.WebApi
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver(); 
             });
 
+            services.AddMemoryCache();
             services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(GlobalContext.HostingEnvironment.ContentRootPath + Path.DirectorySeparatorChar + "DataProtection"));
 
             GlobalContext.SystemConfig = Configuration.GetSection("SystemConfig").Get<SystemConfig>();

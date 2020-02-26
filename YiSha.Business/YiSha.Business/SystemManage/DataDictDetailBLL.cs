@@ -8,12 +8,15 @@ using YiSha.Util.Model;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Service.SystemManage;
+using YiSha.Business.Cache;
 
 namespace YiSha.Business.SystemManage
 {
     public class DataDictDetailBLL
     {
         private DataDictDetailService dataDictDetailService = new DataDictDetailService();
+
+        private DataDictDetailCache dataDictDetailCache = new DataDictDetailCache();
 
         #region  获取数据
         public async Task<TData<List<DataDictDetailEntity>>> GetList(DataDictDetailListParam param)
@@ -66,6 +69,7 @@ namespace YiSha.Business.SystemManage
                 return obj;
             }
             await dataDictDetailService.SaveForm(entity);
+            dataDictDetailCache.Remove();
             obj.Result = entity.Id.ParseToString();
             obj.Tag = 1;
             return obj;
@@ -75,6 +79,7 @@ namespace YiSha.Business.SystemManage
         {
             TData<long> obj = new TData<long>();
             await dataDictDetailService.DeleteForm(ids);
+            dataDictDetailCache.Remove();
             obj.Tag = 1;
             return obj;
         }

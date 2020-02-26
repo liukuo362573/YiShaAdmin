@@ -9,6 +9,7 @@ using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Service.SystemManage;
 using YiSha.Model.Result.SystemManage;
+using YiSha.Business.Cache;
 
 namespace YiSha.Business.SystemManage
 {
@@ -16,6 +17,9 @@ namespace YiSha.Business.SystemManage
     {
         private DataDictService dataDictService = new DataDictService();
         private DataDictDetailService dataDictDetailService = new DataDictDetailService();
+
+        private DataDictCache dataDictCache = new DataDictCache();
+        private DataDictDetailCache dataDictDetailCache = new DataDictDetailCache();
 
         #region 获取数据
         public async Task<TData<List<DataDictEntity>>> GetList(DataDictListParam param)
@@ -59,10 +63,8 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<DataDictInfo>>> GetDataDictList()
         {
             TData<List<DataDictInfo>> obj = new TData<List<DataDictInfo>>();
-
-            List<DataDictEntity> dataDictList = await dataDictService.GetList(null);
-            List<DataDictDetailEntity> dataDictDetailList = await dataDictDetailService.GetList(null);
-
+            List<DataDictEntity> dataDictList = await dataDictCache.GetList();
+            List<DataDictDetailEntity> dataDictDetailList = await dataDictDetailCache.GetList();
             List<DataDictInfo> dataDictInfoList = new List<DataDictInfo>();
             foreach (DataDictEntity dataDict in dataDictList)
             {
@@ -98,7 +100,7 @@ namespace YiSha.Business.SystemManage
             }
 
             await dataDictService.SaveForm(entity);
-
+            dataDictCache.Remove();
             obj.Result = entity.Id.ParseToString();
             obj.Tag = 1;
             return obj;
@@ -117,6 +119,7 @@ namespace YiSha.Business.SystemManage
                 }
             }
             await dataDictService.DeleteForm(ids);
+            dataDictCache.Remove();
             obj.Tag = 1;
             return obj;
         }

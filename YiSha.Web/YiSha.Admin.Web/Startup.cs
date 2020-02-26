@@ -53,6 +53,7 @@ namespace YiSha.Admin.Web
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
             });
 
+            services.AddMemoryCache();
             services.AddSession();
             services.AddHttpContextAccessor();
 

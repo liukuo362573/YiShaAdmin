@@ -1,28 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Caching.Memory;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using StackExchange.Redis;
 using YiSha.Cache.Interface;
 using YiSha.Util;
 
-namespace YiSha.MemoryCache
+namespace YiSha.RedisCache
 {
-    public class MemoryCacheImp : ICache
+    public class RedisCacheImp : ICache
     {
-        private IMemoryCache cache = GlobalContext.ServiceProvider.GetService<IMemoryCache>();
+        private IDatabase cache;
+        private ConnectionMultiplexer connection;
+
+        public RedisCacheImp()
+        {
+            connection = ConnectionMultiplexer.Connect("");
+            cache = connection.GetDatabase(3);
+        }
 
         public bool SetCache<T>(string key, T value, DateTime? expireTime = null)
         {
             try
             {
+                var jsonOption = new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                };
+                string strValue = JsonConvert.SerializeObject(value, jsonOption);
+                if (string.IsNullOrEmpty(strValue))
+                {
+                    return false;
+                }
                 if (expireTime == null)
                 {
-                    return cache.Set<T>(key, value) != null;
+                    return cache.StringSet(key, strValue);
                 }
                 else
                 {
-                    return cache.Set(key, value, (expireTime.Value - DateTime.Now)) != null;
+                    return cache.StringSet(key, strValue, (expireTime.Value - DateTime.Now));
                 }
             }
             catch (Exception ex)
@@ -34,14 +50,26 @@ namespace YiSha.MemoryCache
 
         public bool RemoveCache(string key)
         {
-            cache.Remove(key);
-            return true;
+            return cache.KeyDelete(key);
         }
 
         public T GetCache<T>(string key)
         {
-            var value = cache.Get<T>(key);
-            return value;
+            var t = default(T);
+            try
+            {
+                var value = cache.StringGet(key);
+                if (string.IsNullOrEmpty(value))
+                {
+                    return t;
+                }
+                t = JsonConvert.DeserializeObject<T>(value);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteWithTime(ex);
+            }
+            return t;
         }
 
         #region Hash
@@ -53,9 +81,14 @@ namespace YiSha.MemoryCache
         public int SetHashFieldCache<T>(string key, Dictionary<string, T> dict)
         {
             int count = 0;
+            var jsonOption = new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            };
             foreach (string fieldKey in dict.Keys)
             {
-                count += cache.Set(key, dict) != null ? 1 : 0;
+                string fieldValue = JsonConvert.SerializeObject(dict[fieldKey], jsonOption);
+                count += cache.HashSet(key, fieldKey, fieldValue) ? 1 : 0;
             }
             return count;
         }
@@ -68,10 +101,10 @@ namespace YiSha.MemoryCache
 
         public Dictionary<string, T> GetHashFieldCache<T>(string key, Dictionary<string, T> dict)
         {
-            var hashFields = cache.Get<Dictionary<string, T>>(key);
-            foreach (KeyValuePair<string, T> keyValuePair in hashFields.Where(p => dict.Keys.Contains(p.Key)))
+            foreach (string fieldKey in dict.Keys)
             {
-                dict[keyValuePair.Key] = keyValuePair.Value;
+                string fieldValue = cache.HashGet(key, fieldKey);
+                dict[fieldKey] = JsonConvert.DeserializeObject<T>(fieldValue);
             }
             return dict;
         }
@@ -79,10 +112,10 @@ namespace YiSha.MemoryCache
         public Dictionary<string, T> GetHashCache<T>(string key)
         {
             Dictionary<string, T> dict = new Dictionary<string, T>();
-            var hashFields = cache.Get<Dictionary<string, T>>(key);
-            foreach (string field in hashFields.Keys)
+            var hashFields = cache.HashGetAll(key);
+            foreach (HashEntry field in hashFields)
             {
-                dict[field] = hashFields[field];
+                dict[field.Name] = JsonConvert.DeserializeObject<T>(field.Value);
             }
             return dict;
         }
@@ -90,10 +123,10 @@ namespace YiSha.MemoryCache
         public List<T> GetHashToListCache<T>(string key)
         {
             List<T> list = new List<T>();
-            var hashFields = cache.Get<Dictionary<string, T>>(key);
-            foreach (string field in hashFields.Keys)
+            var hashFields = cache.HashGetAll(key);
+            foreach (HashEntry field in hashFields)
             {
-                list.Add(hashFields[field]);
+                list.Add(JsonConvert.DeserializeObject<T>(field.Value));
             }
             return list;
         }
@@ -107,10 +140,9 @@ namespace YiSha.MemoryCache
 
         public Dictionary<string, bool> RemoveHashFieldCache(string key, Dictionary<string, bool> dict)
         {
-            var hashFields = cache.Get<Dictionary<string, object>>(key);
             foreach (string fieldKey in dict.Keys)
             {
-                dict[fieldKey] = hashFields.Remove(fieldKey);
+                dict[fieldKey] = cache.HashDelete(key, fieldKey);
             }
             return dict;
         }

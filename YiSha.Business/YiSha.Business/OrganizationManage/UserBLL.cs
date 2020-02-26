@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using YiSha.Business.Cache;
 using YiSha.Business.SystemManage;
+using YiSha.Cache.Factory;
 using YiSha.Entity;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Entity.SystemManage;
@@ -27,10 +28,7 @@ namespace YiSha.Business.OrganizationManage
         private UserBelongService userBelongService = new UserBelongService();
         private DepartmentService departmentService = new DepartmentService();
 
-        private LogLoginBLL logLoginBLL = new LogLoginBLL();
         private DepartmentBLL departmentBLL = new DepartmentBLL();
-
-        private UserCache userCache = new UserCache();
 
         #region 获取数据
         public async Task<TData<List<UserEntity>>> GetList(UserListParam param)
@@ -184,7 +182,7 @@ namespace YiSha.Business.OrganizationManage
             }
             await userService.SaveForm(entity);
 
-            await RemoveCacheByToken(entity.Id.Value);
+            await RemoveCacheById(entity.Id.Value);
 
             obj.Result = entity.Id.ParseToString();
             obj.Tag = 1;
@@ -201,7 +199,7 @@ namespace YiSha.Business.OrganizationManage
             }
             await userService.DeleteForm(ids);
 
-            await RemoveCacheByToken(ids);
+            await RemoveCacheById(ids);
 
             obj.Tag = 1;
             return obj;
@@ -222,7 +220,7 @@ namespace YiSha.Business.OrganizationManage
                 entity.Password = EncryptUserPassword(entity.Password, entity.Salt);
                 await userService.ResetPassword(entity);
 
-                await RemoveCacheByToken(entity.Id.Value);
+                await RemoveCacheById(entity.Id.Value);
 
                 obj.Result = entity.Id.Value;
                 obj.Tag = 1;
@@ -250,7 +248,7 @@ namespace YiSha.Business.OrganizationManage
                 dbUserEntity.Password = EncryptUserPassword(param.NewPassword, dbUserEntity.Salt);
                 await userService.ResetPassword(dbUserEntity);
 
-                await RemoveCacheByToken(param.Id.Value);
+                await RemoveCacheById(param.Id.Value);
 
                 obj.Result = dbUserEntity.Id.Value;
                 obj.Tag = 1;
@@ -270,7 +268,7 @@ namespace YiSha.Business.OrganizationManage
             {
                 await userService.ChangeUser(entity);
 
-                await RemoveCacheByToken(entity.Id.Value);
+                await RemoveCacheById(entity.Id.Value);
 
                 obj.Result = entity.Id.Value;
                 obj.Tag = 1;
@@ -301,13 +299,13 @@ namespace YiSha.Business.OrganizationManage
                         if (param.IsOverride == 1)
                         {
                             await userService.SaveForm(entity);
-                            await RemoveCacheByToken(entity.Id.Value);
+                            await RemoveCacheById(entity.Id.Value);
                         }
                     }
                     else
                     {
                         await userService.SaveForm(entity);
-                        await RemoveCacheByToken(entity.Id.Value);
+                        await RemoveCacheById(entity.Id.Value);
                     }
                 }
                 obj.Tag = 1;
@@ -334,6 +332,7 @@ namespace YiSha.Business.OrganizationManage
             string encryptPassword = SecurityHelper.MD5Encrypt(md5Password + salt);
             return encryptPassword;
         }
+
         /// <summary>
         /// 密码盐
         /// </summary>
@@ -342,25 +341,28 @@ namespace YiSha.Business.OrganizationManage
         {
             return new Random().Next(1, 100000).ToString();
         }
+
         /// <summary>
         /// 移除缓存里面的token
         /// </summary>
         /// <param name="id"></param>
-        private async Task RemoveCacheByToken(string ids)
+        private async Task RemoveCacheById(string ids)
         {
             foreach (long id in ids.Split(',').Select(p => long.Parse(p)))
             {
-                await RemoveCacheByToken(id);
+                await RemoveCacheById(id);
             }
         }
-        private async Task RemoveCacheByToken(long id)
+
+        private async Task RemoveCacheById(long id)
         {
             var dbEntity = await userService.GetEntity(id);
             if (dbEntity != null)
             {
-                userCache.RemoveByToken(dbEntity.WebToken);
+                CacheFactory.Cache().RemoveCache(dbEntity.WebToken);
             }
         }
+
         /// <summary>
         /// 获取用户的职位和角色
         /// </summary>

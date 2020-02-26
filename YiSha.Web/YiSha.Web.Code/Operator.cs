@@ -38,7 +38,7 @@ namespace YiSha.Web.Code
                     OperatorInfo user = await new DataRepository().GetUserByToken(token);
                     if (user != null)
                     {
-                        CacheFactory.Cache().AddCache(token, user);
+                        CacheFactory.Cache().SetCache(token, user);
                     }
                     break;
 
@@ -113,7 +113,7 @@ namespace YiSha.Web.Code
                 user = await new DataRepository().GetUserByToken(token);
                 if (user != null)
                 {
-                    CacheFactory.Cache().AddCache(token, user);
+                    CacheFactory.Cache().SetCache(token, user);
                 }
             }
             return user;
