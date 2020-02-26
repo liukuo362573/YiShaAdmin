@@ -54,13 +54,13 @@ namespace YiSha.CodeGenerator.Template
             #region OutputConfigModel          
             baseConfigModel.OutputConfig = new OutputConfigModel();
             baseConfigModel.OutputConfig.OutputModule = string.Empty;
-            baseConfigModel.OutputConfig.OutputEntity = string.Format("{0}\\YiSha.Entity", path);
-            baseConfigModel.OutputConfig.OutputBusiness = string.Format("{0}\\YiSha.Business", path);
-            baseConfigModel.OutputConfig.OutputWeb = string.Format("{0}\\YiSha.Web\\YiSha.Admin.Web", path);
-            string areasModule = baseConfigModel.OutputConfig.OutputWeb + "\\" + "Areas";
+            baseConfigModel.OutputConfig.OutputEntity = Path.Combine(path, "YiSha.Entity");
+            baseConfigModel.OutputConfig.OutputBusiness = Path.Combine(path, "YiSha.Business");
+            baseConfigModel.OutputConfig.OutputWeb = Path.Combine(path, "YiSha.Web", "YiSha.Admin.Web");
+            string areasModule = Path.Combine(baseConfigModel.OutputConfig.OutputWeb, "Areas");
             if (Directory.Exists(areasModule))
             {
-                baseConfigModel.OutputConfig.ModuleList = Directory.GetDirectories(areasModule).Select(p => p.Substring(p.LastIndexOf('\\') + 1)).Where(p => p != "DemoManage").ToList();
+                baseConfigModel.OutputConfig.ModuleList = Directory.GetDirectories(areasModule).Select(p => Path.GetFileName(p)).Where(p => p != "DemoManage").ToList();
             }
             else
             {
@@ -772,7 +772,7 @@ namespace YiSha.CodeGenerator.Template
             if (!string.IsNullOrEmpty(param["CodeEntity"].ParseToString()))
             {
                 string codeEntity = HttpUtility.HtmlDecode(param["CodeEntity"].ToString());
-                string codePath = baseConfigModel.OutputConfig.OutputEntity + "\\YiSha.Entity\\" + baseConfigModel.OutputConfig.OutputModule + "\\" + baseConfigModel.FileConfig.EntityName + ".cs";
+                string codePath = Path.Combine(baseConfigModel.OutputConfig.OutputEntity, "YiSha.Entity", baseConfigModel.OutputConfig.OutputModule, baseConfigModel.FileConfig.EntityName + ".cs");
                 if (!File.Exists(codePath))
                 {
                     FileHelper.CreateFile(codePath, codeEntity);
@@ -785,7 +785,7 @@ namespace YiSha.CodeGenerator.Template
             if (!param["CodeEntityParam"].IsEmpty())
             {
                 string codeListEntity = HttpUtility.HtmlDecode(param["CodeEntityParam"].ToString());
-                string codePath = baseConfigModel.OutputConfig.OutputEntity + "\\YiSha.Model\\Param\\" + baseConfigModel.OutputConfig.OutputModule + "\\" + baseConfigModel.FileConfig.EntityParamName + ".cs";
+                string codePath = Path.Combine(baseConfigModel.OutputConfig.OutputEntity, "YiSha.Model", "Param", baseConfigModel.OutputConfig.OutputModule, baseConfigModel.FileConfig.EntityParamName + ".cs");
                 if (!File.Exists(codePath))
                 {
                     FileHelper.CreateFile(codePath, codeListEntity);
@@ -798,7 +798,7 @@ namespace YiSha.CodeGenerator.Template
             if (!param["CodeService"].IsEmpty())
             {
                 string codeService = HttpUtility.HtmlDecode(param["CodeService"].ToString());
-                string codePath = baseConfigModel.OutputConfig.OutputBusiness + "\\YiSha.Service\\" + baseConfigModel.OutputConfig.OutputModule + "\\" + baseConfigModel.FileConfig.ServiceName + ".cs";
+                string codePath = Path.Combine(baseConfigModel.OutputConfig.OutputBusiness, "YiSha.Service", baseConfigModel.OutputConfig.OutputModule, baseConfigModel.FileConfig.ServiceName + ".cs");
                 if (!File.Exists(codePath))
                 {
                     FileHelper.CreateFile(codePath, codeService);
@@ -811,7 +811,7 @@ namespace YiSha.CodeGenerator.Template
             if (!param["CodeBusiness"].IsEmpty())
             {
                 string codeBusiness = HttpUtility.HtmlDecode(param["CodeBusiness"].ToString());
-                string codePath = baseConfigModel.OutputConfig.OutputBusiness + "\\YiSha.Business\\" + baseConfigModel.OutputConfig.OutputModule + "\\" + baseConfigModel.FileConfig.BusinessName + ".cs";
+                string codePath = Path.Combine(baseConfigModel.OutputConfig.OutputBusiness, "YiSha.Business", baseConfigModel.OutputConfig.OutputModule, baseConfigModel.FileConfig.BusinessName + ".cs");
                 if (!File.Exists(codePath))
                 {
                     FileHelper.CreateFile(codePath, codeBusiness);
@@ -824,7 +824,7 @@ namespace YiSha.CodeGenerator.Template
             if (!param["CodeController"].IsEmpty())
             {
                 string codeController = HttpUtility.HtmlDecode(param["CodeController"].ToString());
-                string codePath = baseConfigModel.OutputConfig.OutputWeb + "\\Areas\\" + baseConfigModel.OutputConfig.OutputModule + "\\Controllers\\" + baseConfigModel.FileConfig.ControllerName + ".cs";
+                string codePath = Path.Combine(baseConfigModel.OutputConfig.OutputWeb, "Areas", baseConfigModel.OutputConfig.OutputModule, "Controllers", baseConfigModel.FileConfig.ControllerName + ".cs");
                 if (!File.Exists(codePath))
                 {
                     FileHelper.CreateFile(codePath, codeController);
@@ -837,7 +837,7 @@ namespace YiSha.CodeGenerator.Template
             if (!param["CodeIndex"].IsEmpty())
             {
                 string codeIndex = HttpUtility.HtmlDecode(param["CodeIndex"].ToString());
-                string codePath = baseConfigModel.OutputConfig.OutputWeb + "\\Areas\\" + baseConfigModel.OutputConfig.OutputModule + "\\Views\\" + baseConfigModel.FileConfig.ClassPrefix + "\\" + baseConfigModel.FileConfig.PageIndexName + ".cshtml";
+                string codePath = Path.Combine(baseConfigModel.OutputConfig.OutputWeb, "Areas", baseConfigModel.OutputConfig.OutputModule, "Views", baseConfigModel.FileConfig.ClassPrefix, baseConfigModel.FileConfig.PageIndexName + ".cshtml");
                 if (!File.Exists(codePath))
                 {
                     FileHelper.CreateFile(codePath, codeIndex);
@@ -895,7 +895,7 @@ namespace YiSha.CodeGenerator.Template
             if (!param["CodeForm"].IsEmpty())
             {
                 string codeSave = HttpUtility.HtmlDecode(param["CodeForm"].ToString());
-                string codePath = baseConfigModel.OutputConfig.OutputWeb + "\\Areas\\" + baseConfigModel.OutputConfig.OutputModule + "\\Views\\" + baseConfigModel.FileConfig.ClassPrefix + "\\" + baseConfigModel.FileConfig.PageFormName + ".cshtml";
+                string codePath = Path.Combine(baseConfigModel.OutputConfig.OutputWeb, "Areas", baseConfigModel.OutputConfig.OutputModule, "Views", baseConfigModel.FileConfig.ClassPrefix, baseConfigModel.FileConfig.PageFormName + ".cshtml");
                 if (!File.Exists(codePath))
                 {
                     FileHelper.CreateFile(codePath, codeSave);
