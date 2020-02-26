@@ -5,8 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\YiSha.Util\YiSha.Util\YiSha.Util.csproj" />
     <ProjectReference Include="..\YiSha.Cache.Interface\YiSha.Cache.Interface.csproj" />
     <ProjectReference Include="..\YiSha.MemoryCache\YiSha.MemoryCache.csproj" />
+    <ProjectReference Include="..\YiSha.RedisCache\YiSha.RedisCache.csproj" />
   </ItemGroup>
 
 </Project>

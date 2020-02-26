@@ -15,6 +15,7 @@ namespace YiSha.Business.Cache
         {
             return CacheFactory.Cache().RemoveCache(CacheKey);
         }
+
         public virtual Task<List<T>> GetList()
         {
             throw new Exception("请在子类实现");

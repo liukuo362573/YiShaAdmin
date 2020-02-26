@@ -44,6 +44,9 @@ namespace YiSha.Util.Model
         /// </summary>
         public string VirtualDirectory { get; set; }
 
+        public string CacheProvider { get; set; }
+        public string RedisConnectionString { get; set; }
+
         public string AppId { get; set; }
         public string AppSecret { get; set; }
         /// <summary>
@@ -52,6 +55,5 @@ namespace YiSha.Util.Model
         public string MerchantId { get; set; }
         public string PayKey { get; set; }
         public string NotifyUrl { get; set; }
-
     }
 }

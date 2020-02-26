@@ -15,8 +15,8 @@ namespace YiSha.RedisCache
 
         public RedisCacheImp()
         {
-            connection = ConnectionMultiplexer.Connect("");
-            cache = connection.GetDatabase(3);
+            connection = ConnectionMultiplexer.Connect(GlobalContext.SystemConfig.RedisConnectionString);
+            cache = connection.GetDatabase();
         }
 
         public bool SetCache<T>(string key, T value, DateTime? expireTime = null)
@@ -147,5 +147,12 @@ namespace YiSha.RedisCache
             return dict;
         }
         #endregion
+
+        public void Dispose()
+        {
+            if (connection != null)
+                connection.Dispose();
+            GC.SuppressFinalize(this);
+        }
     }
 }
