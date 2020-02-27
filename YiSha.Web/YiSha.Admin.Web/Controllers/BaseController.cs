@@ -40,7 +40,7 @@ namespace YiSha.Admin.Web.Controllers
                     {
                         TData obj = new TData();
                         obj.Message = "演示模式，不允许操作";
-                        context.Result = new CustomJsonResult { Value = obj };
+                        context.Result = new JsonResult(obj);
                         return;
                     }
                 }
@@ -55,7 +55,8 @@ namespace YiSha.Admin.Web.Controllers
             var controllerName = context.RouteData.Values["controller"] + "/";
             string currentUrl = "/" + areaName + controllerName + action;
 
-            if (action.ParseToString().ToLower() != "GetServerJson".ToLower() && action.ParseToString().ToLower() != "Error".ToLower())
+            string[] notLogAction = new string[] { "GetServerJson", "Error" };
+            if (!notLogAction.Select(p => p.ToUpper()).Contains(action.ToUpper()))
             {
                 #region 获取请求参数
                 switch (context.HttpContext.Request.Method.ToUpper())
@@ -150,73 +151,5 @@ namespace YiSha.Admin.Web.Controllers
         {
             base.OnActionExecuted(context);
         }
-
-        /// <summary>
-        /// 覆盖基类的Json方法，用来自定义序列化实体，比如把long类型转成字符串返回到前端
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public new CustomJsonResult Json(object data)
-        {
-            SetTDataMessage(data);
-
-            return new CustomJsonResult
-            {
-                Value = data
-            };
-        }
-
-        #region 根据action方法名赋值合适的message
-        private void SetTDataMessage(object data)
-        {
-            string action = this.ControllerContext.RouteData.Values["Action"].ParseToString();
-            TData obj = data as TData;
-            if (obj != null && string.IsNullOrEmpty(obj.Message))
-            {
-                if (action.Contains("Delete"))
-                {
-                    obj.Message = "删除成功";
-                }
-                else if (action.Contains("Save"))
-                {
-                    obj.Message = "保存成功";
-                }
-                else
-                {
-                    obj.Message = "操作成功";
-                }
-            }
-        }
-        #endregion
-    }
-
-    public class CustomJsonResult : JsonResult
-    {
-        public CustomJsonResult() : base(string.Empty)
-        { }
-
-        public override void ExecuteResult(ActionContext context)
-        {
-            this.ContentType = "text/json;charset=utf-8;";
-
-            JsonSerializerSettings jsonSerizlizerSetting = new JsonSerializerSettings();
-            jsonSerizlizerSetting.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-
-            string json = JsonConvert.SerializeObject(Value, Formatting.None, jsonSerizlizerSetting);
-            Value = json;
-            base.ExecuteResult(context);
-        }
-
-        public override Task ExecuteResultAsync(ActionContext context)
-        {
-            this.ContentType = "text/json;charset=utf-8;";
-
-            JsonSerializerSettings jsonSerizlizerSetting = new JsonSerializerSettings();
-            jsonSerizlizerSetting.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-
-            string json = JsonConvert.SerializeObject(Value, Formatting.None, jsonSerizlizerSetting);
-            Value = json.ToJObject();
-            return base.ExecuteResultAsync(context);
-        }
-    }
+    }   
 }
