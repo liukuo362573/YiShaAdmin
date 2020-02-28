@@ -17,11 +17,11 @@ namespace YiSha.Business.Cache
 
         public override async Task<List<DataDictEntity>> GetList()
         {
-            var cacheList = CacheFactory.Cache().GetCache<List<DataDictEntity>>(CacheKey);
+            var cacheList = CacheFactory.Cache.GetCache<List<DataDictEntity>>(CacheKey);
             if (cacheList == null)
             {
                 var list = await dataDictService.GetList(null);
-                CacheFactory.Cache().SetCache(CacheKey, list);
+                CacheFactory.Cache.SetCache(CacheKey, list);
                 return list;
             }
             else
