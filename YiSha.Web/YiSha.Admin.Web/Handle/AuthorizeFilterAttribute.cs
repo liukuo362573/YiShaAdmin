@@ -41,7 +41,7 @@ namespace YiSha.Admin.Web.Controllers
                 {
                     TData obj = new TData();
                     obj.Message = "抱歉，没有登录或登录已超时";
-                    context.Result = new CustomJsonResult { Value = obj };
+                    context.Result = new JsonResult(obj);
                     return;
                 }
                 else
@@ -97,7 +97,7 @@ namespace YiSha.Admin.Web.Controllers
                             {
                                 TData obj = new TData();
                                 obj.Message = "抱歉，没有权限";
-                                context.Result = new CustomJsonResult { Value = obj };
+                                context.Result = new JsonResult(obj);
                             }
                             else
                             {
