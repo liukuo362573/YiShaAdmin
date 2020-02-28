@@ -26,23 +26,14 @@
             <ul class="nav" id="side-menu">
                 <li class="logo">一沙后台管理系统</li>
                 <li class="nav-header">
-                    <div class="dropdown profile-element">
-                        <span>
-                            @{
-                                <img alt="image" src='@portrait' class="img-circle" height="60" width="60" />
-                            }
-                        </span>
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <span class="clear">
-                                <span class="block m-t-xs"><strong class="font-bold">@operatorInfo.UserName</strong></span>
-                                <span class="text-muted text-xs block"><span>@operatorInfo.DepartmentName</span> <b class="caret"></b></span>
-                            </span>
-                        </a>
-                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <li><a class="menuItem" href="#" data-url='@Url.Content("~/OrganizationManage/User/UserDetail")?id=@operatorInfo.UserId'>个人信息</a></li>
-                            <li class="divider"></li>
-                            <li><a href='@Url.Content("~/Home/LoginOff")'>退出</a></li>
-                        </ul>
+                    <div class="dropdown profile-element clear">
+                        <div class="image-left">
+                            <img alt="image" src='@portrait' class="img-circle" height="50" width="50" />
+                        </div>
+                        <div class="image-right">
+                            <span class="block m-t-xs">@operatorInfo.UserName</span>
+                            <span class="text-xs block">@operatorInfo.DepartmentName</span>
+                        </div>
                     </div>
                 </li>
                 @{
