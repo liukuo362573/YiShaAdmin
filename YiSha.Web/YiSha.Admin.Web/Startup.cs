@@ -23,10 +23,12 @@ namespace YiSha.Admin.Web
     public class Startup
     {
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment WebHostEnvironment { get; set; }
 
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            WebHostEnvironment = env;
             GlobalContext.LogWhenStart(env);
             GlobalContext.HostingEnvironment = env;
         }
@@ -34,15 +36,18 @@ namespace YiSha.Admin.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            if (WebHostEnvironment.IsDevelopment())
+            {
+                services.AddRazorPages().AddRazorRuntimeCompilation();
+            }
             services.Configure<CookiePolicyOptions>(options =>
-           {
-               // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-               options.CheckConsentNeeded = context => true;
-               options.MinimumSameSitePolicy = SameSiteMode.None;
-           });
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
 
             services.AddSingleton(HtmlEncoder.Create(UnicodeRanges.All));
-
             services.AddControllersWithViews(options =>
             {
                 options.Filters.Add<GlobalExceptionFilter>();
@@ -72,7 +77,7 @@ namespace YiSha.Admin.Web
             {
                 app.UsePathBase(new PathString(GlobalContext.SystemConfig.VirtualDirectory)); // 让 Pathbase 中间件成为第一个处理请求的中间件， 才能正确的模拟虚拟路径
             }
-            if (env.IsDevelopment())
+            if (WebHostEnvironment.IsDevelopment())
             {
                 GlobalContext.SystemConfig.Debug = true;
                 app.UseDeveloperExceptionPage();

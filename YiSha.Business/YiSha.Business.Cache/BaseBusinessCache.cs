@@ -13,7 +13,7 @@ namespace YiSha.Business.Cache
 
         public virtual bool Remove()
         {
-            return CacheFactory.Cache().RemoveCache(CacheKey);
+            return CacheFactory.Cache.RemoveCache(CacheKey);
         }
 
         public virtual Task<List<T>> GetList()

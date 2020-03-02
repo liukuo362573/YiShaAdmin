@@ -15,11 +15,11 @@ namespace YiSha.Business.Cache
 
         public override async Task<List<AreaEntity>> GetList()
         {
-            var cacheList = CacheFactory.Cache().GetCache<List<AreaEntity>>(CacheKey);
+            var cacheList = CacheFactory.Cache.GetCache<List<AreaEntity>>(CacheKey);
             if (cacheList == null)
             {
                 var result = await areaService.GetList(null);
-                CacheFactory.Cache().SetCache(CacheKey, result);
+                CacheFactory.Cache.SetCache(CacheKey, result);
                 return result;
             }
             else

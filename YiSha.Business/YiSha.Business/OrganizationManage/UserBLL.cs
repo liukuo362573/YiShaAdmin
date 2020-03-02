@@ -359,7 +359,7 @@ namespace YiSha.Business.OrganizationManage
             var dbEntity = await userService.GetEntity(id);
             if (dbEntity != null)
             {
-                CacheFactory.Cache().RemoveCache(dbEntity.WebToken);
+                CacheFactory.Cache.RemoveCache(dbEntity.WebToken);
             }
         }
 

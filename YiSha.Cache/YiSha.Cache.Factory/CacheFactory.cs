@@ -7,16 +7,30 @@ namespace YiSha.Cache.Factory
 {
     public class CacheFactory
     {
-        public static ICache Cache()
-        {
-            switch (GlobalContext.SystemConfig.CacheProvider)
-            {
-                case "Redis":
-                    return new RedisCacheImp();
+        private static ICache cache = null;
+        private static readonly object lockHelper = new object();
 
-                default:
-                case "Memory":
-                    return new MemoryCacheImp();
+        public static ICache Cache
+        {
+            get
+            {
+                if (cache == null)
+                {
+                    lock (lockHelper)
+                    {
+                        if (cache == null)
+                        {
+                            switch (GlobalContext.SystemConfig.CacheProvider)
+                            {
+                                case "Redis": cache = new RedisCacheImp(); break;
+
+                                default:
+                                case "Memory": cache = new MemoryCacheImp(); break;
+                            }
+                        }
+                    }
+                }
+                return cache;
             }
         }
     }
