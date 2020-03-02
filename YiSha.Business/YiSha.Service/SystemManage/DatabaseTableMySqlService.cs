@@ -141,7 +141,7 @@ namespace YiSha.Service.SystemManage
         }
         private string GetDatabase()
         {
-            string database = HtmlHelper.Resove(GlobalContext.Configuration.GetSection("DB:ConnectionString").Value.ToLower(), "database=", ";");
+            string database = HtmlHelper.Resove(GlobalContext.SystemConfig.DBConnectionString.ToLower(), "database=", ";");
             return database;
         }
         #endregion

@@ -20,8 +20,8 @@ namespace YiSha.Data.Repository
         public static IDatabase Base()
         {
             IDatabase database = null;
-            string dbType = GlobalContext.Configuration.GetSection("DB:DBType").Value;
-            string dbConnectionString = GlobalContext.Configuration.GetSection("DB:ConnectionString").Value;
+            string dbType = GlobalContext.SystemConfig.DBProvider;
+            string dbConnectionString = GlobalContext.SystemConfig.DBConnectionString;
             switch (dbType)
             {
                 case "SqlServer":

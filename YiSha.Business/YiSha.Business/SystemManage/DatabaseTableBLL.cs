@@ -21,7 +21,7 @@ namespace YiSha.Business.SystemManage
 
         public DatabaseTableBLL()
         {
-            string dbType = GlobalContext.Configuration.GetSection("DB:DBType").Value;
+            string dbType = GlobalContext.SystemConfig.DBProvider;
             switch (dbType)
             {
                 case "SqlServer":
@@ -119,7 +119,7 @@ namespace YiSha.Business.SystemManage
         #region 提交数据
         public async Task<string> DatabaseBackup(string backupPath)
         {
-            string database = HtmlHelper.Resove(GlobalContext.Configuration.GetSection("DB:ConnectionString").Value, "database=", ";");
+            string database = HtmlHelper.Resove(GlobalContext.SystemConfig.DBConnectionString.ToLower(), "database=", ";");
             await databaseTableService.DatabaseBackup(database, backupPath);
             return backupPath;
         }

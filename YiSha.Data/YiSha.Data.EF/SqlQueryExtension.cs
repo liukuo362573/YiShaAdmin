@@ -31,7 +31,7 @@ namespace YiSha.Data.EF
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {
                 // switch on the connection type name to enable support multiple providers
-                string dbType = GlobalContext.Configuration.GetSection("DB:DBType").Value;
+                string dbType = GlobalContext.SystemConfig.DBProvider;
                 switch (dbType)
                 {
                     case "SqlServer":

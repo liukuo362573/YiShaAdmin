@@ -44,6 +44,11 @@ namespace YiSha.Util.Model
         /// </summary>
         public string VirtualDirectory { get; set; }
 
+
+        public string DBProvider { get; set; }
+        public string DBConnectionString { get; set; }
+        public string DBCommandTimeout { get; set; }
+
         public string CacheProvider { get; set; }
         public string RedisConnectionString { get; set; }
 
