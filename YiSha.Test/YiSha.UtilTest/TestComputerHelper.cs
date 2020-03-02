@@ -7,7 +7,7 @@ namespace YiSha.UtilTest
     public class TestComputerHelper
     {
         [Test]
-        public void TestFormatTime()
+        public void TestGetComputerInfo()
         {
             ComputerInfo computerInfo = ComputerHelper.GetComputerInfo();
 

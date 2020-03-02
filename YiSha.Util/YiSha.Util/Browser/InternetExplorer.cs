@@ -28,7 +28,7 @@ namespace YiSha.Util.Browser
                 Version = new System.Version("11.0");
             }
 
-            if (_agent.Contains(rv) && _agent.Contains("Trident"))
+            if (_agent.Contains(rv) && _agent.Contains("trident"))
             {
                 var first = _agent.IndexOf(rv);
                 var last = _agent.IndexOf(")", first);

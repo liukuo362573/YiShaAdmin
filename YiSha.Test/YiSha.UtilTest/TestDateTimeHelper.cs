@@ -3,7 +3,7 @@ using NUnit.Framework;
 using YiSha.Util;
 using YiSha.Util.Extension;
 
-namespace Tests
+namespace YiSha.UtilTest
 {
     public class TestDateTimeHelper
     {
