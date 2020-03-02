@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nunit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.16.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\YiSha.Cache\YiSha.Cache.Factory\YiSha.Cache.Factory.csproj" />
+    <ProjectReference Include="..\..\YiSha.Util\YiSha.Util\YiSha.Util.csproj" />
+    <ProjectReference Include="..\..\YiSha.Business\YiSha.Business.AutoJob\YiSha.Business.AutoJob.csproj" />
+    <ProjectReference Include="..\..\YiSha.Business\YiSha.Business\YiSha.Business.csproj" />
+    <ProjectReference Include="..\..\YiSha.Data\YiSha.Data.EF\YiSha.Data.EF.csproj" />
+    <ProjectReference Include="..\..\YiSha.Entity\YiSha.Entity\YiSha.Entity.csproj" />
+    <ProjectReference Include="..\..\YiSha.Entity\YiSha.Model\YiSha.Model.csproj" />
+  </ItemGroup>
+
+</Project>
