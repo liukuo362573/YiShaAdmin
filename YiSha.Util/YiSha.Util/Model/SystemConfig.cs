@@ -35,19 +35,18 @@ namespace YiSha.Util.Model
         /// 允许跨域的站点
         /// </summary>
         public string AllowCorsSite { get; set; }
-        /// <summary>
-        /// 数据库备份路径
-        /// </summary>
-        public string DatabaseBackup { get; set; }
-        /// <summary>
+              /// <summary>
         /// 网站虚拟目录
         /// </summary>
         public string VirtualDirectory { get; set; }
 
-
         public string DBProvider { get; set; }
         public string DBConnectionString { get; set; }
         public string DBCommandTimeout { get; set; }
+        /// <summary>
+        /// 数据库备份路径
+        /// </summary>
+        public string DBBackup { get; set; }
 
         public string CacheProvider { get; set; }
         public string RedisConnectionString { get; set; }
