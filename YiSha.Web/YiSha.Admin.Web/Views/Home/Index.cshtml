@@ -158,8 +158,8 @@
 </div>
 
 <script type="text/javascript">
-    var skin = decodeURIComponent($.cookie('Skin'));
-    if (!ys.isNullOrEmpty(skin)) {
+    if (!ys.isNullOrEmpty($.cookie('Skin'))) {
+        var skin = decodeURIComponent($.cookie('Skin'));
         $("body").addClass(skin.split('|')[0]);
         $("body").addClass(skin.split('|')[1]);
     } else {
