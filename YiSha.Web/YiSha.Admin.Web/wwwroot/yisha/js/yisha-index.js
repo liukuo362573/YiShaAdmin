@@ -117,20 +117,21 @@ $(function () {
                 if (link) {
                     var menuUrl = $(link).data('url');
                     if (menuUrl == menuTabUrl) {
-                        var parent1_li = $(link).parent();
+                        var dataType = "[data-type=menu]";
+                        var parent1_li = $(link).parent(dataType);
                         parent1_li.addClass("active");
 
-                        var parent2_ul = parent1_li.parent();
+                        var parent2_ul = parent1_li.parent(dataType);
                         parent2_ul.addClass("in").addClass("active");
 
-                        var parent3_li = parent2_ul.parent();
+                        var parent3_li = parent2_ul.parent(dataType);
                         parent3_li.addClass("active");
 
-                        var parent4_ul = parent3_li.parent();
+                        var parent4_ul = parent3_li.parent(dataType);
                         if (parent4_ul) {
                             parent4_ul.addClass("in").addClass("active");
 
-                            var parent5_li = parent4_ul.parent();
+                            var parent5_li = parent4_ul.parent(dataType);
                             parent5_li.addClass("active");
                         }
                         return false; // 终止循环
@@ -282,8 +283,7 @@ $(function () {
                 if (marginLeftVal < 0) {
                     $('.page-tabs-content').animate({
                         marginLeft: (marginLeftVal + currentWidth) + 'px'
-                    },
-                        "fast");
+                    }, "fast");
                 }
 
                 //  移除当前选项卡

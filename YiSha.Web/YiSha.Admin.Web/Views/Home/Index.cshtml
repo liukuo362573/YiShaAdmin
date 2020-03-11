@@ -40,16 +40,16 @@
                     List<MenuEntity> menuList = ViewBag.MenuList;
                     foreach (MenuEntity menu in menuList.Where(p => p.ParentId == 0).OrderBy(p => p.MenuSort))
                     {
-                        <li>
+                        <li data-type="menu">
                             <a href="#">
                                 <i class="@menu.MenuIcon"></i>
                                 <span class="nav-label">@menu.MenuName</span>
                                 <span class="fa arrow"></span>
                             </a>
-                            <ul class="nav nav-second-level collapse">
+                            <ul class="nav nav-second-level collapse" data-type="menu">
                                 @foreach (MenuEntity secondMenu in menuList.Where(p => p.ParentId == menu.Id).OrderBy(p => p.MenuSort))
                                 {
-                                    <li>
+                                    <li data-type="menu">
                                         @{
                                             if (menuList.Where(p => p.ParentId == secondMenu.Id && p.MenuType != (int)MenuTypeEnum.Button).Count() == 0)
                                             {
@@ -65,10 +65,10 @@
                                             else
                                             {
                                                 <a href="#">@secondMenu.MenuName<span class="fa arrow"></span></a>
-                                                <ul class="nav nav-third-level">
+                                                <ul class="nav nav-third-level" data-type="menu">
                                                     @foreach (MenuEntity thirdMenu in menuList.Where(p => p.ParentId == secondMenu.Id).OrderBy(p => p.MenuSort))
                                                     {
-                                                        <li>
+                                                        <li data-type="menu">
                                                             <a class="menuItem" href="#" data-url='@Url.Content("~/" + thirdMenu.MenuUrl)'>@thirdMenu.MenuName</a>
                                                         </li>
                                                     }
