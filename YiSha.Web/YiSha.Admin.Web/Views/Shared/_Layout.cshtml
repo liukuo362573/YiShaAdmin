@@ -26,7 +26,7 @@
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/yisha/js/yisha.min.js"))
 
     <!--首页需要用到的js开始-->
-    <script type="text/javascript" src='@Url.Content("~/yisha/js/yisha-index.js")'></script>
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/yisha/js/yisha-index.min.js"))
     <script type="text/javascript" src='@Url.Content("~/lib/jquery.metisMenu/1.1.3/jquery.metisMenu.js")'></script>
     <script type="text/javascript" src='@Url.Content("~/lib/jquery.slimscroll/1.3.0/jquery.slimscroll.min.js")'></script>
     <!--首页需要用到的js结束-->

@@ -1,4 +1,5 @@
-﻿@{
+﻿@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
+@{
     ViewBag.Title = "一沙后台管理系统";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
@@ -14,7 +15,7 @@
     }
 }
 
-<script src='@Url.Content("~/yisha/js/yisha-data.js")' type="text/javascript"></script>
+@BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/yisha/js/yisha-data.min.js"))
 
 <div id="wrapper">
     <!--左侧导航开始-->

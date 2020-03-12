@@ -45,7 +45,26 @@
       "renameLocals": true
     }
   },
-
+  {
+    "outputFileName": "wwwroot/yisha/js/yisha-index.min.js",
+    "inputFiles": [
+      "wwwroot/yisha/js/yisha-index.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/yisha/js/yisha-data.min.js",
+    "inputFiles": [
+      "wwwroot/yisha/js/yisha-data.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
   {
     "outputFileName": "wwwroot/lib/jquery/1.10.2/jquery.min.js",
     "inputFiles": [
@@ -339,7 +358,7 @@
       "enabled": true,
       "renameLocals": true
     }
-  },   
+  },
 
   {
     "outputFileName": "wwwroot/lib/imageupload/1.0/css/imgup.min.css",
