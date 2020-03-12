@@ -1,3 +1,6 @@
+del %cd%\Publish\*.* /f /s /q /a
+rd  %cd%\Publish    /s /q
+"D:\Program Files\7-Zip\7z.exe" x %cd%\Publish.7z -o%cd%\Publish
 
 C:\Windows\System32\inetsrv\appcmd.exe stop apppool /apppool.name:"YiShaAdmin" 
 C:\Windows\System32\inetsrv\appcmd.exe stop apppool /apppool.name:"YiShaApi" 
