@@ -66,33 +66,10 @@ namespace YiSha.Admin.Web.Controllers
                         break;
 
                     case "POST":
-                        Dictionary<string, string> param = new Dictionary<string, string>();
-                        foreach (var item in context.ActionDescriptor.Parameters)
-                        {
-                            var itemType = item.ParameterType;
-                            if (itemType.IsClass && itemType.Name != "String")
-                            {
-                                PropertyInfo[] infos = itemType.GetProperties();
-                                foreach (PropertyInfo info in infos)
-                                {
-                                    if (info.CanRead)
-                                    {
-                                        var propertyValue = context.HttpContext.Request.Form[info.Name];
-                                        if (!param.ContainsKey(info.Name))
-                                        {
-                                            if (!string.IsNullOrEmpty(propertyValue))
-                                            {
-                                                param.Add(info.Name, propertyValue);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if (param.Count > 0)
+                        if (context.ActionArguments?.Count > 0)
                         {
                             operateEntity.ExecuteUrl += context.HttpContext.Request.QueryString.Value.ParseToString();
-                            operateEntity.ExecuteParam = TextHelper.GetSubString(JsonConvert.SerializeObject(param), 8000);
+                            operateEntity.ExecuteParam = TextHelper.GetSubString(JsonConvert.SerializeObject(context.ActionArguments), 8000);
                         }
                         else
                         {
