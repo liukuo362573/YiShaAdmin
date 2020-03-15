@@ -109,6 +109,7 @@
             url: '@Url.Content("~/OrganizationManage/Department/GetDepartmentTreeListJson")',
             async: true,
             expandLevel: 2,
+            maxHeight: "700px",
             callback: {
                 onClick: function (event, treeId, treeNode) {
                     $("#departmentId").val(treeNode.id);
