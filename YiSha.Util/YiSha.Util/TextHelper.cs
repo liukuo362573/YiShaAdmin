@@ -32,7 +32,7 @@ namespace YiSha.Util
         /// <param name="value"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public static string GetSubString(string value, int length)
+        public static string GetSubString(string value, int length, bool ellipsis = false)
         {
             if (string.IsNullOrEmpty(value))
             {
@@ -41,6 +41,10 @@ namespace YiSha.Util
             if (value.Length > length)
             {
                 value = value.Substring(0, length);
+                if (ellipsis)
+                {
+                    value += "...";
+                }
             }
             return value;
         }
