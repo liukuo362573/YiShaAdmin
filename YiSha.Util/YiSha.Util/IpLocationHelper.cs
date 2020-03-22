@@ -25,6 +25,8 @@ namespace YiSha.Util
                     {
                         ipLocation = GetIpLocationFromPCOnline(ipAddress);
                     }
+                }else{
+                    ipLocation = ipAddress;
                 }
             }
             catch (Exception ex)
