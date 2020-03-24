@@ -21,7 +21,7 @@ namespace YiSha.Data.Repository
     /// </summary>
     public class Repository
     {
-        #region 构造
+        #region 构造函数
         public IDatabase db;
         public Repository(IDatabase iDatabase)
         {
