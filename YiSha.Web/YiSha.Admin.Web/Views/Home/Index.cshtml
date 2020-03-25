@@ -54,13 +54,13 @@
                                         @{
                                             if (menuList.Where(p => p.ParentId == secondMenu.Id && p.MenuType != (int)MenuTypeEnum.Button).Count() == 0)
                                             {
-                                                if (secondMenu.MenuUrl.IndexOf('/') > 0)
+                                                if (secondMenu.MenuUrl.StartsWith("http://") || secondMenu.MenuUrl.StartsWith("https://"))
                                                 {
-                                                    <a class="menuItem" href="#" data-url='@Url.Content("~/" + secondMenu.MenuUrl)'>@secondMenu.MenuName</a>
+                                                    <a class="menuItem" href="#" data-url='@secondMenu.MenuUrl'>@secondMenu.MenuName</a>
                                                 }
                                                 else
                                                 {
-                                                    <a href="@secondMenu.MenuUrl" target="_blank">@secondMenu.MenuName</a>
+                                                    <a class="menuItem" href="#" data-url='@Url.Content("~/" + secondMenu.MenuUrl)'>@secondMenu.MenuName</a>
                                                 }
                                             }
                                             else
