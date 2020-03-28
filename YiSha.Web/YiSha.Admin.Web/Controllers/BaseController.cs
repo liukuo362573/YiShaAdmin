@@ -117,7 +117,7 @@ namespace YiSha.Admin.Web.Controllers
                     operateEntity.BaseCreatorId = operateEntity.BaseCreatorId ?? 0;
 
                     // 耗时的任务异步完成
-                    operateEntity.IpLocation = IpLocationHelper.GetIpLocation(ip);
+                    // operateEntity.IpLocation = IpLocationHelper.GetIpLocation(ip);
                     await new LogOperateBLL().SaveForm(operateEntity);
                 };
                 AsyncTaskHelper.StartTask(taskAction);
@@ -128,5 +128,5 @@ namespace YiSha.Admin.Web.Controllers
         {
             base.OnActionExecuted(context);
         }
-    }   
+    }
 }
