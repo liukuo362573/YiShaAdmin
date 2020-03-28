@@ -14,7 +14,6 @@
         portrait = GlobalContext.SystemConfig.ApiSite + portrait;
     }
 }
-
 @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/yisha/js/yisha-data.min.js"))
 
 <div id="wrapper">
@@ -42,11 +41,23 @@
                     foreach (MenuEntity menu in menuList.Where(p => p.ParentId == 0).OrderBy(p => p.MenuSort))
                     {
                         <li data-type="menu">
-                            <a href="#">
-                                <i class="@menu.MenuIcon"></i>
-                                <span class="nav-label">@menu.MenuName</span>
-                                <span class="fa arrow"></span>
-                            </a>
+                            @{
+                                if (HttpHelper.IsUrl(menu.MenuUrl))
+                                {
+                                    <a class="menuItem" href="#" data-url='@menu.MenuUrl'>
+                                        <i class="@menu.MenuIcon"></i>
+                                        <span class="nav-label">@menu.MenuName</span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="#">
+                                        <i class="@menu.MenuIcon"></i>
+                                        <span class="nav-label">@menu.MenuName</span>
+                                        <span class="fa arrow"></span>
+                                    </a>
+                                }
+                            }
                             <ul class="nav nav-second-level collapse" data-type="menu">
                                 @foreach (MenuEntity secondMenu in menuList.Where(p => p.ParentId == menu.Id).OrderBy(p => p.MenuSort))
                                 {
@@ -54,7 +65,7 @@
                                         @{
                                             if (menuList.Where(p => p.ParentId == secondMenu.Id && p.MenuType != (int)MenuTypeEnum.Button).Count() == 0)
                                             {
-                                                if (secondMenu.MenuUrl.StartsWith("http://") || secondMenu.MenuUrl.StartsWith("https://"))
+                                                if (HttpHelper.IsUrl(secondMenu.MenuUrl))
                                                 {
                                                     <a class="menuItem" href="#" data-url='@secondMenu.MenuUrl'>@secondMenu.MenuName</a>
                                                 }

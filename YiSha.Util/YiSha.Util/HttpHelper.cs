@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using YiSha.Util.Extension;
 
 namespace YiSha.Util
 {
@@ -17,6 +16,21 @@ namespace YiSha.Util
     /// </summary>
     public class HttpHelper
     {
+        #region 是否是网址
+        public static bool IsUrl(string url)
+        {
+            url = url.ParseToString().ToLower();
+            if (url.StartsWith("http://") || url.StartsWith("https://"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        #endregion
+
         #region 模拟GET
         /// <summary>
         /// GET请求
@@ -420,6 +434,7 @@ namespace YiSha.Util
             return true;
         }
         #endregion
+
         #region 普通类型
         /// <summary>    
         /// 传入一个正确或不正确的URl，返回正确的URL

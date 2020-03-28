@@ -128,26 +128,6 @@ namespace YiSha.Util
             return string.Empty;
         }
 
-
-        private static string GetWebClientHostName()
-        {
-            string result = string.Empty;
-            try
-            {
-                string ip = GetWebRemoteIp();
-                result = Dns.GetHostEntry(IPAddress.Parse(ip)).HostName;
-                if (result == "localhost.localdomain")
-                {
-                    result = Dns.GetHostName();
-                }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteWithTime(ex);
-            }
-            return result;
-        }
-
         public static string Browser
         {
             get
