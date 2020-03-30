@@ -69,7 +69,7 @@ namespace YiSha.Admin.Web.Controllers
                         if (context.ActionArguments?.Count > 0)
                         {
                             operateEntity.ExecuteUrl += context.HttpContext.Request.QueryString.Value.ParseToString();
-                            operateEntity.ExecuteParam = TextHelper.GetSubString(JsonConvert.SerializeObject(context.ActionArguments), 8000);
+                            operateEntity.ExecuteParam = TextHelper.GetSubString(JsonConvert.SerializeObject(context.ActionArguments), 4000);
                         }
                         else
                         {
