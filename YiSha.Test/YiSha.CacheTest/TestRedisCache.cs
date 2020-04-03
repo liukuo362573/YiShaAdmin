@@ -20,7 +20,7 @@ namespace YiSha.CacheTest
             GlobalContext.SystemConfig = new SystemConfig
             {
                 DBProvider = "MySql",
-                DBConnectionString = "server=47.92.169.229;database=yisha_admin;user=root;password=YiSha&2019!;port=3306;pooling=true;max pool size=20;persist security info=True;charset=utf8mb4;",
+                DBConnectionString = "server=localhost;database=yisha_admin;user=root;password=123456;port=3306;",
 
                 CacheProvider = "Redis",
                 RedisConnectionString = "127.0.0.1:6379"
@@ -73,7 +73,7 @@ namespace YiSha.CacheTest
             sw.Stop();
             if (obj.Result.Count == result.Count)
             {
-                Console.WriteLine(nameof(TestRedisPerformance) + "Redis Read Time:" + sw.ElapsedMilliseconds + " ms");
+                Console.WriteLine(nameof(TestRedisPerformance) + " Redis Read Time:" + sw.ElapsedMilliseconds + " ms");
             }
             else
             {
