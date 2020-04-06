@@ -151,7 +151,9 @@ namespace YiSha.RedisCache
         public void Dispose()
         {
             if (connection != null)
-                connection.Dispose();
+            {
+                connection.Close();
+            }
             GC.SuppressFinalize(this);
         }
     }
