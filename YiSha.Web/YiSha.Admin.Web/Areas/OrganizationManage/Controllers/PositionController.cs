@@ -16,7 +16,7 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
     [Area("OrganizationManage")]
     public class PositionController : BaseController
     {
-        private PositionBLL sysPositionBLL = new PositionBLL();
+        private PositionBLL positionBLL = new PositionBLL();
 
         #region 视图功能
         [AuthorizeFilter("organization:position:view")]
@@ -36,7 +36,7 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
         [AuthorizeFilter("organization:position:search,organization:user:view")]
         public async Task<IActionResult> GetListJson(PositionListParam param)
         {
-            TData<List<PositionEntity>> obj = await sysPositionBLL.GetList(param);
+            TData<List<PositionEntity>> obj = await positionBLL.GetList(param);
             return Json(obj);
         }
 
@@ -44,21 +44,21 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
         [AuthorizeFilter("organization:position:search,organization:user:view")]
         public async Task<IActionResult> GetPageListJson(PositionListParam param, Pagination pagination)
         {
-            TData<List<PositionEntity>> obj = await sysPositionBLL.GetPageList(param, pagination);
+            TData<List<PositionEntity>> obj = await positionBLL.GetPageList(param, pagination);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetFormJson(long id)
         {
-            TData<PositionEntity> obj = await sysPositionBLL.GetEntity(id);
+            TData<PositionEntity> obj = await positionBLL.GetEntity(id);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetMaxSortJson()
         {
-            TData<int> obj = await sysPositionBLL.GetMaxSort();
+            TData<int> obj = await positionBLL.GetMaxSort();
             return Json(obj);
         }
 
@@ -66,7 +66,7 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
         public async Task<IActionResult> GetPositionName(PositionListParam param)
         {
             TData<string> obj = new TData<string>();
-            var list = await sysPositionBLL.GetList(param);
+            var list = await positionBLL.GetList(param);
             if (list.Tag == 1)
             {
                 obj.Result = string.Join(",", list.Result.Select(p => p.PositionName));
@@ -81,7 +81,7 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
         [AuthorizeFilter("organization:position:add,organization:position:edit")]
         public async Task<IActionResult> SaveFormJson(PositionEntity entity)
         {
-            TData<string> obj = await sysPositionBLL.SaveForm(entity);
+            TData<string> obj = await positionBLL.SaveForm(entity);
             return Json(obj);
         }
 
@@ -89,7 +89,7 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
         [AuthorizeFilter("organization:position:delete")]
         public async Task<IActionResult> DeleteFormJson(string ids)
         {
-            TData obj = await sysPositionBLL.DeleteForm(ids);
+            TData obj = await positionBLL.DeleteForm(ids);
             return Json(obj);
         }
         #endregion

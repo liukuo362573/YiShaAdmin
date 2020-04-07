@@ -19,7 +19,7 @@ namespace YiSha.Business.SystemManage
 {
     public class RoleBLL
     {
-        private RoleService sysRoleService = new RoleService();
+        private RoleService roleService = new RoleService();
         private MenuAuthorizeService menuAuthorizeService = new MenuAuthorizeService();
 
         private MenuAuthorizeCache menuAuthorizeCache = new MenuAuthorizeCache();
@@ -28,7 +28,7 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<RoleEntity>>> GetList(RoleListParam param)
         {
             TData<List<RoleEntity>> obj = new TData<List<RoleEntity>>();
-            obj.Result = await sysRoleService.GetList(param);
+            obj.Result = await roleService.GetList(param);
             obj.TotalCount = obj.Result.Count;
             obj.Tag = 1;
             return obj;
@@ -37,7 +37,7 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<RoleEntity>>> GetPageList(RoleListParam param, Pagination pagination)
         {
             TData<List<RoleEntity>> obj = new TData<List<RoleEntity>>();
-            obj.Result = await sysRoleService.GetPageList(param, pagination);
+            obj.Result = await roleService.GetPageList(param, pagination);
             obj.TotalCount = pagination.TotalCount;
             obj.Tag = 1;
             return obj;
@@ -46,7 +46,7 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<RoleEntity>> GetEntity(long id)
         {
             TData<RoleEntity> obj = new TData<RoleEntity>();
-            RoleEntity roleEntity = await sysRoleService.GetEntity(id);
+            RoleEntity roleEntity = await roleService.GetEntity(id);
             List<MenuAuthorizeEntity> menuAuthorizeList = await menuAuthorizeService.GetList(new MenuAuthorizeEntity
             {
                 AuthorizeId = id,
@@ -63,7 +63,7 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<int>> GetMaxSort()
         {
             TData<int> obj = new TData<int>();
-            obj.Result = await sysRoleService.GetMaxSort();
+            obj.Result = await roleService.GetMaxSort();
             obj.Tag = 1;
             return obj;
         }
@@ -74,13 +74,13 @@ namespace YiSha.Business.SystemManage
         {
             TData<string> obj = new TData<string>();
 
-            if (sysRoleService.ExistRoleName(entity))
+            if (roleService.ExistRoleName(entity))
             {
                 obj.Message = "角色名称已经存在！";
                 return obj;
             }
 
-            await sysRoleService.SaveForm(entity);
+            await roleService.SaveForm(entity);
 
             // 清除缓存里面的权限数据
             menuAuthorizeCache.Remove();
@@ -95,7 +95,7 @@ namespace YiSha.Business.SystemManage
         {
             TData obj = new TData();
 
-            await sysRoleService.DeleteForm(ids);
+            await roleService.DeleteForm(ids);
 
             // 清除缓存里面的权限数据
             menuAuthorizeCache.Remove();

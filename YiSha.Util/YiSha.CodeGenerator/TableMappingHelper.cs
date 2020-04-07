@@ -25,7 +25,7 @@ namespace YiSha.CodeGenerator
         }
 
         /// <summary>
-        /// SysUserService转成sysUserService
+        /// UserService转成userService
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>

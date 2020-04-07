@@ -17,7 +17,7 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
     [Area("OrganizationManage")]
     public class DepartmentController : BaseController
     {
-        private DepartmentBLL sysDepartmentBLL = new DepartmentBLL();
+        private DepartmentBLL departmentBLL = new DepartmentBLL();
 
         #region 视图功能
         [AuthorizeFilter("organization:department:view")]
@@ -36,7 +36,7 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
         [AuthorizeFilter("organization:department:search,organization:user:search")]
         public async Task<IActionResult> GetListJson(DepartmentListParam param)
         {
-            TData<List<DepartmentEntity>> obj = await sysDepartmentBLL.GetList(param);
+            TData<List<DepartmentEntity>> obj = await departmentBLL.GetList(param);
             return Json(obj);
         }
 
@@ -44,28 +44,28 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
         [AuthorizeFilter("organization:department:search,organization:user:search")]
         public async Task<IActionResult> GetDepartmentTreeListJson(DepartmentListParam param)
         {
-            TData<List<ZtreeInfo>> obj = await sysDepartmentBLL.GetZtreeDepartmentList(param);
+            TData<List<ZtreeInfo>> obj = await departmentBLL.GetZtreeDepartmentList(param);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetUserTreeListJson(DepartmentListParam param)
         {
-            TData<List<ZtreeInfo>> obj = await sysDepartmentBLL.GetZtreeUserList(param);
+            TData<List<ZtreeInfo>> obj = await departmentBLL.GetZtreeUserList(param);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetFormJson(long id)
         {
-            TData<DepartmentEntity> obj = await sysDepartmentBLL.GetEntity(id);
+            TData<DepartmentEntity> obj = await departmentBLL.GetEntity(id);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetMaxSortJson()
         {
-            TData<int> obj = await sysDepartmentBLL.GetMaxSort();
+            TData<int> obj = await departmentBLL.GetMaxSort();
             return Json(obj);
         }
         #endregion
@@ -75,7 +75,7 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
         [AuthorizeFilter("organization:department:add,organization:department:edit")]
         public async Task<IActionResult> SaveFormJson(DepartmentEntity entity)
         {
-            TData<string> obj = await sysDepartmentBLL.SaveForm(entity);
+            TData<string> obj = await departmentBLL.SaveForm(entity);
             return Json(obj);
         }
 
@@ -83,7 +83,7 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
         [AuthorizeFilter("organization:department:delete")]
         public async Task<IActionResult> DeleteFormJson(string ids)
         {
-            TData obj = await sysDepartmentBLL.DeleteForm(ids);
+            TData obj = await departmentBLL.DeleteForm(ids);
             return Json(obj);
         }
         #endregion

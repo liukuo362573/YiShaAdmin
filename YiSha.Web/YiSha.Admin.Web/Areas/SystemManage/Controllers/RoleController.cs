@@ -1,16 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
-using Microsoft.AspNetCore.Mvc;
 using YiSha.Admin.Web.Controllers;
 using YiSha.Business.SystemManage;
-using YiSha.Entity;
 using YiSha.Entity.SystemManage;
-using YiSha.Model;
 using YiSha.Model.Param.SystemManage;
-using YiSha.Util;
 using YiSha.Util.Model;
 
 namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
@@ -18,7 +13,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
     [Area("SystemManage")]
     public class RoleController : BaseController
     {
-        private RoleBLL sysRoleBLL = new RoleBLL();
+        private RoleBLL roleBLL = new RoleBLL();
 
         #region 视图功能
         [AuthorizeFilter("system:role:view")]
@@ -38,7 +33,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         [AuthorizeFilter("system:role:search,organization:user:search")]
         public async Task<IActionResult> GetListJson(RoleListParam param)
         {
-            TData<List<RoleEntity>> obj = await sysRoleBLL.GetList(param);
+            TData<List<RoleEntity>> obj = await roleBLL.GetList(param);
             return Json(obj);
         }
 
@@ -46,14 +41,14 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         [AuthorizeFilter("system:role:search,organization:user:search")]
         public async Task<IActionResult> GetPageListJson(RoleListParam param, Pagination pagination)
         {
-            TData<List<RoleEntity>> obj = await sysRoleBLL.GetPageList(param, pagination);
+            TData<List<RoleEntity>> obj = await roleBLL.GetPageList(param, pagination);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetFormJson(long id)
         {
-            TData<RoleEntity> obj = await sysRoleBLL.GetEntity(id);
+            TData<RoleEntity> obj = await roleBLL.GetEntity(id);
             return Json(obj);
         }
 
@@ -61,7 +56,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         public async Task<IActionResult> GetRoleName(RoleListParam param)
         {
             TData<string> obj = new TData<string>();
-            var list = await sysRoleBLL.GetList(param);
+            var list = await roleBLL.GetList(param);
             if (list.Tag == 1)
             {
                 obj.Result = string.Join(",", list.Result.Select(p => p.RoleName));
@@ -73,7 +68,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         [HttpGet]
         public async Task<IActionResult> GetMaxSortJson()
         {
-            TData<int> obj = await sysRoleBLL.GetMaxSort();
+            TData<int> obj = await roleBLL.GetMaxSort();
             return Json(obj);
         }
         #endregion
@@ -83,7 +78,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         [AuthorizeFilter("system:role:add,system:role:edit")]
         public async Task<IActionResult> SaveFormJson(RoleEntity entity)
         {
-            TData<string> obj = await sysRoleBLL.SaveForm(entity);
+            TData<string> obj = await roleBLL.SaveForm(entity);
             return Json(obj);
         }
 
@@ -91,7 +86,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         [AuthorizeFilter("system:role:delete")]
         public async Task<IActionResult> DeleteFormJson(string ids)
         {
-            TData obj = await sysRoleBLL.DeleteForm(ids);
+            TData obj = await roleBLL.DeleteForm(ids);
             return Json(obj);
         }
         #endregion
