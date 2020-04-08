@@ -44,3 +44,7 @@
 ## YiShaAdmin交流群
 
 QQ群1：428703155
+
+## License
+
+[MIT](https://github.com/liukuo362573/yishaadmin/blob/master/LICENSE)  
