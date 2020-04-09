@@ -35,7 +35,7 @@ namespace YiSha.Util.Model
         /// 允许跨域的站点
         /// </summary>
         public string AllowCorsSite { get; set; }
-              /// <summary>
+        /// <summary>
         /// 网站虚拟目录
         /// </summary>
         public string VirtualDirectory { get; set; }
@@ -50,14 +50,5 @@ namespace YiSha.Util.Model
 
         public string CacheProvider { get; set; }
         public string RedisConnectionString { get; set; }
-
-        public string AppId { get; set; }
-        public string AppSecret { get; set; }
-        /// <summary>
-        /// 商户Id
-        /// </summary>
-        public string MerchantId { get; set; }
-        public string PayKey { get; set; }
-        public string NotifyUrl { get; set; }
     }
 }

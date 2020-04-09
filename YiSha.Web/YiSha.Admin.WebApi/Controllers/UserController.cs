@@ -22,21 +22,7 @@ namespace YiSha.Admin.WebApi.Controllers
     {
         private UserBLL userBLL = new UserBLL();
 
-        #region 获取数据
-        /// <summary>
-        /// 获取WxOpenId
-        /// </summary>
-        /// <param name="code"></param>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<TData<WeiXinInfo>> GetWxOpenId([FromQuery] string code)
-        {
-            TData<WeiXinInfo> obj = new TData<WeiXinInfo>();
-            var result = await SnsApi.JsCode2JsonAsync(GlobalContext.SystemConfig.AppId, GlobalContext.SystemConfig.AppSecret, code);
-            obj.Result = new WeiXinInfo { OpenId = result.openid, UnionId = result.unionid };
-            obj.Tag = 1;
-            return obj;
-        }
+        #region 获取数据       
         #endregion
 
         #region 提交数据

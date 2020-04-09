@@ -41,13 +41,6 @@
             <param name="entity"></param>
             <returns></returns>
         </member>
-        <member name="M:YiSha.Admin.WebApi.Controllers.UserController.GetWxOpenId(System.String)">
-            <summary>
-            获取WxOpenId
-            </summary>
-            <param name="code"></param>
-            <returns></returns>
-        </member>
         <member name="M:YiSha.Admin.WebApi.Controllers.UserController.Login(System.String,System.String)">
             <summary>
             用户登录

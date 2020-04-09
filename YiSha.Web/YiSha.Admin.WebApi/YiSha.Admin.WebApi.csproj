@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
-    <PackageReference Include="Senparc.Weixin.WxOpen" Version="3.3.7" />
   </ItemGroup>
 
   <ItemGroup>
