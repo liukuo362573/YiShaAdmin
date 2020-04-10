@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Senparc.Weixin.WxOpen.AdvancedAPIs.Sns;
 using YiSha.Business.OrganizationManage;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Enum;
