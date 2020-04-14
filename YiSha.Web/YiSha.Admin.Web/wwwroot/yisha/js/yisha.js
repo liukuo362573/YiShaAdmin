@@ -299,7 +299,7 @@
                     return url + '?' + replaceText;
                 }
             }
-        },   
+        },
 
         isNullOrEmpty: function (obj) {
             if ((typeof (obj) == "string" && obj == "") || obj == null || obj == undefined) {
@@ -366,7 +366,7 @@
                 }
             }
             return format;
-        },      
+        },
         trimStart: function (rawStr, c) {
             if (c == null || c == '') {
                 var str = rawStr.replace(/^s*/, '');
@@ -397,6 +397,17 @@
                 return '';
             }
             return value.toString();
+        },
+        openLink(href, target) {
+            let a = document.createElement('a')
+            if (target) {
+                a.target = target;
+            }
+            else {
+                a.target = '_blank';
+            }
+            a.href = href;
+            a.click();
         }
     });
 })(window.jQuery, window.ys);

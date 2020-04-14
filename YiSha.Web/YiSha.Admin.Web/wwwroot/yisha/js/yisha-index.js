@@ -213,8 +213,13 @@ $(function () {
         var dataUrl = $(this).data('url'),
             dataIndex = $(this).data('index'),
             menuName = $.trim($(this).text()),
+            href = $(this).attr("href"),
             addMenuTab = true;
 
+        if (href !== "#" && href !== "") {
+            ys.openLink(href, '_blank');
+            return false;
+        }
         if (dataUrl == undefined || $.trim(dataUrl).length == 0) {
             return false;
         }

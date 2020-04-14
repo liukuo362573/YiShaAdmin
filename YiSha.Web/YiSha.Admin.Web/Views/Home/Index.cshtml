@@ -44,7 +44,7 @@
                             @{
                                 if (HttpHelper.IsUrl(menu.MenuUrl))
                                 {
-                                    <a class="menuItem" href="#" data-url='@menu.MenuUrl'>
+                                    <a class="menuItem" href="@menu.MenuUrl">
                                         <i class="@menu.MenuIcon"></i>
                                         <span class="nav-label">@menu.MenuName</span>
                                     </a>
@@ -67,7 +67,7 @@
                                             {
                                                 if (HttpHelper.IsUrl(secondMenu.MenuUrl))
                                                 {
-                                                    <a class="menuItem" href="#" data-url='@secondMenu.MenuUrl'>@secondMenu.MenuName</a>
+                                                    <a class="menuItem" href='@secondMenu.MenuUrl'>@secondMenu.MenuName</a>
                                                 }
                                                 else
                                                 {
