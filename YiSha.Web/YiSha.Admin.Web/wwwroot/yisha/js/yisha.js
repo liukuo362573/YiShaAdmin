@@ -398,7 +398,7 @@
             }
             return value.toString();
         },
-        openLink(href, target) {
+        openLink: function (href, target) {
             let a = document.createElement('a')
             if (target) {
                 a.target = target;
