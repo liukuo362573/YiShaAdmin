@@ -399,7 +399,7 @@
             return value.toString();
         },
         openLink: function (href, target) {
-            let a = document.createElement('a')
+            var a = document.createElement('a')
             if (target) {
                 a.target = target;
             }
