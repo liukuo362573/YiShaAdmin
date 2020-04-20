@@ -19,7 +19,6 @@ namespace YiSha.Business.OrganizationManage
     {
         private DepartmentService departmentService = new DepartmentService();
         private UserService userService = new UserService();
-        private UserBelongService userBelongService = new UserBelongService();
 
         #region 获取数据
         public async Task<TData<List<DepartmentEntity>>> GetList(DepartmentListParam param)
