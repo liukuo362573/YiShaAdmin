@@ -43,12 +43,14 @@ namespace YiSha.Business.OrganizationManage
         public async Task<TData<List<UserEntity>>> GetPageList(UserListParam param, Pagination pagination)
         {
             TData<List<UserEntity>> obj = new TData<List<UserEntity>>();
-            if (param != null)
+            if (param?.DepartmentId != null)
             {
-                if (param.DepartmentId != null)
-                {
-                    param.ChildrenDepartmentIdList = await departmentBLL.GetDepartmentIdList(param.DepartmentId.Value);
-                }
+                param.ChildrenDepartmentIdList = await departmentBLL.GetChildrenDepartmentIdList(null, param.DepartmentId.Value);
+            }
+            else
+            {
+                OperatorInfo user = await Operator.Instance.Current();
+                param.ChildrenDepartmentIdList = await departmentBLL.GetChildrenDepartmentIdList(null, user.DepartmentId.Value);
             }
             obj.Result = await userService.GetPageList(param, pagination);
             List<UserBelongEntity> userBelongList = await userBelongService.GetList(new UserBelongEntity { UserIds = obj.Result.Select(p => p.Id.Value).ParseToStrings<long>() });
