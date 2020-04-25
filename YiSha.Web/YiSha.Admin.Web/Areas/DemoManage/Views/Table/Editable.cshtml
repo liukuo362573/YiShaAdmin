@@ -1,0 +1,137 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+@section header{
+    <link href="@Url.Content("~/lib/bootstrap.table/1.12.0/extensions/editable/bootstrap-editable.css")" rel="stylesheet" type="text/css">
+    <script src='@Url.Content("~/lib/bootstrap.table/1.12.0/extensions/editable/bootstrap-editable.min.js")' type="text/javascript"></script>
+    <script src='@Url.Content("~/lib/bootstrap.table/1.12.0/extensions/editable/bootstrap-table-editable.js")' type="text/javascript"></script>
+}
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 select-table table-striped">
+            <table id="gridTable" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+    });
+
+    function initGrid() {
+        var queryUrl = '@Url.Content("~/DemoManage/Table/GetPageListJson")';
+        $('#gridTable').ysTable({
+            url: queryUrl,
+            sortName: 'NewsSort',
+            sortOrder: 'Desc',
+            onEditableSave: onEditableSave,
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: '用户编号' },
+                {
+                    field: 'RealName', title: '用户姓名',
+                    editable: {
+                        type: 'text',
+                        title: '名称',
+                        emptytext: "【名称】为空",
+                        validate: function (value) {
+                            if (value.length > 30) {
+                                return '名称不能超过30个字符';
+                            }
+                            if (value.length == 0) {
+                                return '名称不能为空';
+                            }
+                        }
+                    }
+                },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Email', title: '邮箱' },
+                {
+                    field: 'UserStatus', title: '状态',
+                    align: 'center',
+                    editable: {
+                        type: 'select',
+                        title: '状态',
+                        source: [{
+                            value: 0,
+                            text: "正常"
+                        }, {
+                            value: 1,
+                            text: "停用"
+                        }]
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs" href="#"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs" href="#"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }
+            ],
+            queryParams: function (params) {
+                var pagination = $('#gridTable').ysTable('getPagination', params);
+                var queryString = $('#searchDiv').getWebControls(pagination);
+                return queryString;
+            }
+        });
+    }
+
+    function searchGrid() {
+        $('#gridTable').ysTable('search');
+        resetToolbarStatus();
+    }
+
+    function showSaveForm(bAdd) {
+        var id = 0;
+        if (!bAdd) {
+            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+            if (!ys.checkRowEdit(selectedRow)) {
+                return;
+            }
+            else {
+                id = selectedRow[0].Id;
+            }
+        }
+        ys.openDialog({
+            title: id > 0 ? "编辑文章" : "添加文章",
+            content: '@Url.Content("~/OrganizationManage/News/NewsForm")' + '?id=' + id,
+            width: "768px",
+            height: "600px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+    function deleteForm() {
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        if (ys.checkRowDelete(selectedRow)) {
+            ys.confirm("确认要删除选中的" + selectedRow.length + "条数据吗？", function () {
+                var ids = ys.getIds(selectedRow);
+                ys.ajax({
+                    url: '@Url.Content("~/OrganizationManage/News/DeleteFormJson")' + '?ids=' + ids,
+                    type: "post",
+                    success: function (obj) {
+                        if (obj.Tag == 1) {
+                            ys.msgSuccess(obj.Message);
+                            searchGrid();
+                        }
+                        else {
+                            ys.msgError(obj.Message);
+                        }
+                    }
+                });
+            });
+        }
+    }
+
+    function onEditableSave(field, row, oldValue, $el) {
+        alert("字段名：" + field + "，当前值：" + row[field] + "，旧值：" + oldValue);
+    }
+</script>
