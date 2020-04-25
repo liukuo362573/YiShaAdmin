@@ -22,7 +22,7 @@ namespace YiSha.Admin.Web.Controllers
 {
     public class HomeController : BaseController
     {
-        private MenuBLL baseMenuBLL = new MenuBLL();
+        private MenuBLL menuBLL = new MenuBLL();
         private UserBLL userBLL = new UserBLL();
         private LogLoginBLL logLoginBLL = new LogLoginBLL();
         private MenuAuthorizeBLL menuAuthorizeBLL = new MenuAuthorizeBLL();
@@ -35,7 +35,7 @@ namespace YiSha.Admin.Web.Controllers
         {
             OperatorInfo operatorInfo = await Operator.Instance.Current();
 
-            TData<List<MenuEntity>> objMenu = await baseMenuBLL.GetList(null);
+            TData<List<MenuEntity>> objMenu = await menuBLL.GetList(null);
             List<MenuEntity> menuList = objMenu.Result;
             menuList = menuList.Where(p => p.MenuStatus == StatusEnum.Yes.ParseToInt()).ToList();
 
