@@ -17,6 +17,11 @@ namespace YiSha.Admin.Web.Areas.DemoManage.Controllers
         {
             return View();
         }
+
+        public IActionResult Image()
+        {
+            return View();
+        }
         #endregion
 
         #region 获取数据

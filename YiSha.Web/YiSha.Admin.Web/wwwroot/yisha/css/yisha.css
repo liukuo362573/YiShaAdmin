@@ -1,5 +1,4 @@
-﻿/** 用户管理 样式布局 */
-html {
+﻿html {
     overflow: hidden;
     height: 100%;
     border: none;
@@ -463,4 +462,24 @@ a.ui-button:active,
 
 .dropdown-menu > .divider {
     background-color: #eee;
+}
+
+.img-xs {
+    width: 32px;
+    height: 32px;
+}
+
+.img-sm {
+    width: 64px;
+    height: 64px;
+}
+
+.img-md {
+    width: 96px;
+    height: 96px;
+}
+
+.img-lg {
+    width: 120px;
+    height: 120px;
 }

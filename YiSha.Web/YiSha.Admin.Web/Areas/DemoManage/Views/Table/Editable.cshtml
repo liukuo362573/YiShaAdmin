@@ -23,8 +23,6 @@
         var queryUrl = '@Url.Content("~/DemoManage/Table/GetPageListJson")';
         $('#gridTable').ysTable({
             url: queryUrl,
-            sortName: 'NewsSort',
-            sortOrder: 'Desc',
             onEditableSave: onEditableSave,
             columns: [
                 { checkbox: true, visible: true },
@@ -79,56 +77,6 @@
                 return queryString;
             }
         });
-    }
-
-    function searchGrid() {
-        $('#gridTable').ysTable('search');
-        resetToolbarStatus();
-    }
-
-    function showSaveForm(bAdd) {
-        var id = 0;
-        if (!bAdd) {
-            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-            if (!ys.checkRowEdit(selectedRow)) {
-                return;
-            }
-            else {
-                id = selectedRow[0].Id;
-            }
-        }
-        ys.openDialog({
-            title: id > 0 ? "编辑文章" : "添加文章",
-            content: '@Url.Content("~/OrganizationManage/News/NewsForm")' + '?id=' + id,
-            width: "768px",
-            height: "600px",
-            callback: function (index, layero) {
-                var iframeWin = window[layero.find('iframe')[0]['name']];
-                iframeWin.saveForm(index);
-            }
-        });
-    }
-
-    function deleteForm() {
-        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-        if (ys.checkRowDelete(selectedRow)) {
-            ys.confirm("确认要删除选中的" + selectedRow.length + "条数据吗？", function () {
-                var ids = ys.getIds(selectedRow);
-                ys.ajax({
-                    url: '@Url.Content("~/OrganizationManage/News/DeleteFormJson")' + '?ids=' + ids,
-                    type: "post",
-                    success: function (obj) {
-                        if (obj.Tag == 1) {
-                            ys.msgSuccess(obj.Message);
-                            searchGrid();
-                        }
-                        else {
-                            ys.msgError(obj.Message);
-                        }
-                    }
-                });
-            });
-        }
     }
 
     function onEditableSave(field, row, oldValue, $el) {
