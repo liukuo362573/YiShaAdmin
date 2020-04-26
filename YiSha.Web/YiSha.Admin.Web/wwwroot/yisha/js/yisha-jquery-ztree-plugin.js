@@ -59,7 +59,7 @@
         }
     };
     $.fn.ysTree.defaults = {
-        url:'',
+        url: '',
         async: false,
         maxHeight: "300px",
         expandLevel: 0,
@@ -105,6 +105,8 @@
                 var targetTree = $("#" + eleTreeId);
                 var targetInput = $("#" + eleInputId);
 
+                // 用户定义的onClick回调
+                var outsideOnClick = _option.callback.onClick;
                 // OnClick callback
                 _option.callback.onClick = function (event, treeId, treeNode) {
                     var wholeName = '';
@@ -123,6 +125,9 @@
 
                     targetInput.val(wholeName);
                     targetTree.hide();
+                    if (outsideOnClick) {
+                        outsideOnClick(event, treeId, treeNode);
+                    }
                 };
 
                 target.ztree = $.fn.zTree.init($("#" + eleTreeId), _option, data.Result);
