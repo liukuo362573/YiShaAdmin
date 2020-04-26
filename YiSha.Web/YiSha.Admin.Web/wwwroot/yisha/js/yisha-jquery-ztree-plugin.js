@@ -106,7 +106,7 @@
                 var targetInput = $("#" + eleInputId);
 
                 // 用户定义的onClick回调
-                var outsideOnClick = _option.callback.onClick;
+                var customOnClick = _option.callback.customOnClick;
                 // OnClick callback
                 _option.callback.onClick = function (event, treeId, treeNode) {
                     var wholeName = '';
@@ -125,8 +125,9 @@
 
                     targetInput.val(wholeName);
                     targetTree.hide();
-                    if (outsideOnClick) {
-                        outsideOnClick(event, treeId, treeNode);
+
+                    if (customOnClick) {
+                        customOnClick(event, treeId, treeNode);
                     }
                 };
 
@@ -175,7 +176,7 @@
                 zTreeObj.cancelSelectedNode();//先取消所有的选中状态
                 zTreeObj.selectNode(node, true);//将指定ID的节点选中
                 zTreeObj.expandNode(node, true, false);//将指定ID节点展开
-                zTreeObj.setting.callback.onClick(null, zTreeObj.setting.treeId, node); //触发onclick
+                zTreeObj.setting.callback.onClick('setValue', zTreeObj.setting.treeId, node); //触发onclick
             }
             return $(target);
         }
