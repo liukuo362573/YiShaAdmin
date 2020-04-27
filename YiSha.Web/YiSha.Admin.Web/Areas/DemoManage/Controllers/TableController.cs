@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Model.Param.OrganizationManage;
+using YiSha.Util;
 using YiSha.Util.Model;
 
 namespace YiSha.Admin.Web.Areas.DemoManage.Controllers
@@ -19,6 +20,16 @@ namespace YiSha.Admin.Web.Areas.DemoManage.Controllers
         }
 
         public IActionResult Image()
+        {
+            return View();
+        }
+
+        public IActionResult Footer()
+        {
+            return View();
+        }
+
+        public IActionResult GroupHeader()
         {
             return View();
         }
@@ -47,6 +58,7 @@ namespace YiSha.Admin.Web.Areas.DemoManage.Controllers
                     Mobile = "15612345678",
                     Email = "test@163.com",
                     Birthday = DateTime.Now.ToString("yyyy-MM-dd"),
+                    LoginCount = new Random().Next(1, 100),
                     UserStatus = i % 2
                 });
             }

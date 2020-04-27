@@ -57,6 +57,5 @@ namespace YiSha.Entity.OrganizationManage
         /// </summary>
         [NotMapped]
         public string RoleIds { get; set; }
-
     }
 }

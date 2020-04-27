@@ -1,0 +1,58 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 select-table table-striped">
+            <table id="gridTable" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+    });
+
+    function initGrid() {
+        var queryUrl = '@Url.Content("~/DemoManage/Table/GetPageListJson")';
+        $('#gridTable').ysTable({
+            url: queryUrl,
+            showFooter: true,
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: '用户编号' },
+                { field: 'RealName', title: '用户姓名' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Email', title: '邮箱' },
+                {
+				    field : 'LoginCount',
+				    title : '登录次数',
+				    footerFormatter:function (value) {
+				    	var sumBalance = 0;
+				        for (var i in value) {
+				        	sumBalance += parseFloat(value[i].LoginCount);
+				        }
+				        return "总次数：" + sumBalance;
+				    }
+				},
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs" href="#"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs" href="#"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }
+            ],
+            queryParams: function (params) {
+                var pagination = $('#gridTable').ysTable('getPagination', params);
+                var queryString = $('#searchDiv').getWebControls(pagination);
+                return queryString;
+            }
+        });
+    }
+</script>
