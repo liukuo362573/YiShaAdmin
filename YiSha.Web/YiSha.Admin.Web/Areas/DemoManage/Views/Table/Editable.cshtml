@@ -5,6 +5,7 @@
     <link href="@Url.Content("~/lib/bootstrap.table/1.12.0/extensions/editable/bootstrap-editable.css")" rel="stylesheet" type="text/css">
     <script src='@Url.Content("~/lib/bootstrap.table/1.12.0/extensions/editable/bootstrap-editable.min.js")' type="text/javascript"></script>
     <script src='@Url.Content("~/lib/bootstrap.table/1.12.0/extensions/editable/bootstrap-table-editable.js")' type="text/javascript"></script>
+    <script src='@Url.Content("~/lib/bootstrap.table/1.12.0/extensions/editable/bootstrap-datepicker.zh-CN.js")' type="text/javascript"></script>
 }
 <div class="container-div">
     <div class="row">
@@ -31,14 +32,13 @@
                     field: 'RealName', title: '用户姓名',
                     editable: {
                         type: 'text',
-                        title: '名称',
-                        emptytext: "【名称】为空",
+                        emptytext: "【用户姓名】为空",
                         validate: function (value) {
-                            if (value.length > 30) {
-                                return '名称不能超过30个字符';
+                            if (value.length > 20) {
+                                return '用户姓名不能超过20个字符';
                             }
                             if (value.length == 0) {
-                                return '名称不能为空';
+                                return '用户姓名不能为空';
                             }
                         }
                     }
@@ -46,17 +46,28 @@
                 { field: 'Mobile', title: '手机' },
                 { field: 'Email', title: '邮箱' },
                 {
+                    field: 'Birthday', title: '生日',
+                    editable: {
+                        type: 'date',
+                        emptytext: "【生日】为空",
+                        clear: false,
+                        datepicker: { language: 'zh-CN' },//中文支持
+                        validate: function (value) {
+                            if (value == '') { return '生日不能为空!' }
+                        }
+                    }
+                },
+                {
                     field: 'UserStatus', title: '状态',
                     align: 'center',
                     editable: {
                         type: 'select',
-                        title: '状态',
                         source: [{
                             value: 0,
-                            text: "正常"
+                            text: "停用"
                         }, {
                             value: 1,
-                            text: "停用"
+                            text: "正常"
                         }]
                     }
                 },

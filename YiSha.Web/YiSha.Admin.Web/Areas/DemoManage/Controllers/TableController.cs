@@ -46,6 +46,7 @@ namespace YiSha.Admin.Web.Areas.DemoManage.Controllers
                     RealName = "用户" + i,
                     Mobile = "15612345678",
                     Email = "test@163.com",
+                    Birthday = DateTime.Now.ToString("yyyy-MM-dd"),
                     UserStatus = i % 2
                 });
             }
