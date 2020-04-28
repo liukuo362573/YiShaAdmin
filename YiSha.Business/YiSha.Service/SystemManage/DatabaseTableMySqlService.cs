@@ -135,8 +135,10 @@ namespace YiSha.Service.SystemManage
             foreach (TableInfo table in list)
             {
                 table.TableKey = string.Join(",", detailList.Where(p => p.TableName == table.TableName).Select(p => p.TableKey));
-                table.TableKeyName = detailList.Where(p => p.TableName == table.TableName).Select(p => p.TableKeyName).FirstOrDefault();
-                table.TableCount = detailList.Where(p => p.TableName == table.TableName).Select(p => p.TableCount).FirstOrDefault();
+                var tableInfo = detailList.Where(p => p.TableName == table.TableName).FirstOrDefault();
+                table.TableKeyName = tableInfo.TableKeyName;
+                table.TableCount = tableInfo.TableCount;
+                table.Remark = tableInfo.Remark;
             }
         }
         private string GetDatabase()
