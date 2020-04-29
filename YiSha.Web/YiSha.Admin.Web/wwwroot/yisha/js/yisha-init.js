@@ -84,11 +84,16 @@ $(function () {
         expandFlag = expandFlag ? false : true;
     });
 
-    // 复选框后按钮样式状态变更
+
+    // bootstraple table 行选中按钮样式状态变更
     $("#gridTable").on("check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table", function () {
         var ids = $("#gridTable").bootstrapTable("getSelections");
-        $('#btnDelete').toggleClass('disabled', !ids.length);
-        $('#btnEdit').toggleClass('disabled', ids.length != 1);
+        if ($('#btnDelete')) {
+            $('#btnDelete').toggleClass('disabled', !ids.length);
+        }
+        if ($('#btnEdit')) {
+            $('#btnEdit').toggleClass('disabled', ids.length != 1);
+        }
     });
 
     // select2复选框事件绑定
@@ -128,12 +133,13 @@ $(function () {
     });
 });
 
+// 查询事件调用，给按钮添加disabled
 function resetToolbarStatus() {
     if ($('#btnDelete')) {
-        $('#btnDelete').toggleClass('disabled');
+        $('#btnDelete').addClass('disabled');
     }
     if ($('#btnEdit')) {
-        $('#btnEdit').toggleClass('disabled');
+        $('#btnEdit').addClass('disabled');
     }
 }
 
