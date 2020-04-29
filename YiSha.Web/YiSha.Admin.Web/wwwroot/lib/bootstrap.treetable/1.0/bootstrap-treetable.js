@@ -210,8 +210,11 @@
             registerExpanderEvent();
             registerRowClickEvent();
             initHiddenColumns();
+            if ($.isFunction(options.onLoadSuccess)) {
+                options.onLoadSuccess();
+            }
             // 动态设置表头宽度
-            autoTheadWidth()
+            autoTheadWidth();
         }
         // 动态设置表头宽度
         var autoTheadWidth = function (initFlag) {
@@ -607,11 +610,17 @@
         }
         // 展开指定的行
         target.expandRow = function (id) {
-            var _rowData = target.data_obj["id_" + id];
-            var $row_expander = $("#" + _rowData.row_id).find(".treetable-expander");
-            var _isCollapsed = $row_expander.hasClass(options.expanderCollapsedClass);
-            if (_isCollapsed) {
-                $row_expander.trigger("click");
+            var destArr = [];
+            ys.recursion(target.data_obj, id, destArr, options.code, options.parentCode);
+            // 一层一层展开
+            for (var i = destArr.length - 1; i >= 0; i--) {
+                if (destArr[i].row_id) {
+                    var $row_expander = $("#" + destArr[i].row_id).find(".treetable-expander");
+                    var _isCollapsed = $row_expander.hasClass(options.expanderCollapsedClass);
+                    if (_isCollapsed) {
+                        $row_expander.trigger("click");
+                    }
+                }
             }
         }
         // 折叠 指定的行
@@ -755,6 +764,7 @@
         showColumns: true,         // 是否显示内容列下拉框
         showRefresh: true,         // 是否显示刷新按钮
         expanderExpandedClass: 'glyphicon glyphicon-chevron-down', // 展开的按钮的图标
-        expanderCollapsedClass: 'glyphicon glyphicon-chevron-right' // 缩起的按钮的图标
+        expanderCollapsedClass: 'glyphicon glyphicon-chevron-right', // 缩起的按钮的图标
+        onLoadSuccess: null          // 加载完成后调用
     };
 })(jQuery);

@@ -109,7 +109,7 @@
                 success: function (obj) {
                     if (obj.Tag == 1) {
                         ys.msgSuccess(obj.Message);
-                        parent.searchTreeGrid();
+                        parent.searchTreeGrid(id);
                         parent.layer.close(index);
                     }
                     else {

@@ -40,6 +40,7 @@
 
 <script type="text/javascript">
     var parentId = 0;
+    var id = 0;
     $(function () {
         initTreeGrid();
 
@@ -94,14 +95,22 @@
                         }
                     }
                 }
-            ]
+            ],
+            onLoadSuccess: function () {
+                if (id != 0) {
+                    $('#gridTable').ysTreeTable('expandRowById', id);
+                }
+            }
         };
         $('#gridTable').ysTreeTable(options);
     }
 
-    function searchTreeGrid() {
+    function searchTreeGrid(callBackId) {
         var param = $("#searchDiv").getWebControls();
         $('#gridTable').ysTreeTable('search', param);
+        if (callBackId) {
+            id = callBackId;
+        }
     }
 
     function showSaveForm(bAdd) {

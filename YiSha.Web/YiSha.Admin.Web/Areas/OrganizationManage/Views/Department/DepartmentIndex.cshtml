@@ -36,6 +36,7 @@
 </div>
 
 <script type="text/javascript">
+    var id = 0;
     $(function () {
         initTreeGrid();
     });
@@ -62,14 +63,22 @@
                         return ys.formatDate(value, "yyyy-MM-dd HH:mm:ss");
                     }
                 }
-            ]
+            ],
+            onLoadSuccess: function () {
+                if (id != 0) {
+                    $('#gridTable').ysTreeTable('expandRowById', id);
+                }
+            }
         };
         $('#gridTable').ysTreeTable(options);
     }
 
-    function searchTreeGrid() {
+    function searchTreeGrid(callBackId) {
         var param = $("#searchDiv").getWebControls();
         $('#gridTable').ysTreeTable('search', param);
+         if (callBackId) {
+            id = callBackId;
+        }
     }
 
     function showSaveForm(bAdd) {

@@ -408,6 +408,20 @@
             }
             a.href = href;
             a.click();
+        },
+        recursion: function (obj, id, destArr, key, parentKey) {
+            if (!key) {
+                key = "id";
+            }
+            if (!parentKey) {
+                parentKey = "parentId";
+            }
+            for (var item in obj) {
+                if (obj[item][key] == id) {
+                    destArr.push(obj[item]);
+                    return ys.recursion(obj, obj[item][parentKey], destArr, key, parentKey);
+                }
+            }           
         }
     });
 })(window.jQuery, window.ys);
