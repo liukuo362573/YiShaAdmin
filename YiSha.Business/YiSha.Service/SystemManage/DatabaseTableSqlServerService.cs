@@ -88,14 +88,15 @@ namespace YiSha.Service.SystemManage
         /// <returns></returns>
         private async Task<List<TableInfo>> GetTableDetailList()
         {
-            string strSql = @"SELECT syscolumns.id Id,syscolumns.name TableKey,sysobjects.name TableKeyName,sysindexes.rows TableCount
-                                     FROM syscolumns,sysobjects,sysindexes,sysindexkeys 
+            string strSql = @"SELECT (SELECT name FROM sysobjects as t WHERE xtype = 'U' and t.id = sc.id) TableName,
+                                     sc.id Id,sc.name TableKey,sysobjects.name TableKeyName,sysindexes.rows TableCount
+                                     FROM syscolumns sc ,sysobjects,sysindexes,sysindexkeys 
                                      WHERE sysobjects.xtype = 'PK' 
-                                           AND sysobjects.parent_obj = syscolumns.id 
-                                           AND sysindexes.id = syscolumns.id 
-                                           AND sysobjects.name = sysindexes.name AND sysindexkeys.id = syscolumns.id 
+                                           AND sysobjects.parent_obj = sc.id 
+                                           AND sysindexes.id = sc.id 
+                                           AND sysobjects.name = sysindexes.name AND sysindexkeys.id = sc.id 
                                            AND sysindexkeys.indid = sysindexes.indid 
-                                           AND syscolumns.colid = sysindexkeys.colid;";
+                                           AND sc.colid = sysindexkeys.colid;";
 
             IEnumerable<TableInfo> list = await this.BaseRepository().FindList<TableInfo>(strSql.ToString());
             return list.ToList();
