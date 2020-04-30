@@ -147,8 +147,8 @@
                 data: postData,
                 success: function (obj) {
                     if (obj.Tag == 1) {
-                        ys.msgSuccess(obj.Message);
-                        parent.searchTreeGrid(id);
+                        ys.msgSuccess(obj.Message);;
+                        parent.searchTreeGrid(obj.Result);
                         parent.layer.close(index);
                     }
                     else {
