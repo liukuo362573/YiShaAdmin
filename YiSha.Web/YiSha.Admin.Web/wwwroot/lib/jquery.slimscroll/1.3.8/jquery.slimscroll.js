@@ -162,14 +162,12 @@
           .addClass(o.wrapperClass)
           .css({
             position: 'relative',
-            overflow: 'hidden',
             width: o.width,
             height: o.height
           });
 
         // update style for the div
         me.css({
-          overflow: 'hidden',
           width: o.width,
           height: o.height
         });
