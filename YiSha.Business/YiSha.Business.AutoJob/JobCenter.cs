@@ -26,7 +26,7 @@ namespace YiSha.Business.AutoJob
                     TData<List<AutoJobEntity>> obj = await new AutoJobBLL().GetList(null);
                     if (obj.Tag == 1)
                     {
-                        new JobCenter().AddScheduleJob(obj.Result);
+                        AddScheduleJob(obj.Result);
                     }
                 }
             });
@@ -41,7 +41,7 @@ namespace YiSha.Business.AutoJob
         {
             try
             {
-                foreach (AutoJobEntity entity in entityList.Where(p => p.JobStatus == StatusEnum.Yes.ParseToInt()))
+                foreach (AutoJobEntity entity in entityList)
                 {
                     if (entity.StartTime == null)
                     {
