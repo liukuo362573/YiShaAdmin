@@ -20,10 +20,6 @@ namespace YiSha.Util.Model
         public bool LoginMultiple { get; set; }
         public string LoginProvider { get; set; }
         /// <summary>
-        ///  数据库超时间（秒）
-        /// </summary>
-        public int CommandTimeout { get; set; }
-        /// <summary>
         /// Snow Flake Worker Id
         /// </summary>
         public int SnowFlakeWorkerId { get; set; }
@@ -42,6 +38,9 @@ namespace YiSha.Util.Model
 
         public string DBProvider { get; set; }
         public string DBConnectionString { get; set; }
+        /// <summary>
+        ///  数据库超时间（秒）
+        /// </summary>
         public string DBCommandTimeout { get; set; }
         /// <summary>
         /// 数据库备份路径

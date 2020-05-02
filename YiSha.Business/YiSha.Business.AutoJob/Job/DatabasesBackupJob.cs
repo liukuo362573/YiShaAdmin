@@ -15,27 +15,25 @@ namespace YiSha.Business.AutoJob
         public async Task<TData> Start()
         {
             TData obj = new TData();
-            string backupPath = string.Empty;// GlobalContext.SystemConfig.DatabaseBackup;
+            string backupPath = GlobalContext.SystemConfig.DBBackup;
             if (string.IsNullOrEmpty(backupPath))
             {
-                backupPath = GlobalContext.HostingEnvironment.ContentRootPath + Path.DirectorySeparatorChar + "Database";
-            }
-            if (string.IsNullOrEmpty(backupPath))
-            {
-                obj.Message = "未配置数据库备份路径";
+                backupPath = Path.Combine(GlobalContext.HostingEnvironment.ContentRootPath, "Database");
             }
             else
             {
-                if (!Directory.Exists(backupPath))
-                {
-                    Directory.CreateDirectory(backupPath);
-                }
-
-                string info = await new DatabaseTableBLL().DatabaseBackup(backupPath);
-
-                obj.Tag = 1;
-                obj.Message = "备份路径：" + info;
+                backupPath = Path.Combine(GlobalContext.HostingEnvironment.ContentRootPath, backupPath);
             }
+
+            if (!Directory.Exists(backupPath))
+            {
+                Directory.CreateDirectory(backupPath);
+            }
+
+            string info = await new DatabaseTableBLL().DatabaseBackup(backupPath);
+
+            obj.Tag = 1;
+            obj.Message = "备份路径：" + info;
             return obj;
         }
     }
