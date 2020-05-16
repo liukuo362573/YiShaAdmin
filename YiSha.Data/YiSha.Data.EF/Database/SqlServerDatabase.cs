@@ -243,7 +243,6 @@ namespace YiSha.Data.EF
                     continue;
                 }
                 object value = dbContext.Entry(entity).Property(item).CurrentValue;
-
                 if (value != null)
                 {
                     dbContext.Entry(entity).Property(item).IsModified = true;

@@ -207,6 +207,25 @@ namespace YiSha.Data
         public static bool IsNullOrDBNull(object obj)
         {
             return ((obj is DBNull) || string.IsNullOrEmpty(obj.ToString())) ? true : false;
-        }    
+        }
+
+        public static string GetSql<TEntity>(this IQueryable<TEntity> query)
+        {
+            var enumerator = query.Provider.Execute<IEnumerable<TEntity>>(query.Expression).GetEnumerator();
+            var relationalCommandCache = enumerator.Private("_relationalCommandCache");
+            var selectExpression = relationalCommandCache.Private<SelectExpression>("_selectExpression");
+            var factory = relationalCommandCache.Private<IQuerySqlGeneratorFactory>("_querySqlGeneratorFactory");
+
+            var sqlGenerator = factory.Create();
+            var command = sqlGenerator.GetCommand(selectExpression);
+
+            string sql = command.CommandText;
+            return sql;
+        }
+
+        #region 私有方法
+        private static object Private(this object obj, string privateField) => obj?.GetType().GetField(privateField, BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(obj);
+        private static T Private<T>(this object obj, string privateField) => (T)obj?.GetType().GetField(privateField, BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(obj);
+        #endregion
     }
 }

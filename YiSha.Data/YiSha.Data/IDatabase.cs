@@ -12,6 +12,18 @@ namespace YiSha.Data
 {
     public interface IDatabase
     {
+        #region 属性
+        /// <summary>
+        /// 获取 当前使用的数据访问上下文对象
+        /// </summary>
+        public DbContext dbContext { get; set; }
+        /// <summary>
+        /// 事务对象
+        /// </summary>
+        public IDbContextTransaction dbContextTransaction { get; set; }
+        #endregion
+
+        #region 方法
         Task<IDatabase> BeginTrans();
         Task<int> CommitTrans();
         Task RollbackTrans();
@@ -61,5 +73,6 @@ namespace YiSha.Data
         Task<object> FindObject(string strSql);
         Task<object> FindObject(string strSql, DbParameter[] dbParameter);
         Task<T> FindObject<T>(string strSql) where T : class;
+        #endregion
     }
 }

@@ -1,8 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using YiSha.Data;
+using YiSha.Data.Repository;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Service.SystemManage;
@@ -17,7 +19,7 @@ namespace YiSha.DataTest
         /// </summary>
         /// <returns></returns>
         [Test]
-        public async Task TestSort()
+        public async Task SortTest()
         {
             RoleService roleService = new RoleService();
             RoleListParam roleListParam = new RoleListParam { };
@@ -34,7 +36,7 @@ namespace YiSha.DataTest
         /// </summary>
         /// <returns></returns>
         [Test]
-        public async Task TestMultiSort()
+        public async Task MultiSortTest()
         {
             RoleService roleService = new RoleService();
             RoleListParam roleListParam = new RoleListParam { };
@@ -44,6 +46,25 @@ namespace YiSha.DataTest
             };
             List<RoleEntity> list = await roleService.GetPageList(roleListParam, pagination);
             Assert.IsTrue(list[0].Id > list[1].Id);
+        }
+
+        /// <summary>
+        /// 测试如何获取Linq查询时对应的Sql
+        /// </summary>
+        /// <returns></returns>
+        [Test]
+        public async Task LinqGetSqlTest()
+        {
+            string sort = "RoleSort";
+            bool isAsc = false;
+            int pageSize = 10;
+            int pageIndex = 1;
+            RepositoryFactory repositoryFactory = new RepositoryFactory();
+            var tempData = repositoryFactory.BaseRepository().db.dbContext.Set<RoleEntity>().AsQueryable();
+            tempData = DatabasesExtension.AppendSort<RoleEntity>(tempData, sort, isAsc);
+            tempData = tempData.Skip<RoleEntity>(pageSize * (pageIndex - 1)).Take<RoleEntity>(pageSize).AsQueryable();
+            string strSql = DatabasesExtension.GetSql<RoleEntity>(tempData);
+            Assert.IsTrue(strSql.ToUpper().Contains("SELECT"));
         }
     }
 }
