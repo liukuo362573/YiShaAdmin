@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Data;
-using System.Data.Common;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Storage;
+using YiSha.Util.Extension;
 
 namespace YiSha.Data.EF
 {
@@ -313,33 +313,32 @@ namespace YiSha.Data.EF
                 return DatabasesExtension.IDataReaderToList<T>(IDataReader);
             }
         }
-        public async Task<(int total, IEnumerable<T> list)> FindList<T>(string orderField, bool isAsc, int pageSize, int pageIndex) where T : class, new()
+        public async Task<(int total, IEnumerable<T> list)> FindList<T>(string sort, bool isAsc, int pageSize, int pageIndex) where T : class, new()
         {
-            string[] _order = orderField.Split(',');
             var tempData = dbContext.Set<T>().AsQueryable();
-            return await FindList<T>(tempData, orderField, isAsc, pageSize, pageIndex);
+            return await FindList<T>(tempData, sort, isAsc, pageSize, pageIndex);
         }
-        public async Task<(int total, IEnumerable<T> list)> FindList<T>(Expression<Func<T, bool>> condition, string orderField, bool isAsc, int pageSize, int pageIndex) where T : class, new()
+        public async Task<(int total, IEnumerable<T> list)> FindList<T>(Expression<Func<T, bool>> condition, string sort, bool isAsc, int pageSize, int pageIndex) where T : class, new()
         {
-            string[] _order = orderField.Split(',');
             var tempData = dbContext.Set<T>().Where(condition);
-            return await FindList<T>(tempData, orderField, isAsc, pageSize, pageIndex);
+            return await FindList<T>(tempData, sort, isAsc, pageSize, pageIndex);
         }
-        public async Task<(int total, IEnumerable<T>)> FindList<T>(string strSql, string orderField, bool isAsc, int pageSize, int pageIndex) where T : class
+        public async Task<(int total, IEnumerable<T>)> FindList<T>(string strSql, string sort, bool isAsc, int pageSize, int pageIndex) where T : class
         {
-            return await FindList<T>(strSql, null, orderField, isAsc, pageSize, pageIndex);
+            return await FindList<T>(strSql, null, sort, isAsc, pageSize, pageIndex);
         }
-        public async Task<(int total, IEnumerable<T>)> FindList<T>(string strSql, DbParameter[] dbParameter, string orderField, bool isAsc, int pageSize, int pageIndex) where T : class
+        public async Task<(int total, IEnumerable<T>)> FindList<T>(string strSql, DbParameter[] dbParameter, string sort, bool isAsc, int pageSize, int pageIndex) where T : class
         {
             using (var dbConnection = dbContext.Database.GetDbConnection())
             {
+                DbHelper dbHelper = new DbHelper(dbConnection);
                 StringBuilder sb = new StringBuilder();
-                sb.Append(new DatabasePageExtension().SqlPageSql(strSql, dbParameter, orderField, isAsc, pageSize, pageIndex));
-                object tempTotal = await new DbHelper(dbConnection).ExecuteScalarAsync(CommandType.Text, "Select Count(1) From (" + strSql + ")  t", dbParameter);
-                int total = Convert.ToInt32(tempTotal);
+                sb.Append(DatabasePageExtension.SqlPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
+                object tempTotal = await dbHelper.ExecuteScalarAsync(CommandType.Text, "SELECT COUNT(1) FROM (" + strSql + ") T", dbParameter);
+                int total = tempTotal.ParseToInt();
                 if (total > 0)
                 {
-                    var IDataReader = await new DbHelper(dbConnection).ExecuteReadeAsync(CommandType.Text, sb.ToString(), dbParameter);
+                    var IDataReader = await dbHelper.ExecuteReadeAsync(CommandType.Text, sb.ToString(), dbParameter);
                     return (total, DatabasesExtension.IDataReaderToList<T>(IDataReader));
                 }
                 else
@@ -348,32 +347,20 @@ namespace YiSha.Data.EF
                 }
             }
         }
-        private async Task<(int total, IEnumerable<T> list)> FindList<T>(IQueryable<T> tempData, string orderField, bool isAsc, int pageSize, int pageIndex)
+        private async Task<(int total, IEnumerable<T> list)> FindList<T>(IQueryable<T> tempData, string sort, bool isAsc, int pageSize, int pageIndex)
         {
-            string[] _order = orderField.Split(',');
-            MethodCallExpression resultExp = null;
-            foreach (string item in _order)
-            {
-                string _orderPart = item;
-                _orderPart = Regex.Replace(_orderPart, @"\s+", " ");
-                string[] _orderArry = _orderPart.Split(' ');
-                string _orderField = _orderArry[0];
-                bool sort = isAsc;
-                if (_orderArry.Length == 2)
-                {
-                    isAsc = _orderArry[1].ToUpper() == "ASC" ? true : false;
-                }
-                var parameter = Expression.Parameter(typeof(T), "t");
-                var property = typeof(T).GetProperty(_orderField);
-                var propertyAccess = Expression.MakeMemberAccess(parameter, property);
-                var orderByExp = Expression.Lambda(propertyAccess, parameter);
-                resultExp = Expression.Call(typeof(Queryable), isAsc ? "OrderBy" : "OrderByDescending", new Type[] { typeof(T), property.PropertyType }, tempData.Expression, Expression.Quote(orderByExp));
-            }
-            tempData = tempData.Provider.CreateQuery<T>(resultExp);
+            tempData = DatabasesExtension.AppendSort<T>(tempData, sort, isAsc);
             var total = tempData.Count();
-            tempData = tempData.Skip<T>(pageSize * (pageIndex - 1)).Take<T>(pageSize).AsQueryable();
-            var list = await tempData.ToListAsync();
-            return (total, list);
+            if (total > 0)
+            {
+                tempData = tempData.Skip<T>(pageSize * (pageIndex - 1)).Take<T>(pageSize).AsQueryable();
+                var list = await tempData.ToListAsync();
+                return (total, list);
+            }
+            else
+            {
+                return (total, new List<T>());
+            }
         }
         #endregion
 
@@ -390,21 +377,29 @@ namespace YiSha.Data.EF
                 return DatabasesExtension.IDataReaderToDataTable(IDataReader);
             }
         }
-        public async Task<(int total, DataTable)> FindTable(string strSql, string orderField, bool isAsc, int pageSize, int pageIndex)
+        public async Task<(int total, DataTable)> FindTable(string strSql, string sort, bool isAsc, int pageSize, int pageIndex)
         {
-            return await FindTable(strSql, null, orderField, isAsc, pageSize, pageIndex);
+            return await FindTable(strSql, null, sort, isAsc, pageSize, pageIndex);
         }
-        public async Task<(int total, DataTable)> FindTable(string strSql, DbParameter[] dbParameter, string orderField, bool isAsc, int pageSize, int pageIndex)
+        public async Task<(int total, DataTable)> FindTable(string strSql, DbParameter[] dbParameter, string sort, bool isAsc, int pageSize, int pageIndex)
         {
             using (var dbConnection = dbContext.Database.GetDbConnection())
             {
+                DbHelper dbHelper = new DbHelper(dbConnection);
                 StringBuilder sb = new StringBuilder();
-                sb.Append(new DatabasePageExtension().SqlPageSql(strSql, dbParameter, orderField, isAsc, pageSize, pageIndex));
-                object tempTotal = await new DbHelper(dbConnection).ExecuteScalarAsync(CommandType.Text, "SELECT COUNT(1) FROM (" + strSql + ") t ", dbParameter);
-                int total = Convert.ToInt32(tempTotal);
-                var IDataReader = await new DbHelper(dbConnection).ExecuteReadeAsync(CommandType.Text, sb.ToString(), dbParameter);
-                DataTable resultTable = DatabasesExtension.IDataReaderToDataTable(IDataReader);
-                return (total, resultTable);
+                sb.Append(DatabasePageExtension.SqlPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
+                object tempTotal = await dbHelper.ExecuteScalarAsync(CommandType.Text, "SELECT COUNT(1) FROM (" + strSql + ") T", dbParameter);
+                int total = tempTotal.ParseToInt();
+                if (total > 0)
+                {
+                    var IDataReader = await dbHelper.ExecuteReadeAsync(CommandType.Text, sb.ToString(), dbParameter);
+                    DataTable resultTable = DatabasesExtension.IDataReaderToDataTable(IDataReader);
+                    return (total, resultTable);
+                }
+                else
+                {
+                    return (total, new DataTable());
+                }
             }
         }
 

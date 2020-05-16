@@ -15,6 +15,8 @@ namespace YiSha.Util.Model
         {
             Sort = "Id"; // 默认按Id排序
             SortType = " desc ";
+            PageIndex = 1;
+            PageSize = 10;
         }
 
         /// <summary>

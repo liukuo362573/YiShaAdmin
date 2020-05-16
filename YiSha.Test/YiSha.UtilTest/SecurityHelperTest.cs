@@ -4,7 +4,7 @@ using YiSha.Util;
 
 namespace YiSha.UtilTest
 {
-    public class TestSecurityHelper
+    public class SecurityHelperTest
     {
         [Test]
         public void TestMD5Encrypt()

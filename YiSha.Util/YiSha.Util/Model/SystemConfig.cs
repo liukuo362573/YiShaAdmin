@@ -41,7 +41,7 @@ namespace YiSha.Util.Model
         /// <summary>
         ///  数据库超时间（秒）
         /// </summary>
-        public string DBCommandTimeout { get; set; }
+        public int DBCommandTimeout { get; set; }
         /// <summary>
         /// 数据库备份路径
         /// </summary>

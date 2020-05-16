@@ -14,8 +14,7 @@ using YiSha.Util.Model;
 namespace YiSha.Data.Repository
 {
     /// <summary>
-    /// Copyright (c) 2018 合肥一沙软件
-    /// 创建人：刘括
+    /// 创建人：admin
     /// 日 期：2018.10.18
     /// 描 述：定义仓储模型中的数据标准操作接口
     /// </summary>
@@ -177,34 +176,7 @@ namespace YiSha.Data.Repository
             var data = await db.FindList<T>(strSql, dbParameter, pagination.Sort, pagination.SortType.ToLower() == "asc" ? true : false, pagination.PageSize, pagination.PageIndex);
             pagination.TotalCount = data.total;
             return data.Item2;
-        }
-        private async Task<(int total, IEnumerable<T> list)> FindList<T>(IQueryable<T> tempData, string orderField, bool isAsc, int pageSize, int pageIndex)
-        {
-            string[] _order = orderField.Split(',');
-            MethodCallExpression resultExp = null;
-            foreach (string item in _order)
-            {
-                string _orderPart = item;
-                _orderPart = Regex.Replace(_orderPart, @"\s+", " ");
-                string[] _orderArry = _orderPart.Split(' ');
-                string _orderField = _orderArry[0];
-                bool sort = isAsc;
-                if (_orderArry.Length == 2)
-                {
-                    isAsc = _orderArry[1].ToUpper() == "ASC" ? true : false;
-                }
-                var parameter = Expression.Parameter(typeof(T), "t");
-                var property = typeof(T).GetProperty(_orderField);
-                var propertyAccess = Expression.MakeMemberAccess(parameter, property);
-                var orderByExp = Expression.Lambda(propertyAccess, parameter);
-                resultExp = Expression.Call(typeof(Queryable), isAsc ? "OrderBy" : "OrderByDescending", new Type[] { typeof(T), property.PropertyType }, tempData.Expression, Expression.Quote(orderByExp));
-            }
-            tempData = tempData.Provider.CreateQuery<T>(resultExp);
-            var total = tempData.Count();
-            tempData = tempData.Skip<T>(pageSize * (pageIndex - 1)).Take<T>(pageSize).AsQueryable();
-            var list = await tempData.ToListAsync();
-            return (total, list);
-        }
+        }        
         #endregion
 
         #region 数据源 查询

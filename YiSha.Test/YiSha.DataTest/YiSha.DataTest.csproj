@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nunit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\YiSha.Business\YiSha.Service\YiSha.Service.csproj" />
+    <ProjectReference Include="..\..\YiSha.Data\YiSha.Data.EF\YiSha.Data.EF.csproj" />
+    <ProjectReference Include="..\..\YiSha.Data\YiSha.Data.Repository\YiSha.Data.Repository.csproj" />
+    <ProjectReference Include="..\..\YiSha.Data\YiSha.Data\YiSha.Data.csproj" />
+    <ProjectReference Include="..\..\YiSha.Entity\YiSha.Model\YiSha.Model.csproj" />
+  </ItemGroup>
+
+</Project>

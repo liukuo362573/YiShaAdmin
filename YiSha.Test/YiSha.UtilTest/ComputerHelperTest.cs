@@ -4,7 +4,7 @@ using YiSha.Util;
 
 namespace YiSha.UtilTest
 {
-    public class TestComputerHelper
+    public class ComputerHelperTest
     {
         [Test]
         public void TestGetComputerInfo()

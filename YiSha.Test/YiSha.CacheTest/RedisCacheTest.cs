@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,7 +12,7 @@ using YiSha.Entity.SystemManage;
 
 namespace YiSha.CacheTest
 {
-    public class TestRedisCache
+    public class RedisCacheTest
     {
         [SetUp]
         public void Init()
@@ -41,7 +41,7 @@ namespace YiSha.CacheTest
         public void TestRedisComplex()
         {
             string key = "test_complex_key";
-            TData<string> value = new TData<string> { Tag = 1, Result = "²âÊÔRedis" };
+            TData<string> value = new TData<string> { Tag = 1, Result = "æµ‹è¯•Redis" };
             CacheFactory.Cache.SetCache<TData<string>>(key, value);
 
             var result = CacheFactory.Cache.GetCache<TData<string>>(key);

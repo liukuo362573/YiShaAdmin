@@ -5,7 +5,7 @@ using YiSha.Util.Extension;
 
 namespace YiSha.UtilTest
 {
-    public class TestDateTimeHelper
+    public class DateTimeHelperTest
     {
         [Test]
         public void TestFormatTime()

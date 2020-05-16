@@ -5,7 +5,7 @@ namespace YiSha.Data
 {
     public class DatabasePageExtension
     {
-        public StringBuilder SqlPageSql(string strSql, DbParameter[] dbParameter, string orderField, bool isAsc, int pageSize, int pageIndex)
+        public static StringBuilder SqlPageSql(string strSql, DbParameter[] dbParameter, string sort, bool isAsc, int pageSize, int pageIndex)
         {
             StringBuilder sb = new StringBuilder();
             if (pageIndex == 0)
@@ -16,15 +16,15 @@ namespace YiSha.Data
             int num1 = (pageIndex) * pageSize;
             string OrderBy = "";
 
-            if (!string.IsNullOrEmpty(orderField))
+            if (!string.IsNullOrEmpty(sort))
             {
-                if (orderField.ToUpper().IndexOf("ASC") + orderField.ToUpper().IndexOf("DESC") > 0)
+                if (sort.ToUpper().IndexOf("ASC") + sort.ToUpper().IndexOf("DESC") > 0)
                 {
-                    OrderBy = " ORDER BY " + orderField;
+                    OrderBy = " ORDER BY " + sort;
                 }
                 else
                 {
-                    OrderBy = " ORDER BY " + orderField + " " + (isAsc ? "ASC" : "DESC");
+                    OrderBy = " ORDER BY " + sort + " " + (isAsc ? "ASC" : "DESC");
                 }
             }
             else
@@ -36,7 +36,7 @@ namespace YiSha.Data
             return sb;
         }
 
-        public StringBuilder OraclePageSql(string strSql, DbParameter[] dbParameter, string orderField, bool isAsc, int pageSize, int pageIndex)
+        public static StringBuilder OraclePageSql(string strSql, DbParameter[] dbParameter, string sort, bool isAsc, int pageSize, int pageIndex)
         {
             StringBuilder sb = new StringBuilder();
             if (pageIndex == 0)
@@ -47,15 +47,15 @@ namespace YiSha.Data
             int num1 = (pageIndex) * pageSize;
             string OrderBy = "";
 
-            if (!string.IsNullOrEmpty(orderField))
+            if (!string.IsNullOrEmpty(sort))
             {
-                if (orderField.ToUpper().IndexOf("ASC") + orderField.ToUpper().IndexOf("DESC") > 0)
+                if (sort.ToUpper().IndexOf("ASC") + sort.ToUpper().IndexOf("DESC") > 0)
                 {
-                    OrderBy = " ORDER BY " + orderField;
+                    OrderBy = " ORDER BY " + sort;
                 }
                 else
                 {
-                    OrderBy = " ORDER BY " + orderField + " " + (isAsc ? "ASC" : "DESC");
+                    OrderBy = " ORDER BY " + sort + " " + (isAsc ? "ASC" : "DESC");
                 }
             }
             sb.Append("SELECT * From (SELECT ROWNUM AS n,");
@@ -63,7 +63,7 @@ namespace YiSha.Data
             return sb;
         }
 
-        public StringBuilder MySqlPageSql(string strSql, DbParameter[] dbParameter, string orderField, bool isAsc, int pageSize, int pageIndex)
+        public static StringBuilder MySqlPageSql(string strSql, DbParameter[] dbParameter, string sort, bool isAsc, int pageSize, int pageIndex)
         {
             StringBuilder sb = new StringBuilder();
             if (pageIndex == 0)
@@ -73,15 +73,15 @@ namespace YiSha.Data
             int num = (pageIndex - 1) * pageSize;
             string OrderBy = "";
 
-            if (!string.IsNullOrEmpty(orderField))
+            if (!string.IsNullOrEmpty(sort))
             {
-                if (orderField.ToUpper().IndexOf("ASC") + orderField.ToUpper().IndexOf("DESC") > 0)
+                if (sort.ToUpper().IndexOf("ASC") + sort.ToUpper().IndexOf("DESC") > 0)
                 {
-                    OrderBy = " ORDER BY " + orderField;
+                    OrderBy = " ORDER BY " + sort;
                 }
                 else
                 {
-                    OrderBy = " ORDER BY " + orderField + " " + (isAsc ? "ASC" : "DESC");
+                    OrderBy = " ORDER BY " + sort + " " + (isAsc ? "ASC" : "DESC");
                 }
             }
             sb.Append(strSql + OrderBy);
@@ -89,7 +89,7 @@ namespace YiSha.Data
             return sb;
         }
 
-        public string GetCountSql(string strSql)
+        public static string GetCountSql(string strSql)
         {
             string countSql = string.Empty;
             string strSqlCopy = strSql.ToLower();

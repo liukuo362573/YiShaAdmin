@@ -4,12 +4,16 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Dynamic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using YiSha.Util;
 
 namespace YiSha.Data
 {
-    public class DatabasesExtension
+    public static class DatabasesExtension
     {
         /// <summary>
         /// 将DataReader数据转为Dynamic对象
@@ -157,6 +161,36 @@ namespace YiSha.Data
             return ht;
         }
 
+        public static IQueryable<T> AppendSort<T>(IQueryable<T> tempData, string sort, bool isAsc)
+        {
+            string[] sortArr = sort.Split(',');
+            MethodCallExpression resultExpression = null;
+            for (int index = 0; index < sortArr.Length; index++)
+            {
+                string[] oneSortArr = sortArr[index].Trim().Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                string sortField = oneSortArr[0];
+                bool sortAsc = isAsc;
+                if (oneSortArr.Length == 2)
+                {
+                    sortAsc = string.Equals(oneSortArr[1], "asc", StringComparison.OrdinalIgnoreCase) ? true : false;
+                }
+                var parameter = Expression.Parameter(typeof(T), "t");
+                var property = typeof(T).GetProperty(sortField);
+                var propertyAccess = Expression.MakeMemberAccess(parameter, property);
+                var orderByExpression = Expression.Lambda(propertyAccess, parameter);
+                if (index == 0)
+                {
+                    resultExpression = Expression.Call(typeof(Queryable), sortAsc ? "OrderBy" : "OrderByDescending", new Type[] { typeof(T), property.PropertyType }, tempData.Expression, Expression.Quote(orderByExpression));
+                }
+                else
+                {
+                    resultExpression = Expression.Call(typeof(Queryable), sortAsc ? "ThenBy" : "ThenByDescending", new Type[] { typeof(T), property.PropertyType }, tempData.Expression, Expression.Quote(orderByExpression));
+                }
+                tempData = tempData.Provider.CreateQuery<T>(resultExpression);
+            }
+            return tempData;
+        }
+
         //这个类对可空类型进行判断转换，要不然会报错
         public static object HackType(object value, Type conversionType)
         {
@@ -173,6 +207,6 @@ namespace YiSha.Data
         public static bool IsNullOrDBNull(object obj)
         {
             return ((obj is DBNull) || string.IsNullOrEmpty(obj.ToString())) ? true : false;
-        }
+        }    
     }
 }

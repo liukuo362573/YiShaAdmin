@@ -5,7 +5,7 @@ using YiSha.Util.Browser;
 
 namespace YiSha.UtilTest
 {
-    public class TestBrowserHelper
+    public class BrowserHelperTest
     {
         [Test]
         public void TestGetBrwoserInfo()
