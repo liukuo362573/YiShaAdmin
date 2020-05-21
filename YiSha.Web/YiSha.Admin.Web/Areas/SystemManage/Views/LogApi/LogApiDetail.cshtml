@@ -44,7 +44,7 @@
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
-                        var result = obj.Result;
+                        var result = obj.Data;
                         result.UserName = (ys.isNullOrEmpty(result.UserName) ? "" : result.UserName) + " / ";
                         result.UserName += (ys.isNullOrEmpty(result.DepartmentName) ? "" : result.DepartmentName) + " / ";
                         if (result.LogStatus == "@OperateStatusEnum.Success.ParseToInt()") {

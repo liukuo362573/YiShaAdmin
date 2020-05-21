@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace YiSha.Entity.OrganizationManage
 {
-    [Table("sys_position")]
+    [Table("SysPosition")]
     public class PositionEntity : BaseExtensionEntity
     {
         public string PositionName { get; set; }

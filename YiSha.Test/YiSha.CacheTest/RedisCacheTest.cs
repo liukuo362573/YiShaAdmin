@@ -41,7 +41,7 @@ namespace YiSha.CacheTest
         public void TestRedisComplex()
         {
             string key = "test_complex_key";
-            TData<string> value = new TData<string> { Tag = 1, Result = "测试Redis" };
+            TData<string> value = new TData<string> { Tag = 1, Data = "测试Redis" };
             CacheFactory.Cache.SetCache<TData<string>>(key, value);
 
             var result = CacheFactory.Cache.GetCache<TData<string>>(key);
@@ -64,14 +64,14 @@ namespace YiSha.CacheTest
             string key = "test_performance_key";
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            CacheFactory.Cache.SetCache<List<LogLoginEntity>>(key, obj.Result);
+            CacheFactory.Cache.SetCache<List<LogLoginEntity>>(key, obj.Data);
             sw.Stop();
             Console.WriteLine(nameof(TestRedisPerformance) + " Redis Write Time:" + sw.ElapsedMilliseconds + " ms");
 
             sw.Restart();
             var result = CacheFactory.Cache.GetCache<List<LogLoginEntity>>(key);
             sw.Stop();
-            if (obj.Result.Count == result.Count)
+            if (obj.Data.Count == result.Count)
             {
                 Console.WriteLine(nameof(TestRedisPerformance) + " Redis Read Time:" + sw.ElapsedMilliseconds + " ms");
             }

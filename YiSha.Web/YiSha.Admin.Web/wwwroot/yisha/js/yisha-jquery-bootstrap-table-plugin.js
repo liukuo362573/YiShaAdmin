@@ -54,14 +54,14 @@
         uniqueId: "Id",                     // 每一行的唯一标识，一般为主键列
         cardView: false,                    // 是否显示详细视图
         detailView: false,                  // 是否显示父子表
-        totalField: 'TotalCount',
-        dataField: 'Result',
+        totalField: 'Total',
+        dataField: 'Data',
         columns: [],
         queryParams: {},
-        onLoadSuccess: function (data) {
-            if (data) {
-                if (data.Tag != 1) {
-                    ys.alertError(data.Message);
+        onLoadSuccess: function (obj) {
+            if (obj) {
+                if (obj.Tag != 1) {
+                    ys.alertError(obj.Message);
                 }
             }
         },

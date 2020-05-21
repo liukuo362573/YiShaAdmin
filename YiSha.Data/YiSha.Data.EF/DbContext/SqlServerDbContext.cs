@@ -52,14 +52,14 @@ namespace YiSha.Data.EF
             foreach (var entity in modelBuilder.Model.GetEntityTypes())
             {
                 PrimaryKeyConvention.SetPrimaryKey(modelBuilder, entity.Name);
-                var currentTableName = modelBuilder.Entity(entity.Name).Metadata.GetTableName();
-                modelBuilder.Entity(entity.Name).ToTable(currentTableName.ToLower());
+                string currentTableName = modelBuilder.Entity(entity.Name).Metadata.GetTableName();
+                modelBuilder.Entity(entity.Name).ToTable(currentTableName);
 
-                var properties = entity.GetProperties();
-                foreach (var property in properties)
-                {
-                    ColumnConvention.SetColumnName(modelBuilder, entity.Name, property.Name);
-                }
+                //var properties = entity.GetProperties();
+                //foreach (var property in properties)
+                //{
+                //    ColumnConvention.SetColumnName(modelBuilder, entity.Name, property.Name);
+                //}
             }
 
             base.OnModelCreating(modelBuilder);

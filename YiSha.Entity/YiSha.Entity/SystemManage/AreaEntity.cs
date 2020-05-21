@@ -5,7 +5,7 @@ using YiSha.Util;
 
 namespace YiSha.Entity.SystemManage
 {
-    [Table("sys_area")]
+    [Table("SysArea")]
     public class AreaEntity : BaseExtensionEntity
     {
         /// <summary>
@@ -63,7 +63,7 @@ namespace YiSha.Entity.SystemManage
         [NotMapped]
         public string CityName { get; set; }
         [NotMapped]
-        public string CountyName { get; set; }
+        public string CountryName { get; set; }
         [NotMapped]
         public string AreaId { get; set; }
     }

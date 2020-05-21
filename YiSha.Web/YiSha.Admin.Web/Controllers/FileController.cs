@@ -38,7 +38,7 @@ namespace YiSha.Admin.Web.Controllers
             TData<FileContentResult> obj = FileHelper.DownloadFile(filePath, delete);
             if (obj.Tag == 1)
             {
-                return obj.Result;
+                return obj.Data;
             }
             else
             {

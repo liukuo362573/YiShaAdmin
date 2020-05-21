@@ -12,8 +12,8 @@
             type: "get",
             success: function (obj) {
                 if (obj.Tag == 1) {
-                    for (var i = 0; i < obj.Result.length; i++) {
-                        dataDict[obj.Result[i].DictType] = obj.Result[i].Detail;
+                    for (var i = 0; i < obj.Data.length; i++) {
+                        dataDict[obj.Data[i].DictType] = obj.Data[i].Detail;
                     }
                 }
             }
@@ -50,7 +50,7 @@
             type: "get",
             success: function (obj) {
                 if (obj.Tag == 1) {
-                    dataAuthority = obj.Result;
+                    dataAuthority = obj.Data;
                 }
             }
         });

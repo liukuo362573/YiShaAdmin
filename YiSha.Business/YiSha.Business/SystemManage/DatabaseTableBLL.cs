@@ -44,8 +44,8 @@ namespace YiSha.Business.SystemManage
         {
             TData<List<TableInfo>> obj = new TData<List<TableInfo>>();
             List<TableInfo> list = await databaseTableService.GetTableList(tableName);
-            obj.Result = list;
-            obj.TotalCount = list.Count;
+            obj.Data = list;
+            obj.Total = list.Count;
             obj.Tag = 1;
             return obj;
         }
@@ -54,8 +54,8 @@ namespace YiSha.Business.SystemManage
         {
             TData<List<TableInfo>> obj = new TData<List<TableInfo>>();
             List<TableInfo> list = await databaseTableService.GetTablePageList(tableName, pagination);
-            obj.Result = list;
-            obj.TotalCount = pagination.TotalCount;
+            obj.Data = list;
+            obj.Total = pagination.TotalCount;
             obj.Tag = 1;
             return obj;
         }
@@ -69,8 +69,8 @@ namespace YiSha.Business.SystemManage
         {
             TData<List<TableFieldInfo>> obj = new TData<List<TableFieldInfo>>();
             List<TableFieldInfo> list = await databaseTableService.GetTableFieldList(tableName);
-            obj.Result = list;
-            obj.TotalCount = list.Count;
+            obj.Data = list;
+            obj.Total = list.Count;
             obj.Tag = 1;
             return obj;
         }
@@ -84,8 +84,8 @@ namespace YiSha.Business.SystemManage
         {
             TData<List<TableFieldInfo>> obj = new TData<List<TableFieldInfo>>();
             List<TableFieldInfo> list = await databaseTableService.GetTableFieldList(tableName);
-            obj.Result = list;
-            obj.Result.RemoveAll(p => BaseField.BaseFieldList.Contains(p.TableColumn));
+            obj.Data = list;
+            obj.Data.RemoveAll(p => BaseField.BaseFieldList.Contains(p.TableColumn));
             obj.Tag = 1;
             return obj;
         }
@@ -93,18 +93,18 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<ZtreeInfo>>> GetTableFieldZtreeList(string tableName)
         {
             var obj = new TData<List<ZtreeInfo>>();
-            obj.Result = new List<ZtreeInfo>();
+            obj.Data = new List<ZtreeInfo>();
             if (string.IsNullOrEmpty(tableName))
             {
                 return obj;
             }
             List<TableFieldInfo> list = await databaseTableService.GetTableFieldList(tableName);
-            obj.Result.Add(new ZtreeInfo { id = 1, pId = 0, name = tableName });
+            obj.Data.Add(new ZtreeInfo { id = 1, pId = 0, name = tableName });
             string sName = string.Empty;
             for (int i = 0; i < list.Count; i++)
             {
                 sName = list[i].TableColumn;
-                obj.Result.Add(new ZtreeInfo
+                obj.Data.Add(new ZtreeInfo
                 {
                     id = (i + 2),
                     pId = 1,

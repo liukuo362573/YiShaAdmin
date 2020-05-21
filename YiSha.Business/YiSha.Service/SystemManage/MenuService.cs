@@ -31,9 +31,9 @@ namespace YiSha.Service.SystemManage
             string where = string.Empty;
             if (parentId > 0)
             {
-                where += " AND parent_id = " + parentId;
+                where += " AND ParentId = " + parentId;
             }
-            object result = await this.BaseRepository().FindObject("SELECT MAX(menu_sort) FROM sys_menu where base_is_delete=0 " + where);
+            object result = await this.BaseRepository().FindObject("SELECT MAX(MenuSort) FROM SysMenu where BaseIsDelete = 0 " + where);
             int sort = result.ParseToInt();
             sort++;
             return sort;

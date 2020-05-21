@@ -59,7 +59,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
             var list = await roleBLL.GetList(param);
             if (list.Tag == 1)
             {
-                obj.Result = string.Join(",", list.Result.Select(p => p.RoleName));
+                obj.Data = string.Join(",", list.Data.Select(p => p.RoleName));
                 obj.Tag = 1;
             }
             return Json(obj);

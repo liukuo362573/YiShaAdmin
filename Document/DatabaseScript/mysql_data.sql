@@ -1,7 +1,7 @@
 ﻿/*  初始化数据 */;
-/* use yisha_admin; */;
+/* use YiShaAdmin; */;
 
-INSERT INTO `sys_area` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `area_code`, `parent_area_code`, `area_name`, `zip_code`, `area_level`) VALUES
+INSERT INTO `SysArea` (`Id`, `BaseIsDelete`, `BaseCreateTime`, `BaseModifyTime`, `BaseCreatorId`, `BaseModifierId`, `BaseVersion`, `AreaCode`, `ParentAreaCode`, `AreaName`, `ZipCode`, `AreaLevel`) VALUES
 	(16508640061120570, 0, '2018-12-24 16:33:59', '2018-12-24 16:33:59', 0, 0, 0, '110000', '0', '北京', '', 1),
 	(16508640061120571, 0, '2018-12-24 16:33:59', '2018-12-24 16:33:59', 0, 0, 0, '110100', '110000', '北京市', '', 2),
 	(16508640061120572, 0, '2018-12-24 16:33:59', '2018-12-24 16:33:59', 0, 0, 0, '110101', '110100', '东城区', '', 3),
@@ -3802,17 +3802,17 @@ INSERT INTO `sys_area` (`id`, `base_is_delete`, `base_create_time`, `base_modify
 	(16508640061124367, 0, '2018-12-24 16:34:02', '2018-12-24 16:34:02', 0, 0, 0, '820300', '820000', '路环岛', '', 2),
 	(16508640061124368, 0, '2018-12-24 16:34:02', '2018-12-24 16:34:02', 0, 0, 0, '820301', '820300', '圣方济各堂区', '', 3);
 	 
-INSERT INTO `sys_auto_job` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `job_group_name`, `job_name`, `job_status`, `cron_expression`, `start_time`, `end_time`, `next_start_time`, `remark`) VALUES
+INSERT INTO `SysAutoJob` (`Id`, `BaseIsDelete`, `BaseCreateTime`, `BaseModifyTime`, `BaseCreatorId`, `BaseModifierId`, `BaseVersion`, `JobGroupName`, `JobName`, `JobStatus`, `CronExpression`, `StartTime`, `EndTime`, `NextStartTime`, `Remark`) VALUES
 	(16508640061124370, 0, '2019-01-03 09:47:04', '2019-10-13 03:00:00', 0, 0, 0, 'YiShaAdmin', '数据库备份', 1, '0 0 3 1/1 * ?', '2019-01-03 10:00:00', '9999-12-31 00:00:00', '2019-10-14 03:00:00', '');
 
-INSERT INTO `sys_data_dict` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `dict_type`, `dict_sort`, `remark`) VALUES
+INSERT INTO `SysDataDict` (`Id`, `BaseIsDelete`, `BaseCreateTime`, `BaseModifyTime`, `BaseCreatorId`, `BaseModifierId`, `BaseVersion`, `DictType`, `DictSort`, `Remark`) VALUES
 	(16508640061124399, 0, '2019-01-05 07:15:41', '2019-01-05 09:30:19', 0, 0, 0, 'NewsType', 1, '新闻类别');
 
-INSERT INTO `sys_data_dict_detail` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `dict_type`, `dict_sort`, `dict_key`, `dict_value`, `list_class`, `dict_status`, `is_default`, `remark`) VALUES
+INSERT INTO `SysDataDictDetail` (`Id`, `BaseIsDelete`, `BaseCreateTime`, `BaseModifyTime`, `BaseCreatorId`, `BaseModifierId`, `BaseVersion`, `DictType`, `DictSort`, `DictKey`, `DictValue`, `ListClass`, `DictStatus`, `IsDefault`, `Remark`) VALUES
 	(16508640061124400, 0, '2019-01-05 07:16:12', '2019-10-12 18:21:48', 0, 16508640061130151, 0, 'NewsType', 1, 1, '产品案例', 'primary', 1, 1, ''),
 	(16508640061124401, 0, '2019-01-05 07:16:25', '2019-01-05 07:16:25', 0, 0, 0, 'NewsType', 2, 2, '行业新闻', 'warning', 1, 0, '');
 	
-INSERT INTO `sys_department` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `parent_id`, `department_name`, `telephone`, `fax`, `email`, `remark`, `principal_id`, `department_sort`) VALUES
+INSERT INTO `SysDepartment` (`Id`, `BaseIsDelete`, `BaseCreateTime`, `BaseModifyTime`, `BaseCreatorId`, `BaseModifierId`, `BaseVersion`, `ParentId`, `DepartmentName`, `Telephone`, `Fax`, `Email`, `Remark`, `PrincipalId`, `DepartmentSort`) VALUES
 	(16508640061124402, 0, '2019-01-04 17:38:23', '2019-10-12 18:20:23', 0, 16508640061130151, 0, 0, '一沙软件', '0551-6666666', '0551-8888888', '', '', 16508640061130152, 1),
 	(16508640061124403, 1, '2018-10-10 01:00:00', '2019-10-12 18:26:42', 0, 16508640061130151, 0, 16508640061124402, '合肥总公司', '1', '', '', '', 16508640061130150, 1),
 	(16508640061124404, 1, '2018-10-10 01:00:00', '2019-01-04 17:38:42', 0, 0, 0, 16508640061124402, '南京分公司', '1', '', '', '', 0, 2),
@@ -3823,7 +3823,7 @@ INSERT INTO `sys_department` (`id`, `base_is_delete`, `base_create_time`, `base_
 	(16508640061124409, 0, '2018-12-22 18:47:42', '2018-12-26 17:48:15', 0, 0, 0, 16508640061124403, '市场部', '', '', '', '', 0, 7),
 	(16508640061124410, 0, '2018-12-22 18:48:02', '2018-12-26 17:48:25', 0, 0, 0, 16508640061124403, '行政部', '', '', '', '', 0, 10);
 
-INSERT INTO `sys_menu` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `parent_id`, `menu_name`, `menu_icon`, `menu_url`, `menu_target`, `menu_sort`, `menu_type`, `menu_status`, `authorize`, `remark`) VALUES
+INSERT INTO `SysMenu` (`Id`, `BaseIsDelete`, `BaseCreateTime`, `BaseModifyTime`, `BaseCreatorId`, `BaseModifierId`, `BaseVersion`, `ParentId`, `MenuName`, `MenuIcon`, `MenuUrl`, `MenuTarget`, `MenuSort`, `MenuType`, `MenuStatus`, `Authorize`, `Remark`) VALUES
 	(16508640061130069, 0, '2018-11-04 01:01:00', '2019-01-02 10:05:49', 0, 0, 0, 0, '单位组织', 'fa fa-home', '', '', 1, 1, 1, '', ''),
 	(16508640061130070, 0, '2018-11-04 01:01:00', '2018-12-22 21:54:34', 0, 0, 0, 0, '系统管理', 'fa fa-gear', '', '', 2, 1, 1, '', ''),
 	(16508640061130071, 0, '2018-11-04 01:01:00', '2018-12-22 21:53:26', 0, 0, 0, 0, '系统工具', 'fa fa-gears', '', '', 3, 1, 1, '', ''),
@@ -3914,7 +3914,7 @@ INSERT INTO `sys_menu` (`id`, `base_is_delete`, `base_create_time`, `base_modify
 	(174125371522813952, 0, '2020-04-25 11:52:03', '2020-04-25 11:52:21', 16508640061130151, 16508640061130151, 0, 112911997946826752, '表格', '', '', '', 33, 1, 1, '', ''),
 	(174125752109764608, 0, '2020-04-25 11:53:34', '2020-04-25 11:53:34', 16508640061130151, 16508640061130151, 0, 174125371522813952, '表格行内编辑', '', 'DemoManage/Table/Editable', '', 37, 2, 1, '', '');
 
-INSERT INTO `sys_menu_authorize` (`id`, `base_create_time`, `base_creator_id`, `menu_id`, `authorize_id`, `authorize_type`) VALUES
+INSERT INTO `SysMenuAuthorize` (`Id`, `BaseCreateTime`, `BaseCreatorId`, `MenuId`, `AuthorizeId`, `AuthorizeType`) VALUES
 	(21485199565000704, '2019-03-01 06:54:31', 16508640061130151, 16508640061130069, 16508640061130146, 1),
 	(21485199573389312, '2019-03-01 06:54:31', 16508640061130151, 16508640061130072, 16508640061130146, 1),
 	(21485199577583616, '2019-03-01 06:54:31', 16508640061130151, 16508640061130084, 16508640061130146, 1),
@@ -4012,11 +4012,11 @@ INSERT INTO `sys_menu_authorize` (`id`, `base_create_time`, `base_creator_id`, `
 	(103195241913257984, '2019-03-01 06:54:31', 16508640061130151, 16508640061130132, 103195209390624768, 1),
 	(103195241921646592, '2019-03-01 06:54:31', 16508640061130151, 16508640061130133, 103195209390624768, 1);
 	
-INSERT INTO `sys_news` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `news_title`, `news_content`, `news_tag`, `province_id`, `city_id`, `county_id`, `thumb_image`, `news_author`, `news_sort`, `news_date`, `news_type`, `view_times`) VALUES
+INSERT INTO `SysNews` (`Id`, `BaseIsDelete`, `BaseCreateTime`, `BaseModifyTime`, `BaseCreatorId`, `BaseModifierId`, `BaseVersion`, `NewsTitle`, `NewsContent`, `NewsTag`, `ProvinceId`, `CityId`, `CountryId`, `ThumbImage`, `NewsAuthor`, `NewsSort`, `NewsDate`, `NewsType`, `ViewTimes`) VALUES
 	(34571912667467776, 0, '2019-04-06 09:36:26', '2019-10-10 12:22:22', 16508640061130151, 16508640061130151, 0, 'UHC健康会', '<p>UHC 健康会，您的健康管家，为您的健康保驾护航。</p><p>\n        <img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/8722abb613cd46b4af5b4ded7ddf5fad.jpg" data-filename="/" style="width: 550px;">\n    </p><p>\n        <img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/1ffc4edd922e4cb195744c13f9eec636.jpg" data-filename="/" style="width: 550px;">\n    </p><p>\n        <img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/e0728828482542f099ab79ba7d3ef701.jpg" data-filename="/" style="width: 550px;">\n\n    </p><p>\n        <img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/57b1153fbf514d9384ba9837a46737cf.jpg" data-filename="/" style="width: 550px;">\n        <br>\n    </p>\n    <p>小程序码</p><p>\n        <img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/46ece527595a408e9e62b2334374b560.jpg" data-filename="/" style="width: 430px;">\n        <br>\n    </p><p><br></p>', '微信小程序，健康会', 0, 0, 0, 'https://www.yishasoft.com/api/Resource/News/2019/07/31/eee642de4d3443779c0670e0da8eeed7.png', '管理员', 1, '2019-04-06 09:29:00', 1, 138),
 	(76797547762421760, 0, '2019-07-31 22:06:02', '2019-10-12 17:29:52', 16508640061130151, 16508640061130151, 0, '58名师', '<p>汇聚同城的各科教师，找老师，就上58名师！</p><p><img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/b0316da26b5546d1bf07fcd05e8889e0.png" data-filename="/" style="width: 270px;"></p><p><br></p><p><img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/ad812ef0248a4fcb94edfa69d1ee5a66.png" data-filename="/" style="width: 269px;"></p><p><img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/b2921e1e08e04b0d92b29485356eacb1.png" data-filename="/" style="width: 273px;"></p><p><img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/a1ee188e3d3b462c8f401a9205ddd10e.png" data-filename="/" style="width: 274px;"></p><p>小程序码</p><p><img src="https://www.yishasoft.com/api/Resource/News/2019/07/31/1c30e2bb681448bab52e566993b82472.jpg" data-filename="/" style="width: 430px;"><br></p><p><br></p>', '微信小程序，找老师', 340000, 340100, 340172, 'https://www.yishasoft.com/api/Resource/News/2019/07/31/a627c3eed0ca428391fa62a841652ea4.png', '管理员', 2, '2019-07-31 21:44:00', 1, 35);
 
-INSERT INTO `sys_position` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `position_name`, `position_sort`, `position_status`, `remark`) VALUES
+INSERT INTO `SysPosition` (`Id`, `BaseIsDelete`, `BaseCreateTime`, `BaseModifyTime`, `BaseCreatorId`, `BaseModifierId`, `BaseVersion`, `PositionName`, `PositionSort`, `PositionStatus`, `Remark`) VALUES
 	(16508640061130139, 0, '2018-12-06 09:43:34', '2019-04-02 17:03:42', 0, 16508640061130151, 0, '董事长', 1, 1, 'CEO'),
 	(16508640061130140, 0, '2018-12-06 09:47:46', '2019-10-12 17:29:40', 0, 16508640061130151, 0, '总经理', 2, 1, ''),
 	(16508640061130141, 0, '2018-12-06 09:47:56', '2018-12-06 09:47:56', 0, 0, 0, '项目经理', 3, 1, ''),
@@ -4025,11 +4025,11 @@ INSERT INTO `sys_position` (`id`, `base_is_delete`, `base_create_time`, `base_mo
 	(16508640061130144, 0, '2018-12-22 11:41:39', '2018-12-26 16:23:44', 0, 0, 0, '前端', 6, 1, ''),
 	(16508640061130145, 0, '2018-12-22 18:44:32', '2018-12-22 18:44:32', 0, 0, 0, '财务专员', 7, 1, '');
 	
-INSERT INTO `sys_role` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `role_name`, `role_sort`, `role_status`, `remark`) VALUES
+INSERT INTO `SysRole` (`Id`, `BaseIsDelete`, `BaseCreateTime`, `BaseModifyTime`, `BaseCreatorId`, `BaseModifierId`, `BaseVersion`, `RoleName`, `RoleSort`, `RoleStatus`, `Remark`) VALUES
 	(16508640061130146, 0, '2018-12-04 19:04:57', '2019-03-01 06:54:31', 0, 16508640061130151, 0, '管理员', 1, 1, '管理员角色'),
 	(16508640061130147, 0, '2018-12-04 19:07:53', '2019-09-21 10:46:33', 0, 16508640061130151, 0, '普通角色', 2, 1, '普通角色');
 
-INSERT INTO `sys_user` (`id`, `base_is_delete`, `base_create_time`, `base_modify_time`, `base_creator_id`, `base_modifier_id`, `base_version`, `user_name`, `password`, `salt`, `real_name`, `department_id`, `gender`, `birthday`, `portrait`, `email`, `mobile`, `qq`, `wechat`, `login_count`, `user_status`, `is_system`, `is_online`, `first_visit`, `previous_visit`, `last_visit`, `remark`, `web_token`, `api_token`) VALUES
+INSERT INTO `SysUser` (`Id`, `BaseIsDelete`, `BaseCreateTime`, `BaseModifyTime`, `BaseCreatorId`, `BaseModifierId`, `BaseVersion`, `UserName`, `Password`, `Salt`, `RealName`, `DepartmentId`, `Gender`, `Birthday`, `Portrait`, `Email`, `Mobile`, `QQ`, `WeChat`, `LoginCount`, `UserStatus`, `IsSystem`, `IsOnline`, `FirstVisit`, `PreviousVisit`, `LastVisit`, `Remark`, `WebToken`, `ApiToken`) VALUES
 	(16508640061130148, 0, '2018-12-11 18:57:15', '2019-01-05 06:34:41', 0, 0, 0, 'lisi', 'e0dc5bc0da011584308fdc3d5dca04a1', '70212', '李四', 181201190700000005, 1, '', '', '', '16812345678', '', '', 0, 2, 0, 0, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '1970-01-01 00:00:00', '', '', ''),
 	(16508640061130149, 0, '2018-12-12 06:59:29', '2019-10-12 18:14:09', 0, 16508640061130151, 0, 'zhangsan', '3', '', '张三', 16508640061124410, 0, '', '', '', '18712345678', '', '', 0, 1, 0, 0, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '1970-01-01 00:00:00', '', '', ''),
 	(16508640061130150, 0, '2018-12-12 11:20:47', '2019-10-12 18:13:15', 0, 16508640061130151, 0, 'wangxue', '518cd8c7e019f06ad7bf68f7532a5a73', '8941', '王雪', 16508640061124408, 0, '1993-10-06', '', '', '15612345678', '', '', 1, 1, 0, 1, '2019-09-21 10:48:03', '2019-09-21 10:48:03', '2019-09-21 10:48:03', '', 'a066e89f44894cb284c4dc2920234acb', ''),
@@ -4037,7 +4037,7 @@ INSERT INTO `sys_user` (`id`, `base_is_delete`, `base_create_time`, `base_modify
 	(16508640061130152, 0, '2018-12-22 19:09:34', '2019-10-12 18:12:39', 0, 16508640061130151, 0, 'liusitan', 'c84603a610bd35a1283d750334da49c7', '59654', '刘斯坦', 16508640061124405, 1, '1987-12-17', '', 'test@163.com', '15755176597', '', '', 65, 1, 0, 1, '2018-12-23 06:57:16', '2019-01-10 21:25:27', '2019-02-08 12:13:36', '', '', 'f595873c50bf4ddbac3c2b896e8075c4'),
 	(16508640061130153, 0, '2018-12-26 16:23:22', '2019-10-12 17:26:05', 0, 16508640061130151, 0, 'zhujuanjuan', 'e64939cb927238d770e1f8bd77f84813', '91836', '朱娟', 16508640061124402, 2, '2018-12-10', '', '', '15566666666', '', '', 0, 1, 0, 0, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '1970-01-01 00:00:00', '', '', '');
 
-INSERT INTO `sys_user_belong` (`id`, `base_create_time`, `base_creator_id`, `user_id`, `belong_id`, `belong_type`) VALUES
+INSERT INTO `SysUserBelong` (`Id`, `BaseCreateTime`, `BaseCreatorId`, `UserId`, `BelongId`, `BelongType`) VALUES
 	(20152771193868288, '2019-02-25 14:39:55', 16508640061130151, 16508640061130151, 16508640061130139, 1),
 	(20152771193868289, '2019-02-25 14:39:55', 16508640061130151, 16508640061130151, 16508640061130146, 2),
 	(103181410411483136, '2019-10-12 17:26:05', 16508640061130151, 16508640061130153, 16508640061130140, 1),

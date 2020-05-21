@@ -175,7 +175,7 @@ namespace YiSha.Data
                     sortAsc = string.Equals(oneSortArr[1], "asc", StringComparison.OrdinalIgnoreCase) ? true : false;
                 }
                 var parameter = Expression.Parameter(typeof(T), "t");
-                var property = typeof(T).GetProperty(sortField);
+                var property = ReflectionHelper.GetProperties(typeof(T)).Where(p => p.Name.ToLower() == sortField.ToLower()).FirstOrDefault();
                 var propertyAccess = Expression.MakeMemberAccess(parameter, property);
                 var orderByExpression = Expression.Lambda(propertyAccess, parameter);
                 if (index == 0)

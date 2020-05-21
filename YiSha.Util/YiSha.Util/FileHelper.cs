@@ -117,7 +117,7 @@ namespace YiSha.Util
                     await file.CopyToAsync(fs);
                     fs.Flush();
                 }
-                obj.Result = Path.AltDirectorySeparatorChar + ConvertDirectoryToHttp(dir) + newFileName;
+                obj.Data = Path.AltDirectorySeparatorChar + ConvertDirectoryToHttp(dir) + newFileName;
                 obj.Message = Path.GetFileNameWithoutExtension(TextHelper.GetCustomValue(file.FileName, newFileName));
                 obj.Description = (file.Length / 1024).ToString(); // KB
                 obj.Tag = 1;
@@ -193,7 +193,7 @@ namespace YiSha.Util
                 title = fileNameWithoutExtension.Split('_')[1].Trim();
             }
             string fileExtensionName = Path.GetExtension(filePath);
-            obj.Result = new FileContentResult(fileBytes, "application/octet-stream")
+            obj.Data = new FileContentResult(fileBytes, "application/octet-stream")
             {
                 FileDownloadName = string.Format("{0}_{1}{2}", fileNamePrefix, title, fileExtensionName)
             };

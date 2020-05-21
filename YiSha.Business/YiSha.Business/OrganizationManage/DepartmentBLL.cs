@@ -25,12 +25,12 @@ namespace YiSha.Business.OrganizationManage
         public async Task<TData<List<DepartmentEntity>>> GetList(DepartmentListParam param)
         {
             TData<List<DepartmentEntity>> obj = new TData<List<DepartmentEntity>>();
-            obj.Result = await departmentService.GetList(param);
+            obj.Data = await departmentService.GetList(param);
             OperatorInfo operatorInfo = await Operator.Instance.Current();
-            List<long> childrenDepartmentIdList = await GetChildrenDepartmentIdList(obj.Result, operatorInfo.DepartmentId.Value);
-            obj.Result = obj.Result.Where(p => childrenDepartmentIdList.Contains(p.Id.Value)).ToList();
-            List<UserEntity> userList = await userService.GetList(new UserListParam { UserIds = string.Join(",", obj.Result.Select(p => p.PrincipalId).ToArray()) });
-            foreach (DepartmentEntity entity in obj.Result)
+            List<long> childrenDepartmentIdList = await GetChildrenDepartmentIdList(obj.Data, operatorInfo.DepartmentId.Value);
+            obj.Data = obj.Data.Where(p => childrenDepartmentIdList.Contains(p.Id.Value)).ToList();
+            List<UserEntity> userList = await userService.GetList(new UserListParam { UserIds = string.Join(",", obj.Data.Select(p => p.PrincipalId).ToArray()) });
+            foreach (DepartmentEntity entity in obj.Data)
             {
                 if (entity.PrincipalId > 0)
                 {
@@ -48,13 +48,13 @@ namespace YiSha.Business.OrganizationManage
         public async Task<TData<List<ZtreeInfo>>> GetZtreeDepartmentList(DepartmentListParam param)
         {
             var obj = new TData<List<ZtreeInfo>>();
-            obj.Result = new List<ZtreeInfo>();
+            obj.Data = new List<ZtreeInfo>();
             List<DepartmentEntity> departmentList = await departmentService.GetList(param);
             OperatorInfo operatorInfo = await Operator.Instance.Current();
             List<long> childrenDepartmentIdList = await GetChildrenDepartmentIdList(departmentList, operatorInfo.DepartmentId.Value);
             foreach (DepartmentEntity department in departmentList.Where(p => childrenDepartmentIdList.Contains(p.Id.Value)))
             {
-                obj.Result.Add(new ZtreeInfo
+                obj.Data.Add(new ZtreeInfo
                 {
                     id = department.Id,
                     pId = department.ParentId,
@@ -68,14 +68,14 @@ namespace YiSha.Business.OrganizationManage
         public async Task<TData<List<ZtreeInfo>>> GetZtreeUserList(DepartmentListParam param)
         {
             var obj = new TData<List<ZtreeInfo>>();
-            obj.Result = new List<ZtreeInfo>();
+            obj.Data = new List<ZtreeInfo>();
             List<DepartmentEntity> departmentList = await departmentService.GetList(param);
             OperatorInfo operatorInfo = await Operator.Instance.Current();
             List<long> childrenDepartmentIdList = await GetChildrenDepartmentIdList(departmentList, operatorInfo.DepartmentId.Value);
             List<UserEntity> userList = await userService.GetList(new UserListParam { DepartmentId = operatorInfo.DepartmentId });
             foreach (DepartmentEntity department in departmentList.Where(p => childrenDepartmentIdList.Contains(p.Id.Value)))
             {
-                obj.Result.Add(new ZtreeInfo
+                obj.Data.Add(new ZtreeInfo
                 {
                     id = department.Id,
                     pId = department.ParentId,
@@ -84,7 +84,7 @@ namespace YiSha.Business.OrganizationManage
                 List<long> userIdList = userList.Where(t => t.DepartmentId == department.Id).Select(t => t.Id.Value).ToList();
                 foreach (UserEntity user in userList.Where(t => userIdList.Contains(t.Id.Value)))
                 {
-                    obj.Result.Add(new ZtreeInfo
+                    obj.Data.Add(new ZtreeInfo
                     {
                         id = user.Id,
                         pId = department.Id,
@@ -99,7 +99,7 @@ namespace YiSha.Business.OrganizationManage
         public async Task<TData<DepartmentEntity>> GetEntity(long id)
         {
             TData<DepartmentEntity> obj = new TData<DepartmentEntity>();
-            obj.Result = await departmentService.GetEntity(id);
+            obj.Data = await departmentService.GetEntity(id);
             obj.Tag = 1;
             return obj;
         }
@@ -107,7 +107,7 @@ namespace YiSha.Business.OrganizationManage
         public async Task<TData<int>> GetMaxSort()
         {
             TData<int> obj = new TData<int>();
-            obj.Result = await departmentService.GetMaxSort();
+            obj.Data = await departmentService.GetMaxSort();
             obj.Tag = 1;
             return obj;
         }
@@ -123,7 +123,7 @@ namespace YiSha.Business.OrganizationManage
                 return obj;
             }
             await departmentService.SaveForm(entity);
-            obj.Result = entity.Id.ParseToString();
+            obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
             return obj;
         }

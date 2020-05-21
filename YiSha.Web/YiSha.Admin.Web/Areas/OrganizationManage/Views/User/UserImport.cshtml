@@ -49,7 +49,7 @@
         }).on("fileuploaded", function (event, data) {
             var obj = data.response;
             if (obj.Tag == 1) {
-                filePath = obj.Result;
+                filePath = obj.Data;
             }
             else {
                 filePath = '';

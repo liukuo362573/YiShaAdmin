@@ -34,8 +34,7 @@ namespace YiSha.Business.OrganizationManage
         public async Task<TData<List<UserEntity>>> GetList(UserListParam param)
         {
             TData<List<UserEntity>> obj = new TData<List<UserEntity>>();
-            obj.Result = await userService.GetList(param);
-            obj.TotalCount = obj.TotalCount;
+            obj.Data = await userService.GetList(param);
             obj.Tag = 1;
             return obj;
         }
@@ -52,14 +51,14 @@ namespace YiSha.Business.OrganizationManage
                 OperatorInfo user = await Operator.Instance.Current();
                 param.ChildrenDepartmentIdList = await departmentBLL.GetChildrenDepartmentIdList(null, user.DepartmentId.Value);
             }
-            obj.Result = await userService.GetPageList(param, pagination);
-            List<UserBelongEntity> userBelongList = await userBelongService.GetList(new UserBelongEntity { UserIds = obj.Result.Select(p => p.Id.Value).ParseToStrings<long>() });
+            obj.Data = await userService.GetPageList(param, pagination);
+            List<UserBelongEntity> userBelongList = await userBelongService.GetList(new UserBelongEntity { UserIds = obj.Data.Select(p => p.Id.Value).ParseToStrings<long>() });
             List<DepartmentEntity> departmentList = await departmentService.GetList(new DepartmentListParam { Ids = userBelongList.Select(p => p.BelongId.Value).ParseToStrings<long>() });
-            foreach (UserEntity user in obj.Result)
+            foreach (UserEntity user in obj.Data)
             {
                 user.DepartmentName = departmentList.Where(p => p.Id == user.DepartmentId).Select(p => p.DepartmentName).FirstOrDefault();
             }
-            obj.TotalCount = pagination.TotalCount;
+            obj.Total = pagination.TotalCount;
             obj.Tag = 1;
             return obj;
         }
@@ -67,16 +66,16 @@ namespace YiSha.Business.OrganizationManage
         public async Task<TData<UserEntity>> GetEntity(long id)
         {
             TData<UserEntity> obj = new TData<UserEntity>();
-            obj.Result = await userService.GetEntity(id);
+            obj.Data = await userService.GetEntity(id);
 
-            await GetUserBelong(obj.Result);
+            await GetUserBelong(obj.Data);
 
-            if (obj.Result.DepartmentId > 0)
+            if (obj.Data.DepartmentId > 0)
             {
-                DepartmentEntity departmentEntity = await departmentService.GetEntity(obj.Result.DepartmentId.Value);
+                DepartmentEntity departmentEntity = await departmentService.GetEntity(obj.Data.DepartmentId.Value);
                 if (departmentEntity != null)
                 {
-                    obj.Result.DepartmentName = departmentEntity.DepartmentName;
+                    obj.Data.DepartmentName = departmentEntity.DepartmentName;
                 }
             }
 
@@ -142,7 +141,7 @@ namespace YiSha.Business.OrganizationManage
                         }
                         await GetUserBelong(user);
 
-                        obj.Result = user;
+                        obj.Data = user;
                         obj.Message = "登录成功";
                         obj.Tag = 1;
                     }
@@ -186,7 +185,7 @@ namespace YiSha.Business.OrganizationManage
 
             await RemoveCacheById(entity.Id.Value);
 
-            obj.Result = entity.Id.ParseToString();
+            obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
             return obj;
         }
@@ -224,7 +223,7 @@ namespace YiSha.Business.OrganizationManage
 
                 await RemoveCacheById(entity.Id.Value);
 
-                obj.Result = entity.Id.Value;
+                obj.Data = entity.Id.Value;
                 obj.Tag = 1;
             }
             return obj;
@@ -252,7 +251,7 @@ namespace YiSha.Business.OrganizationManage
 
                 await RemoveCacheById(param.Id.Value);
 
-                obj.Result = dbUserEntity.Id.Value;
+                obj.Data = dbUserEntity.Id.Value;
                 obj.Tag = 1;
             }
             return obj;
@@ -272,7 +271,7 @@ namespace YiSha.Business.OrganizationManage
 
                 await RemoveCacheById(entity.Id.Value);
 
-                obj.Result = entity.Id.Value;
+                obj.Data = entity.Id.Value;
                 obj.Tag = 1;
             }
             return obj;

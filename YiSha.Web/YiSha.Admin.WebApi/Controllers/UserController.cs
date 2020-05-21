@@ -38,9 +38,9 @@ namespace YiSha.Admin.WebApi.Controllers
             TData<UserEntity> userObj = await userBLL.CheckLogin(userName, password, (int)PlatformEnum.WebApi);
             if (userObj.Tag == 1)
             {
-                await new UserBLL().UpdateUser(userObj.Result);
-                await Operator.Instance.AddCurrent(userObj.Result.ApiToken);
-                obj.Result = await Operator.Instance.Current(userObj.Result.ApiToken);
+                await new UserBLL().UpdateUser(userObj.Data);
+                await Operator.Instance.AddCurrent(userObj.Data.ApiToken);
+                obj.Data = await Operator.Instance.Current(userObj.Data.ApiToken);
             }
             obj.Tag = userObj.Tag;
             obj.Message = userObj.Message;

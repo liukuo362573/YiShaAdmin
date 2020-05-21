@@ -161,8 +161,8 @@
                     dataType: "JSON",
                     success: function (data, textStatus, jqXHR) {
                         var dataJson = data;
-                        if (data.Result) {
-                            dataJson = data.Result;
+                        if (data.Data) {
+                            dataJson = data.Data;
                         }
                         renderTable(dataJson);
                     },

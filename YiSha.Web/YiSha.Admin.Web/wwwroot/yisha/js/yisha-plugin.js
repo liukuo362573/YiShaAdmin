@@ -15,7 +15,7 @@
             key: "Key",
             value: "Value",
             data: null, // 数据源            
-            dataName: 'Result', // 数据名称
+            dataName: 'Data', // 数据名称
             default: undefined
         }, option);
 
@@ -113,7 +113,7 @@
             key: "Key",
             value: "Value",
             data: null, //数据源
-            dataName: false, //数据名称
+            dataName: 'Data', //数据名称
             default: undefined
         }, option);
 
@@ -211,7 +211,7 @@
             class: null,
             multiple: false,
             data: null, // 数据源          
-            dataName: 'Result',  // 数据名称
+            dataName: 'Data',  // 数据名称
             onChange: null,
             default: undefined
         }, option);

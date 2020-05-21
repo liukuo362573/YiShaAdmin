@@ -71,14 +71,12 @@
 
         $("#role").ysCheckBox({
             url: '@Url.Content("~/SystemManage/Role/GetListJson")',
-            dataName: "Result",
             key: "Id",
             value: "RoleName"
         });
 
         $("#positionId").ysComboBox({
             url: '@Url.Content("~/OrganizationManage/Position/GetListJson")',
-            dataName: "Result",
             key: "Id",
             value: "PositionName",
             class: "form-control",
@@ -114,7 +112,7 @@
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
-                        var result = obj.Result;
+                        var result = obj.Data;
                         $("#form").setWebControls(result);
                     }
                 }

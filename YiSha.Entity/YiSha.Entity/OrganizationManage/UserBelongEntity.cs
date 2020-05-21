@@ -9,7 +9,7 @@ using YiSha.Util;
 
 namespace YiSha.Entity.OrganizationManage
 {
-    [Table("sys_user_belong")]
+    [Table("SysUserBelong")]
     public class UserBelongEntity : BaseCreateEntity
     {
         [JsonConverter(typeof(StringJsonConverter))]

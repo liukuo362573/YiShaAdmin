@@ -36,7 +36,7 @@ namespace YiSha.Service.OrganizationManage
 
         public async Task<int> GetMaxSort()
         {
-            object result = await this.BaseRepository().FindObject("SELECT MAX(position_sort) FROM sys_position");
+            object result = await this.BaseRepository().FindObject("SELECT MAX(PositionSort) FROM SysPosition");
             int sort = result.ParseToInt();
             sort++;
             return sort;

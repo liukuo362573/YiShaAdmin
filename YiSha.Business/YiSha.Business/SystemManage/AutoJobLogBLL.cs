@@ -19,8 +19,8 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<AutoJobLogEntity>>> GetList(AutoJobLogListParam param)
         {
             TData<List<AutoJobLogEntity>> obj = new TData<List<AutoJobLogEntity>>();
-            obj.Result = await autoJobLogService.GetList(param);
-            obj.TotalCount = obj.Result.Count;
+            obj.Data = await autoJobLogService.GetList(param);
+            obj.Total = obj.Data.Count;
             obj.Tag = 1;
             return obj;
         }
@@ -28,8 +28,8 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<AutoJobLogEntity>>> GetPageList(AutoJobLogListParam param, Pagination pagination)
         {
             TData<List<AutoJobLogEntity>> obj = new TData<List<AutoJobLogEntity>>();
-            obj.Result = await autoJobLogService.GetPageList(param, pagination);
-            obj.TotalCount = pagination.TotalCount;
+            obj.Data = await autoJobLogService.GetPageList(param, pagination);
+            obj.Total = pagination.TotalCount;
             obj.Tag = 1;
             return obj;
         }
@@ -37,7 +37,7 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<AutoJobLogEntity>> GetEntity(long id)
         {
             TData<AutoJobLogEntity> obj = new TData<AutoJobLogEntity>();
-            obj.Result = await autoJobLogService.GetEntity(id);
+            obj.Data = await autoJobLogService.GetEntity(id);
             obj.Tag = 1;
             return obj;
         }
@@ -48,7 +48,7 @@ namespace YiSha.Business.SystemManage
         {
             TData<string> obj = new TData<string>();
             await autoJobLogService.SaveForm(entity);
-            obj.Result = entity.Id.ParseToString();
+            obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
             return obj;
         }

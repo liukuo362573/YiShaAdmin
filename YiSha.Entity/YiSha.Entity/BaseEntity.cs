@@ -144,13 +144,13 @@ namespace YiSha.Entity
     {
         public static string[] BaseFieldList = new string[]
         {
-            "id",
-            "base_is_delete",
-            "base_create_time",
-            "base_modify_time",
-            "base_creator_id",
-            "base_modifier_id",
-            "base_version"
+            "Id",
+            "BaseIsDelete",
+            "BaseCreateTime",
+            "BaseModifyTime",
+            "BaseCreatorId",
+            "BaseModifierId",
+            "BaseVersion"
         };
     }
 }

@@ -489,7 +489,7 @@
             type: "get",
             success: function (obj) {
                 if (obj.Tag == 1) {
-                    var result = obj.Result;
+                    var result = obj.Data;
                     tableNameUpper = result.TableNameUpper;
                     $("#fileConfigForm").setWebControls(result.FileConfig);
                     $("#outputConfigForm").setWebControls(result.OutputConfig);
@@ -570,7 +570,7 @@
             data: postData,
             success: function (obj) {
                 if (obj.Tag == 1) {
-                    var result = obj.Result;
+                    var result = obj.Data;
                     $("div.tab-pane").each(function (i, ele) {
                         var col = $(ele).attr("col");
                         if (col == "CodeMenu") {
@@ -608,9 +608,9 @@
             success: function (obj) {
                 $("#outputListForm").find("div").remove();
                 if (obj.Tag == 1) {
-                    for (var i = 0; i < obj.Result.length; i++) {
-                        var html = "<div class='form-group'><label class='col-sm-2 control-label'>" + obj.Result[i].Key + "</label>" +
-                            "<label class='col-sm-10 control-label' style='text-align:left'>" + obj.Result[i].Value + "</label></div>";
+                    for (var i = 0; i < obj.Data.length; i++) {
+                        var html = "<div class='form-group'><label class='col-sm-2 control-label'>" + obj.Data[i].Key + "</label>" +
+                            "<label class='col-sm-10 control-label' style='text-align:left'>" + obj.Data[i].Value + "</label></div>";
                         $("#outputListForm").append(html);
                     }
                 }

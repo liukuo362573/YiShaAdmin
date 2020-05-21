@@ -62,53 +62,53 @@ namespace YiSha.Service.SystemManage
 
         public async Task RemoveAllForm()
         {
-            await this.BaseRepository().ExecuteBySql("truncate table sys_log_login");
+            await this.BaseRepository().ExecuteBySql("truncate table SysLogLogin");
         }
         #endregion
 
         #region 私有方法
         private List<DbParameter> ListFilter(LogLoginListParam param, StringBuilder strSql)
         {
-            strSql.Append(@"SELECT  a.id as Id,
-                                    a.base_create_time as BaseCreateTime,
-                                    a.base_creator_id as BaseCreatorId,
-                                    a.log_status as LogStatus,
-                                    a.ip_address as IpAddress,
-                                    a.ip_location as IpLocation,
-                                    a.browser as Browser,
-                                    a.os as OS,
-                                    a.remark as Remark,
-                                    b.user_name as UserName
-                            FROM    sys_log_login a
-                                    LEFT JOIN sys_user b ON a.base_creator_id = b.id
+            strSql.Append(@"SELECT  a.Id,
+                                    a.BaseCreateTime,
+                                    a.BaseCreatorId,
+                                    a.LogStatus,
+                                    a.IpAddress,
+                                    a.IpLocation,
+                                    a.Browser,
+                                    a.OS,
+                                    a.Remark,
+                                    b.UserName
+                            FROM    SysLogLogin a
+                                    LEFT JOIN SysUser b ON a.BaseCreatorId = b.Id
                             WHERE   1 = 1");
             var parameter = new List<DbParameter>();
             if (param != null)
             {
                 if (!string.IsNullOrEmpty(param.UserName))
                 {
-                    strSql.Append(" AND b.user_name like @UserName");
+                    strSql.Append(" AND b.UserName like @UserName");
                     parameter.Add(DbParameterExtension.CreateDbParameter("@UserName", '%' + param.UserName + '%'));
                 }
                 if (param.LogStatus > -1)
                 {
-                    strSql.Append(" AND a.log_status = @LogStatus");
+                    strSql.Append(" AND a.LogStatus = @LogStatus");
                     parameter.Add(DbParameterExtension.CreateDbParameter("@LogStatus", param.LogStatus));
                 }
                 if (!string.IsNullOrEmpty(param.IpAddress))
                 {
-                    strSql.Append(" AND a.ip_address like @IpAddress");
+                    strSql.Append(" AND a.IpAddress like @IpAddress");
                     parameter.Add(DbParameterExtension.CreateDbParameter("@IpAddress", '%' + param.IpAddress + '%'));
                 }
                 if (!string.IsNullOrEmpty(param.StartTime.ParseToString()))
                 {
-                    strSql.Append(" AND a.base_create_time >= @StartTime");
+                    strSql.Append(" AND a.BaseCreateTime >= @StartTime");
                     parameter.Add(DbParameterExtension.CreateDbParameter("@StartTime", param.StartTime));
                 }
                 if (!string.IsNullOrEmpty(param.EndTime.ParseToString()))
                 {
                     param.EndTime = (param.EndTime.Value.ToString("yyyy-MM-dd") + " 23:59:59").ParseToDateTime();
-                    strSql.Append(" AND a.base_create_time <= @EndTime");
+                    strSql.Append(" AND a.BaseCreateTime <= @EndTime");
                     parameter.Add(DbParameterExtension.CreateDbParameter("@EndTime", param.EndTime));
                 }
             }

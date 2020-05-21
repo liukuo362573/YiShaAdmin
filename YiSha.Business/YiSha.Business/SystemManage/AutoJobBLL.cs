@@ -20,8 +20,8 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<AutoJobEntity>>> GetList(AutoJobListParam param)
         {
             TData<List<AutoJobEntity>> obj = new TData<List<AutoJobEntity>>();
-            obj.Result = await autoJobService.GetList(param);
-            obj.TotalCount = obj.Result.Count;
+            obj.Data = await autoJobService.GetList(param);
+            obj.Total = obj.Data.Count;
             obj.Tag = 1;
             return obj;
         }
@@ -29,8 +29,8 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<AutoJobEntity>>> GetPageList(AutoJobListParam param, Pagination pagination)
         {
             TData<List<AutoJobEntity>> obj = new TData<List<AutoJobEntity>>();
-            obj.Result = await autoJobService.GetPageList(param, pagination);
-            obj.TotalCount = pagination.TotalCount;
+            obj.Data = await autoJobService.GetPageList(param, pagination);
+            obj.Total = pagination.TotalCount;
             obj.Tag = 1;
             return obj;
         }
@@ -38,7 +38,7 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<AutoJobEntity>> GetEntity(long id)
         {
             TData<AutoJobEntity> obj = new TData<AutoJobEntity>();
-            obj.Result = await autoJobService.GetEntity(id);
+            obj.Data = await autoJobService.GetEntity(id);
             obj.Tag = 1;
             return obj;
         }
@@ -54,7 +54,7 @@ namespace YiSha.Business.SystemManage
                 return obj;
             }
             await autoJobService.SaveForm(entity);
-            obj.Result = entity.Id.ParseToString();
+            obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
             return obj;
         }

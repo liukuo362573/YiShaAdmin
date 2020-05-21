@@ -78,10 +78,10 @@ namespace YiSha.Admin.WebApi.Controllers
             TData<string> obj = null;
             TData<NewsEntity> objNews = await newsBLL.GetEntity(param.Id.Value);
             NewsEntity newsEntity = new NewsEntity();
-            if (objNews.Result != null)
+            if (objNews.Data != null)
             {
                 newsEntity.Id = param.Id.Value;
-                newsEntity.ViewTimes = objNews.Result.ViewTimes;
+                newsEntity.ViewTimes = objNews.Data.ViewTimes;
                 newsEntity.ViewTimes++;
                 obj = await newsBLL.SaveForm(newsEntity);
             }

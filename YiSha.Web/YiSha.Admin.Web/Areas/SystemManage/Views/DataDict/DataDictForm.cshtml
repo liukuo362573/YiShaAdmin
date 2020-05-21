@@ -45,7 +45,7 @@
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
-                        $("#form").setWebControls(obj.Result);
+                        $("#form").setWebControls(obj.Data);
                     }
                 }
             });
@@ -57,7 +57,7 @@
                 success: function (obj) {
                     if (obj.Tag == 1) {
                         var defaultData = {};
-                        defaultData.DictSort = obj.Result;
+                        defaultData.DictSort = obj.Data;
                         $("#form").setWebControls(defaultData);
                     }
                 }

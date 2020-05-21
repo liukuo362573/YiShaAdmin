@@ -113,9 +113,12 @@ namespace YiSha.Service.SystemManage
             {
                 table.TableKey = string.Join(",", detailList.Where(p => p.Id == table.Id).Select(p => p.TableKey));
                 var tableInfo = detailList.Where(p => p.TableName == table.TableName).FirstOrDefault();
-                table.TableKeyName = tableInfo.TableKeyName;
-                table.TableCount = tableInfo.TableCount;
-                table.Remark = tableInfo.Remark;
+                if (tableInfo != null)
+                {
+                    table.TableKeyName = tableInfo.TableKeyName;
+                    table.TableCount = tableInfo.TableCount;
+                    table.Remark = tableInfo.Remark;
+                }
             }
         }
         #endregion

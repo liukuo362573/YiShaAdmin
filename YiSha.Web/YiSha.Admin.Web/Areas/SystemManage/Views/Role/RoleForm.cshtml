@@ -68,8 +68,8 @@
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
-                        $("#form").setWebControls(obj.Result);
-                        $('#menuTree').ysTree("setCheckedNodes", obj.Result.MenuIds);
+                        $("#form").setWebControls(obj.Data);
+                        $('#menuTree').ysTree("setCheckedNodes", obj.Data.MenuIds);
                     }
                 }
             });
@@ -81,7 +81,7 @@
                 success: function (obj) {
                     if (obj.Tag == 1) {
                         var defaultData = {};
-                        defaultData.RoleSort = obj.Result;
+                        defaultData.RoleSort = obj.Data;
                         defaultData.RoleStatus = "@StatusEnum.Yes.ParseToInt()";
                         $("#form").setWebControls(defaultData);
                     }

@@ -28,8 +28,8 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<RoleEntity>>> GetList(RoleListParam param)
         {
             TData<List<RoleEntity>> obj = new TData<List<RoleEntity>>();
-            obj.Result = await roleService.GetList(param);
-            obj.TotalCount = obj.Result.Count;
+            obj.Data = await roleService.GetList(param);
+            obj.Total = obj.Data.Count;
             obj.Tag = 1;
             return obj;
         }
@@ -37,8 +37,8 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<RoleEntity>>> GetPageList(RoleListParam param, Pagination pagination)
         {
             TData<List<RoleEntity>> obj = new TData<List<RoleEntity>>();
-            obj.Result = await roleService.GetPageList(param, pagination);
-            obj.TotalCount = pagination.TotalCount;
+            obj.Data = await roleService.GetPageList(param, pagination);
+            obj.Total = pagination.TotalCount;
             obj.Tag = 1;
             return obj;
         }
@@ -55,7 +55,7 @@ namespace YiSha.Business.SystemManage
             // 获取角色对应的权限
             roleEntity.MenuIds = string.Join(",", menuAuthorizeList.Select(p => p.MenuId));
 
-            obj.Result = roleEntity;
+            obj.Data = roleEntity;
             obj.Tag = 1;
             return obj;
         }
@@ -63,7 +63,7 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<int>> GetMaxSort()
         {
             TData<int> obj = new TData<int>();
-            obj.Result = await roleService.GetMaxSort();
+            obj.Data = await roleService.GetMaxSort();
             obj.Tag = 1;
             return obj;
         }
@@ -85,7 +85,7 @@ namespace YiSha.Business.SystemManage
             // 清除缓存里面的权限数据
             menuAuthorizeCache.Remove();
 
-            obj.Result = entity.Id.ParseToString();
+            obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
 
             return obj;

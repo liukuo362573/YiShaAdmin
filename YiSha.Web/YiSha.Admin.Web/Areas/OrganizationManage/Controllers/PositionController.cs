@@ -69,7 +69,7 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
             var list = await positionBLL.GetList(param);
             if (list.Tag == 1)
             {
-                obj.Result = string.Join(",", list.Result.Select(p => p.PositionName));
+                obj.Data = string.Join(",", list.Data.Select(p => p.PositionName));
                 obj.Tag = 1;
             }
             return Json(obj);

@@ -105,7 +105,7 @@
     function saveUserPortrait(data) {
         var postData = {};
         postData.Id = id;
-        postData.Portrait = data.Result;
+        postData.Portrait = data.Data;
         ys.ajax({
             url: '@Url.Content("~/OrganizationManage/User/ChangeUserJson")',
             type: "post",
@@ -113,7 +113,7 @@
             success: function (obj) {
                 if (obj.Tag == 1) {
                     ys.msgSuccess(obj.Message);
-                    $("#portrait", parent.document).attr("src", '@GlobalContext.SystemConfig.ApiSite' + data.Result);
+                    $("#portrait", parent.document).attr("src", '@GlobalContext.SystemConfig.ApiSite' + data.Data);
                     ys.closeDialog();
                 }
                 else {

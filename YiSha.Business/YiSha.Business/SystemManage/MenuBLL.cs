@@ -30,7 +30,7 @@ namespace YiSha.Business.SystemManage
             List<MenuEntity> list = await menuCache.GetList();
             list = ListFilter(param, list);
 
-            obj.Result = list;
+            obj.Data = list;
             obj.Tag = 1;
             return obj;
         }
@@ -38,14 +38,14 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<ZtreeInfo>>> GetZtreeList(MenuListParam param)
         {
             var obj = new TData<List<ZtreeInfo>>();
-            obj.Result = new List<ZtreeInfo>();
+            obj.Data = new List<ZtreeInfo>();
 
             List<MenuEntity> list = await menuCache.GetList();
             list = ListFilter(param, list);
 
             foreach (MenuEntity menu in list)
             {
-                obj.Result.Add(new ZtreeInfo
+                obj.Data.Add(new ZtreeInfo
                 {
                     id = menu.Id,
                     pId = menu.ParentId,
@@ -60,21 +60,21 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<MenuEntity>> GetEntity(long id)
         {
             TData<MenuEntity> obj = new TData<MenuEntity>();
-            obj.Result = await menuService.GetEntity(id);
-            if (obj.Result != null)
+            obj.Data = await menuService.GetEntity(id);
+            if (obj.Data != null)
             {
-                long parentId = obj.Result.ParentId.Value;
+                long parentId = obj.Data.ParentId.Value;
                 if (parentId > 0)
                 {
                     MenuEntity parentMenu = await menuService.GetEntity(parentId);
                     if (parentMenu != null)
                     {
-                        obj.Result.ParentName = parentMenu.MenuName;
+                        obj.Data.ParentName = parentMenu.MenuName;
                     }
                 }
                 else
                 {
-                    obj.Result.ParentName = "主目录";
+                    obj.Data.ParentName = "主目录";
                 }
             }
             obj.Tag = 1;
@@ -84,7 +84,7 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<int>> GetMaxSort(long parentId)
         {
             TData<int> obj = new TData<int>();
-            obj.Result = await menuService.GetMaxSort(parentId);
+            obj.Data = await menuService.GetMaxSort(parentId);
             obj.Tag = 1;
             return obj;
         }
@@ -103,7 +103,7 @@ namespace YiSha.Business.SystemManage
 
             menuCache.Remove();
 
-            obj.Result = entity.Id.ParseToString();
+            obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
             return obj;
         }

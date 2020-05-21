@@ -20,7 +20,7 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<LogLoginEntity>>> GetList(LogLoginListParam param)
         {
             TData<List<LogLoginEntity>> obj = new TData<List<LogLoginEntity>>();
-            obj.Result = await logLoginService.GetList(param);
+            obj.Data = await logLoginService.GetList(param);
             obj.Tag = 1;
             return obj;
         }
@@ -28,8 +28,8 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<LogLoginEntity>>> GetPageList(LogLoginListParam param, Pagination pagination)
         {
             TData<List<LogLoginEntity>> obj = new TData<List<LogLoginEntity>>();
-            obj.Result = await logLoginService.GetPageList(param, pagination);
-            obj.TotalCount = pagination.TotalCount;
+            obj.Data = await logLoginService.GetPageList(param, pagination);
+            obj.Total = pagination.TotalCount;
             obj.Tag = 1;
             return obj;
         }
@@ -37,7 +37,7 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<LogLoginEntity>> GetEntity(long id)
         {
             TData<LogLoginEntity> obj = new TData<LogLoginEntity>();
-            obj.Result = await logLoginService.GetEntity(id);
+            obj.Data = await logLoginService.GetEntity(id);
             obj.Tag = 1;
             return obj;
         }
@@ -49,7 +49,7 @@ namespace YiSha.Business.SystemManage
         {
             TData<string> obj = new TData<string>();
             await logLoginService.SaveForm(entity);
-            obj.Result = entity.Id.ParseToString();
+            obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
             return obj;
         }

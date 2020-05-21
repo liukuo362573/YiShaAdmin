@@ -115,12 +115,12 @@
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
-                        obj.Result.NewsDate = ys.formatDate(obj.Result.NewsDate, "yyyy-MM-dd HH:mm");
-                        $("#form").setWebControls(obj.Result);
-                        $("#newsContent").summernote('code', obj.Result.NewsContent);
-                        $("#thumbImage").imageUpload("setImageUrl", obj.Result.ThumbImage);
+                        obj.Data.NewsDate = ys.formatDate(obj.Data.NewsDate, "yyyy-MM-dd HH:mm");
+                        $("#form").setWebControls(obj.Data);
+                        $("#newsContent").summernote('code', obj.Data.NewsContent);
+                        $("#thumbImage").imageUpload("setImageUrl", obj.Data.ThumbImage);
 
-                        $.each(obj.Result.NewsTag.split(','), function (index,val) {
+                        $.each(obj.Data.NewsTag.split(','), function (index,val) {
                              $('#newsTag').tagsinput('add', val);
                         });
                     }
@@ -136,7 +136,7 @@
                         var defaultData = {};
                         defaultData.NewsAuthor = "@ViewBag.OperatorInfo.RealName";
                         defaultData.NewsDate = '@DateTime.Now.ToString("yyyy-MM-dd HH:mm")';
-                        defaultData.NewsSort = obj.Result;
+                        defaultData.NewsSort = obj.Data;
                         $("#form").setWebControls(defaultData);
                     }
                 }
@@ -175,7 +175,7 @@
             data: formdata,
             success: function (obj) {
                 if (obj.Tag == 1) {
-                    $("#newsContent").summernote('insertImage', '@GlobalContext.SystemConfig.ApiSite' + obj.Result, '/');
+                    $("#newsContent").summernote('insertImage', '@GlobalContext.SystemConfig.ApiSite' + obj.Data, '/');
                 }
                 else {
                     ys.msgError(obj.Message);
@@ -193,7 +193,7 @@
             success: function (obj) {
                 if (obj.Tag == 1) {
                     if (callback) {
-                        callback('@GlobalContext.SystemConfig.ApiSite' + obj.Result);
+                        callback('@GlobalContext.SystemConfig.ApiSite' + obj.Data);
                     }
                 }
                 else {

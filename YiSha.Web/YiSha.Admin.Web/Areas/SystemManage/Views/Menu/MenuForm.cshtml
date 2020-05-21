@@ -93,7 +93,7 @@
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
-                        $("#form").setWebControls(obj.Result);
+                        $("#form").setWebControls(obj.Data);
                     }
                 }
             });
@@ -114,7 +114,7 @@
                         }
                         defaultData.MenuStatus = "@StatusEnum.Yes.ParseToInt()";
 
-                        defaultData.MenuSort = obj.Result;
+                        defaultData.MenuSort = obj.Data;
                         $("#form").setWebControls(defaultData);
                     }
                 }
@@ -148,7 +148,7 @@
                 success: function (obj) {
                     if (obj.Tag == 1) {
                         ys.msgSuccess(obj.Message);;
-                        parent.searchTreeGrid(obj.Result);
+                        parent.searchTreeGrid(obj.Data);
                         parent.layer.close(index);
                     }
                     else {

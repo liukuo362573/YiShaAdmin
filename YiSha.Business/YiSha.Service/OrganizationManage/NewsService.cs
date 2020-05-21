@@ -49,7 +49,7 @@ namespace YiSha.Service.OrganizationManage
 
         public async Task<int> GetMaxSort()
         {
-            object result = await this.BaseRepository().FindObject("SELECT MAX(news_sort) FROM sys_news");
+            object result = await this.BaseRepository().FindObject("SELECT MAX(NewsSort) FROM SysNews");
             int sort = result.ParseToInt();
             sort++;
             return sort;
@@ -81,57 +81,57 @@ namespace YiSha.Service.OrganizationManage
         #region 私有方法
         private List<DbParameter> ListFilter(NewsListParam param, StringBuilder strSql, bool bNewsContent = false)
         {
-            strSql.Append(@"SELECT  a.id as Id,
-                                    a.base_modify_time as BaseModifyTime,
-                                    a.base_modifier_id as BaseModifierId,
-                                    a.news_title as NewsTitle,
-                                    a.thumb_image as ThumbImage,
-                                    a.news_tag as NewsTag,
-                                    a.news_author as NewsAuthor,
-                                    a.news_sort as NewsSort,
-                                    a.news_date as NewsDate,
-                                    a.news_type as NewsType,
-                                    a.province_id as ProvinceId,
-                                    a.city_id as CityId,
-                                    a.county_id as CountyId,
-                                    a.view_times as ViewTimes");
+            strSql.Append(@"SELECT  a.Id,
+                                    a.BaseModifyTime,
+                                    a.BaseModifierId,
+                                    a.NewsTitle,
+                                    a.ThumbImage,
+                                    a.NewsTag,
+                                    a.NewsAuthor,
+                                    a.NewsSort,
+                                    a.NewsDate,
+                                    a.NewsType,
+                                    a.ProvinceId,
+                                    a.CityId,
+                                    a.CountyId,
+                                    a.ViewTimes");
             if (bNewsContent)
             {
-                strSql.Append(",a.news_content as NewsContent");
+                strSql.Append(",a.NewsContent");
             }
-            strSql.Append(@"         FROM    sys_news a
+            strSql.Append(@"         FROM    SysNews a
                             WHERE   1 = 1");
             var parameter = new List<DbParameter>();
             if (param != null)
             {
                 if (!string.IsNullOrEmpty(param.NewsTitle))
                 {
-                    strSql.Append(" AND a.news_title like @NewsTitle");
+                    strSql.Append(" AND a.NewsTitle like @NewsTitle");
                     parameter.Add(DbParameterExtension.CreateDbParameter("@NewsTitle", '%' + param.NewsTitle + '%'));
                 }
                 if (param.NewsType > 0)
                 {
-                    strSql.Append(" AND a.news_type = @NewsType");
+                    strSql.Append(" AND a.NewsType = @NewsType");
                     parameter.Add(DbParameterExtension.CreateDbParameter("@NewsType", param.NewsType));
                 }
                 if (!string.IsNullOrEmpty(param.NewsTag))
                 {
-                    strSql.Append(" AND a.news_tag like @NewsTag");
+                    strSql.Append(" AND a.NewsTag like @NewsTag");
                     parameter.Add(DbParameterExtension.CreateDbParameter("@NewsTag", '%' + param.NewsTag + '%'));
                 }
                 if (param.ProvinceId > 0)
                 {
-                    strSql.Append(" AND a.province_id = @ProvinceId");
+                    strSql.Append(" AND a.ProvinceId = @ProvinceId");
                     parameter.Add(DbParameterExtension.CreateDbParameter("@ProvinceId", param.ProvinceId));
                 }
                 if (param.CityId > 0)
                 {
-                    strSql.Append(" AND a.city_id = @CityId");
+                    strSql.Append(" AND a.CityId = @CityId");
                     parameter.Add(DbParameterExtension.CreateDbParameter("@CityId", param.CityId));
                 }
                 if (param.CountyId > 0)
                 {
-                    strSql.Append(" AND a.county_id = @CountyId");
+                    strSql.Append(" AND a.CountId = @CountId");
                     parameter.Add(DbParameterExtension.CreateDbParameter("@CountyId", param.CountyId));
                 }
             }

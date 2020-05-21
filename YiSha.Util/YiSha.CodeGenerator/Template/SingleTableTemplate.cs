@@ -26,13 +26,11 @@ namespace YiSha.CodeGenerator.Template
         {
             path = GetProjectRootPath(path);
 
-            string tableNameUpper = TableMappingHelper.ConvertToUppercase(tableName);
-            List<string> tableFieldUpperList = tableFieldList.Select(p => TableMappingHelper.ConvertToUppercase(p)).ToList();
             int defaultField = 2; // 默认显示2个字段
 
             BaseConfigModel baseConfigModel = new BaseConfigModel();
             baseConfigModel.TableName = tableName;
-            baseConfigModel.TableNameUpper = tableNameUpper;
+            baseConfigModel.TableNameUpper = tableName;
 
             #region FileConfigModel
             baseConfigModel.FileConfig = new FileConfigModel();
@@ -74,14 +72,14 @@ namespace YiSha.CodeGenerator.Template
             baseConfigModel.PageIndex.IsPagination = 1;
             baseConfigModel.PageIndex.ButtonList = new List<string>();
             baseConfigModel.PageIndex.ColumnList = new List<string>();
-            baseConfigModel.PageIndex.ColumnList.AddRange(tableFieldUpperList.Take(defaultField));
+            baseConfigModel.PageIndex.ColumnList.AddRange(tableFieldList.Take(defaultField));
             #endregion
 
             #region PageFormModel
             baseConfigModel.PageForm = new PageFormModel();
             baseConfigModel.PageForm.ShowMode = 1;
             baseConfigModel.PageForm.FieldList = new List<string>();
-            baseConfigModel.PageForm.FieldList.AddRange(tableFieldUpperList.Take(defaultField));
+            baseConfigModel.PageForm.FieldList.AddRange(tableFieldList.Take(defaultField));
             #endregion
 
             return baseConfigModel;
@@ -113,7 +111,7 @@ namespace YiSha.CodeGenerator.Template
             foreach (DataRow dr in dt.Rows)
             {
                 column = dr["TableColumn"].ToString();
-                if (BaseField.BaseFieldList.Where(p => p == column.ToLower()).Any())
+                if (BaseField.BaseFieldList.Where(p => p == column).Any())
                 {
                     // 基础字段不需要生成，继承合适的BaseEntity即可。
                     continue;
@@ -122,7 +120,6 @@ namespace YiSha.CodeGenerator.Template
                 remark = dr["Remark"].ToString();
                 datatype = dr["Datatype"].ToString();
 
-                column = TableMappingHelper.ConvertToUppercase(column);
                 datatype = TableMappingHelper.GetPropertyDatatype(datatype);
 
                 sb.AppendLine("        /// <summary>");
@@ -295,8 +292,8 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("        public async Task<TData<List<" + baseConfigModel.FileConfig.EntityName + ">>> GetList(" + baseConfigModel.FileConfig.EntityParamName.Replace("Param", "ListParam") + " param)");
             sb.AppendLine("        {");
             sb.AppendLine("            TData<List<" + baseConfigModel.FileConfig.EntityName + ">> obj = new TData<List<" + baseConfigModel.FileConfig.EntityName + ">>();");
-            sb.AppendLine("            obj.Result = await " + TableMappingHelper.FirstLetterLowercase(baseConfigModel.FileConfig.ServiceName) + ".GetList(param);");
-            sb.AppendLine("            obj.TotalCount = obj.Result.Count;");
+            sb.AppendLine("            obj.Data = await " + TableMappingHelper.FirstLetterLowercase(baseConfigModel.FileConfig.ServiceName) + ".GetList(param);");
+            sb.AppendLine("            obj.Total = obj.Data.Count;");
             sb.AppendLine("            obj.Tag = 1;");
             sb.AppendLine("            return obj;");
             sb.AppendLine("        }");
@@ -304,8 +301,8 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("        public async Task<TData<List<" + baseConfigModel.FileConfig.EntityName + ">>> GetPageList(" + baseConfigModel.FileConfig.EntityParamName.Replace("Param", "ListParam") + " param, Pagination pagination)");
             sb.AppendLine("        {");
             sb.AppendLine("            TData<List<" + baseConfigModel.FileConfig.EntityName + ">> obj = new TData<List<" + baseConfigModel.FileConfig.EntityName + ">>();");
-            sb.AppendLine("            obj.Result = await " + TableMappingHelper.FirstLetterLowercase(baseConfigModel.FileConfig.ServiceName) + ".GetPageList(param, pagination);");
-            sb.AppendLine("            obj.TotalCount = pagination.TotalCount;");
+            sb.AppendLine("            obj.Data = await " + TableMappingHelper.FirstLetterLowercase(baseConfigModel.FileConfig.ServiceName) + ".GetPageList(param, pagination);");
+            sb.AppendLine("            obj.Total = pagination.TotalCount;");
             sb.AppendLine("            obj.Tag = 1;");
             sb.AppendLine("            return obj;");
             sb.AppendLine("        }");
@@ -313,8 +310,8 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("        public async Task<TData<" + baseConfigModel.FileConfig.EntityName + ">> GetEntity(long id)");
             sb.AppendLine("        {");
             sb.AppendLine("            TData<" + baseConfigModel.FileConfig.EntityName + "> obj = new TData<" + baseConfigModel.FileConfig.EntityName + ">();");
-            sb.AppendLine("            obj.Result = await " + TableMappingHelper.FirstLetterLowercase(baseConfigModel.FileConfig.ServiceName) + ".GetEntity(id);");
-            sb.AppendLine("            if (obj.Result != null)");
+            sb.AppendLine("            obj.Data = await " + TableMappingHelper.FirstLetterLowercase(baseConfigModel.FileConfig.ServiceName) + ".GetEntity(id);");
+            sb.AppendLine("            if (obj.Data != null)");
             sb.AppendLine("            {");
             sb.AppendLine("                obj.Tag = 1;");
             sb.AppendLine("            }");
@@ -327,7 +324,7 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("        {");
             sb.AppendLine("            TData<string> obj = new TData<string>();");
             sb.AppendLine("            await " + TableMappingHelper.FirstLetterLowercase(baseConfigModel.FileConfig.ServiceName) + ".SaveForm(entity);");
-            sb.AppendLine("            obj.Result = entity.Id.ParseToString();");
+            sb.AppendLine("            obj.Data = entity.Id.ParseToString();");
             sb.AppendLine("            obj.Tag = 1;");
             sb.AppendLine("            return obj;");
             sb.AppendLine("        }");
@@ -697,7 +694,7 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("                type: 'get',");
             sb.AppendLine("                success: function (obj) {");
             sb.AppendLine("                    if (obj.Tag == 1) {");
-            sb.AppendLine("                        $('#form').setWebControls(obj.Result);");
+            sb.AppendLine("                        $('#form').setWebControls(obj.Data);");
             sb.AppendLine("                    }");
             sb.AppendLine("                }");
             sb.AppendLine("            });");
@@ -972,17 +969,17 @@ namespace YiSha.CodeGenerator.Template
             string entity = string.Empty;
             var columnList = dt.AsEnumerable().Select(p => p["TableColumn"].ParseToString()).ToList();
 
-            bool id = columnList.Where(p => p == "id").Any();
-            bool baseIsDelete = columnList.Where(p => p == "base_is_delete").Any();
-            bool baseVersion = columnList.Where(p => p == "base_version").Any();
-            bool baseModifyTime = columnList.Where(p => p == "base_modify_time").Any();
-            bool baseModifierId = columnList.Where(p => p == "base_modifier_id").Any();
-            bool baseCreateTime = columnList.Where(p => p == "base_create_time").Any();
-            bool baseCreatorId = columnList.Where(p => p == "base_creator_id").Any();
+            bool id = columnList.Where(p => p == "Id").Any();
+            bool baseIsDelete = columnList.Where(p => p == "BaseIsDelete").Any();
+            bool baseVersion = columnList.Where(p => p == "BaseVersion").Any();
+            bool baseModifyTime = columnList.Where(p => p == "BaseModifyTime").Any();
+            bool baseModifierId = columnList.Where(p => p == "BaseModifierId").Any();
+            bool baseCreateTime = columnList.Where(p => p == "BaseCreateTime").Any();
+            bool baseCreatorId = columnList.Where(p => p == "BaseCreatorId").Any();
 
             if (!id)
             {
-                throw new Exception("数据库表必须有主键id字段");
+                throw new Exception("数据库表必须有主键Id字段");
             }
             if (baseIsDelete && baseVersion && baseModifyTime && baseModifierId && baseCreateTime && baseCreatorId)
             {

@@ -8,23 +8,6 @@ namespace YiSha.CodeGenerator
     public class TableMappingHelper
     {
         /// <summary>
-        /// sys_role转成SysRole
-        /// </summary>
-        /// <param name="lowercase"></param>
-        /// <returns></returns>
-        public static string ConvertToUppercase(string lowercase)
-        {
-            lowercase = lowercase.ParseToString();
-            StringBuilder sb = new StringBuilder();
-            string[] arr = lowercase.Split('_');
-            for (int i = 0; i < arr.Length; i++)
-            {
-                sb.Append(arr[i][0].ToString().ToUpper() + arr[i].Substring(1));
-            }
-            return sb.ToString();
-        }
-
-        /// <summary>
         /// UserService转成userService
         /// </summary>
         /// <param name="s"></param>

@@ -78,7 +78,7 @@
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
-                        var result = obj.Result;
+                        var result = obj.Data;
                         $("#form").setWebControls(result);
                     }
                 }
@@ -90,7 +90,7 @@
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
-                        $("#departmentSort").val(obj.Result);
+                        $("#departmentSort").val(obj.Data);
                     }
                 }
             });
@@ -109,7 +109,7 @@
                 success: function (obj) {
                     if (obj.Tag == 1) {
                         ys.msgSuccess(obj.Message);
-                        parent.searchTreeGrid(obj.Result);
+                        parent.searchTreeGrid(obj.Data);
                         parent.layer.close(index);
                     }
                     else {

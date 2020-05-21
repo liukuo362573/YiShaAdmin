@@ -25,8 +25,8 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<DataDictEntity>>> GetList(DataDictListParam param)
         {
             TData<List<DataDictEntity>> obj = new TData<List<DataDictEntity>>();
-            obj.Result = await dataDictService.GetList(param);
-            obj.TotalCount = obj.Result.Count;
+            obj.Data = await dataDictService.GetList(param);
+            obj.Total = obj.Data.Count;
             obj.Tag = 1;
             return obj;
         }
@@ -34,8 +34,8 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<DataDictEntity>>> GetPageList(DataDictListParam param, Pagination pagination)
         {
             TData<List<DataDictEntity>> obj = new TData<List<DataDictEntity>>();
-            obj.Result = await dataDictService.GetPageList(param, pagination);
-            obj.TotalCount = pagination.TotalCount;
+            obj.Data = await dataDictService.GetPageList(param, pagination);
+            obj.Total = pagination.TotalCount;
             obj.Tag = 1;
             return obj;
         }
@@ -43,7 +43,7 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<DataDictEntity>> GetEntity(long id)
         {
             TData<DataDictEntity> obj = new TData<DataDictEntity>();
-            obj.Result = await dataDictService.GetEntity(id);
+            obj.Data = await dataDictService.GetEntity(id);
             obj.Tag = 1;
             return obj;
         }
@@ -51,7 +51,7 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<int>> GetMaxSort()
         {
             TData<int> obj = new TData<int>();
-            obj.Result = await dataDictService.GetMaxSort();
+            obj.Data = await dataDictService.GetMaxSort();
             obj.Tag = 1;
             return obj;
         }
@@ -83,7 +83,7 @@ namespace YiSha.Business.SystemManage
                     Detail = detailList
                 });
             }
-            obj.Result = dataDictInfoList;
+            obj.Data = dataDictInfoList;
             obj.Tag = 1;
             return obj;
         }
@@ -101,7 +101,7 @@ namespace YiSha.Business.SystemManage
 
             await dataDictService.SaveForm(entity);
             dataDictCache.Remove();
-            obj.Result = entity.Id.ParseToString();
+            obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
             return obj;
         }

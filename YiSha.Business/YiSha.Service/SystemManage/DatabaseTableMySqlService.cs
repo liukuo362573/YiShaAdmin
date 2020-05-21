@@ -136,14 +136,17 @@ namespace YiSha.Service.SystemManage
             {
                 table.TableKey = string.Join(",", detailList.Where(p => p.TableName == table.TableName).Select(p => p.TableKey));
                 var tableInfo = detailList.Where(p => p.TableName == table.TableName).FirstOrDefault();
-                table.TableKeyName = tableInfo.TableKeyName;
-                table.TableCount = tableInfo.TableCount;
-                table.Remark = tableInfo.Remark;
+                if (tableInfo != null)
+                {
+                    table.TableKeyName = tableInfo.TableKeyName;
+                    table.TableCount = tableInfo.TableCount;
+                    table.Remark = tableInfo.Remark;
+                }
             }
         }
         private string GetDatabase()
         {
-            string database = HtmlHelper.Resove(GlobalContext.SystemConfig.DBConnectionString.ToLower(), "database=", ";");
+            string database = HtmlHelper.Resove(GlobalContext.SystemConfig.DBConnectionString, "database=", ";");
             return database;
         }
         #endregion

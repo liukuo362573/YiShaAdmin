@@ -30,7 +30,7 @@ namespace YiSha.Business.SystemManage
                     areaList = areaList.Where(t => t.AreaName.Contains(param.AreaName)).ToList();
                 }
             }
-            obj.Result = areaList;
+            obj.Data = areaList;
             obj.Tag = 1;
             return obj;
         }
@@ -38,8 +38,8 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<AreaEntity>>> GetPageList(AreaListParam param, Pagination pagination)
         {
             TData<List<AreaEntity>> obj = new TData<List<AreaEntity>>();
-            obj.Result = await areaService.GetPageList(param, pagination);
-            obj.TotalCount = pagination.TotalCount;
+            obj.Data = await areaService.GetPageList(param, pagination);
+            obj.Total = pagination.TotalCount;
             obj.Tag = 1;
             return obj;
         }
@@ -47,11 +47,11 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<ZtreeInfo>>> GetZtreeAreaList(AreaListParam param)
         {
             var obj = new TData<List<ZtreeInfo>>();
-            obj.Result = new List<ZtreeInfo>();
+            obj.Data = new List<ZtreeInfo>();
             List<AreaEntity> list = await areaCache.GetList();
             foreach (AreaEntity area in list)
             {
-                obj.Result.Add(new ZtreeInfo
+                obj.Data.Add(new ZtreeInfo
                 {
                     id = area.AreaCode.ParseToLong(),
                     pId = area.ParentAreaCode.ParseToLong(),
@@ -65,8 +65,8 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<AreaEntity>> GetEntity(long id)
         {
             TData<AreaEntity> obj = new TData<AreaEntity>();
-            obj.Result = await areaService.GetEntity(id);
-            if (obj.Result != null)
+            obj.Data = await areaService.GetEntity(id);
+            if (obj.Data != null)
             {
                 obj.Tag = 1;
             }
@@ -76,8 +76,8 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<AreaEntity>> GetEntityByAreaCode(string areaCode)
         {
             TData<AreaEntity> obj = new TData<AreaEntity>();
-            obj.Result = await areaService.GetEntityByAreaCode(areaCode);
-            if (obj.Result != null)
+            obj.Data = await areaService.GetEntityByAreaCode(areaCode);
+            if (obj.Data != null)
             {
                 obj.Tag = 1;
             }
@@ -90,7 +90,7 @@ namespace YiSha.Business.SystemManage
         {
             TData<string> obj = new TData<string>();
             await areaService.SaveForm(entity);
-            obj.Result = entity.Id.ParseToString();
+            obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
             return obj;
         }

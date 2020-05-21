@@ -52,7 +52,7 @@
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
-                        var result = obj.Result;
+                        var result = obj.Data;
                         $("#form").setWebControls(result);
                     }
                 }
@@ -65,7 +65,7 @@
                 success: function (obj) {
                     if (obj.Tag == 1) {
                         var defaultData = {};
-                        defaultData.PositionSort = obj.Result;
+                        defaultData.PositionSort = obj.Data;
                         defaultData.PositionStatus = "@StatusEnum.Yes.ParseToInt()";
                         $("#form").setWebControls(defaultData);
                     }

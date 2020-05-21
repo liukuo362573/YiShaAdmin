@@ -203,7 +203,7 @@
             type: "get",
             success: function (obj) {
                 if (obj.Tag == 1) {
-                    $(".wrapper").setWebControls(obj.Result);
+                    $(".wrapper").setWebControls(obj.Data);
                 }
             }
         });
@@ -215,7 +215,7 @@
             type: "get",
             success: function (obj) {
                 if (obj.Tag == 1) {
-                    $("#wanIp").html(obj.Result);
+                    $("#wanIp").html(obj.Data);
                 }
             }
         });

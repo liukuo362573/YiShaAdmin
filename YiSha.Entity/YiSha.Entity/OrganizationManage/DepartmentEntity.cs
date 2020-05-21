@@ -9,7 +9,7 @@ using YiSha.Util;
 
 namespace YiSha.Entity.OrganizationManage
 {
-    [Table("sys_department")]
+    [Table("SysDepartment")]
     public class DepartmentEntity : BaseExtensionEntity
     {
         [JsonConverter(typeof(StringJsonConverter))]

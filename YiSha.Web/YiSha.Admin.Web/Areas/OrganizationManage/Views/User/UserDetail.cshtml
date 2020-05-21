@@ -57,7 +57,7 @@
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
-                        var result = obj.Result;
+                        var result = obj.Data;
                         result.Gender = ys.getValueByKey(@Html.Raw(typeof(GenderTypeEnum).EnumToDictionaryString()), result.Gender);
                         $("#userInfo").setWebControls(result);
 
@@ -85,7 +85,7 @@
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
-                        $("#roleName").html(obj.Result);
+                        $("#roleName").html(obj.Data);
                     }
                 }
             });
@@ -99,7 +99,7 @@
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
-                        $("#positionName").html(obj.Result);
+                        $("#positionName").html(obj.Data);
                     }
                 }
             });
@@ -113,7 +113,7 @@
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
-                        $("#departmentName").html(obj.Result.DepartmentName);
+                        $("#departmentName").html(obj.Data.DepartmentName);
                     }
                 }
             });

@@ -2,7 +2,7 @@
 
 namespace YiSha.Entity.SystemManage
 {
-    [Table("sys_role")]
+    [Table("SysRole")]
     public class RoleEntity : BaseExtensionEntity
     {
         public string RoleName { get; set; }

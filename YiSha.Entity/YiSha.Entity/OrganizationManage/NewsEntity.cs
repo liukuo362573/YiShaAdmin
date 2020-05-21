@@ -6,7 +6,7 @@ using YiSha.Entity.SystemManage;
 
 namespace YiSha.Entity.OrganizationManage
 {
-    [Table("sys_news")]
+    [Table("SysNews")]
     public class NewsEntity : BaseAreaEntity
     {
         /// <summary>

@@ -26,7 +26,7 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<MenuAuthorizeInfo>>> GetAuthorizeList(OperatorInfo user)
         {
             TData<List<MenuAuthorizeInfo>> obj = new TData<List<MenuAuthorizeInfo>>();
-            obj.Result = new List<MenuAuthorizeInfo>();
+            obj.Data = new List<MenuAuthorizeInfo>();
 
             List<MenuAuthorizeEntity> authorizeList = new List<MenuAuthorizeEntity>();
             List<MenuAuthorizeEntity> userAuthorizeList = null;
@@ -61,7 +61,7 @@ namespace YiSha.Business.SystemManage
 
             foreach (MenuAuthorizeEntity authorize in authorizeList)
             {
-                obj.Result.Add(new MenuAuthorizeInfo
+                obj.Data.Add(new MenuAuthorizeInfo
                 {
                     MenuId = authorize.MenuId,
                     AuthorizeId = authorize.AuthorizeId,

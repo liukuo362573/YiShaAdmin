@@ -22,8 +22,8 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<DataDictDetailEntity>>> GetList(DataDictDetailListParam param)
         {
             TData<List<DataDictDetailEntity>> obj = new TData<List<DataDictDetailEntity>>();
-            obj.Result = await dataDictDetailService.GetList(param);
-            obj.TotalCount = obj.Result.Count;
+            obj.Data = await dataDictDetailService.GetList(param);
+            obj.Total = obj.Data.Count;
             obj.Tag = 1;
             return obj;
         }
@@ -31,8 +31,8 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<DataDictDetailEntity>>> GetPageList(DataDictDetailListParam param, Pagination pagination)
         {
             TData<List<DataDictDetailEntity>> obj = new TData<List<DataDictDetailEntity>>();
-            obj.Result = await dataDictDetailService.GetPageList(param, pagination);
-            obj.TotalCount = pagination.TotalCount;
+            obj.Data = await dataDictDetailService.GetPageList(param, pagination);
+            obj.Total = pagination.TotalCount;
             obj.Tag = 1;
             return obj;
         }
@@ -40,7 +40,7 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<DataDictDetailEntity>> GetEntity(long id)
         {
             TData<DataDictDetailEntity> obj = new TData<DataDictDetailEntity>();
-            obj.Result = await dataDictDetailService.GetEntity(id);
+            obj.Data = await dataDictDetailService.GetEntity(id);
             obj.Tag = 1;
             return obj;
         }
@@ -48,7 +48,7 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<int>> GetMaxSort()
         {
             TData<int> obj = new TData<int>();
-            obj.Result = await dataDictDetailService.GetMaxSort();
+            obj.Data = await dataDictDetailService.GetMaxSort();
             obj.Tag = 1;
             return obj;
         }
@@ -70,7 +70,7 @@ namespace YiSha.Business.SystemManage
             }
             await dataDictDetailService.SaveForm(entity);
             dataDictDetailCache.Remove();
-            obj.Result = entity.Id.ParseToString();
+            obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
             return obj;
         }

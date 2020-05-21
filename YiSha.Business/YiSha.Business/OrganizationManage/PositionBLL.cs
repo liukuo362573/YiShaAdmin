@@ -19,8 +19,7 @@ namespace YiSha.Business.OrganizationManage
         public async Task<TData<List<PositionEntity>>> GetList(PositionListParam param)
         {
             TData<List<PositionEntity>> obj = new TData<List<PositionEntity>>();
-            obj.Result = await positionService.GetList(param);
-            obj.TotalCount = obj.TotalCount;
+            obj.Data = await positionService.GetList(param);
             obj.Tag = 1;
             return obj;
         }
@@ -28,8 +27,8 @@ namespace YiSha.Business.OrganizationManage
         public async Task<TData<List<PositionEntity>>> GetPageList(PositionListParam param, Pagination pagination)
         {
             TData<List<PositionEntity>> obj = new TData<List<PositionEntity>>();
-            obj.Result = await positionService.GetPageList(param, pagination);
-            obj.TotalCount = pagination.TotalCount;
+            obj.Data = await positionService.GetPageList(param, pagination);
+            obj.Total = pagination.TotalCount;
             obj.Tag = 1;
             return obj;
         }
@@ -37,7 +36,7 @@ namespace YiSha.Business.OrganizationManage
         public async Task<TData<PositionEntity>> GetEntity(long id)
         {
             TData<PositionEntity> obj = new TData<PositionEntity>();
-            obj.Result = await positionService.GetEntity(id);
+            obj.Data = await positionService.GetEntity(id);
             obj.Tag = 1;
             return obj;
         }
@@ -45,7 +44,7 @@ namespace YiSha.Business.OrganizationManage
         public async Task<TData<int>> GetMaxSort()
         {
             TData<int> obj = new TData<int>();
-            obj.Result = await positionService.GetMaxSort();
+            obj.Data = await positionService.GetMaxSort();
             obj.Tag = 1;
             return obj;
         }
@@ -61,7 +60,7 @@ namespace YiSha.Business.OrganizationManage
                 return obj;
             }
             await positionService.SaveForm(entity);
-            obj.Result = entity.Id.ParseToString();
+            obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
             return obj;
         }

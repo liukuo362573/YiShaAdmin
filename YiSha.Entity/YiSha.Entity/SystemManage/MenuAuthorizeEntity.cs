@@ -9,7 +9,7 @@ using YiSha.Util;
 
 namespace YiSha.Entity.SystemManage
 {
-    [Table("sys_menu_authorize")]
+    [Table("SysMenuAuthorize")]
     public class MenuAuthorizeEntity : BaseCreateEntity
     {
         [JsonConverter(typeof(StringJsonConverter))]

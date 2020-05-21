@@ -26,7 +26,7 @@ namespace YiSha.Business.AutoJob
                     TData<List<AutoJobEntity>> obj = await new AutoJobBLL().GetList(null);
                     if (obj.Tag == 1)
                     {
-                        AddScheduleJob(obj.Result);
+                        AddScheduleJob(obj.Data);
                     }
                 }
             });

@@ -21,8 +21,8 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<LogApiEntity>>> GetList(LogApiListParam param)
         {
             TData<List<LogApiEntity>> obj = new TData<List<LogApiEntity>>();
-            obj.Result = await logApiService.GetList(param);
-            obj.TotalCount = obj.Result.Count;
+            obj.Data = await logApiService.GetList(param);
+            obj.Total = obj.Data.Count;
             obj.Tag = 1;
             return obj;
         }
@@ -30,8 +30,8 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<LogApiEntity>>> GetPageList(LogApiListParam param, Pagination pagination)
         {
             TData<List<LogApiEntity>> obj = new TData<List<LogApiEntity>>();
-            obj.Result = await logApiService.GetPageList(param, pagination);
-            obj.TotalCount = pagination.TotalCount;
+            obj.Data = await logApiService.GetPageList(param, pagination);
+            obj.Total = pagination.TotalCount;
             obj.Tag = 1;
             return obj;
         }
@@ -39,17 +39,17 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<LogApiEntity>> GetEntity(long id)
         {
             TData<LogApiEntity> obj = new TData<LogApiEntity>();
-            obj.Result = await logApiService.GetEntity(id);
-            if (obj.Result != null)
+            obj.Data = await logApiService.GetEntity(id);
+            if (obj.Data != null)
             {
-                UserEntity userEntity = await new UserService().GetEntity(obj.Result.BaseCreatorId.Value);
+                UserEntity userEntity = await new UserService().GetEntity(obj.Data.BaseCreatorId.Value);
                 if (userEntity != null)
                 {
-                    obj.Result.UserName = userEntity.UserName;
+                    obj.Data.UserName = userEntity.UserName;
                     DepartmentEntity departmentEntitty = await new DepartmentService().GetEntity(userEntity.DepartmentId.Value);
                     if (departmentEntitty != null)
                     {
-                        obj.Result.DepartmentName = departmentEntitty.DepartmentName;
+                        obj.Data.DepartmentName = departmentEntitty.DepartmentName;
                     }
                 }
             }
@@ -63,7 +63,7 @@ namespace YiSha.Business.SystemManage
         {
             TData<string> obj = new TData<string>();
             await logApiService.SaveForm(entity);
-            obj.Result = entity.Id.ParseToString();
+            obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
             return obj;
         }

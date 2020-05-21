@@ -62,55 +62,55 @@ namespace YiSha.Service.SystemManage
 
         public async Task RemoveAllForm()
         {
-            await this.BaseRepository().ExecuteBySql("truncate table sys_log_api");
+            await this.BaseRepository().ExecuteBySql("truncate table SysLogApi");
         }
         #endregion
 
         #region 私有方法
         private List<DbParameter> ListFilter(LogApiListParam param, StringBuilder strSql)
         {
-            strSql.Append(@"SELECT  a.id as Id,
-                                    a.base_create_time as BaseCreateTime,
-                                    a.base_creator_id as BaseCreatorId,
-                                    a.log_status as LogStatus,
-                                    a.remark as Remark,
-                                    a.execute_url as ExecuteUrl,
-                                    a.execute_param as ExecuteParam,
-                                    a.execute_result as ExecuteResult,
-                                    a.execute_time as ExecuteTime,
-                                    b.user_name as UserName,
-                                    c.department_name as DepartmentName
-                            FROM    sys_log_api a
-                                    LEFT JOIN sys_user b ON a.base_creator_id = b.id
-                                    LEFT JOIN sys_department c ON b.department_id = c.id
+            strSql.Append(@"SELECT  a.Id,
+                                    a.BaseCreateTime,
+                                    a.BaseCreatorId,
+                                    a.LogStatus,
+                                    a.Remark,
+                                    a.ExecuteUrl,
+                                    a.ExecuteParam,
+                                    a.ExecuteResult,
+                                    a.ExecuteTime,
+                                    b.UserName,
+                                    c.DepartmentName
+                            FROM    SysLogApi a
+                                    LEFT JOIN SysUser b ON a.BaseCreatorId = b.Id
+                                    LEFT JOIN SysDepartment c ON b.DepartmentId = c.Id
                             WHERE   1 = 1");
             var parameter = new List<DbParameter>();
             if (param != null)
             {
                 if (!string.IsNullOrEmpty(param.UserName))
                 {
-                    strSql.Append(" AND b.user_name like @UserName");
+                    strSql.Append(" AND b.UserName like @UserName");
                     parameter.Add(DbParameterExtension.CreateDbParameter("@UserName", '%' + param.UserName + '%'));
                 }
                 if (param.LogStatus > -1)
                 {
-                    strSql.Append(" AND a.log_status = @LogStatus");
+                    strSql.Append(" AND a.LogStatus = @LogStatus");
                     parameter.Add(DbParameterExtension.CreateDbParameter("@LogStatus", param.LogStatus));
                 }
                 if (!string.IsNullOrEmpty(param.ExecuteUrl))
                 {
-                    strSql.Append(" AND a.execute_url like @ExecuteUrl");
+                    strSql.Append(" AND a.ExecuteUrl like @ExecuteUrl");
                     parameter.Add(DbParameterExtension.CreateDbParameter("@ExecuteUrl", '%' + param.ExecuteUrl + '%'));
                 }
                 if (!string.IsNullOrEmpty(param.StartTime.ParseToString()))
                 {
-                    strSql.Append(" AND a.base_create_time >= @StartTime");
+                    strSql.Append(" AND a.BaseCreateTime >= @StartTime");
                     parameter.Add(DbParameterExtension.CreateDbParameter("@StartTime", param.StartTime));
                 }
                 if (!string.IsNullOrEmpty(param.EndTime.ParseToString()))
                 {
                     param.EndTime = (param.EndTime.Value.ToString("yyyy-MM-dd") + " 23:59:59").ParseToDateTime();
-                    strSql.Append(" AND a.base_create_time <= @EndTime");
+                    strSql.Append(" AND a.BaseCreateTime <= @EndTime");
                     parameter.Add(DbParameterExtension.CreateDbParameter("@EndTime", param.EndTime));
                 }
             }

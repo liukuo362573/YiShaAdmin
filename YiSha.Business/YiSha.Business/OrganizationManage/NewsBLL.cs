@@ -22,8 +22,8 @@ namespace YiSha.Business.OrganizationManage
         {
             TData<List<NewsEntity>> obj = new TData<List<NewsEntity>>();
             areaBLL.SetAreaParam(param);
-            obj.Result = await newsService.GetList(param);
-            obj.TotalCount = obj.Result.Count;
+            obj.Data = await newsService.GetList(param);
+            obj.Total = obj.Data.Count;
             obj.Tag = 1;
             return obj;
         }
@@ -32,8 +32,8 @@ namespace YiSha.Business.OrganizationManage
         {
             TData<List<NewsEntity>> obj = new TData<List<NewsEntity>>();
             areaBLL.SetAreaParam(param);
-            obj.Result = await newsService.GetPageList(param, pagination);
-            obj.TotalCount = pagination.TotalCount;
+            obj.Data = await newsService.GetPageList(param, pagination);
+            obj.Total = pagination.TotalCount;
             obj.Tag = 1;
             return obj;
         }
@@ -41,8 +41,8 @@ namespace YiSha.Business.OrganizationManage
         public async Task<TData<List<NewsEntity>>> GetPageContentList(NewsListParam param, Pagination pagination)
         {
             TData<List<NewsEntity>> obj = new TData<List<NewsEntity>>();
-            obj.Result = await newsService.GetPageContentList(param, pagination);
-            obj.TotalCount = pagination.TotalCount;
+            obj.Data = await newsService.GetPageContentList(param, pagination);
+            obj.Total = pagination.TotalCount;
             obj.Tag = 1;
             return obj;
         }
@@ -50,8 +50,8 @@ namespace YiSha.Business.OrganizationManage
         public async Task<TData<NewsEntity>> GetEntity(long id)
         {
             TData<NewsEntity> obj = new TData<NewsEntity>();
-            obj.Result = await newsService.GetEntity(id);
-            areaBLL.SetAreaId(obj.Result);
+            obj.Data = await newsService.GetEntity(id);
+            areaBLL.SetAreaId(obj.Data);
             obj.Tag = 1;
             return obj;
         }
@@ -59,7 +59,7 @@ namespace YiSha.Business.OrganizationManage
         public async Task<TData<int>> GetMaxSort()
         {
             TData<int> obj = new TData<int>();
-            obj.Result = await newsService.GetMaxSort();
+            obj.Data = await newsService.GetMaxSort();
             obj.Tag = 1;
             return obj;
         }
@@ -71,7 +71,7 @@ namespace YiSha.Business.OrganizationManage
             TData<string> obj = new TData<string>();
             areaBLL.SetAreaEntity(entity);
             await newsService.SaveForm(entity);
-            obj.Result = entity.Id.ParseToString();
+            obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
             return obj;
         }

@@ -65,7 +65,7 @@ namespace YiSha.Admin.Web.Controllers
                     {
                         string[] authorizeList = Authorize.Split(',');
                         TData<List<MenuAuthorizeInfo>> objMenuAuthorize = await new MenuAuthorizeBLL().GetAuthorizeList(user);
-                        List<MenuAuthorizeInfo> authorizeInfoList = objMenuAuthorize.Result.Where(p => authorizeList.Contains(p.Authorize)).ToList();
+                        List<MenuAuthorizeInfo> authorizeInfoList = objMenuAuthorize.Data.Where(p => authorizeList.Contains(p.Authorize)).ToList();
                         if (authorizeInfoList.Any())
                         {
                             hasPermission = true;

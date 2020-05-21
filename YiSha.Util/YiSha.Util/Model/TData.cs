@@ -32,13 +32,11 @@ namespace YiSha.Util.Model
         /// <summary>
         /// 列表的记录数
         /// </summary>
-        public int TotalCount { get; set; }
+        public int Total { get; set; }
 
         /// <summary>
         /// 数据
         /// </summary>
-        public T Result { get; set; }
-
+        public T Data { get; set; }
     }
-
 }

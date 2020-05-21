@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace YiSha.Entity.SystemManage
 {
-    [Table("sys_data_dict_detail")]
+    [Table("SysDataDictDetail")]
     public class DataDictDetailEntity : BaseExtensionEntity
     {
         /// <summary>

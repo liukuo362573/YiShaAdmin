@@ -176,7 +176,7 @@ namespace YiSha.Data.Repository
             var data = await db.FindList<T>(strSql, dbParameter, pagination.Sort, pagination.SortType.ToLower() == "asc" ? true : false, pagination.PageSize, pagination.PageIndex);
             pagination.TotalCount = data.total;
             return data.Item2;
-        }        
+        }
         #endregion
 
         #region 数据源 查询
