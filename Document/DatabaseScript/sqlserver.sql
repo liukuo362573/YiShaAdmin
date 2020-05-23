@@ -4,17 +4,17 @@
 IF OBJECT_ID('[dbo].[SysArea]', 'U') IS NOT NULL DROP TABLE [dbo].[SysArea]; 
 CREATE TABLE [dbo].[SysArea](
 	[Id]					[bigint]		 NOT NULL,
-	[BaseIsDelete]		[int]			 NOT NULL,
+	[BaseIsDelete]			[int]			 NOT NULL,
 	[BaseCreateTime]		[datetime]		 NOT NULL,
 	[BaseModifyTime]		[datetime]		 NOT NULL,
-	[BaseCreatorId]		[bigint]		 NOT NULL,
+	[BaseCreatorId]			[bigint]		 NOT NULL,
 	[BaseModifierId]		[bigint]		 NOT NULL,
 	[BaseVersion]			[int]			 NOT NULL,
 	[AreaCode]				[varchar](6)	 NOT NULL,
 	[ParentAreaCode]		[varchar](6)	 NOT NULL,
-	[AreaName]				[varchar](50)	 NOT NULL,
+	[AreaName]				[nvarchar](50)	 NOT NULL,
 	[ZipCode]				[varchar](50)	 NOT NULL,
-	[AreaLevel]			[int]			 NOT NULL,
+	[AreaLevel]				[int]			 NOT NULL,
  CONSTRAINT [PK_SysArea] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -36,20 +36,20 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'地区层级(1
 IF OBJECT_ID('[dbo].[SysAutoJob]', 'U') IS NOT NULL DROP TABLE [dbo].SysAutoJob; 
 CREATE TABLE [dbo].[SysAutoJob](
 	[Id]                    [bigint]	     NOT NULL,
-	[BaseIsDelete]		[int]			 NOT NULL,
+	[BaseIsDelete]		    [int]			 NOT NULL,
 	[BaseCreateTime]		[datetime]		 NOT NULL,
 	[BaseModifyTime]		[datetime]		 NOT NULL,
-	[BaseCreatorId]		[bigint]		 NOT NULL,
+	[BaseCreatorId]		    [bigint]		 NOT NULL,
 	[BaseModifierId]		[bigint]		 NOT NULL,
 	[BaseVersion]		    [int]			 NOT NULL,
-	[JobGroupName]		[varchar](50)	 NOT NULL,
-	[JobName]				[varchar](50)	 NOT NULL,
-	[JobStatus]			[int]			 NOT NULL,
+	[JobGroupName]		    [nvarchar](50)	 NOT NULL,
+	[JobName]				[nvarchar](50)	 NOT NULL,
+	[JobStatus]				[int]			 NOT NULL,
 	[CronExpression]		[varchar](50)	 NOT NULL,
-	[StartTime]			[datetime]		 NOT NULL,
+	[StartTime]				[datetime]		 NOT NULL,
 	[EndTime]				[datetime]		 NOT NULL,
-	[NextStartTime]		[datetime]		 NOT NULL,
-	[Remark]				[varchar](500)   NOT NULL,
+	[NextStartTime]			[datetime]		 NOT NULL,
+	[Remark]				[nvarchar](500)   NOT NULL,
  CONSTRAINT [PK_SysAutoJob] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -68,11 +68,11 @@ IF OBJECT_ID('[dbo].[SysAutoJobLog]', 'U') IS NOT NULL DROP TABLE [dbo].[SysAuto
 CREATE TABLE [dbo].[SysAutoJobLog](
 	[Id]					[bigint]         NOT NULL,
 	[BaseCreateTime]		[datetime]		 NOT NULL,
-	[BaseCreatorId]		[bigint]         NOT NULL,
-	[JobGroupName]		[varchar](50)    NOT NULL,
-	[JobName]				[varchar](50)    NOT NULL,
-	[LogStatus]			[int]			 NOT NULL,
-	[Remark]				[varchar](500)   NOT NULL,
+	[BaseCreatorId]			[bigint]         NOT NULL,
+	[JobGroupName]			[nvarchar](50)    NOT NULL,
+	[JobName]				[nvarchar](50)    NOT NULL,
+	[LogStatus]				[int]			 NOT NULL,
+	[Remark]				[nvarchar](500)   NOT NULL,
  CONSTRAINT [PK_SysAutoJobLog] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -86,15 +86,15 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'备注',      
 IF OBJECT_ID('[dbo].[SysDataDict]', 'U') IS NOT NULL DROP TABLE [dbo].[SysDataDict]; 
 CREATE TABLE [dbo].[SysDataDict](
 	[Id]					[bigint]			NOT NULL,
-	[BaseIsDelete]		[int]				NOT NULL,
+	[BaseIsDelete]			[int]				NOT NULL,
 	[BaseCreateTime]		[datetime]			NOT NULL,
 	[BaseModifyTime]		[datetime]			NOT NULL,
-	[BaseCreatorId]		[bigint]			NOT NULL,
+	[BaseCreatorId]			[bigint]			NOT NULL,
 	[BaseModifierId]		[bigint]			NOT NULL,
 	[BaseVersion]			[int]				NOT NULL,
 	[DictType]				[varchar](50)		NOT NULL,
 	[DictSort]				[int]				NOT NULL,
-	[Remark]				[varchar](50)		NOT NULL,
+	[Remark]				[nvarchar](50)		NOT NULL,
  CONSTRAINT [PK_SysDataDict] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -107,20 +107,20 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'备注',      
 IF OBJECT_ID('[dbo].[SysDataDictDetail]', 'U') IS NOT NULL DROP TABLE [dbo].[SysDataDictDetail]; 
 CREATE TABLE [dbo].[SysDataDictDetail](
 	[Id]				    [bigint]			NOT NULL,
-	[BaseIsDelete]		[int]				NOT NULL,
+	[BaseIsDelete]			[int]				NOT NULL,
 	[BaseCreateTime]		[datetime]			NOT NULL,
 	[BaseModifyTime]		[datetime]			NOT NULL,
-	[BaseCreatorId]		[bigint]			NOT NULL,
+	[BaseCreatorId]			[bigint]			NOT NULL,
 	[BaseModifierId]		[bigint]			NOT NULL,
 	[BaseVersion]			[int]				NOT NULL,
 	[DictType]				[varchar](50)		NOT NULL,
 	[DictSort]				[int]				NOT NULL,
 	[DictKey]				[int]				NOT NULL,
-	[DictValue]			[varchar](50)		NOT NULL,
-	[ListClass]			[varchar](50)		NOT NULL,
+	[DictValue]				[varchar](50)		NOT NULL,
+	[ListClass]				[varchar](50)		NOT NULL,
 	[DictStatus]			[int]				NOT NULL,
-	[IsDefault]			[int]				NOT NULL,
-	[Remark]				[varchar](50)		NOT NULL,
+	[IsDefault]				[int]				NOT NULL,
+	[Remark]				[nvarchar](50)		NOT NULL,
  CONSTRAINT [PK_SysDataDictDetail] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -138,20 +138,20 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'备注',      
 IF OBJECT_ID('[dbo].[SysDepartment]', 'U') IS NOT NULL DROP TABLE [dbo].[SysDepartment]; 
 CREATE TABLE [dbo].[SysDepartment](
 	[Id]				    [bigint]			NOT NULL,
-	[BaseIsDelete]		[int]				NOT NULL,
+	[BaseIsDelete]			[int]				NOT NULL,
 	[BaseCreateTime]		[datetime]			NOT NULL,
 	[BaseModifyTime]		[datetime]			NOT NULL,
-	[BaseCreatorId]		[bigint]			NOT NULL,
+	[BaseCreatorId]			[bigint]			NOT NULL,
 	[BaseModifierId]		[bigint]			NOT NULL,
 	[BaseVersion]			[int]				NOT NULL,
 	[ParentId]				[bigint]			NOT NULL,
-	[DepartmentName]		[varchar](50)		NOT NULL,
+	[DepartmentName]		[nvarchar](50)		NOT NULL,
 	[Telephone]				[varchar](50)		NOT NULL,
 	[Fax]					[varchar](50)		NOT NULL,
 	[Email]					[varchar](50)		NOT NULL,
 	[PrincipalId]			[bigint]			NOT NULL,
 	[DepartmentSort]		[int]				NOT NULL,
-	[Remark]				[varchar](500)		NOT NULL,
+	[Remark]				[nvarchar](500)		NOT NULL,
  CONSTRAINT [PK_SysDepartment] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -170,12 +170,12 @@ IF OBJECT_ID('[dbo].[SysLogApi]', 'U') IS NOT NULL DROP TABLE [dbo].[SysLogApi];
 CREATE TABLE [dbo].[SysLogApi](
 	[Id]                    [bigint]			NOT NULL,
 	[BaseCreateTime]		[datetime]			NOT NULL,
-	[BaseCreatorId]		[bigint]			NOT NULL,
-	[LogStatus]			[int]				NOT NULL,
-	[Remark]				[varchar](50)		NOT NULL,
+	[BaseCreatorId]			[bigint]			NOT NULL,
+	[LogStatus]				[int]				NOT NULL,
+	[Remark]				[nvarchar](50)		NOT NULL,
 	[ExecuteUrl]			[varchar](100)		NOT NULL,
-	[ExecuteParam]			[varchar](8000)		NOT NULL,
-	[ExecuteResult]		[varchar](8000)		NOT NULL,
+	[ExecuteParam]			[nvarchar](8000)		NOT NULL,
+	[ExecuteResult]			[nvarchar](8000)		NOT NULL,
 	[ExecuteTime]			[int]				NOT NULL,
  CONSTRAINT [PK_SysLogApi] PRIMARY KEY CLUSTERED 
 (
@@ -193,14 +193,14 @@ IF OBJECT_ID('[dbo].[SysLogLogin]', 'U') IS NOT NULL DROP TABLE [dbo].[SysLogLog
 CREATE TABLE [dbo].[SysLogLogin](
 	[Id]					[bigint]			NOT NULL,
 	[BaseCreateTime]		[datetime]			NOT NULL,
-	[BaseCreatorId]		[bigint]			NOT NULL,
-	[LogStatus]			[int]				NOT NULL,
-	[IpAddress]			[varchar](20)		NOT NULL,
-	[IpLocation]			[varchar](50)		NOT NULL,
-	[Browser]				[varchar](50)		NOT NULL,
-	[OS]					[varchar](50)		NOT NULL,
-	[Remark]			    [varchar](50)		NOT NULL,
-	[ExtraRemark]			[varchar](500)		NOT NULL,
+	[BaseCreatorId]			[bigint]			NOT NULL,
+	[LogStatus]				[int]				NOT NULL,
+	[IpAddress]				[varchar](20)		NOT NULL,
+	[IpLocation]			[nvarchar](50)		NOT NULL,
+	[Browser]				[nvarchar](50)		NOT NULL,
+	[OS]					[nvarchar](50)		NOT NULL,
+	[Remark]			    [nvarchar](50)		NOT NULL,
+	[ExtraRemark]			[nvarchar](500)		NOT NULL,
  CONSTRAINT [PK_SysLogLogin] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -218,16 +218,16 @@ IF OBJECT_ID('[dbo].[SysLogOperate]', 'U') IS NOT NULL DROP TABLE [dbo].[SysLogO
 CREATE TABLE [dbo].[SysLogOperate](
 	[Id]					[bigint]			NOT NULL,
 	[BaseCreateTime]		[datetime]			NOT NULL,
-	[BaseCreatorId]		[bigint]			NOT NULL,
-	[LogStatus]			[int]				NOT NULL,
-	[IpAddress]			[varchar](20)		NOT NULL,
-	[IpLocation]			[varchar](50)		NOT NULL,
-	[Remark]				[varchar](50)		NOT NULL,
+	[BaseCreatorId]			[bigint]			NOT NULL,
+	[LogStatus]				[int]				NOT NULL,
+	[IpAddress]				[varchar](20)		NOT NULL,
+	[IpLocation]			[nvarchar](50)		NOT NULL,
+	[Remark]				[nvarchar](50)		NOT NULL,
 	[LogType]				[varchar](50)		NOT NULL,
 	[BusinessType]			[varchar](50)		NOT NULL,
-	[ExecuteUrl]			[varchar](100)		NOT NULL,
-	[ExecuteParam]			[varchar](8000)		NOT NULL,
-	[ExecuteResult]		[varchar](8000)		NOT NULL,
+	[ExecuteUrl]			[nvarchar](100)		NOT NULL,
+	[ExecuteParam]			[nvarchar](8000)		NOT NULL,
+	[ExecuteResult]			[nvarchar](8000)		NOT NULL,
 	[ExecuteTime]			[int]				NOT NULL,
  CONSTRAINT [PK_SysLogOperate] PRIMARY KEY CLUSTERED 
 (
@@ -248,14 +248,14 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'执行时间',
 IF OBJECT_ID('[dbo].[SysMenu]', 'U') IS NOT NULL DROP TABLE [dbo].[SysMenu]; 
 CREATE TABLE [dbo].[SysMenu](
 	[Id]				    [bigint]			NOT NULL,
-	[BaseIsDelete]		[int]				NOT NULL,
+	[BaseIsDelete]			[int]				NOT NULL,
 	[BaseCreateTime]		[datetime]			NOT NULL,
 	[BaseModifyTime]		[datetime]			NOT NULL,
-	[BaseCreatorId]		[bigint]			NOT NULL,
+	[BaseCreatorId]			[bigint]			NOT NULL,
 	[BaseModifierId]		[bigint]			NOT NULL,
 	[BaseVersion]			[int]				NOT NULL,
 	[ParentId]				[bigint]			NOT NULL,
-	[MenuName]				[varchar](50)		NOT NULL,
+	[MenuName]				[nvarchar](50)		NOT NULL,
 	[MenuIcon]				[varchar](50)		NOT NULL,
 	[MenuUrl]				[varchar](100)		NOT NULL,
 	[MenuTarget]			[varchar](50)		NOT NULL,
@@ -263,7 +263,7 @@ CREATE TABLE [dbo].[SysMenu](
 	[MenuType]				[int]				NOT NULL,
 	[MenuStatus]			[int]				NOT NULL,
 	[Authorize]				[varchar](50)		NOT NULL,
-	[Remark]				[varchar](50)		NOT NULL,
+	[Remark]				[nvarchar](50)		NOT NULL,
  CONSTRAINT [PK_SysMenu] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -284,10 +284,10 @@ IF OBJECT_ID('[dbo].[SysMenuAuthorize]', 'U') IS NOT NULL DROP TABLE [dbo].[SysM
 CREATE TABLE [dbo].[SysMenuAuthorize](
 	[Id]				    [bigint]			NOT NULL,
 	[BaseCreateTime]		[datetime]			NOT NULL,
-	[BaseCreatorId]		[bigint]			NOT NULL,
+	[BaseCreatorId]			[bigint]			NOT NULL,
 	[MenuId]				[bigint]			NOT NULL,
 	[AuthorizeId]			[bigint]			NOT NULL,
-	[AuthorizeType]		[int]				NOT NULL,
+	[AuthorizeType]			[int]				NOT NULL,
  CONSTRAINT [PK_SysMenuAuthorize] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -300,21 +300,21 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'授权类型(1
 IF OBJECT_ID('[dbo].[SysNews]', 'U') IS NOT NULL DROP TABLE [dbo].[SysNews]; 
 CREATE TABLE [dbo].[SysNews](
 	[Id]					[bigint]			NOT NULL,
-	[BaseIsDelete]		[int]				NOT NULL,
+	[BaseIsDelete]			[int]				NOT NULL,
 	[BaseCreateTime]		[datetime]			NOT NULL,
 	[BaseModifyTime]		[datetime]			NOT NULL,
-	[BaseCreatorId]		[bigint]			NOT NULL,
+	[BaseCreatorId]			[bigint]			NOT NULL,
 	[BaseModifierId]		[bigint]			NOT NULL,
 	[BaseVersion]			[int]				NOT NULL,
-	[NewsTitle]			[varchar](300)		NOT NULL,
-	[NewsContent]			[text]				NOT NULL,
-	[NewsTag]				[varchar](200)		NOT NULL,
+	[NewsTitle]				[nvarchar](300)		NOT NULL,
+	[NewsContent]			[ntext]				NOT NULL,
+	[NewsTag]				[nvarchar](200)		NOT NULL,
 	[ThumbImage]			[varchar](200)		NOT NULL,
-	[NewsAuthor]			[varchar](50)		NOT NULL,
+	[NewsAuthor]			[nvarchar](50)		NOT NULL,
 	[NewsSort]				[int]				NOT NULL,
 	[NewsDate]				[datetime]			NOT NULL,
 	[NewsType]				[int]				NOT NULL,
-	[ViewTimes]			[int]				NOT NULL,
+	[ViewTimes]				[int]				NOT NULL,
 	[ProvinceId]			[bigint]			NOT NULL,
 	[CityId]				[bigint]			NOT NULL,
 	[CountyId]				[bigint]			NOT NULL,
@@ -339,16 +339,16 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'查看次数',
 IF OBJECT_ID('[dbo].[SysPosition]', 'U') IS NOT NULL DROP TABLE [dbo].[SysPosition]; 
 CREATE TABLE [dbo].[SysPosition](
 	[Id]					[bigint]			NOT NULL,
-	[BaseIsDelete]		[int]				NOT NULL,
+	[BaseIsDelete]			[int]				NOT NULL,
 	[BaseCreateTime]		[datetime]			NOT NULL,
 	[BaseModifyTime]		[datetime]			NOT NULL,
-	[BaseCreatorId]		[bigint]			NOT NULL,
+	[BaseCreatorId]			[bigint]			NOT NULL,
 	[BaseModifierId]		[bigint]			NOT NULL,
 	[BaseVersion]			[int]				NOT NULL,
-	[PositionName]			[varchar](50)		NOT NULL,
+	[PositionName]			[nvarchar](50)		NOT NULL,
 	[PositionSort]			[int]				NOT NULL,
 	[PositionStatus]		[int]				NOT NULL,
-	[Remark]				[varchar](50)		NOT NULL,
+	[Remark]				[nvarchar](50)		NOT NULL,
  CONSTRAINT [PK_SysPosition] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -362,16 +362,16 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'备注',      
 IF OBJECT_ID('[dbo].[SysRole]', 'U') IS NOT NULL DROP TABLE [dbo].[SysRole]; 
 CREATE TABLE [dbo].[SysRole](
 	[Id]					[bigint]			NOT NULL,
-	[BaseIsDelete]		[int]				NOT NULL,
+	[BaseIsDelete]			[int]				NOT NULL,
 	[BaseCreateTime]		[datetime]			NOT NULL,
 	[BaseModifyTime]		[datetime]			NOT NULL,
-	[BaseCreatorId]		[bigint]			NOT NULL,
+	[BaseCreatorId]			[bigint]			NOT NULL,
 	[BaseModifierId]		[bigint]			NOT NULL,
 	[BaseVersion]			[int]				NOT NULL,
-	[RoleName]				[varchar](50)		NOT NULL,
+	[RoleName]				[nvarchar](50)		NOT NULL,
 	[RoleSort]				[int]				NOT NULL,
 	[RoleStatus]			[int]				NOT NULL,
-	[Remark]				[varchar](50)		NOT NULL,
+	[Remark]				[nvarchar](50)		NOT NULL,
  CONSTRAINT [PK_SysRole] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -385,16 +385,16 @@ EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'备注',      
 IF OBJECT_ID('[dbo].[SysUser]', 'U') IS NOT NULL DROP TABLE [dbo].[SysUser]; 
 CREATE TABLE [dbo].[SysUser](
 	[Id]					[bigint]			NOT NULL,
-	[BaseIsDelete]		[int]				NOT NULL,
+	[BaseIsDelete]			[int]				NOT NULL,
 	[BaseCreateTime]		[datetime]			NOT NULL,
 	[BaseModifyTime]		[datetime]			NOT NULL,
-	[BaseCreatorId]		[bigint]			NOT NULL,
+	[BaseCreatorId]			[bigint]			NOT NULL,
 	[BaseModifierId]		[bigint]			NOT NULL,
 	[BaseVersion]			[int]				NOT NULL,
-	[UserName]				[varchar](20)		NOT NULL,
+	[UserName]				[nvarchar](20)		NOT NULL,
 	[Password]				[varchar](32)		NOT NULL,
 	[Salt]					[varchar](5)		NOT NULL,
-	[RealName]				[varchar](20)		NOT NULL,
+	[RealName]				[nvarchar](20)		NOT NULL,
 	[DepartmentId]			[bigint]			NOT NULL,
 	[Gender]				[int]				NOT NULL,
 	[Birthday]				[varchar](10)		NOT NULL,
@@ -408,9 +408,9 @@ CREATE TABLE [dbo].[SysUser](
 	[IsSystem]				[int]				NOT NULL,
 	[IsOnline]				[int]				NOT NULL,
 	[FirstVisit]			[datetime]			NOT NULL,
-	[PreviousVisit]		[datetime]			NOT NULL,
-	[LastVisit]			[datetime]			NOT NULL,
-	[Remark]				[varchar](200)		NOT NULL,
+	[PreviousVisit]			[datetime]			NOT NULL,
+	[LastVisit]				[datetime]			NOT NULL,
+	[Remark]				[nvarchar](200)		NOT NULL,
 	[WebToken]				[varchar](32)		NOT NULL,
 	[ApiToken]				[varchar](32)		NOT NULL,
  CONSTRAINT [PK_SysUser] PRIMARY KEY CLUSTERED 
@@ -445,7 +445,7 @@ IF OBJECT_ID('[dbo].[SysUserBelong]', 'U') IS NOT NULL DROP TABLE [dbo].[SysUser
 CREATE TABLE [dbo].[SysUserBelong](
 	[Id]					[bigint]			NOT NULL,
 	[BaseCreateTime]		[datetime]			NOT NULL,
-	[BaseCreatorId]		[bigint]			NOT NULL,
+	[BaseCreatorId]			[bigint]			NOT NULL,
 	[UserId]				[bigint]			NOT NULL,
 	[BelongId]				[bigint]			NOT NULL,
 	[BelongType]			[int]				NOT NULL,
