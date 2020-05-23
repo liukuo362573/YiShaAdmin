@@ -174,8 +174,8 @@ CREATE TABLE [dbo].[SysLogApi](
 	[LogStatus]				[int]				NOT NULL,
 	[Remark]				[nvarchar](50)		NOT NULL,
 	[ExecuteUrl]			[varchar](100)		NOT NULL,
-	[ExecuteParam]			[nvarchar](8000)		NOT NULL,
-	[ExecuteResult]			[nvarchar](8000)		NOT NULL,
+	[ExecuteParam]			[nvarchar](4000)		NOT NULL,
+	[ExecuteResult]			[nvarchar](4000)		NOT NULL,
 	[ExecuteTime]			[int]				NOT NULL,
  CONSTRAINT [PK_SysLogApi] PRIMARY KEY CLUSTERED 
 (
@@ -226,8 +226,8 @@ CREATE TABLE [dbo].[SysLogOperate](
 	[LogType]				[varchar](50)		NOT NULL,
 	[BusinessType]			[varchar](50)		NOT NULL,
 	[ExecuteUrl]			[nvarchar](100)		NOT NULL,
-	[ExecuteParam]			[nvarchar](8000)		NOT NULL,
-	[ExecuteResult]			[nvarchar](8000)		NOT NULL,
+	[ExecuteParam]			[nvarchar](4000)		NOT NULL,
+	[ExecuteResult]			[nvarchar](4000)		NOT NULL,
 	[ExecuteTime]			[int]				NOT NULL,
  CONSTRAINT [PK_SysLogOperate] PRIMARY KEY CLUSTERED 
 (
