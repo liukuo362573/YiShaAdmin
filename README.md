@@ -41,10 +41,6 @@
 ![用户列表](https://raw.githubusercontent.com/liukuo362573/YiShaAdmin/master/YiSha.Web/YiSha.Admin.Web/wwwroot/image/demo_3.png)
 ![用户列表修改](https://raw.githubusercontent.com/liukuo362573/YiShaAdmin/master/YiSha.Web/YiSha.Admin.Web/wwwroot/image/demo_4.png)
 
-## YiShaAdmin交流群
-
-QQ群1：428703155
-
 ## License
 
 [MIT](https://github.com/liukuo362573/yishaadmin/blob/master/LICENSE)  
