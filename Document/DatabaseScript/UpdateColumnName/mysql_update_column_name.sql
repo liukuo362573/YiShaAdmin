@@ -36,7 +36,7 @@ DROP PROCEDURE IF EXISTS `SP_UpdateColumnName`;
 DELIMITER $$
 CREATE PROCEDURE `SP_UpdateColumnName`()
     BEGIN
-        DECLARE databaseName    VARCHAR(50) DEFAULT 'yisha_test';
+        DECLARE databaseName    VARCHAR(50) DEFAULT 'yisha_admin';
         DECLARE tableName       VARCHAR(50);
         DECLARE fieldName       VARCHAR(50);
         DECLARE fieldType       VARCHAR(50);

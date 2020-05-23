@@ -101,7 +101,7 @@ namespace YiSha.Service.SystemManage
         }
         private async Task SyncSqlServerTable<T>() where T : class, new()
         {
-            string sqlServerConnectionString = "Server=localhost;Database=yisha_admin;User Id=sa;Password=123456;";
+            string sqlServerConnectionString = "Server=localhost;Database=YiShaAdmin;User Id=sa;Password=123456;";
             IEnumerable<T> list = await this.BaseRepository().FindList<T>();
 
             await new SqlServerDatabase(sqlServerConnectionString).Delete<T>(p => true);

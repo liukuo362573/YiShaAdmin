@@ -1,3 +1,4 @@
+USE yisha_admin
 IF OBJECT_ID (N'dbo.FUN_GetNewName', N'FN') IS NOT NULL  
 	DROP FUNCTION FUN_GetNewName;
 GO
