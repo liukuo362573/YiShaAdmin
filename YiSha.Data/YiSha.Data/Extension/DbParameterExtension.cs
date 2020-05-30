@@ -26,7 +26,7 @@ namespace YiSha.Data
         /// <returns></returns>
         public static DbParameter CreateDbParameter(string paramName, object value)
         {
-            DbParameter param = DbParameterExtension.CreateDbParameter();
+            DbParameter param = CreateDbParameter();
             param.ParameterName = paramName;
             param.Value = value;
             return param;
