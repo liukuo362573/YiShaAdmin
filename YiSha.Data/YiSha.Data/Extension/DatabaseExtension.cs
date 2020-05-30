@@ -7,6 +7,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.ComponentModel;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using YiSha.Util;
@@ -82,7 +83,7 @@ namespace YiSha.Data
                 while (reader.Read())
                 {
                     T model = Activator.CreateInstance<T>();
-                    foreach (PropertyInfo property in model.GetType().GetProperties(BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance))
+                    foreach (PropertyInfo property in ReflectionHelper.GetProperties(model.GetType()))
                     {
                         if (field.Contains(property.Name.ToLower()))
                         {
@@ -198,7 +199,7 @@ namespace YiSha.Data
             {
                 if (value == null)
                     return null;
-                System.ComponentModel.NullableConverter nullableConverter = new System.ComponentModel.NullableConverter(conversionType);
+                NullableConverter nullableConverter = new NullableConverter(conversionType);
                 conversionType = nullableConverter.UnderlyingType;
             }
             return Convert.ChangeType(value, conversionType);

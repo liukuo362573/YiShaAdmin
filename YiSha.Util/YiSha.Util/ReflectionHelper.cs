@@ -23,7 +23,6 @@ namespace YiSha.Util
             if (dictCache.ContainsKey(type.FullName))
             {
                 properties = dictCache[type.FullName] as PropertyInfo[];
-
             }
             else
             {
