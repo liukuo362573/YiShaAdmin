@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using YiSha.Util;
 
 namespace YiSha.Data
 {
@@ -213,6 +214,7 @@ namespace YiSha.Data
             }
             cmd.Connection = conn;
             cmd.CommandText = strSql;
+            cmd.CommandTimeout = GlobalContext.SystemConfig.DBCommandTimeout;
             if (isOpenTrans != null)
             {
                 cmd.Transaction = isOpenTrans;
