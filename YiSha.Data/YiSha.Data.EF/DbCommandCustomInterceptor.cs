@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using YiSha.Util;
 
 namespace YiSha.Data.EF
 {
@@ -23,8 +24,10 @@ namespace YiSha.Data.EF
 
         public async override Task<int> NonQueryExecutedAsync(DbCommand command, CommandExecutedEventData eventData, int result, CancellationToken cancellationToken = default)
         {
-            // 数据库执行耗时
-            double milliseconds = eventData.Duration.TotalMilliseconds;
+            if (eventData.Duration.TotalMilliseconds >= GlobalContext.SystemConfig.DBSlowSqlLogTime * 1000)
+            {
+                LogHelper.WriteWithTime(command.CommandText);
+            }
             int val = await base.NonQueryExecutedAsync(command, eventData, result, cancellationToken);
             return val;
         }
@@ -37,7 +40,10 @@ namespace YiSha.Data.EF
 
         public async override Task<object> ScalarExecutedAsync(DbCommand command, CommandExecutedEventData eventData, object result, CancellationToken cancellationToken = default)
         {
-            double milliseconds = eventData.Duration.TotalMilliseconds;
+            if (eventData.Duration.TotalMilliseconds >= GlobalContext.SystemConfig.DBSlowSqlLogTime * 1000)
+            {
+                LogHelper.WriteWithTime(command.CommandText);
+            }
             var obj = await base.ScalarExecutedAsync(command, eventData, result, cancellationToken);
             return obj;
         }
@@ -50,7 +56,10 @@ namespace YiSha.Data.EF
 
         public async override Task<DbDataReader> ReaderExecutedAsync(DbCommand command, CommandExecutedEventData eventData, DbDataReader result, CancellationToken cancellationToken = default)
         {
-            double milliseconds = eventData.Duration.TotalMilliseconds;
+            if (eventData.Duration.TotalMilliseconds >= GlobalContext.SystemConfig.DBSlowSqlLogTime * 1000)
+            {
+                LogHelper.WriteWithTime(command.CommandText);
+            }
             var reader = await base.ReaderExecutedAsync(command, eventData, result, cancellationToken);
             return reader;
         }

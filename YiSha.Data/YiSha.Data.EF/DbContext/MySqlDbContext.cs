@@ -15,7 +15,6 @@ namespace YiSha.Data.EF
         public MySqlDbContext(string connectionString)
         {
             ConnectionString = connectionString;
-            var tt = Database.GetCommandTimeout();
         }
 
         #region 重载
