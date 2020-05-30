@@ -38,7 +38,7 @@ namespace YiSha.Data.EF
                         optionsBuilder.UseSqlServer(connection, options => options.EnableRetryOnFailure());
                         break;
                     case "MySql":
-                        optionsBuilder.UseMySql(connection);
+                        optionsBuilder.UseMySql(connection, options => options.EnableRetryOnFailure());
                         break;
                     case "Oracle":
                         break;

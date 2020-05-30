@@ -38,6 +38,7 @@ namespace YiSha.Data.EF
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(ConnectionString);
+            optionsBuilder.AddInterceptors(new DbCommandCustomInterceptor());
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
