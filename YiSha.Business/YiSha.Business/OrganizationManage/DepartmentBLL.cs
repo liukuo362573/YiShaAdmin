@@ -27,8 +27,11 @@ namespace YiSha.Business.OrganizationManage
             TData<List<DepartmentEntity>> obj = new TData<List<DepartmentEntity>>();
             obj.Data = await departmentService.GetList(param);
             OperatorInfo operatorInfo = await Operator.Instance.Current();
-            List<long> childrenDepartmentIdList = await GetChildrenDepartmentIdList(obj.Data, operatorInfo.DepartmentId.Value);
-            obj.Data = obj.Data.Where(p => childrenDepartmentIdList.Contains(p.Id.Value)).ToList();
+            if (operatorInfo.IsSystem != 1)
+            {
+                List<long> childrenDepartmentIdList = await GetChildrenDepartmentIdList(obj.Data, operatorInfo.DepartmentId.Value);
+                obj.Data = obj.Data.Where(p => childrenDepartmentIdList.Contains(p.Id.Value)).ToList();
+            }
             List<UserEntity> userList = await userService.GetList(new UserListParam { UserIds = string.Join(",", obj.Data.Select(p => p.PrincipalId).ToArray()) });
             foreach (DepartmentEntity entity in obj.Data)
             {
@@ -51,8 +54,12 @@ namespace YiSha.Business.OrganizationManage
             obj.Data = new List<ZtreeInfo>();
             List<DepartmentEntity> departmentList = await departmentService.GetList(param);
             OperatorInfo operatorInfo = await Operator.Instance.Current();
-            List<long> childrenDepartmentIdList = await GetChildrenDepartmentIdList(departmentList, operatorInfo.DepartmentId.Value);
-            foreach (DepartmentEntity department in departmentList.Where(p => childrenDepartmentIdList.Contains(p.Id.Value)))
+            if (operatorInfo.IsSystem != 1)
+            {
+                List<long> childrenDepartmentIdList = await GetChildrenDepartmentIdList(departmentList, operatorInfo.DepartmentId.Value);
+                departmentList = departmentList.Where(p => childrenDepartmentIdList.Contains(p.Id.Value)).ToList();
+            }
+            foreach (DepartmentEntity department in departmentList)
             {
                 obj.Data.Add(new ZtreeInfo
                 {
@@ -71,9 +78,13 @@ namespace YiSha.Business.OrganizationManage
             obj.Data = new List<ZtreeInfo>();
             List<DepartmentEntity> departmentList = await departmentService.GetList(param);
             OperatorInfo operatorInfo = await Operator.Instance.Current();
-            List<long> childrenDepartmentIdList = await GetChildrenDepartmentIdList(departmentList, operatorInfo.DepartmentId.Value);
-            List<UserEntity> userList = await userService.GetList(new UserListParam { DepartmentId = operatorInfo.DepartmentId });
-            foreach (DepartmentEntity department in departmentList.Where(p => childrenDepartmentIdList.Contains(p.Id.Value)))
+            if (operatorInfo.IsSystem != 1)
+            {
+                List<long> childrenDepartmentIdList = await GetChildrenDepartmentIdList(departmentList, operatorInfo.DepartmentId.Value);
+                departmentList = departmentList.Where(p => childrenDepartmentIdList.Contains(p.Id.Value)).ToList();
+            }
+            List<UserEntity> userList = await userService.GetList(null);
+            foreach (DepartmentEntity department in departmentList)
             {
                 obj.Data.Add(new ZtreeInfo
                 {

@@ -200,6 +200,7 @@ namespace YiSha.Util
             using (MemoryStream ms = new MemoryStream())
             {
                 workbook.Write(ms);
+                workbook.Close();
                 ms.Flush();
                 ms.Position = 0;
                 return ms;
@@ -311,6 +312,8 @@ namespace YiSha.Util
                 }
                 list.Add(entity);
             }
+            hssfWorkbook?.Close();
+            xssWorkbook?.Close();
             return list;
         }
 

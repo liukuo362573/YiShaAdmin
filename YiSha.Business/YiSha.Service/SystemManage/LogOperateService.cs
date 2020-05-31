@@ -107,7 +107,7 @@ namespace YiSha.Service.SystemManage
                 }
                 if (!string.IsNullOrEmpty(param.StartTime.ParseToString()))
                 {
-                    strSql.Append(" AND a.StartTime >= @StartTime");
+                    strSql.Append(" AND a.BaseCreateTime >= @StartTime");
                     parameter.Add(DbParameterExtension.CreateDbParameter("@StartTime", param.StartTime));
                 }
                 if (!string.IsNullOrEmpty(param.EndTime.ParseToString()))

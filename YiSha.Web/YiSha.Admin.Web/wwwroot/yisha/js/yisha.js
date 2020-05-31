@@ -239,7 +239,7 @@
                 data: postData,
                 success: function (obj) {
                     if (obj.Tag == 1) {
-                        window.location.href = ctx + "File/DownloadFile?filePath=" + obj.Result + "&delete=1";
+                        window.location.href = ctx + "File/DownloadFile?filePath=" + obj.Data + "&delete=1";
                     }
                     else {
                         ys.msgError(obj.Message);

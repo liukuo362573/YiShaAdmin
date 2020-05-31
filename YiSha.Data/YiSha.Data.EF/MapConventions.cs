@@ -23,6 +23,7 @@ namespace YiSha.Data.EF
     /// <summary>
     /// 列名约定，比如属性ParentId，映射到数据库字段parent_id
     /// </summary>
+    [Obsolete]
     public class ColumnConvention
     {
         public static void SetColumnName(ModelBuilder modelBuilder, string entityName, string propertyName)

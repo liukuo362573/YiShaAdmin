@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using YiSha.Util;
 
 namespace YiSha.Data.EF
 {
@@ -19,7 +20,8 @@ namespace YiSha.Data.EF
         #region 重载
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql(ConnectionString);
+            optionsBuilder.UseMySql(ConnectionString, p => p.CommandTimeout(GlobalContext.SystemConfig.DBCommandTimeout));
+            optionsBuilder.AddInterceptors(new DbCommandCustomInterceptor());
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

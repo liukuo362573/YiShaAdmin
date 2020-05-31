@@ -3,13 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
+using System.Data.Common;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.ComponentModel;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using YiSha.Util;
+using YiSha.Util.Extension;
 
 namespace YiSha.Data
 {
@@ -82,7 +85,7 @@ namespace YiSha.Data
                 while (reader.Read())
                 {
                     T model = Activator.CreateInstance<T>();
-                    foreach (PropertyInfo property in model.GetType().GetProperties(BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance))
+                    foreach (PropertyInfo property in ReflectionHelper.GetProperties(model.GetType()))
                     {
                         if (field.Contains(property.Name.ToLower()))
                         {
@@ -198,7 +201,7 @@ namespace YiSha.Data
             {
                 if (value == null)
                     return null;
-                System.ComponentModel.NullableConverter nullableConverter = new System.ComponentModel.NullableConverter(conversionType);
+                NullableConverter nullableConverter = new NullableConverter(conversionType);
                 conversionType = nullableConverter.UnderlyingType;
             }
             return Convert.ChangeType(value, conversionType);
@@ -209,6 +212,12 @@ namespace YiSha.Data
             return ((obj is DBNull) || string.IsNullOrEmpty(obj.ToString())) ? true : false;
         }
 
+        /// <summary>
+        /// 获取使用Linq生成的Sql
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="query"></param>
+        /// <returns></returns>
         public static string GetSql<TEntity>(this IQueryable<TEntity> query)
         {
             var enumerator = query.Provider.Execute<IEnumerable<TEntity>>(query.Expression).GetEnumerator();
@@ -220,6 +229,38 @@ namespace YiSha.Data
             var command = sqlGenerator.GetCommand(selectExpression);
 
             string sql = command.CommandText;
+            return sql;
+        }
+
+        /// <summary>
+        /// 获取运行时的Sql
+        /// </summary>
+        /// <param name="dbCommand"></param>
+        /// <returns></returns>
+        public static string GetCommandText(this DbCommand dbCommand)
+        {
+            var sql = dbCommand.CommandText;
+            foreach (DbParameter parameter in dbCommand.Parameters)
+            {
+                try
+                {
+                    string value = string.Empty;
+                    switch (parameter.DbType)
+                    {
+                        case DbType.Date:
+                            value = parameter.Value.ParseToString().ParseToDateTime().ToString("yyyy-MM-dd HH:mm:ss");
+                            break;
+                        default:
+                            value = parameter.Value.ParseToString();
+                            break;
+                    }
+                    sql = sql.Replace(parameter.ParameterName, value);
+                }
+                catch(Exception ex)
+                {
+                    LogHelper.WriteWithTime(ex);
+                }
+            }
             return sql;
         }
 

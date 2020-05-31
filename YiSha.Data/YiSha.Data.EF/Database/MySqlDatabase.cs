@@ -310,8 +310,8 @@ namespace YiSha.Data.EF
         {
             using (var dbConnection = dbContext.Database.GetDbConnection())
             {
-                var IDataReader = await new DbHelper(dbConnection).ExecuteReadeAsync(CommandType.Text, strSql, dbParameter);
-                return DatabasesExtension.IDataReaderToList<T>(IDataReader);
+                var reader = await new DbHelper(dbContext, dbConnection).ExecuteReadeAsync(CommandType.Text, strSql, dbParameter);
+                return DatabasesExtension.IDataReaderToList<T>(reader);
             }
         }
         public async Task<(int total, IEnumerable<T> list)> FindList<T>(string sort, bool isAsc, int pageSize, int pageIndex) where T : class, new()
@@ -332,15 +332,15 @@ namespace YiSha.Data.EF
         {
             using (var dbConnection = dbContext.Database.GetDbConnection())
             {
-                DbHelper dbHelper = new DbHelper(dbConnection);
+                DbHelper dbHelper = new DbHelper(dbContext, dbConnection);
                 StringBuilder sb = new StringBuilder();
                 sb.Append(DatabasePageExtension.MySqlPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
                 object tempTotal = await dbHelper.ExecuteScalarAsync(CommandType.Text, DatabasePageExtension.GetCountSql(strSql), dbParameter);
                 int total = tempTotal.ParseToInt();
                 if (total > 0)
                 {
-                    var IDataReader = await dbHelper.ExecuteReadeAsync(CommandType.Text, sb.ToString(), dbParameter);
-                    return (total, DatabasesExtension.IDataReaderToList<T>(IDataReader));
+                    var reader = await dbHelper.ExecuteReadeAsync(CommandType.Text, sb.ToString(), dbParameter);
+                    return (total, DatabasesExtension.IDataReaderToList<T>(reader));
                 }
                 else
                 {
@@ -374,8 +374,8 @@ namespace YiSha.Data.EF
         {
             using (var dbConnection = dbContext.Database.GetDbConnection())
             {
-                var IDataReader = await new DbHelper(dbConnection).ExecuteReadeAsync(CommandType.Text, strSql, dbParameter);
-                return DatabasesExtension.IDataReaderToDataTable(IDataReader);
+                var reader = await new DbHelper(dbContext, dbConnection).ExecuteReadeAsync(CommandType.Text, strSql, dbParameter);
+                return DatabasesExtension.IDataReaderToDataTable(reader);
             }
         }
         public async Task<(int total, DataTable)> FindTable(string strSql, string sort, bool isAsc, int pageSize, int pageIndex)
@@ -386,15 +386,15 @@ namespace YiSha.Data.EF
         {
             using (var dbConnection = dbContext.Database.GetDbConnection())
             {
-                DbHelper dbHelper = new DbHelper(dbConnection);
+                DbHelper dbHelper = new DbHelper(dbContext, dbConnection);
                 StringBuilder sb = new StringBuilder();
                 sb.Append(DatabasePageExtension.MySqlPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
                 object tempTotal = await dbHelper.ExecuteScalarAsync(CommandType.Text, "SELECT COUNT(1) FROM (" + strSql + ") T", dbParameter);
                 int total = tempTotal.ParseToInt();
                 if (total > 0)
                 {
-                    var IDataReader = await dbHelper.ExecuteReadeAsync(CommandType.Text, sb.ToString(), dbParameter);
-                    DataTable resultTable = DatabasesExtension.IDataReaderToDataTable(IDataReader);
+                    var reader = await dbHelper.ExecuteReadeAsync(CommandType.Text, sb.ToString(), dbParameter);
+                    DataTable resultTable = DatabasesExtension.IDataReaderToDataTable(reader);
                     return (total, resultTable);
                 }
                 else
@@ -412,7 +412,7 @@ namespace YiSha.Data.EF
         {
             using (var dbConnection = dbContext.Database.GetDbConnection())
             {
-                return await new DbHelper(dbConnection).ExecuteScalarAsync(CommandType.Text, strSql, dbParameter);
+                return await new DbHelper(dbContext, dbConnection).ExecuteScalarAsync(CommandType.Text, strSql, dbParameter);
             }
         }
         public async Task<T> FindObject<T>(string strSql) where T : class

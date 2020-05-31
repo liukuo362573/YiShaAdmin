@@ -6,6 +6,7 @@ using System.Configuration;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using YiSha.Util;
 
 namespace YiSha.Data.EF
 {
@@ -14,20 +15,6 @@ namespace YiSha.Data.EF
         private string ConnectionString { get; set; }
 
         #region 构造函数
-        private static SqlConnection GetEFConnctionString(string connString)
-        {
-            var obj = ConfigurationManager.ConnectionStrings[connString];
-            SqlConnection con;
-            if (obj != null)
-            {
-                con = new SqlConnection(obj.ConnectionString);
-            }
-            else
-            {
-                con = new SqlConnection(connString);
-            }
-            return con;
-        }
         public SqlServerDbContext(string connectionString)
         {
             ConnectionString = connectionString;
@@ -37,7 +24,8 @@ namespace YiSha.Data.EF
         #region 重载
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(ConnectionString);
+            optionsBuilder.UseSqlServer(ConnectionString, p => p.CommandTimeout(GlobalContext.SystemConfig.DBCommandTimeout));
+            optionsBuilder.AddInterceptors(new DbCommandCustomInterceptor());
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
