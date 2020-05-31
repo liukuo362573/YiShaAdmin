@@ -117,6 +117,9 @@ $(function () {
         $('#toolbar').find('a').each(function (i, ele) {
             buttonList.push(ele.id);
         });
+        $('.toolbar').find('a').each(function (i, ele) {
+            buttonList.push(ele.id);
+        });
         var removeButtonList = top.getButtonAuthority(window.location.href, buttonList);
         if (removeButtonList) {
             $.each(removeButtonList, function (i, val) {
