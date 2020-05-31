@@ -1,3 +1,4 @@
+USE yisha_admin;
 DROP FUNCTION IF EXISTS `Fun_GetNewName`;
 DELIMITER $$
 CREATE FUNCTION Fun_GetNewName(name varchar(50)) RETURNS varchar(50) DETERMINISTIC
@@ -36,14 +37,13 @@ DROP PROCEDURE IF EXISTS `SP_UpdateColumnName`;
 DELIMITER $$
 CREATE PROCEDURE `SP_UpdateColumnName`()
     BEGIN
-        DECLARE databaseName    VARCHAR(50) DEFAULT 'yisha_admin';
         DECLARE tableName       VARCHAR(50);
         DECLARE fieldName       VARCHAR(50);
         DECLARE fieldType       VARCHAR(50);
         DECLARE tableDone BOOLEAN DEFAULT false;
-        DECLARE fieldDone BOOLEAN DEFAULT false;         
+        DECLARE fieldDone BOOLEAN DEFAULT false;
         
-        DECLARE curTable CURSOR FOR SELECT table_name FROM information_schema.tables WHERE table_schema = databaseName AND 
+        DECLARE curTable CURSOR FOR SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE() AND 
 																						   (table_type='base table' or table_type='BASE TABLE') AND 
 																						   table_name in('sys_area','sys_auto_job','sys_auto_job_log','sys_data_dict','sys_data_dict_detail','sys_department',
 																										 'sys_log_api','sys_log_login','sys_log_operate','sys_menu','sys_menu_authorize','sys_news',
@@ -56,7 +56,7 @@ CREATE PROCEDURE `SP_UpdateColumnName`()
                         LEAVE curTableLoop;
                  END IF;
 					  BEGIN
-					  		DECLARE curField CURSOR FOR SELECT column_name,column_type FROM information_schema.columns WHERE table_schema = databaseName AND table_name = tableName;
+					  		DECLARE curField CURSOR FOR SELECT column_name,column_type FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = tableName;
 				         DECLARE CONTINUE HANDLER FOR NOT FOUND SET fieldDone = TRUE;				          
 				         OPEN curField;				 
 				            curFieldLoop: LOOP
