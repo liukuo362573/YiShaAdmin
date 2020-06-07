@@ -110,8 +110,10 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
                 TData<List<TableFieldInfo>> objTable = await databaseTableBLL.GetTableFieldList(baseConfig.TableName);
                 DataTable dt = DataTableHelper.ListToDataTable(objTable.Data);  // 用DataTable类型，避免依赖
                 string codeEntity = template.BuildEntity(baseConfig, dt);
+                string codePartialEntity = template.BuildPartialEntity(baseConfig, dt);
                 string codeEntityParam = template.BuildEntityParam(baseConfig);
                 string codeService = template.BuildService(baseConfig, dt);
+                string codePartialService = template.BuildPartialService(baseConfig, dt);
                 string codeBusiness = template.BuildBusiness(baseConfig);
                 string codeController = template.BuildController(baseConfig);
                 string codeIndex = template.BuildIndex(baseConfig);
@@ -121,8 +123,10 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
                 var json = new
                 {
                     CodeEntity = HttpUtility.HtmlEncode(codeEntity),
+                    CodePartialEntity = HttpUtility.HtmlEncode(codePartialEntity),
                     CodeEntityParam = HttpUtility.HtmlEncode(codeEntityParam),
                     CodeService = HttpUtility.HtmlEncode(codeService),
+                    CodePartialService = HttpUtility.HtmlEncode(codePartialService),
                     CodeBusiness = HttpUtility.HtmlEncode(codeBusiness),
                     CodeController = HttpUtility.HtmlEncode(codeController),
                     CodeIndex = HttpUtility.HtmlEncode(codeIndex),

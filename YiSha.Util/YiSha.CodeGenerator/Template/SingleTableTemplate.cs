@@ -100,9 +100,10 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("{");
 
             SetClassDescription("实体类", baseConfigModel, sb);
+            sb.AppendLine("    /// 注 意：不要手动修改这个文件，下次修改可能丢失。");
 
             sb.AppendLine("    [Table(\"" + baseConfigModel.TableName + "\")]");
-            sb.AppendLine("    public class " + baseConfigModel.FileConfig.EntityName + " : " + GetBaseEntity(dt));
+            sb.AppendLine("    public partial class " + baseConfigModel.FileConfig.EntityName + " : " + GetBaseEntity(dt));
             sb.AppendLine("    {");
 
             string column = string.Empty;
@@ -144,6 +145,30 @@ namespace YiSha.CodeGenerator.Template
 
             return sb.ToString();
         }
+        public string BuildPartialEntity(BaseConfigModel baseConfigModel, DataTable dt)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("using System;");
+            sb.AppendLine("using Newtonsoft.Json;");
+            sb.AppendLine("using System.ComponentModel.DataAnnotations.Schema;");
+            sb.AppendLine("using YiSha.Util;");
+            sb.AppendLine();
+
+            sb.AppendLine("namespace YiSha.Entity." + baseConfigModel.OutputConfig.OutputModule);
+            sb.AppendLine("{");
+
+            SetClassDescription("实体类", baseConfigModel, sb);
+
+            sb.AppendLine("    public partial class " + baseConfigModel.FileConfig.EntityName + " : " + GetBaseEntity(dt));
+            sb.AppendLine("    {");
+
+           
+            sb.AppendLine("    }");
+            sb.AppendLine("}");
+
+            return sb.ToString();
+        }
+
         #endregion
 
         #region BuildEntityParam
@@ -199,8 +224,9 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("{");
 
             SetClassDescription("服务类", baseConfigModel, sb);
+            sb.AppendLine("    /// 注 意：不要手动修改这个文件，下次修改可能丢失。");
 
-            sb.AppendLine("    public class " + baseConfigModel.FileConfig.ServiceName + " :  RepositoryFactory");
+            sb.AppendLine("    public partial class " + baseConfigModel.FileConfig.ServiceName + " :  RepositoryFactory");
             sb.AppendLine("    {");
             sb.AppendLine("        #region 获取数据");
             sb.AppendLine("        public async Task<List<" + baseConfigModel.FileConfig.EntityName + ">> GetList(" + baseConfigModel.FileConfig.EntityParamName.Replace("Param", "ListParam") + " param)");
@@ -244,6 +270,42 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("            await this.BaseRepository().Delete<" + baseConfigModel.FileConfig.EntityName + ">(idArr);");
             sb.AppendLine("        }");
             sb.AppendLine("        #endregion");
+            sb.AppendLine();
+
+            sb.AppendLine("    }");
+            sb.AppendLine("}");
+            return sb.ToString();
+        }
+        public string BuildPartialService(BaseConfigModel baseConfigModel, DataTable dt)
+        {
+            string baseEntity = GetBaseEntity(dt);
+
+            StringBuilder sb = new StringBuilder();
+            string method = string.Empty;
+            sb.AppendLine("using System;");
+            sb.AppendLine("using System.Linq;");
+            sb.AppendLine("using System.Text;");
+            sb.AppendLine("using System.Data.Common;");
+            sb.AppendLine("using System.Linq.Expressions;");
+            sb.AppendLine("using System.Collections.Generic;");
+            sb.AppendLine("using System.Threading.Tasks;");
+            sb.AppendLine("using YiSha.Util;");
+            sb.AppendLine("using YiSha.Util.Extension;");
+            sb.AppendLine("using YiSha.Util.Model;");
+            sb.AppendLine("using YiSha.Data;");
+            sb.AppendLine("using YiSha.Data.Repository;");
+            sb.AppendLine("using YiSha.Entity." + baseConfigModel.OutputConfig.OutputModule + ";");
+            sb.AppendLine("using YiSha.Model.Param." + baseConfigModel.OutputConfig.OutputModule + ";");
+
+            sb.AppendLine();
+
+            sb.AppendLine("namespace YiSha.Service." + baseConfigModel.OutputConfig.OutputModule);
+            sb.AppendLine("{");
+
+            SetClassDescription("服务类", baseConfigModel, sb);
+
+            sb.AppendLine("    public partial class " + baseConfigModel.FileConfig.ServiceName + " :  RepositoryFactory");
+            sb.AppendLine("    {");
             sb.AppendLine();
             sb.AppendLine("        #region 私有方法");
             sb.AppendLine("        private Expression<Func<" + baseConfigModel.FileConfig.EntityName + ", bool>> ListFilter(" + baseConfigModel.FileConfig.EntityParamName.Replace("Param", "ListParam") + " param)");
@@ -770,10 +832,20 @@ namespace YiSha.CodeGenerator.Template
             {
                 string codeEntity = HttpUtility.HtmlDecode(param["CodeEntity"].ToString());
                 string codePath = Path.Combine(baseConfigModel.OutputConfig.OutputEntity, "YiSha.Entity", baseConfigModel.OutputConfig.OutputModule, baseConfigModel.FileConfig.EntityName + ".cs");
-                if (!File.Exists(codePath))
+                if (File.Exists(codePath))
                 {
-                    FileHelper.CreateFile(codePath, codeEntity);
-                    result.Add(new KeyValue { Key = "实体类", Value = codePath });
+                    File.Delete(codePath);
+                }
+                FileHelper.CreateFile(codePath, codeEntity);
+                result.Add(new KeyValue { Key = "实体类", Value = codePath });
+
+
+                string codePartialPath = Path.Combine(baseConfigModel.OutputConfig.OutputEntity, "YiSha.Entity", baseConfigModel.OutputConfig.OutputModule, baseConfigModel.FileConfig.EntityName + "_Partial.cs");
+                string codePartialEntity = HttpUtility.HtmlDecode(param["CodePartialEntity"].ToString());
+                if (!File.Exists(codePartialPath))
+                {
+                    FileHelper.CreateFile(codePartialPath, codePartialEntity);
+                    // result["实体类"] = result["实体类"] + "<br/>" + codePartialEntity;
                 }
             }
             #endregion
@@ -796,10 +868,19 @@ namespace YiSha.CodeGenerator.Template
             {
                 string codeService = HttpUtility.HtmlDecode(param["CodeService"].ToString());
                 string codePath = Path.Combine(baseConfigModel.OutputConfig.OutputBusiness, "YiSha.Service", baseConfigModel.OutputConfig.OutputModule, baseConfigModel.FileConfig.ServiceName + ".cs");
-                if (!File.Exists(codePath))
+                if (File.Exists(codePath))
                 {
-                    FileHelper.CreateFile(codePath, codeService);
-                    result.Add(new KeyValue { Key = "服务类", Value = codePath });
+                    File.Delete(codePath);
+                }
+                FileHelper.CreateFile(codePath, codeService);
+                result.Add(new KeyValue { Key = "服务类", Value = codePath });
+
+
+                string codePartialService = HttpUtility.HtmlDecode(param["CodePartialService"].ToString());
+                string codePartialPath = Path.Combine(baseConfigModel.OutputConfig.OutputBusiness, "YiSha.Service", baseConfigModel.OutputConfig.OutputModule, baseConfigModel.FileConfig.ServiceName + "_Partial.cs");
+                if (!File.Exists(codePartialPath))
+                {
+                    FileHelper.CreateFile(codePartialPath, codePartialService);
                 }
             }
             #endregion
