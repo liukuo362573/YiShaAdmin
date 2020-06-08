@@ -44,8 +44,11 @@ namespace YiSha.Util
             {
                 var json = JsonHelper.ToJObject(result);
                 var jsonData = json["data"];
-                ipLocation = jsonData["region"] + " " + jsonData["city"];
-                ipLocation = ipLocation.Trim();
+                if (jsonData != null)
+                {
+                    ipLocation = jsonData["region"] + " " + jsonData["city"];
+                    ipLocation = ipLocation.Trim();
+                }
             }
             return ipLocation;
         }
