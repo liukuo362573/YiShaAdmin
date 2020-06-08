@@ -58,7 +58,7 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<string>> SaveForm(DataDictDetailEntity entity)
         {
             TData<string> obj = new TData<string>();
-            if (entity.DictKey <= 0)
+            if (entity.DictKey < 0)
             {
                 obj.Message = "字典键必须大于0";
                 return obj;
