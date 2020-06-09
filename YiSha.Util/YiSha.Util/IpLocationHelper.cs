@@ -19,10 +19,6 @@ namespace YiSha.Util
                     ipLocation = GetIpLocationFromTaoBao(ipAddress);
                     if (string.IsNullOrEmpty(ipLocation))
                     {
-                        ipLocation = GetIpLocationFromIpIp(ipAddress);
-                    }
-                    if (string.IsNullOrEmpty(ipLocation))
-                    {
                         ipLocation = GetIpLocationFromPCOnline(ipAddress);
                     }
                 }
@@ -49,21 +45,6 @@ namespace YiSha.Util
                     ipLocation = jsonData["region"] + " " + jsonData["city"];
                     ipLocation = ipLocation.Trim();
                 }
-            }
-            return ipLocation;
-        }
-
-        private static string GetIpLocationFromIpIp(string ipAddress)
-        {
-            string url = "http://freeapi.ipip.net/" + ipAddress;
-            string result = HttpHelper.HttpGet(url);
-            string ipLocation = string.Empty;
-            if (!string.IsNullOrEmpty(result))
-            {
-                result = result.Replace("\"", string.Empty);
-                var resultArr = result.Split(',');
-                ipLocation = resultArr[1] + " " + resultArr[2];
-                ipLocation = ipLocation.Trim();
             }
             return ipLocation;
         }
