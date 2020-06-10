@@ -35,12 +35,12 @@ namespace YiSha.Util
         /// <summary>
         /// GET请求
         /// </summary>
-        /// <param name="Url">The URL.</param>
+        /// <param name="url">The URL.</param>
         /// <param name="postDataStr">The post data string.</param>
         /// <returns>System.String.</returns>
-        public static string HttpGet(string Url, int timeout = 10 * 1000)
+        public static string HttpGet(string url, int timeout = 10 * 1000)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "GET";
             request.ContentType = "text/html;charset=UTF-8";
             request.Timeout = timeout;
@@ -267,38 +267,38 @@ namespace YiSha.Util
         /// <summary>
         /// 为请求准备参数
         /// </summary>
-        ///<param name="objhttpItem">参数列表</param>
+        ///<param name="httpItem">参数列表</param>
         /// <param name="_Encoding">读取数据时的编码方式</param>
-        private void SetRequest(HttpItem objhttpItem)
+        private void SetRequest(HttpItem httpItem)
         {
             // 验证证书
-            SetCer(objhttpItem);
+            SetCer(httpItem);
             // 设置代理
-            SetProxy(objhttpItem);
+            SetProxy(httpItem);
             //请求方式Get或者Post
-            request.Method = objhttpItem.Method;
-            request.Timeout = objhttpItem.Timeout;
-            request.ReadWriteTimeout = objhttpItem.ReadWriteTimeout;
+            request.Method = httpItem.Method;
+            request.Timeout = httpItem.Timeout;
+            request.ReadWriteTimeout = httpItem.ReadWriteTimeout;
             //Accept
-            request.Accept = objhttpItem.Accept;
+            request.Accept = httpItem.Accept;
             //ContentType返回类型
-            request.ContentType = objhttpItem.ContentType;
+            request.ContentType = httpItem.ContentType;
             //UserAgent客户端的访问类型，包括浏览器版本和操作系统信息
-            request.UserAgent = objhttpItem.UserAgent;
+            request.UserAgent = httpItem.UserAgent;
             // 编码
-            SetEncoding(objhttpItem);
+            SetEncoding(httpItem);
             //设置Cookie
-            SetCookie(objhttpItem);
+            SetCookie(httpItem);
             //来源地址
-            request.Referer = objhttpItem.Referer;
+            request.Referer = httpItem.Referer;
             //是否执行跳转功能
-            request.AllowAutoRedirect = objhttpItem.Allowautoredirect;
+            request.AllowAutoRedirect = httpItem.Allowautoredirect;
             //设置Post数据
-            SetPostData(objhttpItem);
+            SetPostData(httpItem);
             //设置最大连接
-            if (objhttpItem.Connectionlimit > 0)
+            if (httpItem.Connectionlimit > 0)
             {
-                request.ServicePoint.ConnectionLimit = objhttpItem.Connectionlimit;
+                request.ServicePoint.ConnectionLimit = httpItem.Connectionlimit;
             }
         }
         /// <summary>
@@ -453,17 +453,18 @@ namespace YiSha.Util
         ///<summary>
         ///采用https协议访问网络,根据传入的URl地址，得到响应的数据字符串。
         ///</summary>
-        ///<param name="objhttpItem">参数列表</param>
+        ///<param name="httpItem">参数列表</param>
         ///<returns>String类型的数据</returns>
-        public HttpResult GetHtml(HttpItem objhttpItem)
+        public HttpResult GetHtml(HttpItem httpItem)
         {
             //准备参数
-            SetRequest(objhttpItem);
+            SetRequest(httpItem);
             //调用专门读取数据的类
-            return GetHttpRequestData(objhttpItem);
+            return GetHttpRequestData(httpItem);
         }
         #endregion
     }
+
     /// <summary>
     /// Http请求参考类 
     /// </summary>
@@ -667,8 +668,8 @@ namespace YiSha.Util
             get { return resulttype; }
             set { resulttype = value; }
         }
-
     }
+
     /// <summary>
     /// Http返回参数类
     /// </summary>
@@ -707,7 +708,6 @@ namespace YiSha.Util
         /// </summary>
         public byte[] ResultByte
         {
-
             get { return resultbyte; }
             set { resultbyte = value; }
         }
@@ -718,7 +718,6 @@ namespace YiSha.Util
             get { return header; }
             set { header = value; }
         }
-
     }
 
     /// <summary>
@@ -726,8 +725,8 @@ namespace YiSha.Util
     /// </summary>
     public enum ResultType
     {
-        String,//表示只返回字符串
-        Byte//表示返回字符串和字节流
+        String, //表示只返回字符串
+        Byte //表示返回字符串和字节流
     }
 
     /// <summary>
@@ -735,8 +734,8 @@ namespace YiSha.Util
     /// </summary>
     public enum PostDataType
     {
-        String,//字符串
-        Byte,//字符串和字节流
-        FilePath//表示传入的是文件
+        String, //字符串
+        Byte, //字符串和字节流
+        FilePath //表示传入的是文件
     }
 }
