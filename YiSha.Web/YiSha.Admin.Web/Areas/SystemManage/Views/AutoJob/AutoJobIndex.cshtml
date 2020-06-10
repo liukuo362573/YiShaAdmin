@@ -15,7 +15,7 @@
                 </ul>
             </div>
         </div>
-        <div class="btn-group-sm hidden-xs" id="toolbar">
+        <div class="btn-group-sm" id="toolbar">
             <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> 新增</a>
             <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> 修改</a>
             <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> 删除</a>
@@ -97,8 +97,6 @@
         ys.openDialog({
             title: id > 0 ? "编辑" : "添加",
             content: '@Url.Content("~/SystemManage/AutoJob/AutoJobForm")' + '?id=' + id,
-            width: "768px",
-            height: "690px",
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 iframeWin.saveForm(index);

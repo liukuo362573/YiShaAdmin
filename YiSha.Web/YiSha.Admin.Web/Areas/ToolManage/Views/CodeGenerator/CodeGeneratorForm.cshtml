@@ -211,7 +211,7 @@
                             </h3>
                         </div>
                         <div class="panel-body">
-                            <div class="btn-group-sm hidden-xs" id="toolbar">
+                            <div class="btn-group-sm" id="toolbar">
                                 <a id="btnAdd" class="btn btn-success disabled" dis><i class="fa fa-plus"></i> 新增</a>
                                 <a id="btnEdit" class="btn btn-primary disabled"><i class="fa fa-edit"></i> 修改</a>
                                 <a id="btnDelete" class="btn btn-danger disabled"><i class="fa fa-remove"></i> 删除</a>
@@ -625,7 +625,6 @@
         ys.openDialog({
             title: "搜索编辑",
             content: '@Url.Content("~/ToolManage/CodeGenerator/CodeGeneratorEditSearch")',
-            width: "768px",
             height: "130px",
             btn: [],
             shadeClose: true,
@@ -640,7 +639,6 @@
         ys.openDialog({
             title: "工具栏编辑",
             content: '@Url.Content("~/ToolManage/CodeGenerator/CodeGeneratorEditToolbar")',
-            width: "768px",
             height: "220px",
             btn: [],
             shadeClose: true,
@@ -655,7 +653,6 @@
         ys.openDialog({
             title: "列表编辑",
             content: '@Url.Content("~/ToolManage/CodeGenerator/CodeGeneratorEditList")' + '?tableName=' + tableName + '&tableNameUpper=' + tableNameUpper,
-            width: "768px",
             height: "300px",
             btn: [],
             shadeClose: true,

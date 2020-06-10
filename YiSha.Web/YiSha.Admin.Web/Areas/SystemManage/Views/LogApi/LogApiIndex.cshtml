@@ -1,6 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/_Index.cshtml";
- }
+}
 <div class="container-div">
     <div class="row">
         <div id="searchDiv" class="col-sm-12 search-collapse">
@@ -27,7 +27,7 @@
                 </ul>
             </div>
         </div>
-        <div class="btn-group-sm hidden-xs" id="toolbar">
+        <div class="btn-group-sm" id="toolbar">
             <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> 删除</a>
             <a id="btnDelete" class="btn btn-danger" onclick="removeAllForm()"><i class="fa fa-trash"></i> 清空</a>
         </div>
@@ -138,9 +138,7 @@
     function showDetailForm(id) {
         ys.openDialog({
             title: "Api日志详细",
-            content: '@Url.Content("~/SystemManage/LogApi/LogApiDetail")' + '?id=' + id,
-            width: "768px",
-            height: "500px"
+            content: '@Url.Content("~/SystemManage/LogApi/LogApiDetail")' + '?id=' + id
         });
     }
 </script>

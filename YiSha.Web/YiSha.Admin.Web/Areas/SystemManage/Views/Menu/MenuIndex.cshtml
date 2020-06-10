@@ -26,7 +26,7 @@
             </form>
         </div>
 
-        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+        <div class="btn-group-sm" id="toolbar" role="group">
             <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> 新增</a>
             <a id="btnEdit" class="btn btn-primary" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> 修改</a>
             <a id="btnDelete" class="btn btn-danger" onclick="deleteForm()"><i class="fa fa-remove"></i> 删除</a>
@@ -135,8 +135,6 @@
         ys.openDialog({
             title: id > 0 ? "编辑菜单" : "添加菜单",
             content: '@Url.Content("~/SystemManage/Menu/MenuForm")' + '?id=' + id + '&parentId=' + parentId + '&parentName=' + encodeURIComponent(parentName),
-            width: "780px",
-            height: "500px",
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 iframeWin.saveForm(index);

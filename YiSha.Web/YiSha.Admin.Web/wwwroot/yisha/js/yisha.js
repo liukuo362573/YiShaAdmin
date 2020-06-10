@@ -4,11 +4,19 @@
     "use strict";
     $.extend(ys, {
         openDialog: function (option) {
+            if (ys.isMobile()) {
+                option.width = 'auto';
+                option.height = 'auto';
+            }
+            else {
+                if (!option.height) {
+                    option.height = ($(window).height() - 50) + 'px';
+                }
+            }
             var _option = $.extend({
                 type: 2,
                 title: '',
                 width: '768px',
-                height: '600px',
                 content: '',
                 maxmin: true,
                 shade: 0.4,
@@ -36,11 +44,19 @@
             });
         },
         openDialogContent: function (option) {
+            if (ys.isMobile()) {
+                option.width = 'auto';
+                option.height = 'auto';
+            }
+            else {
+                if (!option.height) {
+                    option.height = ($(window).height() - 50) + 'px';
+                }
+            }
             var _option = $.extend({
                 type: 1,
                 title: false,
                 width: '768px',
-                height: '600px',
                 content: '',
                 maxmin: false,
                 shade: 0.4,
@@ -52,7 +68,8 @@
             }, option);
             layer.open({
                 type: _option.type, // 2表示content的值为url，1表示content的值为html
-                area: [_option.width, _option.height], maxmin: _option.maxmin,
+                area: [_option.width, _option.height],
+                maxmin: _option.maxmin,
                 shade: _option.shade,
                 title: _option.title,
                 content: _option.content,
@@ -421,7 +438,10 @@
                     destArr.push(obj[item]);
                     return ys.recursion(obj, obj[item][parentKey], destArr, key, parentKey);
                 }
-            }           
+            }
+        },
+        isMobile: function () {
+            return navigator.userAgent.match(/(Android|iPhone|SymbianOS|Windows Phone|iPad|iPod)/i);
         }
     });
 })(window.jQuery, window.ys);

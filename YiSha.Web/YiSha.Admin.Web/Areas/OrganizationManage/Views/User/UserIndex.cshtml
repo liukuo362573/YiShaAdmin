@@ -59,7 +59,7 @@
             </div>
         </div>
 
-        <div id="toolbar" class="btn-group-sm hidden-xs">
+        <div id="toolbar" class="btn-group-sm">
             <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> 新增</a>
             <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> 修改</a>
             <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> 删除</a>
@@ -181,8 +181,6 @@
         ys.openDialog({
             title: id > 0 ? "编辑用户" : "添加用户",
             content: '@Url.Content("~/OrganizationManage/User/UserForm")' + '?id=' + id,
-            width: "768px",
-            height: "577px",
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 iframeWin.saveForm(index);
@@ -222,7 +220,6 @@
         ys.openDialog({
             title: "重置密码",
             content: '@Url.Content("~/OrganizationManage/User/ResetPassword")' + '?id=' + id,
-            width: "768px",
             height: "220px",
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
@@ -241,7 +238,6 @@
       ys.openDialog({
             title: "导入用户数据",
             content: '@Url.Content("~/OrganizationManage/User/UserImport")',
-            width: "768px",
             height: "280px",
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];

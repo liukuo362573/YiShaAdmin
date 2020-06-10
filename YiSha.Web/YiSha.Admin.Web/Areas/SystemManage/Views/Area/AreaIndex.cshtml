@@ -22,7 +22,7 @@
                 </ul>
             </div>
         </div>
-        <div class="btn-group-sm hidden-xs" id="toolbar">
+        <div class="btn-group-sm" id="toolbar">
             <a id="btnDelete" class="btn btn-danger" onclick="deleteForm()"><i class="fa fa-remove"></i> 删除</a>
         </div>
 
@@ -81,8 +81,6 @@
         ys.openDialog({
             title: id > 0 ? "编辑" : "添加",
             content: '@Url.Content("~/SystemManage/Area/AreaForm")' + '?id=' + id,
-            width: "768px",
-            height: "550px",
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 iframeWin.saveForm(index);

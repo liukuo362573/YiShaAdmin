@@ -145,8 +145,6 @@
         ys.openDialog({
             title: "修改密码",
             content: '@Url.Content("~/OrganizationManage/User/ChangePassword")' + '?id=' + id,
-            width: "768px",
-            height: "500px",
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 iframeWin.saveForm(index);
@@ -158,8 +156,6 @@
         ys.openDialog({
             title: "修改信息",
             content: '@Url.Content("~/OrganizationManage/User/ChangeUser")' + '?id=' + id,
-            width: "768px",
-            height: "500px",
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 iframeWin.saveForm(index);
@@ -171,8 +167,6 @@
         ys.openDialog({
             title: "修改头像",
             content: '@Url.Content("~/OrganizationManage/User/UserPortrait")' + '?id=' + id,
-            width: "768px",
-            height: "600px",
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 iframeWin.saveForm(index);

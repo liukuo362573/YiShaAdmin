@@ -185,7 +185,6 @@
         ys.openDialog({
             title: "修改密码",
             content: '@Url.Content("~/OrganizationManage/User/ChangePassword")' + '?id=@operatorInfo.UserId',
-            width: "768px",
             height: "500px",
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];

@@ -27,7 +27,7 @@
                 </ul>
             </div>
         </div>
-        <div class="btn-group-sm hidden-xs" id="toolbar">
+        <div class="btn-group-sm" id="toolbar">
             <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> 删除</a>
             <a id="btnDelete" class="btn btn-danger" onclick="removeAllForm()"><i class="fa fa-trash"></i> 清空</a>
         </div>
@@ -141,9 +141,7 @@
     function showDetailForm(id) {
         ys.openDialog({
             title: "操作日志详细",
-            content: '@Url.Content("~/SystemManage/LogOperate/LogOperateDetail")' + '?id=' + id,
-            width: "768px",
-            height: "500px"
+            content: '@Url.Content("~/SystemManage/LogOperate/LogOperateDetail")' + '?id=' + id
         });
     }
 </script>
