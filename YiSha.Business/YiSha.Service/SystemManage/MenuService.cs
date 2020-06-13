@@ -72,8 +72,19 @@ namespace YiSha.Service.SystemManage
 
         public async Task DeleteForm(string ids)
         {
-            long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
-            await this.BaseRepository().Delete<MenuEntity>(p => idArr.Contains(p.Id.Value) || idArr.Contains(p.ParentId.Value));
+            var db = await this.BaseRepository().BeginTrans();
+            try
+            {
+                long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
+                await db.Delete<MenuEntity>(p => idArr.Contains(p.Id.Value) || idArr.Contains(p.ParentId.Value));
+                await db.Delete<MenuAuthorizeEntity>(p => idArr.Contains(p.MenuId.Value));
+                await db.CommitTrans();
+            }
+            catch
+            {
+                await db.RollbackTrans();
+                throw;
+            }
         }
         #endregion
 
