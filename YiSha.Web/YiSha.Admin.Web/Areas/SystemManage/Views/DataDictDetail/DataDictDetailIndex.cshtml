@@ -21,7 +21,7 @@
                 </ul>
             </div>
         </div>
-        <div class="btn-group-sm" id="toolbar">
+        <div class="btn-group-sm" id="toolbarPermission">
             <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> 新增</a>
             <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> 修改</a>
             <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> 删除</a>
@@ -49,6 +49,7 @@
             url: queryUrl,
             sortName: 'DictSort',
             sortOrder: 'Asc',
+            toolbar: '#toolbarPermission',
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
