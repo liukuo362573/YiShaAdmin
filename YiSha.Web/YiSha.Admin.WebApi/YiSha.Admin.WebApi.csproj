@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\YiSha.Business\YiSha.Business.AutoJob\YiSha.Business.AutoJob.csproj" />
     <ProjectReference Include="..\..\YiSha.Business\YiSha.Business\YiSha.Business.csproj" />
+    <ProjectReference Include="..\..\YiSha.Util\YiSha.Util\YiSha.Util.csproj" />
   </ItemGroup>
 
 </Project>

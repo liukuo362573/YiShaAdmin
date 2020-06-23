@@ -27,7 +27,7 @@ namespace YiSha.MemoryCache
             }
             catch (Exception ex)
             {
-                LogHelper.WriteWithTime(ex);
+                LogHelper.Error(ex);
             }
             return false;
         }

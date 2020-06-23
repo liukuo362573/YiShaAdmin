@@ -43,7 +43,7 @@ namespace YiSha.RedisCache
             }
             catch (Exception ex)
             {
-                LogHelper.WriteWithTime(ex);
+                LogHelper.Error(ex);
             }
             return false;
         }
@@ -67,7 +67,7 @@ namespace YiSha.RedisCache
             }
             catch (Exception ex)
             {
-                LogHelper.WriteWithTime(ex);
+                LogHelper.Error(ex);
             }
             return t;
         }

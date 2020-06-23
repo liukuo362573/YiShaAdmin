@@ -34,7 +34,7 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
             }
             catch (Exception ex)
             {
-                LogHelper.WriteWithTime(ex);
+                LogHelper.Error(ex);
                 obj.Message = ex.Message;
             }
             obj.Data = computerInfo;

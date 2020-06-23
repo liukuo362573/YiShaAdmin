@@ -38,7 +38,7 @@ namespace YiSha.Util
                 }
                 catch (Exception ex)
                 {
-                    LogHelper.WriteWithTime(ex);
+                    LogHelper.Error(ex);
                 }
                 return result;
             }
@@ -59,7 +59,7 @@ namespace YiSha.Util
             }
             catch (Exception ex)
             {
-                LogHelper.WriteWithTime(ex);
+                LogHelper.Error(ex);
             }
             return string.Empty;
         }
@@ -78,7 +78,7 @@ namespace YiSha.Util
             }
             catch (Exception ex)
             {
-                LogHelper.WriteWithTime(ex);
+                LogHelper.Error(ex);
             }
             return string.Empty;
         }
@@ -97,7 +97,7 @@ namespace YiSha.Util
             }
             catch (Exception ex)
             {
-                LogHelper.WriteWithTime(ex);
+                LogHelper.Error(ex);
             }
             return ip;
         }
@@ -123,7 +123,7 @@ namespace YiSha.Util
             }
             catch (Exception ex)
             {
-                LogHelper.WriteWithTime(ex);
+                LogHelper.Error(ex);
             }
             return string.Empty;
         }
@@ -140,7 +140,7 @@ namespace YiSha.Util
                 }
                 catch (Exception ex)
                 {
-                    LogHelper.WriteWithTime(ex);
+                    LogHelper.Error(ex);
                 }
                 return string.Empty;
             }
@@ -157,7 +157,7 @@ namespace YiSha.Util
                 }
                 catch (Exception ex)
                 {
-                    LogHelper.WriteWithTime(ex);
+                    LogHelper.Error(ex);
                 }
                 return userAgent;
             }
@@ -236,7 +236,7 @@ namespace YiSha.Util
             }
             catch (Exception ex)
             {
-                LogHelper.WriteWithTime(ex);
+                LogHelper.Error(ex);
             }
             return osVersion;
         }

@@ -30,7 +30,6 @@ namespace YiSha.Admin.Web.Controllers
         #region 视图功能
         [HttpGet]
         [AuthorizeFilter]
-
         public async Task<IActionResult> Index()
         {
             OperatorInfo operatorInfo = await Operator.Instance.Current();

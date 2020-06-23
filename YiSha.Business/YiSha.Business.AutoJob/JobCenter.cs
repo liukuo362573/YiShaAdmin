@@ -71,7 +71,7 @@ namespace YiSha.Business.AutoJob
             }
             catch (Exception ex)
             {
-                LogHelper.Write(ex);
+                LogHelper.Error(ex);
             }
         }
         #endregion
@@ -89,7 +89,7 @@ namespace YiSha.Business.AutoJob
             }
             catch (Exception ex)
             {
-                LogHelper.Write(ex);
+                LogHelper.Error(ex);
             }
         }
         #endregion

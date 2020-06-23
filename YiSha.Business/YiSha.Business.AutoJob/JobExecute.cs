@@ -61,7 +61,7 @@ namespace YiSha.Business.AutoJob
                 catch (Exception ex)
                 {
                     obj.Message = ex.GetOriginalException().Message;
-                    LogHelper.WriteWithTime(ex);
+                    LogHelper.Error(ex);
                 }
 
                 try
@@ -93,7 +93,7 @@ namespace YiSha.Business.AutoJob
                 catch (Exception ex)
                 {
                     obj.Message = ex.GetOriginalException().Message;
-                    LogHelper.WriteWithTime(ex);
+                    LogHelper.Error(ex);
                 }
             });
         }

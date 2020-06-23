@@ -26,7 +26,7 @@ namespace YiSha.Util
             }
             catch (Exception ex)
             {
-                LogHelper.WriteWithTime(ex);
+                LogHelper.Error(ex);
             }
         }
     }

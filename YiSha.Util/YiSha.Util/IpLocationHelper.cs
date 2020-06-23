@@ -25,7 +25,7 @@ namespace YiSha.Util
             }
             catch (Exception ex)
             {
-                LogHelper.Write(ex);
+                LogHelper.Error(ex);
             }
             return ipLocation;
         }

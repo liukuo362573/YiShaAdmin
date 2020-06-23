@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using YiSha.Util;
 using YiSha.Util.Model;
 using YiSha.Admin.Web.Controllers;
+using Microsoft.Extensions.Logging;
 
 namespace YiSha.Admin.Web
 {

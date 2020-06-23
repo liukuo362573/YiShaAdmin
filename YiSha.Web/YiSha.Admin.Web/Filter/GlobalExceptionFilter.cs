@@ -20,7 +20,7 @@ namespace YiSha.Admin.Web.Controllers
     {
         public void OnException(ExceptionContext context)
         {
-            LogHelper.WriteWithTime(context.Exception);
+            LogHelper.Error(context.Exception);
             if (context.HttpContext.Request.IsAjaxRequest())
             {
                 TData obj = new TData();

@@ -42,11 +42,11 @@ namespace YiSha.Util
         public static void LogWhenStart(IWebHostEnvironment env)
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("程序启动");
-            sb.AppendLine("ContentRootPath:" + env.ContentRootPath);
-            sb.AppendLine("WebRootPath:" + env.WebRootPath);
-            sb.AppendLine("IsDevelopment:" + env.IsDevelopment());
-            LogHelper.WriteWithTime(sb.ToString());
+            sb.Append("程序启动");
+            sb.Append(" |ContentRootPath:" + env.ContentRootPath);
+            sb.Append(" |WebRootPath:" + env.WebRootPath);
+            sb.Append(" |IsDevelopment:" + env.IsDevelopment());
+            LogHelper.Debug(sb.ToString());
         }
 
         /// <summary>

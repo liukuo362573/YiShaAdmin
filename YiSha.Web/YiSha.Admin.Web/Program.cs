@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
+using NLog.Web;
 
 namespace YiSha.Admin.Web
 {
@@ -13,6 +15,11 @@ namespace YiSha.Admin.Web
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                    .UseUrls("http://*:5000")
-                   .UseStartup<Startup>();
+                   .UseStartup<Startup>()
+                   .ConfigureLogging(logging =>
+                   {
+                       logging.ClearProviders();
+                       logging.SetMinimumLevel(LogLevel.Trace);
+                   }).UseNLog();
     }
 }

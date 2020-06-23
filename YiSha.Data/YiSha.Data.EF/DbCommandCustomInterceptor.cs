@@ -26,7 +26,7 @@ namespace YiSha.Data.EF
         {
             if (eventData.Duration.TotalMilliseconds >= GlobalContext.SystemConfig.DBSlowSqlLogTime * 1000)
             {
-                LogHelper.WriteWithTime(command.GetCommandText());
+                LogHelper.Warn("耗时的Sql：" + command.GetCommandText());
             }
             int val = await base.NonQueryExecutedAsync(command, eventData, result, cancellationToken);
             return val;
@@ -42,7 +42,7 @@ namespace YiSha.Data.EF
         {
             if (eventData.Duration.TotalMilliseconds >= GlobalContext.SystemConfig.DBSlowSqlLogTime * 1000)
             {
-                LogHelper.WriteWithTime(command.GetCommandText());
+                LogHelper.Warn("耗时的Sql：" + command.GetCommandText());
             }
             var obj = await base.ScalarExecutedAsync(command, eventData, result, cancellationToken);
             return obj;
@@ -58,7 +58,7 @@ namespace YiSha.Data.EF
         {
             if (eventData.Duration.TotalMilliseconds >= GlobalContext.SystemConfig.DBSlowSqlLogTime * 1000)
             {
-                LogHelper.WriteWithTime(command.GetCommandText());
+                LogHelper.Warn("耗时的Sql：" + command.GetCommandText());
             }
             var reader = await base.ReaderExecutedAsync(command, eventData, result, cancellationToken);
             return reader;
