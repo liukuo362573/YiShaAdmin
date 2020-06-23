@@ -42,7 +42,7 @@ namespace YiSha.Admin.WebApi
             }).AddNewtonsoftJson(options =>
             {
                 // 返回数据首字母不小写，CamelCasePropertyNamesContractResolver是小写
-                options.SerializerSettings.ContractResolver = new DefaultContractResolver(); 
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver();
             });
 
             services.AddMemoryCache();
@@ -101,7 +101,10 @@ namespace YiSha.Admin.WebApi
                 endpoints.MapControllerRoute("default", "{controller=ApiHome}/{action=Index}/{id?}");
             });
             GlobalContext.ServiceProvider = app.ApplicationServices;
-            new JobCenter().Start(); // 定时任务
+            if (!GlobalContext.SystemConfig.Debug)
+            {
+                new JobCenter().Start(); // 定时任务
+            }
         }
     }
 }

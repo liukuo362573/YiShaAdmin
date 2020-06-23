@@ -21,13 +21,10 @@ namespace YiSha.Business.AutoJob
         {
             Task.Run(async () =>
             {
-                if (!GlobalContext.SystemConfig.Debug)
+                TData<List<AutoJobEntity>> obj = await new AutoJobBLL().GetList(null);
+                if (obj.Tag == 1)
                 {
-                    TData<List<AutoJobEntity>> obj = await new AutoJobBLL().GetList(null);
-                    if (obj.Tag == 1)
-                    {
-                        AddScheduleJob(obj.Data);
-                    }
+                    AddScheduleJob(obj.Data);
                 }
             });
         }
