@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using YiSha.Admin.Web.Controllers;
 using YiSha.Business.SystemManage;
 using YiSha.Model.Result;
+using YiSha.Util;
 using YiSha.Util.Extension;
 using YiSha.Util.Model;
 using YiSha.Web.Code;
@@ -36,6 +37,12 @@ namespace YiSha.Admin.Web.Controllers
             OperatorInfo user = await Operator.Instance.Current();
             if (user == null || user.UserId == 0)
             {
+                // 防止用户选择记住我，页面一直在首页刷新
+                if (new CookieHelper().GetCookie("RememberMe").ParseToInt() == 1)
+                {
+                    Operator.Instance.RemoveCurrent();
+                }
+
                 #region 没有登录
                 if (context.HttpContext.Request.IsAjaxRequest())
                 {
