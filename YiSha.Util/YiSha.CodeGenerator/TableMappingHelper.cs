@@ -80,8 +80,9 @@ namespace YiSha.CodeGenerator
                     sTempDatatype = "bool?";
                     break;
 
-                case "datetime":
                 case "date":
+                case "datetime":
+                case "datetime2":
                 case "smalldatetime":
                     sTempDatatype = "DateTime?";
                     break;
