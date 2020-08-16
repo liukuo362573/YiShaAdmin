@@ -414,12 +414,8 @@
             var field = $(control).attr("col");
             if (control.tagName == "INPUT") {
                 if (control.type == "checkbox") {
-                    if ($(control).prop("checked")) {
-                        if (data[field]) {
-                            data[field] = data[field] + "," + $(control).val();
-                        } else {
-                            $(control).val(data[field]);
-                        }
+                    if ($(control).val() == data[field]) {
+                        $(control).prop("checked", "checked");
                     }
                 }
                 else if (control.type == "radio") {
