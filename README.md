@@ -27,12 +27,12 @@
 - 服务器信息：查看服务器的基本信息
 
 ## 在线体验
-1. 项目地址：[https://yishasoft.com/admin](https://yishasoft.com/admin)  
+1. 项目地址：[http://106.14.124.170:5000](http://106.14.124.170:5000)  
 2. 账号密码：admin 123456
 
 ## 开发文档
 
-文档地址：[https://yishasoft.com/doc](https://yishasoft.com/doc)  
+文档地址：[http://106.14.124.170:3000](http://106.14.124.170:3000)  
 
 ## 演示图
 

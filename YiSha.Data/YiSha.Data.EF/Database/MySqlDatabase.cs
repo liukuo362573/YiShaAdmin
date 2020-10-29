@@ -256,7 +256,7 @@ namespace YiSha.Data.EF
         {
             foreach (var entity in entities)
             {
-                await this.Update(entity);
+                dbContext.Entry<T>(entity).State = EntityState.Modified;
             }
             return dbContextTransaction == null ? await this.CommitTrans() : 0;
         }
