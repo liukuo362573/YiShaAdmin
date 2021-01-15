@@ -48,19 +48,7 @@ namespace YiSha.Data.EF
         /// <returns></returns>
         public static string DeleteSql(string tableName, string propertyName, long[] propertyValue)
         {
-            StringBuilder strSql = new StringBuilder("DELETE FROM " + tableName + " WHERE " + propertyName + " IN (");
-            for (long i = 0; i < propertyValue.Length; i++)
-            {
-                if (i == 0)
-                {
-                    strSql.Append(propertyValue[i]);
-                }
-                else
-                {
-                    strSql.Append("," + propertyValue[i]);
-                }
-            }
-            strSql.Append(")");
+            string strSql = "DELETE FROM " + tableName + " WHERE " + propertyName + " IN (" + string.Join(",", propertyValue) + ")";
             return strSql.ToString();
         }
 
