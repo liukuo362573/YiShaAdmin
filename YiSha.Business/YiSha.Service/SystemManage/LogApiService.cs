@@ -109,7 +109,7 @@ namespace YiSha.Service.SystemManage
                 }
                 if (!string.IsNullOrEmpty(param.EndTime.ParseToString()))
                 {
-                    param.EndTime = (param.EndTime.Value.ToString("yyyy-MM-dd") + " 23:59:59").ParseToDateTime();
+                    param.EndTime = param.EndTime.Value.Date.Add(new TimeSpan(23, 59, 59));
                     strSql.Append(" AND a.BaseCreateTime <= @EndTime");
                     parameter.Add(DbParameterExtension.CreateDbParameter("@EndTime", param.EndTime));
                 }

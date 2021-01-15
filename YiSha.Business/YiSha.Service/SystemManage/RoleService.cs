@@ -134,7 +134,7 @@ namespace YiSha.Service.SystemManage
                 }
                 if (!string.IsNullOrEmpty(param.EndTime.ParseToString()))
                 {
-                    param.EndTime = (param.EndTime.Value.ToString("yyyy-MM-dd") + " 23:59:59").ParseToDateTime();
+                    param.EndTime = param.EndTime.Value.Date.Add(new TimeSpan(23, 59, 59));
                     expression = expression.And(t => t.BaseModifyTime <= param.EndTime);
                 }
             }
