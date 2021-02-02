@@ -110,16 +110,29 @@ namespace YiSha.Service.SystemManage
         #endregion
 
         #region 私有方法
+
         /// <summary>
         /// 获取所有表的主键、主键名称、记录数
         /// </summary>
+        /// <param name="exp"></param>
         /// <returns></returns>
-        private async Task<List<TableInfo>> GetTableDetailList()
+        private async Task<List<TableInfo>> GetTableDetailList(IEnumerable<TableInfo> exp)
         {
             string strSql = @"SELECT t1.TABLE_NAME TableName,t1.TABLE_COMMENT Remark,t1.TABLE_ROWS TableCount,t2.CONSTRAINT_NAME TableKeyName,t2.column_name TableKey
                                      FROM information_schema.TABLES as t1 
-	                                 LEFT JOIN INFORMATION_SCHEMA.`KEY_COLUMN_USAGE` as t2 on t1.TABLE_NAME = t2.TABLE_NAME
+                                     LEFT JOIN INFORMATION_SCHEMA.`KEY_COLUMN_USAGE` as t2 on t1.TABLE_NAME = t2.TABLE_NAME
                                      WHERE t1.TABLE_SCHEMA='" + GetDatabase() + "' AND t2.TABLE_SCHEMA='" + GetDatabase() + "'";
+            
+            if (exp != null && exp.Count() > 0)
+            {
+                strSql += " AND t1.TABLE_NAME in(";
+                foreach (var item in exp)
+                {
+                    strSql += $"'{item.TableName}',";
+                }
+                strSql = strSql.TrimEnd(',');
+                strSql += ")";
+            }
 
             IEnumerable<TableInfo> list = await this.BaseRepository().FindList<TableInfo>(strSql.ToString());
             return list.ToList();
@@ -131,7 +144,7 @@ namespace YiSha.Service.SystemManage
         /// <param name="list"></param>
         private async Task SetTableDetail(IEnumerable<TableInfo> list)
         {
-            List<TableInfo> detailList = await GetTableDetailList();
+            List<TableInfo> detailList = await GetTableDetailList(list);
             foreach (TableInfo table in list)
             {
                 table.TableKey = string.Join(",", detailList.Where(p => p.TableName == table.TableName).Select(p => p.TableKey));
