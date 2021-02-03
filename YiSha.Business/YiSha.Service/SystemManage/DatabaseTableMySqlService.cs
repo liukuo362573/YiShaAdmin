@@ -114,28 +114,20 @@ namespace YiSha.Service.SystemManage
         /// <summary>
         /// 获取所有表的主键、主键名称、记录数
         /// </summary>
-        /// <param name="exp"></param>
+        /// <param name="list"></param>
         /// <returns></returns>
-        private async Task<List<TableInfo>> GetTableDetailList(IEnumerable<TableInfo> exp)
+        private async Task<List<TableInfo>> GetTableDetailList(IEnumerable<TableInfo> list)
         {
             string strSql = @"SELECT t1.TABLE_NAME TableName,t1.TABLE_COMMENT Remark,t1.TABLE_ROWS TableCount,t2.CONSTRAINT_NAME TableKeyName,t2.column_name TableKey
-                                     FROM information_schema.TABLES as t1 
+                                     FROM information_schema.TABLES as t1
                                      LEFT JOIN INFORMATION_SCHEMA.`KEY_COLUMN_USAGE` as t2 on t1.TABLE_NAME = t2.TABLE_NAME
                                      WHERE t1.TABLE_SCHEMA='" + GetDatabase() + "' AND t2.TABLE_SCHEMA='" + GetDatabase() + "'";
-            
-            if (exp != null && exp.Count() > 0)
+            if (list != null && list.Count() > 0)
             {
-                strSql += " AND t1.TABLE_NAME in(";
-                foreach (var item in exp)
-                {
-                    strSql += $"'{item.TableName}',";
-                }
-                strSql = strSql.TrimEnd(',');
-                strSql += ")";
+                strSql += " AND t1.TABLE_NAME in(" + string.Join(",", list.Select(p => "'" + p.TableName + "'")) + ")";//生成 Where In 条件
             }
-
-            IEnumerable<TableInfo> list = await this.BaseRepository().FindList<TableInfo>(strSql.ToString());
-            return list.ToList();
+            IEnumerable<TableInfo> result = await BaseRepository().FindList<TableInfo>(strSql.ToString());
+            return result.ToList();
         }
 
         /// <summary>
