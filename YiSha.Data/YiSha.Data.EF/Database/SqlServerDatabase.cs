@@ -332,7 +332,7 @@ namespace YiSha.Data.EF
             {
                 DbHelper dbHelper = new DbHelper(dbContext, dbConnection);
                 StringBuilder sb = new StringBuilder();
-                sb.Append(DatabasePageExtension.SqlPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
+                sb.Append(DatabasePageExtension.SqlServerPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
                 object tempTotal = await dbHelper.ExecuteScalarAsync(CommandType.Text, "SELECT COUNT(1) FROM (" + strSql + ") T", dbParameter);
                 int total = tempTotal.ParseToInt();
                 if (total > 0)
@@ -386,7 +386,7 @@ namespace YiSha.Data.EF
             {
                 DbHelper dbHelper = new DbHelper(dbContext, dbConnection);
                 StringBuilder sb = new StringBuilder();
-                sb.Append(DatabasePageExtension.SqlPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
+                sb.Append(DatabasePageExtension.SqlServerPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
                 object tempTotal = await dbHelper.ExecuteScalarAsync(CommandType.Text, "SELECT COUNT(1) FROM (" + strSql + ") T", dbParameter);
                 int total = tempTotal.ParseToInt();
                 if (total > 0)
