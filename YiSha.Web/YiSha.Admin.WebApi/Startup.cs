@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Text;
+using System.IO;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -46,7 +47,10 @@ namespace YiSha.Admin.WebApi
             });
 
             services.AddMemoryCache();
+
             services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(GlobalContext.HostingEnvironment.ContentRootPath + Path.DirectorySeparatorChar + "DataProtection"));
+                       
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);  // 注册Encoding
 
             GlobalContext.SystemConfig = Configuration.GetSection("SystemConfig").Get<SystemConfig>();
             GlobalContext.Services = services;
