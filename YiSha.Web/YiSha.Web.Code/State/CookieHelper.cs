@@ -17,11 +17,13 @@ namespace YiSha.Util
         /// </summary>
         /// <param name="sName">名称</param>
         /// <param name="sValue">值</param>
-        public void WriteCookie(string sName, string sValue)
+        /// <param name="httpOnly">true代表浏览器的js不能获取到的cookie</param>
+        public void WriteCookie(string sName, string sValue, bool httpOnly = true)
         {
             IHttpContextAccessor hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
             CookieOptions option = new CookieOptions();
             option.Expires = DateTime.Now.AddDays(30);
+            option.HttpOnly = httpOnly;
             hca?.HttpContext?.Response.Cookies.Append(sName, sValue, option);
         }
 
@@ -31,11 +33,13 @@ namespace YiSha.Util
         /// <param name="sName">名称</param>
         /// <param name="sValue">值</param>
         /// <param name="expires">过期时间(分钟)</param>
-        public void WriteCookie(string sName, string sValue, int expires)
+        /// <param name="httpOnly">true代表浏览器的js不能获取到的cookie</param>
+        public void WriteCookie(string sName, string sValue, int expires, bool httpOnly = true)
         {
             IHttpContextAccessor hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
             CookieOptions option = new CookieOptions();
             option.Expires = DateTime.Now.AddMinutes(expires);
+            option.HttpOnly = httpOnly;
             hca?.HttpContext?.Response.Cookies.Append(sName, sValue, option);
         }
 
