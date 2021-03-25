@@ -94,6 +94,11 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<string>> SaveForm(MenuEntity entity)
         {
             TData<string> obj = new TData<string>();
+            if (!entity.Id.IsNullOrZero() && entity.Id == entity.ParentId)
+            {
+                obj.Message = "不能选择自己作为上级菜单！";
+                return obj;
+            }
             if (menuService.ExistMenuName(entity))
             {
                 obj.Message = "菜单名称已经存在！";

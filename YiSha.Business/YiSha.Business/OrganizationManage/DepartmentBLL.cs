@@ -128,6 +128,11 @@ namespace YiSha.Business.OrganizationManage
         public async Task<TData<string>> SaveForm(DepartmentEntity entity)
         {
             TData<string> obj = new TData<string>();
+            if (!entity.Id.IsNullOrZero() && entity.Id == entity.ParentId)
+            {
+                obj.Message = "不能选择自己作为上级部门！";
+                return obj;
+            }
             if (departmentService.ExistDepartmentName(entity))
             {
                 obj.Message = "部门名称已经存在！";
