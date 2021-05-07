@@ -1,6 +1,6 @@
-﻿using YiSha.Data.EF.Database;
+﻿using YiSha.Data.EF.DbContext;
 
-namespace YiSha.Data.EF
+namespace YiSha.Data.EF.Database
 {
     public sealed class MySqlDatabase : AbstractDatabase
     {
@@ -9,7 +9,7 @@ namespace YiSha.Data.EF
         /// </summary>
         public MySqlDatabase(string connString)
         {
-            dbContext = new MySqlDbContext(connString);
+            DbContext = new MySqlDbContext(connString);
         }
     }
 }

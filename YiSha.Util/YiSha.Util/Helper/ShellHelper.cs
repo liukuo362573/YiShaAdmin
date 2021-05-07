@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
+﻿using System.Diagnostics;
 
-namespace YiSha.Util
+namespace YiSha.Util.Helper
 {
-    public class ShellHelper
+    public static class ShellHelper
     {
         public static string Bash(string command)
         {
-            var escapedArgs = command.Replace("\"", "\\\"");
-            var process = new Process()
+            var escapedArgs = command?.Replace("\"", "\\\"");
+            var process = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
@@ -18,7 +15,7 @@ namespace YiSha.Util
                     Arguments = $"-c \"{escapedArgs}\"",
                     RedirectStandardOutput = true,
                     UseShellExecute = false,
-                    CreateNoWindow = true,
+                    CreateNoWindow = true
                 }
             };
             process.Start();
@@ -30,18 +27,15 @@ namespace YiSha.Util
 
         public static string Cmd(string fileName, string args)
         {
-            string output = string.Empty;
-
-            var info = new ProcessStartInfo();
-            info.FileName = fileName;
-            info.Arguments = args;
-            info.RedirectStandardOutput = true;
-
-            using (var process = Process.Start(info))
+            var info = new ProcessStartInfo
             {
-                output = process.StandardOutput.ReadToEnd();
-            }
-            return output;
+                FileName = fileName,
+                Arguments = args,
+                RedirectStandardOutput = true
+            };
+
+            using var process = Process.Start(info);
+            return process.StandardOutput.ReadToEnd();
         }
     }
 }

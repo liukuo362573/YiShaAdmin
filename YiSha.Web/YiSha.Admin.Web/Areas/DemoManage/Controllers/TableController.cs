@@ -1,11 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Model.Param.OrganizationManage;
-using YiSha.Util;
 using YiSha.Util.Model;
 
 namespace YiSha.Admin.Web.Areas.DemoManage.Controllers
@@ -14,6 +12,7 @@ namespace YiSha.Admin.Web.Areas.DemoManage.Controllers
     public class TableController : Controller
     {
         #region 视图功能
+
         public IActionResult Editable()
         {
             return View();
@@ -38,9 +37,11 @@ namespace YiSha.Admin.Web.Areas.DemoManage.Controllers
         {
             return View();
         }
+
         #endregion
 
         #region 获取数据
+
         [HttpGet]
         public async Task<IActionResult> GetPageListJson(UserListParam param, Pagination pagination)
         {
@@ -70,6 +71,7 @@ namespace YiSha.Admin.Web.Areas.DemoManage.Controllers
             obj.Tag = 1;
             return Json(obj);
         }
+
         #endregion
     }
 }

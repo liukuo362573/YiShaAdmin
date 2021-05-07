@@ -1,4 +1,5 @@
-﻿@{
+﻿@using YiSha.Util.Model
+@{
     Layout = "~/Views/Shared/_FormGray.cshtml";
 }
 
@@ -38,7 +39,7 @@
                                     她适用于开发 <b>网站管理后台</b>、<b>CMS</b>、<b>CRM</b>、<b>ERP</b>、<b>OA</b> 这类的系统和开发<a href="/api/api-doc" target="_blank"><b>移动端Api</b></a>。<br />
                                     代码完全免费开源，易读易懂、界面简洁美观，给你的项目多一种选择与参考。
                                 </p>
-                                <p>当前版本：@YiSha.Util.GlobalContext.GetVersion() &nbsp;&nbsp;<span class="label label-warning">¥免费开源</span></p>
+                                <p>当前版本：@GlobalContext.GetVersion() &nbsp;&nbsp;<span class="label label-warning">¥免费开源</span></p>
                                 <p></p>
                                 <p>
                                     <a class="btn btn-success btn-outline" href="https://github.com/liukuo362573/YiShaAdmin" target="_blank">

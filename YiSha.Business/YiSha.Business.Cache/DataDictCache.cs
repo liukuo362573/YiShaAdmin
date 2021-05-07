@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using YiSha.Cache.Factory;
 using YiSha.Entity.SystemManage;
@@ -11,23 +8,20 @@ namespace YiSha.Business.Cache
 {
     public class DataDictCache : BaseBusinessCache<DataDictEntity>
     {
-        private DataDictService dataDictService = new DataDictService();
+        private readonly DataDictService _dataDictService = new();
 
-        public override string CacheKey => this.GetType().Name;
+        protected override string CacheKey => GetType().Name;
 
         public override async Task<List<DataDictEntity>> GetList()
         {
             var cacheList = CacheFactory.Cache.GetCache<List<DataDictEntity>>(CacheKey);
             if (cacheList == null)
             {
-                var list = await dataDictService.GetList(null);
+                var list = await _dataDictService.GetList(null);
                 CacheFactory.Cache.SetCache(CacheKey, list);
                 return list;
             }
-            else
-            {
-                return cacheList;
-            }
+            return cacheList;
         }
     }
 }

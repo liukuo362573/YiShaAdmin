@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ToolManage\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\YiSha.Util\YiSha.IdGenerator\YiSha.IdGenerator.csproj" />
     <ProjectReference Include="..\..\YiSha.Util\YiSha.Util\YiSha.Util.csproj" />
     <ProjectReference Include="..\..\YiSha.Web\YiSha.Web.Code\YiSha.Web.Code.csproj" />

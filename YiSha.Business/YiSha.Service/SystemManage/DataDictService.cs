@@ -1,42 +1,43 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
-using YiSha.Util;
-using YiSha.Util.Extension;
-using YiSha.Util.Model;
 using YiSha.Data.Repository;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
-using System.Linq.Expressions;
+using YiSha.Util.Extension;
+using YiSha.Util.Helper;
+using YiSha.Util.Model;
 
 namespace YiSha.Service.SystemManage
 {
     public class DataDictService : RepositoryFactory
     {
         #region 获取数据
+
         public async Task<List<DataDictEntity>> GetList(DataDictListParam param)
         {
             var expression = ListFilter(param);
-            var list = await this.BaseRepository().FindList(expression);
+            var list = await BaseRepository().FindList(expression);
             return list.ToList();
         }
 
         public async Task<List<DataDictEntity>> GetPageList(DataDictListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
-            var list = await this.BaseRepository().FindList(expression, pagination);
+            var list = await BaseRepository().FindList(expression, pagination);
             return list.ToList();
         }
 
         public async Task<DataDictEntity> GetEntity(long id)
         {
-            return await this.BaseRepository().FindEntity<DataDictEntity>(id);
+            return await BaseRepository().FindEntity<DataDictEntity>(id);
         }
 
         public async Task<int> GetMaxSort()
         {
-            var result =  await BaseRepository().FindEntity<int>("SELECT MAX(DictSort) FROM SysDataDict");
+            var result = await BaseRepository().FindEntity<int>("SELECT MAX(DictSort) FROM SysDataDict");
             return result + 1;
         }
 
@@ -52,7 +53,7 @@ namespace YiSha.Service.SystemManage
             {
                 expression = expression.And(t => t.DictType == entity.DictType && t.Id != entity.Id);
             }
-            return this.BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
+            return BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
         }
 
         /// <summary>
@@ -64,14 +65,16 @@ namespace YiSha.Service.SystemManage
         {
             var expression = LinqExtensions.True<DataDictDetailEntity>();
             expression = expression.And(t => t.DictType == dictType);
-            return this.BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
+            return BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
         }
+
         #endregion
 
         #region 提交数据
+
         public async Task SaveForm(DataDictEntity entity)
         {
-            var db = await this.BaseRepository().BeginTrans();
+            var db = await BaseRepository().BeginTrans();
             try
             {
                 if (!entity.Id.IsNullOrZero())
@@ -91,12 +94,12 @@ namespace YiSha.Service.SystemManage
                     dbEntity.Remark = entity.Remark;
                     dbEntity.DictSort = entity.DictSort;
                     await dbEntity.Modify();
-                    await db.Update<DataDictEntity>(dbEntity);
+                    await db.Update(dbEntity);
                 }
                 else
                 {
                     await entity.Create();
-                    await db.Insert<DataDictEntity>(entity);
+                    await db.Insert(entity);
                 }
                 await db.CommitTrans();
             }
@@ -110,11 +113,13 @@ namespace YiSha.Service.SystemManage
         public async Task DeleteForm(string ids)
         {
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
-            await this.BaseRepository().Delete<DataDictEntity>(idArr);
+            await BaseRepository().Delete<DataDictEntity>(idArr);
         }
+
         #endregion
 
         #region 私有方法
+
         private Expression<Func<DataDictEntity, bool>> ListFilter(DataDictListParam param)
         {
             var expression = LinqExtensions.True<DataDictEntity>();
@@ -131,6 +136,7 @@ namespace YiSha.Service.SystemManage
             }
             return expression;
         }
+
         #endregion
     }
 }

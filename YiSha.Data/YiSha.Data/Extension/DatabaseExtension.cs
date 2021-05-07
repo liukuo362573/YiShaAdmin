@@ -1,16 +1,16 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using YiSha.Util;
 using YiSha.Util.Extension;
+using YiSha.Util.Helper;
 
-namespace YiSha.Data
+namespace YiSha.Data.Extension
 {
     public static class DatabasesExtension
     {

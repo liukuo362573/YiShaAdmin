@@ -1,7 +1,7 @@
-using System;
 using NUnit.Framework;
-using YiSha.Util;
+using System;
 using YiSha.Util.Extension;
+using YiSha.Util.Helper;
 
 namespace YiSha.UtilTest
 {
@@ -10,10 +10,10 @@ namespace YiSha.UtilTest
         [Test]
         public void TestFormatTime()
         {
-            long ticks = 333333000;     // Environment.TickCount;
+            long ticks = 333333000; // Environment.TickCount;
             string result = DateTimeHelper.FormatTime(ticks);
 
-            Assert.AreEqual("03 ÃÏ 20 –° ± 35 ∑÷ 33 √Î", result);
+            Assert.AreEqual("03 Â§© 20 Â∞èÊó∂ 35 ÂàÜ 33 Áßí", result);
         }
 
         [Test]

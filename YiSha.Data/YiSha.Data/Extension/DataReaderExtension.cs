@@ -7,8 +7,8 @@ using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using YiSha.Util;
-using YiSha.Util.Extension;
+using YiSha.Util.Helper;
+using TypeExtensions = YiSha.Util.Extension.TypeExtensions;
 
 namespace YiSha.Data.Extension
 {
@@ -40,7 +40,7 @@ namespace YiSha.Data.Extension
             {
                 var list = new List<T>();
 
-                if (typeof(T).IsElementaryType())
+                if (TypeExtensions.IsElementaryType(typeof(T)))
                 {
                     while (reader.Read())
                     {
@@ -74,7 +74,7 @@ namespace YiSha.Data.Extension
         {
             using (reader)
             {
-                if (typeof(T).IsElementaryType())
+                if (TypeExtensions.IsElementaryType(typeof(T)))
                 {
                     while (reader.Read())
                     {
@@ -102,7 +102,7 @@ namespace YiSha.Data.Extension
         {
             using (reader)
             {
-                if (typeof(T).IsElementaryType())
+                if (TypeExtensions.IsElementaryType(typeof(T)))
                 {
                     if (reader.Read())
                     {
@@ -201,7 +201,7 @@ namespace YiSha.Data.Extension
 
     internal sealed class ReaderMapperCache<T> : Dictionary<int, Func<IDataRecord, T>>
     {
-        private static readonly ConcurrentDictionary<CacheIdentity, Func<IDataRecord, T>> _funcCaches = new ConcurrentDictionary<CacheIdentity, Func<IDataRecord, T>>();
+        private static readonly ConcurrentDictionary<CacheIdentity, Func<IDataRecord, T>> _funcCaches = new();
 
         internal static Func<IDataRecord, T> GetMapper(IDataReader reader, string sql)
         {
@@ -260,7 +260,7 @@ namespace YiSha.Data.Extension
 
         private static UnaryExpression ConvertExpression(Expression getItemExp, Type type)
         {
-            var underlyingType = type.GetUnderlyingType();
+            var underlyingType = TypeExtensions.GetUnderlyingType(type);
             if (underlyingType.IsEnum)
             {
                 var method = typeof(System.Enum).GetMethod("ToObject", new[] { typeof(Type), typeof(object) });

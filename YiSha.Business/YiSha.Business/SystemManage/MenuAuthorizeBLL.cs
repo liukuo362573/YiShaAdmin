@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using YiSha.Business.Cache;
-using YiSha.Business.OrganizationManage;
-using YiSha.Entity.OrganizationManage;
 using YiSha.Entity.SystemManage;
 using YiSha.Enum;
 using YiSha.Enum.SystemManage;
 using YiSha.Model.Result;
-using YiSha.Service.SystemManage;
 using YiSha.Util.Extension;
 using YiSha.Util.Model;
 using YiSha.Web.Code;
@@ -19,10 +14,11 @@ namespace YiSha.Business.SystemManage
 {
     public class MenuAuthorizeBLL
     {
-        private MenuAuthorizeCache menuAuthorizeCache = new MenuAuthorizeCache();
-        private MenuCache menuCache = new MenuCache();
+        private readonly MenuAuthorizeCache _menuAuthorizeCache = new();
+        private readonly MenuCache _menuCache = new();
 
         #region 获取数据
+
         public async Task<TData<List<MenuAuthorizeInfo>>> GetAuthorizeList(OperatorInfo user)
         {
             TData<List<MenuAuthorizeInfo>> obj = new TData<List<MenuAuthorizeInfo>>();
@@ -32,8 +28,8 @@ namespace YiSha.Business.SystemManage
             List<MenuAuthorizeEntity> userAuthorizeList = null;
             List<MenuAuthorizeEntity> roleAuthorizeList = null;
 
-            var menuAuthorizeCacheList = await menuAuthorizeCache.GetList();
-            var menuList = await menuCache.GetList();
+            var menuAuthorizeCacheList = await _menuAuthorizeCache.GetList();
+            var menuList = await _menuCache.GetList();
             var enableMenuIdList = menuList.Where(p => p.MenuStatus == (int)StatusEnum.Yes).Select(p => p.Id).ToList();
 
             menuAuthorizeCacheList = menuAuthorizeCacheList.Where(p => enableMenuIdList.Contains(p.MenuId)).ToList();
@@ -72,6 +68,7 @@ namespace YiSha.Business.SystemManage
             obj.Tag = 1;
             return obj;
         }
+
         #endregion
     }
 }

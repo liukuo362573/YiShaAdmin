@@ -1,42 +1,43 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
-using YiSha.Util;
-using YiSha.Util.Extension;
-using YiSha.Util.Model;
 using YiSha.Data.Repository;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
-using System.Linq.Expressions;
+using YiSha.Util.Extension;
+using YiSha.Util.Helper;
+using YiSha.Util.Model;
 
 namespace YiSha.Service.SystemManage
 {
     public class DataDictDetailService : RepositoryFactory
     {
         #region 获取数据
+
         public async Task<List<DataDictDetailEntity>> GetList(DataDictDetailListParam param)
         {
             var expression = ListFilter(param);
-            var list = await this.BaseRepository().FindList(expression);
+            var list = await BaseRepository().FindList(expression);
             return list.OrderBy(p => p.DictSort).ToList();
         }
 
         public async Task<List<DataDictDetailEntity>> GetPageList(DataDictDetailListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
-            var list = await this.BaseRepository().FindList(expression, pagination);
+            var list = await BaseRepository().FindList(expression, pagination);
             return list.ToList();
         }
 
         public async Task<DataDictDetailEntity> GetEntity(long id)
         {
-            return await this.BaseRepository().FindEntity<DataDictDetailEntity>(id);
+            return await BaseRepository().FindEntity<DataDictDetailEntity>(id);
         }
 
         public async Task<int> GetMaxSort()
         {
-            var result =  await BaseRepository().FindEntity<int>("SELECT MAX(DictSort) FROM SysDataDictDetail");
+            var result = await BaseRepository().FindEntity<int>("SELECT MAX(DictSort) FROM SysDataDictDetail");
             return result + 1;
         }
 
@@ -52,33 +53,37 @@ namespace YiSha.Service.SystemManage
             {
                 expression = expression.And(t => t.DictType == entity.DictType && (t.DictKey == entity.DictKey || t.DictValue == entity.DictValue) && t.Id != entity.Id);
             }
-            return this.BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
+            return BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
         }
+
         #endregion
 
         #region 提交数据
+
         public async Task SaveForm(DataDictDetailEntity entity)
         {
             if (entity.Id.IsNullOrZero())
             {
                 await entity.Create();
-                await this.BaseRepository().Insert<DataDictDetailEntity>(entity);
+                await BaseRepository().Insert(entity);
             }
             else
             {
                 await entity.Modify();
-                await this.BaseRepository().Update<DataDictDetailEntity>(entity);
+                await BaseRepository().Update(entity);
             }
         }
 
         public async Task DeleteForm(string ids)
         {
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
-            await this.BaseRepository().Delete<DataDictDetailEntity>(idArr);
+            await BaseRepository().Delete<DataDictDetailEntity>(idArr);
         }
+
         #endregion
 
         #region 私有方法
+
         private Expression<Func<DataDictDetailEntity, bool>> ListFilter(DataDictDetailListParam param)
         {
             var expression = LinqExtensions.True<DataDictDetailEntity>();
@@ -101,6 +106,7 @@ namespace YiSha.Service.SystemManage
             }
             return expression;
         }
+
         #endregion
     }
 }

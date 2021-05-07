@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using YiSha.Admin.Web.Controllers;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using YiSha.Business.SystemManage;
 using YiSha.Model.Result;
-using YiSha.Util;
 using YiSha.Util.Extension;
 using YiSha.Util.Model;
 using YiSha.Web.Code;
+using YiSha.Web.Code.State;
 
-namespace YiSha.Admin.Web.Controllers
+namespace YiSha.Admin.Web.Filter
 {
     public class AuthorizeFilterAttribute : ActionFilterAttribute
     {
@@ -22,7 +18,7 @@ namespace YiSha.Admin.Web.Controllers
 
         public AuthorizeFilterAttribute(string authorize)
         {
-            this.Authorize = authorize;
+            Authorize = authorize;
         }
 
         /// <summary>
@@ -44,6 +40,7 @@ namespace YiSha.Admin.Web.Controllers
                 }
 
                 #region 没有登录
+
                 if (context.HttpContext.Request.IsAjaxRequest())
                 {
                     TData obj = new TData();
@@ -56,6 +53,7 @@ namespace YiSha.Admin.Web.Controllers
                     context.Result = new RedirectResult("~/Home/Login");
                     return;
                 }
+
                 #endregion
             }
             else
@@ -77,7 +75,8 @@ namespace YiSha.Admin.Web.Controllers
                         {
                             hasPermission = true;
 
-                            #region  新增和修改判断
+                            #region 新增和修改判断
+
                             if (context.RouteData.Values["Action"].ToString() == "SaveFormJson")
                             {
                                 var id = context.HttpContext.Request.Form["Id"];
@@ -96,6 +95,7 @@ namespace YiSha.Admin.Web.Controllers
                                     }
                                 }
                             }
+
                             #endregion
                         }
                         if (!hasPermission)

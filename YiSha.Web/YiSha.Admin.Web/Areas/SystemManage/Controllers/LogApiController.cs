@@ -1,26 +1,21 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using YiSha.Util;
-using YiSha.Util.Model;
-using YiSha.Entity;
-using YiSha.Model;
 using YiSha.Admin.Web.Controllers;
-using YiSha.Entity.SystemManage;
 using YiSha.Business.SystemManage;
+using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
+using YiSha.Util.Model;
 
 namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
 {
     [Area("SystemManage")]
     public class LogApiController : BaseController
     {
-        private LogApiBLL logApiBLL = new LogApiBLL();
+        private readonly LogApiBLL _logApiBLL = new();
 
         #region 视图功能
+
         public IActionResult LogApiIndex()
         {
             return View();
@@ -30,45 +25,50 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         {
             return View();
         }
+
         #endregion
 
         #region 获取数据
+
         [HttpGet]
         public async Task<IActionResult> GetListJson(LogApiListParam param)
         {
-            TData<List<LogApiEntity>> obj = await logApiBLL.GetList(param);
+            TData<List<LogApiEntity>> obj = await _logApiBLL.GetList(param);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetPageListJson(LogApiListParam param, Pagination pagination)
         {
-            TData<List<LogApiEntity>> obj = await logApiBLL.GetPageList(param, pagination);
+            TData<List<LogApiEntity>> obj = await _logApiBLL.GetPageList(param, pagination);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetFormJson(long id)
         {
-            TData<LogApiEntity> obj = await logApiBLL.GetEntity(id);
+            TData<LogApiEntity> obj = await _logApiBLL.GetEntity(id);
             return Json(obj);
         }
+
         #endregion
 
         #region 提交数据
+
         [HttpPost]
         public async Task<IActionResult> DeleteFormJson(string ids)
         {
-            TData obj = await logApiBLL.DeleteForm(ids);
+            TData obj = await _logApiBLL.DeleteForm(ids);
             return Json(obj);
         }
 
         [HttpPost]
         public async Task<IActionResult> RemoveAllFormJson()
         {
-            TData obj = await logApiBLL.RemoveAllForm();
+            TData obj = await _logApiBLL.RemoveAllForm();
             return Json(obj);
         }
+
         #endregion
     }
 }

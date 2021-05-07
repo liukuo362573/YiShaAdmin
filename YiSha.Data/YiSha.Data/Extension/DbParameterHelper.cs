@@ -1,12 +1,12 @@
-﻿using System;
-using System.Data.Common;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using MySqlConnector;
 using Oracle.ManagedDataAccess.Client;
+using System;
+using System.Data.Common;
 using System.Linq;
 using YiSha.Util.Extension;
 
-namespace YiSha.Data
+namespace YiSha.Data.Extension
 {
     public static class DbParameterHelper
     {

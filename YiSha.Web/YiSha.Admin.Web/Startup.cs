@@ -1,30 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
-using Newtonsoft.Json.Serialization;
-using Microsoft.Extensions.FileProviders;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Serialization;
+using System.IO;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
+using YiSha.Admin.Web.Filter;
 using YiSha.Util;
+using YiSha.Util.Helper;
 using YiSha.Util.Model;
-using YiSha.Admin.Web.Controllers;
-using Microsoft.Extensions.Logging;
 
 namespace YiSha.Admin.Web
 {
     public class Startup
     {
         public IConfiguration Configuration { get; }
+
         public IWebHostEnvironment WebHostEnvironment { get; set; }
 
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
@@ -68,7 +65,7 @@ namespace YiSha.Admin.Web
 
             services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(GlobalContext.HostingEnvironment.ContentRootPath + Path.DirectorySeparatorChar + "DataProtection"));
 
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);  // 注册Encoding
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // 注册Encoding
 
             GlobalContext.SystemConfig = Configuration.GetSection("SystemConfig").Get<SystemConfig>();
             GlobalContext.Services = services;

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using YiSha.Entity.OrganizationManage;
+﻿using System.Collections.Generic;
 
 namespace YiSha.Model.Param.OrganizationManage
 {
@@ -22,8 +20,9 @@ namespace YiSha.Model.Param.OrganizationManage
     public class ChangePasswordParam
     {
         public long? Id { get; set; }
+
         public string Password { get; set; }
+
         public string NewPassword { get; set; }
     }
-
 }

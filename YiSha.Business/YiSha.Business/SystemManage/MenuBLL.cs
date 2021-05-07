@@ -1,33 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using YiSha.Entity;
-using YiSha.Service;
-using YiSha.Service.SystemManage;
-using YiSha.Entity.SystemManage;
-using YiSha.Model.Result;
-using YiSha.Model;
-using YiSha.Util.Model;
 using YiSha.Business.Cache;
+using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
+using YiSha.Model.Result;
+using YiSha.Service.SystemManage;
 using YiSha.Util.Extension;
+using YiSha.Util.Model;
 
 namespace YiSha.Business.SystemManage
 {
     public class MenuBLL
     {
-        private MenuService menuService = new MenuService();
+        private readonly MenuService _menuService = new();
 
-        private MenuCache menuCache = new MenuCache();
+        private readonly MenuCache _menuCache = new();
 
         #region 获取数据
+
         public async Task<TData<List<MenuEntity>>> GetList(MenuListParam param)
         {
             var obj = new TData<List<MenuEntity>>();
 
-            List<MenuEntity> list = await menuCache.GetList();
+            List<MenuEntity> list = await _menuCache.GetList();
             list = ListFilter(param, list);
 
             obj.Data = list;
@@ -40,7 +36,7 @@ namespace YiSha.Business.SystemManage
             var obj = new TData<List<ZtreeInfo>>();
             obj.Data = new List<ZtreeInfo>();
 
-            List<MenuEntity> list = await menuCache.GetList();
+            List<MenuEntity> list = await _menuCache.GetList();
             list = ListFilter(param, list);
 
             foreach (MenuEntity menu in list)
@@ -60,13 +56,13 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<MenuEntity>> GetEntity(long id)
         {
             TData<MenuEntity> obj = new TData<MenuEntity>();
-            obj.Data = await menuService.GetEntity(id);
+            obj.Data = await _menuService.GetEntity(id);
             if (obj.Data != null)
             {
                 long parentId = obj.Data.ParentId.Value;
                 if (parentId > 0)
                 {
-                    MenuEntity parentMenu = await menuService.GetEntity(parentId);
+                    MenuEntity parentMenu = await _menuService.GetEntity(parentId);
                     if (parentMenu != null)
                     {
                         obj.Data.ParentName = parentMenu.MenuName;
@@ -84,13 +80,15 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<int>> GetMaxSort(long parentId)
         {
             TData<int> obj = new TData<int>();
-            obj.Data = await menuService.GetMaxSort(parentId);
+            obj.Data = await _menuService.GetMaxSort(parentId);
             obj.Tag = 1;
             return obj;
         }
+
         #endregion
 
         #region 提交数据
+
         public async Task<TData<string>> SaveForm(MenuEntity entity)
         {
             TData<string> obj = new TData<string>();
@@ -99,14 +97,14 @@ namespace YiSha.Business.SystemManage
                 obj.Message = "不能选择自己作为上级菜单！";
                 return obj;
             }
-            if (menuService.ExistMenuName(entity))
+            if (_menuService.ExistMenuName(entity))
             {
                 obj.Message = "菜单名称已经存在！";
                 return obj;
             }
-            await menuService.SaveForm(entity);
+            await _menuService.SaveForm(entity);
 
-            menuCache.Remove();
+            _menuCache.Remove();
 
             obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
@@ -116,15 +114,17 @@ namespace YiSha.Business.SystemManage
         public async Task<TData> DeleteForm(string ids)
         {
             TData obj = new TData();
-            await menuService.DeleteForm(ids);
+            await _menuService.DeleteForm(ids);
 
-            menuCache.Remove();
+            _menuCache.Remove();
             obj.Tag = 1;
             return obj;
         }
+
         #endregion
 
         #region 私有方法
+
         private List<MenuEntity> ListFilter(MenuListParam param, List<MenuEntity> list)
         {
             if (param != null)
@@ -140,6 +140,7 @@ namespace YiSha.Business.SystemManage
             }
             return list;
         }
+
         #endregion
     }
 }

@@ -1,14 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using NUnit.Framework;
-using YiSha.Cache.Factory;
-using YiSha.Util;
-using YiSha.Util.Model;
-using YiSha.Business;
+using System.Threading.Tasks;
 using YiSha.Business.SystemManage;
+using YiSha.Cache.Factory;
 using YiSha.Entity.SystemManage;
+using YiSha.Util.Model;
 
 namespace YiSha.CacheTest
 {
@@ -19,8 +17,8 @@ namespace YiSha.CacheTest
         {
             GlobalContext.SystemConfig = new SystemConfig
             {
-                DBProvider = "MySql",
-                DBConnectionString = "server=localhost;database=YiShaAdmin;user=root;password=123456;port=3306;",
+                DbProvider = "MySql",
+                DbConnectionString = "server=localhost;database=YiShaAdmin;user=root;password=123456;port=3306;",
 
                 CacheProvider = "Redis",
                 RedisConnectionString = "127.0.0.1:6379"
@@ -32,7 +30,7 @@ namespace YiSha.CacheTest
         {
             string key = "test_simple_key";
             string value = "test_simple_value";
-            CacheFactory.Cache.SetCache<string>(key, value);
+            CacheFactory.Cache.SetCache(key, value);
 
             Assert.AreEqual(value, CacheFactory.Cache.GetCache<string>(key));
         }
@@ -42,7 +40,7 @@ namespace YiSha.CacheTest
         {
             string key = "test_complex_key";
             TData<string> value = new TData<string> { Tag = 1, Data = "测试Redis" };
-            CacheFactory.Cache.SetCache<TData<string>>(key, value);
+            CacheFactory.Cache.SetCache(key, value);
 
             var result = CacheFactory.Cache.GetCache<TData<string>>(key);
             if (result.Tag == 1)
@@ -64,7 +62,7 @@ namespace YiSha.CacheTest
             string key = "test_performance_key";
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            CacheFactory.Cache.SetCache<List<LogLoginEntity>>(key, obj.Data);
+            CacheFactory.Cache.SetCache(key, obj.Data);
             sw.Stop();
             Console.WriteLine(nameof(TestRedisPerformance) + " Redis Write Time:" + sw.ElapsedMilliseconds + " ms");
 

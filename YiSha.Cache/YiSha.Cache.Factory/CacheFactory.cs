@@ -1,36 +1,34 @@
-﻿using YiSha.Util;
-using YiSha.Cache.Interface;
+﻿using YiSha.Cache.Interface;
 using YiSha.MemoryCache;
 using YiSha.RedisCache;
+using YiSha.Util.Model;
 
 namespace YiSha.Cache.Factory
 {
-    public class CacheFactory
+    public static class CacheFactory
     {
-        private static ICache cache = null;
-        private static readonly object lockHelper = new object();
+        private static ICache _cache;
+
+        private static readonly object _lockHelper = new();
 
         public static ICache Cache
         {
             get
             {
-                if (cache == null)
+                if (_cache != null)
                 {
-                    lock (lockHelper)
-                    {
-                        if (cache == null)
-                        {
-                            switch (GlobalContext.SystemConfig.CacheProvider)
-                            {
-                                case "Redis": cache = new RedisCacheImp(); break;
-
-                                default:
-                                case "Memory": cache = new MemoryCacheImp(); break;
-                            }
-                        }
-                    }
+                    return _cache;
                 }
-                return cache;
+                lock (_lockHelper)
+                {
+                    _cache ??= GlobalContext.SystemConfig.CacheProvider switch
+                    {
+                        "Redis" => new RedisCacheImp(),
+                        "Memory" => new MemoryCacheImp(),
+                        _ => _cache
+                    };
+                }
+                return _cache;
             }
         }
     }

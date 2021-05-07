@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <LangVersion>9</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,10 +11,6 @@
     <ProjectReference Include="..\..\YiSha.Util\YiSha.CodeGenerator\YiSha.CodeGenerator.csproj" />
     <ProjectReference Include="..\YiSha.Business.Cache\YiSha.Business.Cache.csproj" />
     <ProjectReference Include="..\YiSha.Service\YiSha.Service.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ToolManage\" />
   </ItemGroup>
 
 </Project>

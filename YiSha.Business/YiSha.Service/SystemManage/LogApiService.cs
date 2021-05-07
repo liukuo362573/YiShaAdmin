@@ -1,28 +1,28 @@
 ﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using YiSha.Util;
-using YiSha.Util.Extension;
-using YiSha.Util.Model;
+using YiSha.Data.Extension;
 using YiSha.Data.Repository;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
-using System.Text;
-using System.Data.Common;
-using YiSha.Data;
+using YiSha.Util.Extension;
+using YiSha.Util.Helper;
+using YiSha.Util.Model;
 
 namespace YiSha.Service.SystemManage
 {
     public class LogApiService : RepositoryFactory
     {
         #region 获取数据
+
         public async Task<List<LogApiEntity>> GetList(LogApiListParam param)
         {
             var strSql = new StringBuilder();
             List<DbParameter> filter = ListFilter(param, strSql);
-            var list = await this.BaseRepository().FindList<LogApiEntity>(strSql.ToString(), filter.ToArray());
+            var list = await BaseRepository().FindList<LogApiEntity>(strSql.ToString(), filter.ToArray());
             return list.ToList();
         }
 
@@ -30,43 +30,47 @@ namespace YiSha.Service.SystemManage
         {
             var strSql = new StringBuilder();
             List<DbParameter> filter = ListFilter(param, strSql);
-            var list = await this.BaseRepository().FindList<LogApiEntity>(strSql.ToString(), filter.ToArray(), pagination);
+            var list = await BaseRepository().FindList<LogApiEntity>(strSql.ToString(), filter.ToArray(), pagination);
             return list.ToList();
         }
 
         public async Task<LogApiEntity> GetEntity(long id)
         {
-            return await this.BaseRepository().FindEntity<LogApiEntity>(id);
+            return await BaseRepository().FindEntity<LogApiEntity>(id);
         }
+
         #endregion
 
         #region 提交数据
+
         public async Task SaveForm(LogApiEntity entity)
         {
             if (entity.Id.IsNullOrZero())
             {
                 await entity.Create();
-                await this.BaseRepository().Insert<LogApiEntity>(entity);
+                await BaseRepository().Insert(entity);
             }
             else
             {
-                await this.BaseRepository().Update<LogApiEntity>(entity);
+                await BaseRepository().Update(entity);
             }
         }
 
         public async Task DeleteForm(string ids)
         {
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
-            await this.BaseRepository().Delete<LogApiEntity>(idArr);
+            await BaseRepository().Delete<LogApiEntity>(idArr);
         }
 
         public async Task RemoveAllForm()
         {
-            await this.BaseRepository().ExecuteBySql("truncate table SysLogApi");
+            await BaseRepository().ExecuteBySql("truncate table SysLogApi");
         }
+
         #endregion
 
         #region 私有方法
+
         private List<DbParameter> ListFilter(LogApiListParam param, StringBuilder strSql)
         {
             strSql.Append(@"SELECT  a.Id,
@@ -116,6 +120,7 @@ namespace YiSha.Service.SystemManage
             }
             return parameter;
         }
+
         #endregion
     }
 }

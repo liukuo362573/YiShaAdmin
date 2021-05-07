@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace YiSha.Entity.OrganizationManage
 {
@@ -11,8 +6,11 @@ namespace YiSha.Entity.OrganizationManage
     public class PositionEntity : BaseExtensionEntity
     {
         public string PositionName { get; set; }
+
         public int? PositionSort { get; set; }
+
         public int? PositionStatus { get; set; }
+
         public string Remark { get; set; }
     }
 }

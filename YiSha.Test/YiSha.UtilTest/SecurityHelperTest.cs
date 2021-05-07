@@ -1,6 +1,5 @@
-﻿using System;
-using NUnit.Framework;
-using YiSha.Util;
+﻿using NUnit.Framework;
+using YiSha.Util.Helper;
 
 namespace YiSha.UtilTest
 {

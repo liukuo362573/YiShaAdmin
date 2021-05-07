@@ -1,30 +1,30 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using System.Data;
-using Microsoft.AspNetCore.Mvc;
 using YiSha.Admin.Web.Controllers;
+using YiSha.Admin.Web.Filter;
 using YiSha.Business.SystemManage;
 using YiSha.CodeGenerator.Model;
 using YiSha.CodeGenerator.Template;
 using YiSha.Entity;
 using YiSha.Model.Result;
 using YiSha.Model.Result.SystemManage;
-using YiSha.Util;
+using YiSha.Util.Extension;
 using YiSha.Util.Model;
 using YiSha.Web.Code;
-using YiSha.CodeGenerator;
 
 namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
 {
     [Area("ToolManage")]
     public class CodeGeneratorController : BaseController
     {
-        private DatabaseTableBLL databaseTableBLL = new DatabaseTableBLL();
+        private readonly DatabaseTableBLL _databaseTableBLL = new();
 
         #region 视图功能
+
         [AuthorizeFilter("tool:codegenerator:view")]
         public IActionResult CodeGeneratorIndex()
         {
@@ -55,35 +55,33 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
         #endregion
 
         #region 获取数据
-        [HttpGet]
-        [AuthorizeFilter("tool:codegenerator:search")]
+
+        [HttpGet, AuthorizeFilter("tool:codegenerator:search")]
         public async Task<IActionResult> GetTableFieldTreeListJson(string tableName)
         {
-            TData<List<ZtreeInfo>> obj = await databaseTableBLL.GetTableFieldZtreeList(tableName);
+            TData<List<ZtreeInfo>> obj = await _databaseTableBLL.GetTableFieldZtreeList(tableName);
             return Json(obj);
         }
 
-        [HttpGet]
-        [AuthorizeFilter("tool:codegenerator:search")]
+        [HttpGet, AuthorizeFilter("tool:codegenerator:search")]
         public async Task<IActionResult> GetTableFieldTreePartListJson(string tableName, int upper = 0)
         {
-            TData<List<ZtreeInfo>> obj = await databaseTableBLL.GetTableFieldZtreeList(tableName);
+            TData<List<ZtreeInfo>> obj = await _databaseTableBLL.GetTableFieldZtreeList(tableName);
             if (obj.Data != null)
             {
                 // 基础字段不显示出来
-                obj.Data.RemoveAll(p => BaseField.BaseFieldList.Contains(p.name));                
+                obj.Data.RemoveAll(p => BaseField.BaseFieldList.Contains(p.name));
             }
             return Json(obj);
         }
 
-        [HttpGet]
-        [AuthorizeFilter("tool:codegenerator:search")]
+        [HttpGet, AuthorizeFilter("tool:codegenerator:search")]
         public async Task<IActionResult> GetBaseConfigJson(string tableName)
         {
             TData<BaseConfigModel> obj = new TData<BaseConfigModel>();
 
             string tableDescription = string.Empty;
-            TData<List<TableFieldInfo>> tDataTableField = await databaseTableBLL.GetTableFieldList(tableName);
+            TData<List<TableFieldInfo>> tDataTableField = await _databaseTableBLL.GetTableFieldList(tableName);
             List<string> columnList = tDataTableField.Data.Where(p => !BaseField.BaseFieldList.Contains(p.TableColumn)).Select(p => p.TableColumn).ToList();
 
             OperatorInfo operatorInfo = await Operator.Instance.Current();
@@ -92,11 +90,12 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
             obj.Tag = 1;
             return Json(obj);
         }
+
         #endregion
 
         #region 提交数据
-        [HttpPost]
-        [AuthorizeFilter("tool:codegenerator:add")]
+
+        [HttpPost, AuthorizeFilter("tool:codegenerator:add")]
         public async Task<IActionResult> CodePreviewJson(BaseConfigModel baseConfig)
         {
             TData<object> obj = new TData<object>();
@@ -107,8 +106,8 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
             else
             {
                 SingleTableTemplate template = new SingleTableTemplate();
-                TData<List<TableFieldInfo>> objTable = await databaseTableBLL.GetTableFieldList(baseConfig.TableName);
-                DataTable dt = DataTableHelper.ListToDataTable(objTable.Data);  // 用DataTable类型，避免依赖
+                TData<List<TableFieldInfo>> objTable = await _databaseTableBLL.GetTableFieldList(baseConfig.TableName);
+                DataTable dt = objTable.Data.ToDataTable(); // 用DataTable类型，避免依赖
                 string codeEntity = template.BuildEntity(baseConfig, dt);
                 string codeEntityParam = template.BuildEntityParam(baseConfig);
                 string codeService = template.BuildService(baseConfig, dt);
@@ -135,9 +134,8 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
             return Json(obj);
         }
 
-        [HttpPost]
-        [AuthorizeFilter("tool:codegenerator:add")]
-        public async Task<IActionResult> CodeGenerateJson(BaseConfigModel baseConfig, string Code)
+        [HttpPost, AuthorizeFilter("tool:codegenerator:add")]
+        public async Task<IActionResult> CodeGenerateJson(BaseConfigModel baseConfig, string code)
         {
             TData<List<KeyValue>> obj = new TData<List<KeyValue>>();
             if (!GlobalContext.SystemConfig.Debug)
@@ -147,12 +145,13 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
             else
             {
                 SingleTableTemplate template = new SingleTableTemplate();
-                List<KeyValue> result = await template.CreateCode(baseConfig, HttpUtility.UrlDecode(Code));
+                List<KeyValue> result = await template.CreateCode(baseConfig, HttpUtility.UrlDecode(code));
                 obj.Data = result;
                 obj.Tag = 1;
             }
             return Json(obj);
         }
+
         #endregion
     }
 }

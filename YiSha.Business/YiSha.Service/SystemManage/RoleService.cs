@@ -8,31 +8,32 @@ using YiSha.Entity.SystemManage;
 using YiSha.Enum.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Util.Extension;
+using YiSha.Util.Helper;
 using YiSha.Util.Model;
-using YiSha.Util;
 
 namespace YiSha.Service.SystemManage
 {
     public class RoleService : RepositoryFactory
     {
         #region 获取数据
+
         public async Task<List<RoleEntity>> GetList(RoleListParam param)
         {
             var expression = ListFilter(param);
-            var list = await this.BaseRepository().FindList(expression);
+            var list = await BaseRepository().FindList(expression);
             return list.ToList();
         }
 
         public async Task<List<RoleEntity>> GetPageList(RoleListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
-            var list = await this.BaseRepository().FindList(expression, pagination);
+            var list = await BaseRepository().FindList(expression, pagination);
             return list.ToList();
         }
 
         public async Task<RoleEntity> GetEntity(long id)
         {
-            return await this.BaseRepository().FindEntity<RoleEntity>(id);
+            return await BaseRepository().FindEntity<RoleEntity>(id);
         }
 
         public async Task<int> GetMaxSort()
@@ -53,14 +54,16 @@ namespace YiSha.Service.SystemManage
             {
                 expression = expression.And(t => t.RoleName == entity.RoleName && t.Id != entity.Id);
             }
-            return this.BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
+            return BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
         }
+
         #endregion
 
         #region 提交数据
+
         public async Task SaveForm(RoleEntity entity)
         {
-            var db = await this.BaseRepository().BeginTrans();
+            var db = await BaseRepository().BeginTrans();
             try
             {
                 if (entity.Id.IsNullOrZero())
@@ -99,11 +102,13 @@ namespace YiSha.Service.SystemManage
         public async Task DeleteForm(string ids)
         {
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
-            await this.BaseRepository().Delete<RoleEntity>(idArr);
+            await BaseRepository().Delete<RoleEntity>(idArr);
         }
+
         #endregion
 
         #region 私有方法
+
         private Expression<Func<RoleEntity, bool>> ListFilter(RoleListParam param)
         {
             var expression = LinqExtensions.True<RoleEntity>();
@@ -138,6 +143,7 @@ namespace YiSha.Service.SystemManage
             }
             return expression;
         }
+
         #endregion
     }
 }

@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
-using YiSha.Util.Extension;
-using YiSha.Util.Model;
-using YiSha.Util;
+using System;
 using System.Diagnostics;
-using YiSha.Entity.SystemManage;
-using System.Reflection;
+using System.Linq;
 using System.Text;
-using YiSha.Web.Code;
+using System.Threading.Tasks;
 using YiSha.Business.SystemManage;
+using YiSha.Entity.SystemManage;
 using YiSha.Enum;
+using YiSha.Util.Extension;
+using YiSha.Util.Helper;
+using YiSha.Util.Model;
+using YiSha.Web.Code;
 
 namespace YiSha.Admin.Web.Controllers
 {
@@ -35,7 +33,7 @@ namespace YiSha.Admin.Web.Controllers
             {
                 if (context.HttpContext.Request.Method.ToUpper() == "POST")
                 {
-                    string[] allowAction = new string[] { "LoginJson", "ExportUserJson", "CodePreviewJson" };
+                    string[] allowAction = new[] { "LoginJson", "ExportUserJson", "CodePreviewJson" };
                     if (!allowAction.Select(p => p.ToUpper()).Contains(action.ToUpper()))
                     {
                         TData obj = new TData();
@@ -55,10 +53,11 @@ namespace YiSha.Admin.Web.Controllers
             var controllerName = context.RouteData.Values["controller"] + "/";
             string currentUrl = "/" + areaName + controllerName + action;
 
-            string[] notLogAction = new string[] { "GetServerJson", "Error" };
+            string[] notLogAction = new[] { "GetServerJson", "Error" };
             if (!notLogAction.Select(p => p.ToUpper()).Contains(action.ToUpper()))
             {
                 #region 获取请求参数
+
                 switch (context.HttpContext.Request.Method.ToUpper())
                 {
                     case "GET":
@@ -77,9 +76,11 @@ namespace YiSha.Admin.Web.Controllers
                         }
                         break;
                 }
+
                 #endregion
 
                 #region 异常获取
+
                 StringBuilder sbException = new StringBuilder();
                 if (resultContext.Exception != null)
                 {
@@ -97,9 +98,11 @@ namespace YiSha.Admin.Web.Controllers
                 {
                     operateEntity.LogStatus = OperateStatusEnum.Success.ParseToInt();
                 }
+
                 #endregion
 
-                #region 日志实体                  
+                #region 日志实体
+
                 if (user != null)
                 {
                     operateEntity.BaseCreatorId = user.UserId;
@@ -109,6 +112,7 @@ namespace YiSha.Admin.Web.Controllers
                 operateEntity.IpAddress = ip;
                 operateEntity.ExecuteUrl = currentUrl.Replace("//", "/");
                 operateEntity.ExecuteResult = TextHelper.GetSubString(sbException.ToString(), 4000);
+
                 #endregion
 
                 Action taskAction = async () =>

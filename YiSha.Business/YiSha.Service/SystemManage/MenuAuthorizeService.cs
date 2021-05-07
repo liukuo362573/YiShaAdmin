@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using YiSha.Data.Repository;
 using YiSha.Entity.SystemManage;
-using YiSha.Util;
 using YiSha.Util.Extension;
-using YiSha.Util.Model;
+using YiSha.Util.Helper;
 
 namespace YiSha.Service.SystemManage
 {
     public class MenuAuthorizeService : RepositoryFactory
     {
         #region 获取数据
+
         public async Task<List<MenuAuthorizeEntity>> GetList(MenuAuthorizeEntity param)
         {
             var expression = LinqExtensions.True<MenuAuthorizeEntity>();
@@ -33,34 +31,37 @@ namespace YiSha.Service.SystemManage
                     expression = expression.And(t => authorizeIdArr.Contains(t.AuthorizeId.Value));
                 }
             }
-            var list = await this.BaseRepository().FindList<MenuAuthorizeEntity>(expression);
+            var list = await BaseRepository().FindList(expression);
             return list.ToList();
         }
 
         public async Task<MenuAuthorizeEntity> GetEntity(long id)
         {
-            return await this.BaseRepository().FindEntity<MenuAuthorizeEntity>(id);
+            return await BaseRepository().FindEntity<MenuAuthorizeEntity>(id);
         }
+
         #endregion
 
         #region 提交数据
+
         public async Task SaveForm(MenuAuthorizeEntity entity)
         {
             if (entity.Id.IsNullOrZero())
             {
                 await entity.Create();
-                await this.BaseRepository().Insert(entity);
+                await BaseRepository().Insert(entity);
             }
             else
             {
-                await this.BaseRepository().Update(entity);
+                await BaseRepository().Update(entity);
             }
         }
 
         public async Task DeleteForm(long id)
         {
-            await this.BaseRepository().Delete<MenuAuthorizeEntity>(id);
+            await BaseRepository().Delete<MenuAuthorizeEntity>(id);
         }
+
         #endregion
     }
 }

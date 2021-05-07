@@ -1,18 +1,19 @@
-﻿using System.Text;
-using System.IO;
-using Newtonsoft.Json.Serialization;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using YiSha.Util;
-using YiSha.Util.Model;
+using Newtonsoft.Json.Serialization;
+using System.IO;
+using System.Text;
+using YiSha.Admin.WebApi.Filter;
 using YiSha.Business.AutoJob;
-using YiSha.Admin.WebApi.Controllers;
+using YiSha.Util;
+using YiSha.Util.Helper;
+using YiSha.Util.Model;
 
 namespace YiSha.Admin.WebApi
 {
@@ -30,17 +31,11 @@ namespace YiSha.Admin.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSwaggerGen(config =>
-            {
-                config.SwaggerDoc("v1", new OpenApiInfo { Title = "YiSha Api", Version = "v1" });
-            });
+            services.AddSwaggerGen(config => { config.SwaggerDoc("v1", new OpenApiInfo { Title = "YiSha Api", Version = "v1" }); });
 
             services.AddOptions();
             services.AddCors();
-            services.AddControllers(options =>
-            {
-                options.ModelMetadataDetailsProviders.Add(new ModelBindingMetadataProvider());
-            }).AddNewtonsoftJson(options =>
+            services.AddControllers(options => { options.ModelMetadataDetailsProviders.Add(new ModelBindingMetadataProvider()); }).AddNewtonsoftJson(options =>
             {
                 // 返回数据首字母不小写，CamelCasePropertyNamesContractResolver是小写
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
@@ -49,8 +44,8 @@ namespace YiSha.Admin.WebApi
             services.AddMemoryCache();
 
             services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(GlobalContext.HostingEnvironment.ContentRootPath + Path.DirectorySeparatorChar + "DataProtection"));
-                       
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);  // 注册Encoding
+
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // 注册Encoding
 
             GlobalContext.SystemConfig = Configuration.GetSection("SystemConfig").Get<SystemConfig>();
             GlobalContext.Services = services;
@@ -86,24 +81,15 @@ namespace YiSha.Admin.WebApi
 
             app.UseMiddleware(typeof(GlobalExceptionMiddleware));
 
-            app.UseCors(builder =>
-            {
-                builder.WithOrigins(GlobalContext.SystemConfig.AllowCorsSite.Split(',')).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
-            });
-            app.UseSwagger(c =>
-            {
-                c.RouteTemplate = "api-doc/{documentName}/swagger.json";
-            });
+            app.UseCors(builder => { builder.WithOrigins(GlobalContext.SystemConfig.AllowCorsSite.Split(',')).AllowAnyHeader().AllowAnyMethod().AllowCredentials(); });
+            app.UseSwagger(c => { c.RouteTemplate = "api-doc/{documentName}/swagger.json"; });
             app.UseSwaggerUI(c =>
             {
                 c.RoutePrefix = "api-doc";
                 c.SwaggerEndpoint("v1/swagger.json", "YiSha Api v1");
             });
             app.UseRouting();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute("default", "{controller=ApiHome}/{action=Index}/{id?}");
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllerRoute("default", "{controller=ApiHome}/{action=Index}/{id?}"); });
             GlobalContext.ServiceProvider = app.ApplicationServices;
             if (!GlobalContext.SystemConfig.Debug)
             {

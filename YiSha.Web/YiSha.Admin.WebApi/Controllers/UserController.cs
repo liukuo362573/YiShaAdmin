@@ -1,30 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using YiSha.Admin.WebApi.Filter;
 using YiSha.Business.OrganizationManage;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Enum;
-using YiSha.Model.Result.SystemManage;
-using YiSha.Util;
 using YiSha.Util.Model;
 using YiSha.Web.Code;
 
 namespace YiSha.Admin.WebApi.Controllers
 {
-    [Route("[controller]/[action]")]
-    [ApiController]
-    [AuthorizeFilter]
+    [Route("[controller]/[action]"), ApiController, AuthorizeFilter]
     public class UserController : ControllerBase
     {
-        private UserBLL userBLL = new UserBLL();
+        private readonly UserBLL _userBLL = new();
 
-        #region 获取数据       
+        #region 获取数据
+
         #endregion
 
         #region 提交数据
+
         /// <summary>
         /// 用户登录
         /// </summary>
@@ -35,7 +30,7 @@ namespace YiSha.Admin.WebApi.Controllers
         public async Task<TData<OperatorInfo>> Login([FromQuery] string userName, [FromQuery] string password)
         {
             TData<OperatorInfo> obj = new TData<OperatorInfo>();
-            TData<UserEntity> userObj = await userBLL.CheckLogin(userName, password, (int)PlatformEnum.WebApi);
+            TData<UserEntity> userObj = await _userBLL.CheckLogin(userName, password, (int)PlatformEnum.WebApi);
             if (userObj.Tag == 1)
             {
                 await new UserBLL().UpdateUser(userObj.Data);
@@ -60,6 +55,7 @@ namespace YiSha.Admin.WebApi.Controllers
             obj.Message = "登出成功";
             return obj;
         }
+
         #endregion
     }
 }

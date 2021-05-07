@@ -1,7 +1,7 @@
 ﻿using System;
-using YiSha.Util;
+using YiSha.Util.Helper;
 
-namespace YiSha.Data
+namespace YiSha.Data.Extension
 {
     public static class DbPagingHelper
     {
