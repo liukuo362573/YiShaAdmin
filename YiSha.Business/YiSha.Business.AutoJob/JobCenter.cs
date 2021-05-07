@@ -1,17 +1,11 @@
-﻿using System;
+﻿using Quartz;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using Quartz;
-using YiSha.Entity.SystemManage;
-using YiSha.Service.SystemManage;
-using YiSha.Util;
-using YiSha.Util.Model;
-using YiSha.Util.Extension;
-using YiSha.Enum;
 using YiSha.Business.SystemManage;
+using YiSha.Entity.SystemManage;
+using YiSha.Util.Helper;
+using YiSha.Util.Model;
 
 namespace YiSha.Business.AutoJob
 {
@@ -30,10 +24,10 @@ namespace YiSha.Business.AutoJob
         }
 
         #region 添加任务计划
+
         /// <summary>
         /// 添加任务计划
         /// </summary>
-        /// <returns></returns>
         private void AddScheduleJob(List<AutoJobEntity> entityList)
         {
             try
@@ -55,12 +49,7 @@ namespace YiSha.Business.AutoJob
                     IJobDetail job = JobBuilder.Create<JobExecute>().WithIdentity(entity.JobName, entity.JobGroupName).Build();
                     job.JobDataMap.Add("Id", entity.Id);
 
-                    ICronTrigger trigger = (ICronTrigger)TriggerBuilder.Create()
-                                                 .StartAt(starRunTime)
-                                                 .EndAt(endRunTime)
-                                                 .WithIdentity(entity.JobName, entity.JobGroupName)
-                                                 .WithCronSchedule(entity.CronExpression)
-                                                 .Build();
+                    ICronTrigger trigger = (ICronTrigger)TriggerBuilder.Create().StartAt(starRunTime).EndAt(endRunTime).WithIdentity(entity.JobName, entity.JobGroupName).WithCronSchedule(entity.CronExpression).Build();
 
                     scheduler.ScheduleJob(job, trigger);
                     scheduler.Start();
@@ -71,13 +60,14 @@ namespace YiSha.Business.AutoJob
                 LogHelper.Error(ex);
             }
         }
-        #endregion
+
+        #endregion 添加任务计划
 
         #region 添加任务计划
+
         /// <summary>
         /// 添加任务计划
         /// </summary>
-        /// <returns></returns>
         public void ClearScheduleJob()
         {
             try
@@ -89,6 +79,7 @@ namespace YiSha.Business.AutoJob
                 LogHelper.Error(ex);
             }
         }
-        #endregion
+
+        #endregion 添加任务计划
     }
 }

@@ -1,39 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YiSha.Util;
+using YiSha.Util.Helper;
 
 namespace YiSha.IdGenerator
 {
     public class Snowflake
     {
-        private const long TwEpoch = 1546272000000L;//2019-01-01 00:00:00
+        private const long _TwEpoch = 1546272000000L; //2019-01-01 00:00:00
 
-        private const int WorkerIdBits = 5;
-        private const int DatacenterIdBits = 5;
-        private const int SequenceBits = 12;
-        private const long MaxWorkerId = -1L ^ (-1L << WorkerIdBits);
-        private const long MaxDatacenterId = -1L ^ (-1L << DatacenterIdBits);
+        private const int _WorkerIdBits = 5;
+        private const int _DatacenterIdBits = 5;
+        private const int _SequenceBits = 12;
+        private const long _MaxWorkerId = -1L ^ (-1L << _WorkerIdBits);
+        private const long _MaxDatacenterId = -1L ^ (-1L << _DatacenterIdBits);
 
-        private const int WorkerIdShift = SequenceBits;
-        private const int DatacenterIdShift = SequenceBits + WorkerIdBits;
-        private const int TimestampLeftShift = SequenceBits + WorkerIdBits + DatacenterIdBits;
-        private const long SequenceMask = -1L ^ (-1L << SequenceBits);
+        private const int _WorkerIdShift = _SequenceBits;
+        private const int _DatacenterIdShift = _SequenceBits + _WorkerIdBits;
+        private const int _TimestampLeftShift = _SequenceBits + _WorkerIdBits + _DatacenterIdBits;
+        private const long _SequenceMask = -1L ^ (-1L << _SequenceBits);
 
         private long _sequence = 0L;
         private long _lastTimestamp = -1L;
+
         /// <summary>
         ///10位的数据机器位中的高位
         /// </summary>
         public long WorkerId { get; protected set; }
+
         /// <summary>
         /// 10位的数据机器位中的低位
         /// </summary>
         public long DatacenterId { get; protected set; }
 
-        private readonly object _lock = new object();
+        private readonly object _lock = new();
+
         /// <summary>
         /// 基于Twitter的snowflake算法
         /// </summary>
@@ -46,14 +45,14 @@ namespace YiSha.IdGenerator
             DatacenterId = datacenterId;
             _sequence = sequence;
 
-            if (workerId > MaxWorkerId || workerId < 0)
+            if (workerId > _MaxWorkerId || workerId < 0)
             {
-                throw new ArgumentException($"worker Id can't be greater than {MaxWorkerId} or less than 0");
+                throw new ArgumentException($"worker Id can't be greater than {_MaxWorkerId} or less than 0");
             }
 
-            if (datacenterId > MaxDatacenterId || datacenterId < 0)
+            if (datacenterId > _MaxDatacenterId || datacenterId < 0)
             {
-                throw new ArgumentException($"datacenter Id can't be greater than {MaxDatacenterId} or less than 0");
+                throw new ArgumentException($"datacenter Id can't be greater than {_MaxDatacenterId} or less than 0");
             }
         }
 
@@ -62,7 +61,6 @@ namespace YiSha.IdGenerator
         /// <summary>
         /// 获取下一个Id，该方法线程安全
         /// </summary>
-        /// <returns></returns>
         public long NextId()
         {
             lock (_lock)
@@ -71,13 +69,12 @@ namespace YiSha.IdGenerator
                 if (timestamp < _lastTimestamp)
                 {
                     //TODO 是否可以考虑直接等待？
-                    throw new Exception(
-                        $"Clock moved backwards or wrapped around. Refusing to generate id for {_lastTimestamp - timestamp} ticks");
+                    throw new Exception($"Clock moved backwards or wrapped around. Refusing to generate id for {_lastTimestamp - timestamp} ticks");
                 }
 
                 if (_lastTimestamp == timestamp)
                 {
-                    _sequence = (_sequence + 1) & SequenceMask;
+                    _sequence = (_sequence + 1) & _SequenceMask;
                     if (_sequence == 0)
                     {
                         timestamp = TilNextMillis(_lastTimestamp);
@@ -88,9 +85,9 @@ namespace YiSha.IdGenerator
                     _sequence = 0;
                 }
                 _lastTimestamp = timestamp;
-                CurrentId = ((timestamp - TwEpoch) << TimestampLeftShift) |
-                         (DatacenterId << DatacenterIdShift) |
-                         (WorkerId << WorkerIdShift) | _sequence;
+                CurrentId = ((timestamp - _TwEpoch) << _TimestampLeftShift) |
+                            (DatacenterId << _DatacenterIdShift) |
+                            (WorkerId << _WorkerIdShift) | _sequence;
 
                 return CurrentId;
             }

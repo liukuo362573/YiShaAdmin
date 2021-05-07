@@ -1,14 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System;
 using System.Threading.Tasks;
-using System.Web;
-using YiSha.Util;
-using YiSha.Util.Extension;
 using YiSha.Cache.Factory;
+using YiSha.Util.Model;
+using YiSha.Web.Code.State;
 
 namespace YiSha.Web.Code
 {
@@ -16,22 +12,22 @@ namespace YiSha.Web.Code
     {
         public static Operator Instance
         {
-            get { return new Operator(); }
+            get { return new(); }
         }
 
-        private string LoginProvider = GlobalContext.Configuration.GetSection("SystemConfig:LoginProvider").Value;
-        private string TokenName = "UserToken"; //cookie name or session name
+        private readonly string _loginProvider = GlobalContext.Configuration.GetSection("SystemConfig:LoginProvider").Value;
+        private readonly string _tokenName = "UserToken"; //cookie name or session name
 
         public async Task AddCurrent(string token)
         {
-            switch (LoginProvider)
+            switch (_loginProvider)
             {
                 case "Cookie":
-                    new CookieHelper().WriteCookie(TokenName, token);
+                    new CookieHelper().WriteCookie(_tokenName, token);
                     break;
 
                 case "Session":
-                    new SessionHelper().WriteSession(TokenName, token);
+                    new SessionHelper().WriteSession(_tokenName, token);
                     break;
 
                 case "WebApi":
@@ -42,8 +38,7 @@ namespace YiSha.Web.Code
                     }
                     break;
 
-                default:
-                    throw new Exception("未找到LoginProvider配置");
+                default: throw new Exception("未找到LoginProvider配置");
             }
         }
 
@@ -53,22 +48,21 @@ namespace YiSha.Web.Code
         /// <param name="apiToken"></param>
         public void RemoveCurrent(string apiToken = "")
         {
-            switch (LoginProvider)
+            switch (_loginProvider)
             {
                 case "Cookie":
-                    new CookieHelper().RemoveCookie(TokenName);
+                    new CookieHelper().RemoveCookie(_tokenName);
                     break;
 
                 case "Session":
-                    new SessionHelper().RemoveSession(TokenName);
+                    new SessionHelper().RemoveSession(_tokenName);
                     break;
 
                 case "WebApi":
                     CacheFactory.Cache.RemoveCache(apiToken);
                     break;
 
-                default:
-                    throw new Exception("未找到LoginProvider配置");
+                default: throw new Exception("未找到LoginProvider配置");
             }
         }
 
@@ -82,19 +76,19 @@ namespace YiSha.Web.Code
             IHttpContextAccessor hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
             OperatorInfo user = null;
             string token = string.Empty;
-            switch (LoginProvider)
+            switch (_loginProvider)
             {
                 case "Cookie":
                     if (hca.HttpContext != null)
                     {
-                        token = new CookieHelper().GetCookie(TokenName);
+                        token = new CookieHelper().GetCookie(_tokenName);
                     }
                     break;
 
                 case "Session":
                     if (hca.HttpContext != null)
                     {
-                        token = new SessionHelper().GetSession(TokenName);
+                        token = new SessionHelper().GetSession(_tokenName);
                     }
                     break;
 

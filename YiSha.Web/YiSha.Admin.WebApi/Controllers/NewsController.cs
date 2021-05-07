@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using YiSha.Admin.WebApi.Filter;
 using YiSha.Business.OrganizationManage;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Model.Param;
@@ -12,14 +10,13 @@ using YiSha.Util.Model;
 
 namespace YiSha.Admin.WebApi.Controllers
 {
-    [Route("[controller]/[action]")]
-    [ApiController]
-    [AuthorizeFilter]
+    [Route("[controller]/[action]"), ApiController, AuthorizeFilter]
     public class NewsController : ControllerBase
     {
-        private NewsBLL newsBLL = new NewsBLL();
+        private readonly NewsBLL _newsBLL = new();
 
         #region 获取数据
+
         /// <summary>
         /// 获取文章列表
         /// </summary>
@@ -29,7 +26,7 @@ namespace YiSha.Admin.WebApi.Controllers
         [HttpGet]
         public async Task<TData<List<NewsEntity>>> GetPageList([FromQuery] NewsListParam param, [FromQuery] Pagination pagination)
         {
-            TData<List<NewsEntity>> obj = await newsBLL.GetPageList(param, pagination);
+            TData<List<NewsEntity>> obj = await _newsBLL.GetPageList(param, pagination);
             return obj;
         }
 
@@ -40,9 +37,9 @@ namespace YiSha.Admin.WebApi.Controllers
         /// <param name="pagination"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<TData<List<NewsEntity>>> GetPageContentList([FromQuery]NewsListParam param, [FromQuery]Pagination pagination)
+        public async Task<TData<List<NewsEntity>>> GetPageContentList([FromQuery] NewsListParam param, [FromQuery] Pagination pagination)
         {
-            TData<List<NewsEntity>> obj = await newsBLL.GetPageContentList(param, pagination);
+            TData<List<NewsEntity>> obj = await _newsBLL.GetPageContentList(param, pagination);
             return obj;
         }
 
@@ -52,38 +49,40 @@ namespace YiSha.Admin.WebApi.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<TData<NewsEntity>> GetForm([FromQuery]long id)
+        public async Task<TData<NewsEntity>> GetForm([FromQuery] long id)
         {
-            TData<NewsEntity> obj = await newsBLL.GetEntity(id);
+            TData<NewsEntity> obj = await _newsBLL.GetEntity(id);
             return obj;
         }
+
         #endregion
 
         #region 提交数据
+
         /// <summary>
         /// 保存文章
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<TData<string>> SaveForm([FromBody]NewsEntity entity)
+        public async Task<TData<string>> SaveForm([FromBody] NewsEntity entity)
         {
-            TData<string> obj = await newsBLL.SaveForm(entity);
+            TData<string> obj = await _newsBLL.SaveForm(entity);
             return obj;
         }
 
         [HttpPost]
-        public async Task<TData<string>> SaveViewTimes([FromBody]IdParam param)
+        public async Task<TData<string>> SaveViewTimes([FromBody] IdParam param)
         {
             TData<string> obj = null;
-            TData<NewsEntity> objNews = await newsBLL.GetEntity(param.Id.Value);
+            TData<NewsEntity> objNews = await _newsBLL.GetEntity(param.Id.Value);
             NewsEntity newsEntity = new NewsEntity();
             if (objNews.Data != null)
             {
                 newsEntity.Id = param.Id.Value;
                 newsEntity.ViewTimes = objNews.Data.ViewTimes;
                 newsEntity.ViewTimes++;
-                obj = await newsBLL.SaveForm(newsEntity);
+                obj = await _newsBLL.SaveForm(newsEntity);
             }
             else
             {
@@ -92,6 +91,7 @@ namespace YiSha.Admin.WebApi.Controllers
             }
             return obj;
         }
+
         #endregion
     }
 }

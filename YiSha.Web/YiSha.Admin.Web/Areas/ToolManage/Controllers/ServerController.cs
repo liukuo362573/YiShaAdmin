@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
-using System.Web;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using YiSha.Admin.Web.Controllers;
-using YiSha.Model.Result.SystemManage;
-using YiSha.Util;
+using YiSha.Util.Helper;
 using YiSha.Util.Model;
 
 namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
@@ -16,13 +10,16 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
     public class ServerController : BaseController
     {
         #region 视图功能
+
         public IActionResult ServerIndex()
         {
             return View();
         }
+
         #endregion
 
         #region 获取数据
+
         [HttpGet]
         public IActionResult GetServerJson()
         {
@@ -51,6 +48,7 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
             obj.Tag = 1;
             return Json(obj);
         }
-        #endregion    　
+
+        #endregion 　
     }
 }

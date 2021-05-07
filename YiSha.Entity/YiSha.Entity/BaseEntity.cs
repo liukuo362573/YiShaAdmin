@@ -1,11 +1,11 @@
-﻿using System;
-using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Threading.Tasks;
-using YiSha.Util;
-using YiSha.Web.Code;
 using YiSha.IdGenerator;
+using YiSha.Util.Helper;
+using YiSha.Web.Code;
 
 namespace YiSha.Entity
 {
@@ -30,7 +30,7 @@ namespace YiSha.Entity
 
         public virtual void Create()
         {
-            this.Id = IdGeneratorHelper.Instance.GetId();
+            Id = IdGeneratorHelper.Instance.GetId();
         }
     }
 
@@ -39,8 +39,7 @@ namespace YiSha.Entity
         /// <summary>
         /// 创建时间
         /// </summary>
-        [JsonConverter(typeof(DateTimeJsonConverter))]
-        [Description("创建时间")]
+        [JsonConverter(typeof(DateTimeJsonConverter)), Description("创建时间")]
         public DateTime? BaseCreateTime { get; set; }
 
         /// <summary>
@@ -52,23 +51,23 @@ namespace YiSha.Entity
         {
             base.Create();
 
-            if (this.BaseCreateTime == null)
+            if (BaseCreateTime == null)
             {
-                this.BaseCreateTime = DateTime.Now;
+                BaseCreateTime = DateTime.Now;
             }
 
-            if (this.BaseCreatorId == null)
+            if (BaseCreatorId == null)
             {
                 OperatorInfo user = await Operator.Instance.Current(Token);
                 if (user != null)
                 {
-                    this.BaseCreatorId = user.UserId;
+                    BaseCreatorId = user.UserId;
                 }
                 else
                 {
-                    if (this.BaseCreatorId == null)
+                    if (BaseCreatorId == null)
                     {
-                        this.BaseCreatorId = 0;
+                        BaseCreatorId = 0;
                     }
                 }
             }
@@ -85,8 +84,7 @@ namespace YiSha.Entity
         /// <summary>
         /// 修改时间
         /// </summary>
-        [JsonConverter(typeof(DateTimeJsonConverter))]
-        [Description("修改时间")]
+        [JsonConverter(typeof(DateTimeJsonConverter)), Description("修改时间")]
         public DateTime? BaseModifyTime { get; set; }
 
         /// <summary>
@@ -96,21 +94,21 @@ namespace YiSha.Entity
 
         public async Task Modify()
         {
-            this.BaseVersion = 0;
-            this.BaseModifyTime = DateTime.Now;
+            BaseVersion = 0;
+            BaseModifyTime = DateTime.Now;
 
-            if (this.BaseModifierId == null)
+            if (BaseModifierId == null)
             {
                 OperatorInfo user = await Operator.Instance.Current();
                 if (user != null)
                 {
-                    this.BaseModifierId = user.UserId;
+                    BaseModifierId = user.UserId;
                 }
                 else
                 {
-                    if (this.BaseModifierId == null)
+                    if (BaseModifierId == null)
                     {
-                        this.BaseModifierId = 0;
+                        BaseModifierId = 0;
                     }
                 }
             }
@@ -127,8 +125,8 @@ namespace YiSha.Entity
 
         public new async Task Create()
         {
-            this.BaseIsDelete = 0;
-         
+            BaseIsDelete = 0;
+
             await base.Create();
 
             await base.Modify();
@@ -142,7 +140,7 @@ namespace YiSha.Entity
 
     public class BaseField
     {
-        public static string[] BaseFieldList = new string[]
+        public static string[] BaseFieldList = new[]
         {
             "Id",
             "BaseIsDelete",

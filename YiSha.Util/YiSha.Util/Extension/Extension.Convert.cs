@@ -1,62 +1,23 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using YiSha.Util.Helper;
 
 namespace YiSha.Util.Extension
 {
     public static partial class Extensions
     {
-        #region 转换为long
         /// <summary>
-        /// 将object转换为long，若转换失败，则返回0。不抛出异常。  
+        /// 将object转换为int，若转换失败，则返回0。不抛出异常。
         /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static long ParseToLong(this object obj)
+        public static int ParseToInt(this object o)
         {
             try
             {
-                return long.Parse(obj.ToString());
-            }
-            catch
-            {
-                return 0L;
-            }
-        }
-
-        /// <summary>
-        /// 将object转换为long，若转换失败，则返回指定值。不抛出异常。  
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="defaultValue"></param>
-        /// <returns></returns>
-        public static long ParseToLong(this string str, long defaultValue)
-        {
-            try
-            {
-                return long.Parse(str);
-            }
-            catch
-            {
-                return defaultValue;
-            }
-        }
-        #endregion
-
-        #region 转换为int
-        /// <summary>
-        /// 将object转换为int，若转换失败，则返回0。不抛出异常。  
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static int ParseToInt(this object str)
-        {
-            try
-            {
-                return Convert.ToInt32(str);
+                return Convert.ToInt32(o);
             }
             catch
             {
@@ -65,231 +26,117 @@ namespace YiSha.Util.Extension
         }
 
         /// <summary>
-        /// 将object转换为int，若转换失败，则返回指定值。不抛出异常。 
-        /// null返回默认值
+        /// 将object转换为long，若转换失败，则返回0。不抛出异常。
         /// </summary>
-        /// <param name="str"></param>
-        /// <param name="defaultValue"></param>
-        /// <returns></returns>
-        public static int ParseToInt(this object str, int defaultValue)
+        public static long ParseToLong(this object o)
         {
-            if (str == null)
-            {
-                return defaultValue;
-            }
-            try
-            {
-                return Convert.ToInt32(str);
-            }
-            catch
-            {
-                return defaultValue;
-            }
-        }
-        #endregion
-
-        #region 转换为short
-        /// <summary>
-        /// 将object转换为short，若转换失败，则返回0。不抛出异常。  
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static short ParseToShort(this object obj)
-        {
-            try
-            {
-                return short.Parse(obj.ToString());
-            }
-            catch
-            {
-                return 0;
-            }
+            return long.TryParse(o?.ToString(), out var result) ? result : default;
         }
 
         /// <summary>
-        /// 将object转换为short，若转换失败，则返回指定值。不抛出异常。  
+        /// 将object转换为short，若转换失败，则返回0。不抛出异常。
         /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static short ParseToShort(this object str, short defaultValue)
+        public static short ParseToShort(this object o)
         {
-            try
-            {
-                return short.Parse(str.ToString());
-            }
-            catch
-            {
-                return defaultValue;
-            }
-        }
-        #endregion
-
-        #region 转换为demical
-        /// <summary>
-        /// 将object转换为demical，若转换失败，则返回指定值。不抛出异常。  
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static decimal ParseToDecimal(this object str, decimal defaultValue)
-        {
-            try
-            {
-                return decimal.Parse(str.ToString());
-            }
-            catch
-            {
-                return defaultValue;
-            }
+            return short.TryParse(o?.ToString(), out var result) ? result : default;
         }
 
         /// <summary>
-        /// 将object转换为demical，若转换失败，则返回0。不抛出异常。  
+        /// 将object转换为float，若转换失败，则返回0。不抛出异常。
         /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static decimal ParseToDecimal(this object str)
+        public static float ParseToFloat(this object o)
+        {
+            return float.TryParse(o?.ToString(), out var result) ? result : default;
+        }
+
+        /// <summary>
+        /// 将object转换为double，若转换失败，则返回0。不抛出异常。
+        /// </summary>
+        public static double ParseToDouble(this object o)
+        {
+            return double.TryParse(o?.ToString(), out var result) ? result : default;
+        }
+
+        /// <summary>
+        /// 将object转换为demical，若转换失败，则返回0。不抛出异常。
+        /// </summary>
+        public static decimal ParseToDecimal(this object o)
+        {
+            return decimal.TryParse(o?.ToString(), out var result) ? result : default;
+        }
+
+        /// <summary>
+        /// 将object转换为bool，若转换失败，则返回false。不抛出异常。
+        /// </summary>
+        public static bool ParseToBool(this object o)
+        {
+            return bool.TryParse(o?.ToString(), out var result) ? result : default;
+        }
+
+        /// <summary>
+        /// 将object转换为byte，若转换失败，则返回默认值。不抛出异常。
+        /// </summary>
+        public static byte ParseToByte(this object o)
+        {
+            return byte.TryParse(o?.ToString(), out var result) ? result : default;
+        }
+
+        /// <summary>
+        /// 将object转换为string，若转换失败，则返回""。不抛出异常。
+        /// </summary>
+        public static string ParseToString(this object o)
         {
             try
             {
-                return decimal.Parse(str.ToString());
+                return o?.ToString();
             }
             catch
             {
-                return 0;
+                return string.Empty;
             }
         }
-        #endregion
 
-        #region 转化为bool
-        /// <summary>
-        /// 将object转换为bool，若转换失败，则返回false。不抛出异常。  
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static bool ParseToBool(this object str)
+        public static string ParseToStrings<T>(this object o)
         {
             try
             {
-                return bool.Parse(str.ToString());
+                if (o is IEnumerable<T> list)
+                {
+                    return string.Join(",", list);
+                }
+                return o?.ToString();
             }
             catch
             {
-                return false;
+                return string.Empty;
             }
         }
 
         /// <summary>
-        /// 将object转换为bool，若转换失败，则返回指定值。不抛出异常。  
+        /// 将string转换为DateTime，若转换失败，则返回日期最小值。不抛出异常。
         /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static bool ParseToBool(this object str, bool result)
+        public static DateTime ParseToDateTime(this string s)
         {
             try
             {
-                return bool.Parse(str.ToString());
-            }
-            catch
-            {
-                return result;
-            }
-        }
-        #endregion
-
-        #region 转换为float
-        /// <summary>
-        /// 将object转换为float，若转换失败，则返回0。不抛出异常。  
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static float ParseToFloat(this object str)
-        {
-            try
-            {
-                return float.Parse(str.ToString());
-            }
-            catch
-            {
-                return 0;
-            }
-        }
-
-        /// <summary>
-        /// 将object转换为float，若转换失败，则返回指定值。不抛出异常。  
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static float ParseToFloat(this object str, float result)
-        {
-            try
-            {
-                return float.Parse(str.ToString());
-            }
-            catch
-            {
-                return result;
-            }
-        }
-        #endregion
-
-        #region 转换为Guid
-        /// <summary>
-        /// 将string转换为Guid，若转换失败，则返回Guid.Empty。不抛出异常。  
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static Guid ParseToGuid(this string str)
-        {
-            try
-            {
-                return new Guid(str);
-            }
-            catch
-            {
-                return Guid.Empty;
-            }
-        }
-        #endregion
-
-        #region 转换为DateTime
-        /// <summary>
-        /// 将string转换为DateTime，若转换失败，则返回日期最小值。不抛出异常。  
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static DateTime ParseToDateTime(this string str)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(str))
+                if (string.IsNullOrWhiteSpace(s))
                 {
                     return DateTime.MinValue;
                 }
-                if (str.Contains("-") || str.Contains("/"))
+                if (s.Contains("-") || s.Contains("/"))
                 {
-                    return DateTime.Parse(str);
+                    return DateTime.Parse(s);
                 }
-                else
+                return s.Length switch
                 {
-                    int length = str.Length;
-                    switch (length)
-                    {
-                        case 4:
-                            return DateTime.ParseExact(str, "yyyy", System.Globalization.CultureInfo.CurrentCulture);
-                        case 6:
-                            return DateTime.ParseExact(str, "yyyyMM", System.Globalization.CultureInfo.CurrentCulture);
-                        case 8:
-                            return DateTime.ParseExact(str, "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
-                        case 10:
-                            return DateTime.ParseExact(str, "yyyyMMddHH", System.Globalization.CultureInfo.CurrentCulture);
-                        case 12:
-                            return DateTime.ParseExact(str, "yyyyMMddHHmm", System.Globalization.CultureInfo.CurrentCulture);
-                        case 14:
-                            return DateTime.ParseExact(str, "yyyyMMddHHmmss", System.Globalization.CultureInfo.CurrentCulture);
-                        default:
-                            return DateTime.ParseExact(str, "yyyyMMddHHmmss", System.Globalization.CultureInfo.CurrentCulture);
-                    }
-                }
+                    4 => DateTime.ParseExact(s, "yyyy", CultureInfo.CurrentCulture),
+                    6 => DateTime.ParseExact(s, "yyyyMM", CultureInfo.CurrentCulture),
+                    8 => DateTime.ParseExact(s, "yyyyMMdd", CultureInfo.CurrentCulture),
+                    10 => DateTime.ParseExact(s, "yyyyMMddHH", CultureInfo.CurrentCulture),
+                    12 => DateTime.ParseExact(s, "yyyyMMddHHmm", CultureInfo.CurrentCulture),
+                    14 => DateTime.ParseExact(s, "yyyyMMddHHmmss", CultureInfo.CurrentCulture),
+                    _ => DateTime.ParseExact(s, "yyyyMMddHHmmss", CultureInfo.CurrentCulture)
+                };
             }
             catch
             {
@@ -298,149 +145,37 @@ namespace YiSha.Util.Extension
         }
 
         /// <summary>
-        /// 将string转换为DateTime，若转换失败，则返回默认值。  
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="defaultValue"></param>
-        /// <returns></returns>
-        public static DateTime ParseToDateTime(this string str, DateTime? defaultValue)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(str))
-                {
-                    return defaultValue.GetValueOrDefault();
-                }
-                if (str.Contains("-") || str.Contains("/"))
-                {
-                    return DateTime.Parse(str);
-                }
-                else
-                {
-                    int length = str.Length;
-                    switch (length)
-                    {
-                        case 4:
-                            return DateTime.ParseExact(str, "yyyy", System.Globalization.CultureInfo.CurrentCulture);
-                        case 6:
-                            return DateTime.ParseExact(str, "yyyyMM", System.Globalization.CultureInfo.CurrentCulture);
-                        case 8:
-                            return DateTime.ParseExact(str, "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
-                        case 10:
-                            return DateTime.ParseExact(str, "yyyyMMddHH", System.Globalization.CultureInfo.CurrentCulture);
-                        case 12:
-                            return DateTime.ParseExact(str, "yyyyMMddHHmm", System.Globalization.CultureInfo.CurrentCulture);
-                        case 14:
-                            return DateTime.ParseExact(str, "yyyyMMddHHmmss", System.Globalization.CultureInfo.CurrentCulture);
-                        default:
-                            return DateTime.ParseExact(str, "yyyyMMddHHmmss", System.Globalization.CultureInfo.CurrentCulture);
-                    }
-                }
-            }
-            catch
-            {
-                return defaultValue.GetValueOrDefault();
-            }
-        }
-        #endregion
-
-        #region 转换为string
-        /// <summary>
-        /// 将object转换为string，若转换失败，则返回""。不抛出异常。  
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static string ParseToString(this object obj)
-        {
-            try
-            {
-                if (obj == null)
-                {
-                    return string.Empty;
-                }
-                else
-                {
-                    return obj.ToString();
-                }
-            }
-            catch
-            {
-                return string.Empty;
-            }
-        }
-        public static string ParseToStrings<T>(this object obj)
-        {
-            try
-            {
-                var list = obj as IEnumerable<T>;
-                if (list != null)
-                {
-                    return string.Join(",", list);
-                }
-                else
-                {
-                    return obj.ToString();
-                }
-            }
-            catch
-            {
-                return string.Empty;
-            }
-
-        }
-        #endregion
-
-        #region 转换为double
-        /// <summary>
-        /// 将object转换为double，若转换失败，则返回0。不抛出异常。  
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public static double ParseToDouble(this object obj)
-        {
-            try
-            {
-                return double.Parse(obj.ToString());
-            }
-            catch
-            {
-                return 0;
-            }
-        }
-
-        /// <summary>
-        /// 将object转换为double，若转换失败，则返回指定值。不抛出异常。  
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="defaultValue"></param>
-        /// <returns></returns>
-        public static double ParseToDouble(this object str, double defaultValue)
-        {
-            try
-            {
-                return double.Parse(str.ToString());
-            }
-            catch
-            {
-                return defaultValue;
-            }
-        }
-        #endregion
-
-        #region 强制转换类型
-        /// <summary>
         /// 强制转换类型
         /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
         public static IEnumerable<TResult> CastSuper<TResult>(this IEnumerable source)
         {
-            foreach (object item in source)
+            if (source != null)
             {
-                yield return (TResult)Convert.ChangeType(item, typeof(TResult));
+                foreach (var item in source)
+                {
+                    yield return (TResult)Convert.ChangeType(item, typeof(TResult));
+                }
             }
         }
-        #endregion
+
+        public static DataTable ToDataTable<T>(this List<T> list)
+        {
+            var dt = new DataTable();
+            var props = ReflectionHelper.GetProperties(typeof(T));
+            foreach (var t in props)
+            {
+                dt.Columns.Add(t.Name);
+            }
+            if (list.TryAny())
+            {
+                dt.BeginLoadData();
+                foreach (var values in list.Select(entity => props.Select(p => p.GetValue(entity))))
+                {
+                    dt.LoadDataRow(values.ToArray(), true);
+                }
+                dt.EndLoadData();
+            }
+            return dt;
+        }
     }
 }

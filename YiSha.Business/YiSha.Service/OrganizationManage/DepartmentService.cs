@@ -2,31 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 using YiSha.Data.Repository;
 using YiSha.Entity.OrganizationManage;
-using YiSha.Model;
 using YiSha.Model.Param.OrganizationManage;
-using YiSha.Util;
 using YiSha.Util.Extension;
-using YiSha.Util.Model;
+using YiSha.Util.Helper;
 
 namespace YiSha.Service.OrganizationManage
 {
     public class DepartmentService : RepositoryFactory
     {
         #region 获取数据
+
         public async Task<List<DepartmentEntity>> GetList(DepartmentListParam param)
         {
             var expression = ListFilter(param);
-            var list = await this.BaseRepository().FindList(expression);
+            var list = await BaseRepository().FindList(expression);
             return list.OrderBy(p => p.DepartmentSort).ToList();
         }
 
         public async Task<DepartmentEntity> GetEntity(long id)
         {
-            return await this.BaseRepository().FindEntity<DepartmentEntity>(id);
+            return await BaseRepository().FindEntity<DepartmentEntity>(id);
         }
 
         public async Task<int> GetMaxSort()
@@ -52,7 +50,7 @@ namespace YiSha.Service.OrganizationManage
             {
                 expression = expression.And(t => t.DepartmentName == entity.DepartmentName && t.Id != entity.Id);
             }
-            return this.BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
+            return BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
         }
 
         /// <summary>
@@ -64,28 +62,30 @@ namespace YiSha.Service.OrganizationManage
         {
             var expression = LinqExtensions.True<DepartmentEntity>();
             expression = expression.And(t => t.ParentId == id);
-            return this.BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
+            return BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
         }
+
         #endregion
 
         #region 提交数据
+
         public async Task SaveForm(DepartmentEntity entity)
         {
             if (entity.Id.IsNullOrZero())
             {
                 await entity.Create();
-                await this.BaseRepository().Insert(entity);
+                await BaseRepository().Insert(entity);
             }
             else
             {
                 await entity.Modify();
-                await this.BaseRepository().Update(entity);
+                await BaseRepository().Update(entity);
             }
         }
 
         public async Task DeleteForm(string ids)
         {
-            var db = await this.BaseRepository().BeginTrans();
+            var db = await BaseRepository().BeginTrans();
             try
             {
                 long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
@@ -98,9 +98,11 @@ namespace YiSha.Service.OrganizationManage
                 throw;
             }
         }
+
         #endregion
 
         #region 私有方法
+
         private Expression<Func<DepartmentEntity, bool>> ListFilter(DepartmentListParam param)
         {
             var expression = LinqExtensions.True<DepartmentEntity>();
@@ -113,6 +115,7 @@ namespace YiSha.Service.OrganizationManage
             }
             return expression;
         }
+
         #endregion
     }
 }

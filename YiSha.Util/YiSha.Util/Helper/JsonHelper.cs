@@ -1,41 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using YiSha.Util.Extension;
 
-namespace YiSha.Util
+namespace YiSha.Util.Helper
 {
     #region JsonHelper
+
     public static class JsonHelper
     {
-        public static T ToObject<T>(this string Json)
+        public static T ToObject<T>(this string json)
         {
-            Json = Json.Replace("&nbsp;", "");
-            return Json == null ? default(T) : JsonConvert.DeserializeObject<T>(Json);
+            if (string.IsNullOrEmpty(json))
+            {
+                throw new ArgumentNullException(nameof(json));
+            }
+            json = json.Replace("&nbsp;", "");
+            return JsonConvert.DeserializeObject<T>(json);
         }
 
-        public static JObject ToJObject(this string Json)
+        public static JObject ToJObject(this string json)
         {
-            return Json == null ? JObject.Parse("{}") : JObject.Parse(Json.Replace("&nbsp;", ""));
+            return json == null ? JObject.Parse("{}") : JObject.Parse(json.Replace("&nbsp;", ""));
         }
     }
-    #endregion
+
+    #endregion JsonHelper
 
     #region JsonConverter
+
     /// <summary>
     /// Json数据返回到前端js的时候，把数值很大的long类型转成字符串
     /// </summary>
     public class StringJsonConverter : JsonConverter
     {
-        public StringJsonConverter() { }
-
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            return reader.Value.ParseToLong();
+            return reader?.Value.ParseToLong();
         }
 
         public override bool CanConvert(Type objectType)
@@ -45,13 +46,18 @@ namespace YiSha.Util
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
+            if (writer == null)
+            {
+                throw new ArgumentNullException(nameof(writer));
+            }
             if (value == null)
             {
                 writer.WriteNull();
-                return;
             }
-            string sValue = value.ToString();
-            writer.WriteValue(sValue);
+            else
+            {
+                writer.WriteValue(value.ToString());
+            }
         }
     }
 
@@ -60,8 +66,6 @@ namespace YiSha.Util
     /// </summary>
     public class DateTimeJsonConverter : JsonConverter
     {
-        public DateTimeJsonConverter() { }
-
         public override bool CanConvert(Type objectType)
         {
             return true;
@@ -69,24 +73,28 @@ namespace YiSha.Util
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            return reader.Value.ParseToString().ParseToDateTime();
+            return reader?.Value.ParseToString().ParseToDateTime();
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
+            if (writer == null)
+            {
+                throw new ArgumentNullException(nameof(writer));
+            }
             if (value == null)
             {
                 writer.WriteNull();
                 return;
             }
-            DateTime? dt = value as DateTime?;
-            if (dt == null)
+            if (!(value is DateTime dt))
             {
                 writer.WriteNull();
                 return;
             }
-            writer.WriteValue(dt.Value.ToString("yyyy-MM-dd HH:mm:ss"));
+            writer.WriteValue(dt.ToString("yyyy-MM-dd HH:mm:ss"));
         }
     }
-    #endregion
+
+    #endregion JsonConverter
 }

@@ -1,27 +1,28 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Data;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Data;
 using System.Web;
-using Newtonsoft.Json.Linq;
-using YiSha.Data.Repository;
+using YiSha.Business.Cache;
 using YiSha.CodeGenerator.Model;
-using YiSha.Util;
-using YiSha.Util.Extension;
-using YiSha.Util.Model;
+using YiSha.Data.Repository;
+using YiSha.Entity;
 using YiSha.Entity.SystemManage;
 using YiSha.Enum.SystemManage;
-using YiSha.Business.Cache;
-using YiSha.Entity;
+using YiSha.Util.Extension;
+using YiSha.Util.Helper;
+using YiSha.Util.Model;
 
 namespace YiSha.CodeGenerator.Template
 {
     public class SingleTableTemplate
     {
         #region GetBaseConfig
+
         public BaseConfigModel GetBaseConfig(string path, string userName, string tableName, string tableDescription, List<string> tableFieldList)
         {
             path = GetProjectRootPath(path);
@@ -33,6 +34,7 @@ namespace YiSha.CodeGenerator.Template
             baseConfigModel.TableNameUpper = tableName;
 
             #region FileConfigModel
+
             baseConfigModel.FileConfig = new FileConfigModel();
             baseConfigModel.FileConfig.ClassPrefix = TableMappingHelper.GetClassNamePrefix(tableName);
             baseConfigModel.FileConfig.ClassDescription = tableDescription;
@@ -47,9 +49,11 @@ namespace YiSha.CodeGenerator.Template
             baseConfigModel.FileConfig.ControllerName = string.Format("{0}Controller", baseConfigModel.FileConfig.ClassPrefix);
             baseConfigModel.FileConfig.PageIndexName = string.Format("{0}Index", baseConfigModel.FileConfig.ClassPrefix);
             baseConfigModel.FileConfig.PageFormName = string.Format("{0}Form", baseConfigModel.FileConfig.ClassPrefix);
+
             #endregion
 
-            #region OutputConfigModel          
+            #region OutputConfigModel
+
             baseConfigModel.OutputConfig = new OutputConfigModel();
             baseConfigModel.OutputConfig.OutputModule = string.Empty;
             baseConfigModel.OutputConfig.OutputEntity = Path.Combine(path, "YiSha.Entity");
@@ -64,29 +68,36 @@ namespace YiSha.CodeGenerator.Template
             {
                 baseConfigModel.OutputConfig.ModuleList = new List<string> { "TestManage" };
             }
+
             #endregion
 
             #region PageIndexModel
+
             baseConfigModel.PageIndex = new PageIndexModel();
             baseConfigModel.PageIndex.IsSearch = 1;
             baseConfigModel.PageIndex.IsPagination = 1;
             baseConfigModel.PageIndex.ButtonList = new List<string>();
             baseConfigModel.PageIndex.ColumnList = new List<string>();
             baseConfigModel.PageIndex.ColumnList.AddRange(tableFieldList.Take(defaultField));
+
             #endregion
 
             #region PageFormModel
+
             baseConfigModel.PageForm = new PageFormModel();
             baseConfigModel.PageForm.ShowMode = 1;
             baseConfigModel.PageForm.FieldList = new List<string>();
             baseConfigModel.PageForm.FieldList.AddRange(tableFieldList.Take(defaultField));
+
             #endregion
 
             return baseConfigModel;
         }
+
         #endregion
 
         #region BuildEntity
+
         public string BuildEntity(BaseConfigModel baseConfigModel, DataTable dt)
         {
             StringBuilder sb = new StringBuilder();
@@ -144,9 +155,11 @@ namespace YiSha.CodeGenerator.Template
 
             return sb.ToString();
         }
+
         #endregion
 
         #region BuildEntityParam
+
         public string BuildEntityParam(BaseConfigModel baseConfigModel)
         {
             StringBuilder sb = new StringBuilder();
@@ -169,9 +182,11 @@ namespace YiSha.CodeGenerator.Template
 
             return sb.ToString();
         }
+
         #endregion
 
         #region BuildService
+
         public string BuildService(BaseConfigModel baseConfigModel, DataTable dt)
         {
             string baseEntity = GetBaseEntity(dt);
@@ -260,9 +275,11 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("}");
             return sb.ToString();
         }
+
         #endregion
 
         #region BuildBusiness
+
         public string BuildBusiness(BaseConfigModel baseConfigModel)
         {
             StringBuilder sb = new StringBuilder();
@@ -345,9 +362,11 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("}");
             return sb.ToString();
         }
+
         #endregion
 
         #region BuildController
+
         public string BuildController(BaseConfigModel baseConfigModel)
         {
             string modulePrefix = GetModulePrefix(baseConfigModel);
@@ -439,12 +458,15 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("}");
             return sb.ToString();
         }
+
         #endregion
 
         #region BuildIndex
+
         public string BuildIndex(BaseConfigModel baseConfigModel)
         {
             #region 初始化集合
+
             if (baseConfigModel.PageIndex.ButtonList == null)
             {
                 baseConfigModel.PageIndex.ButtonList = new List<string>();
@@ -453,6 +475,7 @@ namespace YiSha.CodeGenerator.Template
             {
                 baseConfigModel.PageIndex.ColumnList = new List<string>();
             }
+
             #endregion
 
             StringBuilder sb = new StringBuilder();
@@ -463,6 +486,7 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("    <div class=\"row\">");
 
             #region 是否显示搜索
+
             if (baseConfigModel.PageIndex.IsSearch == 1)
             {
                 string fieldName = TextHelper.GetCustomValue(baseConfigModel.PageIndex.ColumnList.FirstOrDefault(), "fieldName");
@@ -480,9 +504,11 @@ namespace YiSha.CodeGenerator.Template
                 sb.AppendLine("            </div>");
                 sb.AppendLine("        </div>");
             }
+
             #endregion
 
             #region 是否显示工具栏
+
             if (baseConfigModel.PageIndex.ButtonList.Where(p => p != "btnSearch").Any())
             {
                 sb.AppendLine("        <div class=\"btn-group-sm hidden-xs\" id=\"toolbar\">");
@@ -500,6 +526,7 @@ namespace YiSha.CodeGenerator.Template
                 }
                 sb.AppendLine("        </div>");
             }
+
             #endregion
 
             sb.AppendLine("        <div class=\"col-sm-12 select-table table-striped\">");
@@ -546,6 +573,7 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("");
 
             #region 新增和修改方法
+
             if (baseConfigModel.PageIndex.ButtonList.Where(p => p == "btnAdd" || p == "btnEdit").Any())
             {
                 sb.AppendLine("    function showSaveForm(bAdd) {");
@@ -571,11 +599,13 @@ namespace YiSha.CodeGenerator.Template
                 sb.AppendLine("        });");
                 sb.AppendLine("    }");
             }
+
             #endregion
 
             sb.AppendLine("");
 
             #region 删除方法
+
             if (baseConfigModel.PageIndex.ButtonList.Where(p => p == "btnDelete").Any())
             {
                 sb.AppendLine("    function deleteForm() {");
@@ -600,22 +630,28 @@ namespace YiSha.CodeGenerator.Template
                 sb.AppendLine("        }");
                 sb.AppendLine("    }");
             }
+
             #endregion
 
             sb.AppendLine("</script>");
             return sb.ToString();
         }
+
         #endregion
 
         #region BuildForm
+
         public string BuildForm(BaseConfigModel baseConfigModel)
         {
             #region 初始化集合
+
             if (baseConfigModel.PageForm.FieldList == null)
             {
                 baseConfigModel.PageForm.FieldList = new List<string>();
             }
+
             #endregion
+
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("@{");
             sb.AppendLine("    Layout = \"~/Views/Shared/_FormWhite.cshtml\";");
@@ -625,6 +661,7 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("    <form id=\"form\" class=\"form-horizontal m\">");
 
             #region 表单控件
+
             if (baseConfigModel.PageForm.FieldList.Count > 0)
             {
                 string field = string.Empty;
@@ -670,6 +707,7 @@ namespace YiSha.CodeGenerator.Template
                         break;
                 }
             }
+
             #endregion
 
             sb.AppendLine("    </form>");
@@ -729,9 +767,11 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("");
             return sb.ToString();
         }
+
         #endregion
 
         #region BuildMenu
+
         public string BuildMenu(BaseConfigModel baseConfigModel)
         {
             StringBuilder sb = new StringBuilder();
@@ -757,15 +797,18 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine();
             return sb.ToString();
         }
+
         #endregion
 
         #region CreateCode
+
         public async Task<List<KeyValue>> CreateCode(BaseConfigModel baseConfigModel, string code)
         {
             List<KeyValue> result = new List<KeyValue>();
             JObject param = code.ToJObject();
 
             #region 实体类
+
             if (!string.IsNullOrEmpty(param["CodeEntity"].ParseToString()))
             {
                 string codeEntity = HttpUtility.HtmlDecode(param["CodeEntity"].ToString());
@@ -776,9 +819,11 @@ namespace YiSha.CodeGenerator.Template
                     result.Add(new KeyValue { Key = "实体类", Value = codePath });
                 }
             }
+
             #endregion
 
             #region 实体查询类
+
             if (!param["CodeEntityParam"].IsEmpty())
             {
                 string codeListEntity = HttpUtility.HtmlDecode(param["CodeEntityParam"].ToString());
@@ -789,9 +834,11 @@ namespace YiSha.CodeGenerator.Template
                     result.Add(new KeyValue { Key = "实体查询类", Value = codePath });
                 }
             }
+
             #endregion
 
             #region 服务类
+
             if (!param["CodeService"].IsEmpty())
             {
                 string codeService = HttpUtility.HtmlDecode(param["CodeService"].ToString());
@@ -802,9 +849,11 @@ namespace YiSha.CodeGenerator.Template
                     result.Add(new KeyValue { Key = "服务类", Value = codePath });
                 }
             }
+
             #endregion
 
             #region 业务类
+
             if (!param["CodeBusiness"].IsEmpty())
             {
                 string codeBusiness = HttpUtility.HtmlDecode(param["CodeBusiness"].ToString());
@@ -815,9 +864,11 @@ namespace YiSha.CodeGenerator.Template
                     result.Add(new KeyValue { Key = "业务类", Value = codePath });
                 }
             }
+
             #endregion
 
             #region 控制器
+
             if (!param["CodeController"].IsEmpty())
             {
                 string codeController = HttpUtility.HtmlDecode(param["CodeController"].ToString());
@@ -828,9 +879,11 @@ namespace YiSha.CodeGenerator.Template
                     result.Add(new KeyValue { Key = "控制器", Value = codePath });
                 }
             }
+
             #endregion
 
             #region 列表页
+
             if (!param["CodeIndex"].IsEmpty())
             {
                 string codeIndex = HttpUtility.HtmlDecode(param["CodeIndex"].ToString());
@@ -886,9 +939,11 @@ namespace YiSha.CodeGenerator.Template
                     new MenuCache().Remove();
                 }
             }
+
             #endregion
 
             #region 表单页
+
             if (!param["CodeForm"].IsEmpty())
             {
                 string codeSave = HttpUtility.HtmlDecode(param["CodeForm"].ToString());
@@ -899,6 +954,7 @@ namespace YiSha.CodeGenerator.Template
                     result.Add(new KeyValue { Key = "表单页", Value = codePath });
                 }
             }
+
             #endregion
 
             return result;
@@ -918,10 +974,13 @@ namespace YiSha.CodeGenerator.Template
             }
             return obj;
         }
+
         #endregion
 
         #region 私有方法
+
         #region GetProjectRootPath
+
         private string GetProjectRootPath(string path)
         {
             path = path.ParseToString();
@@ -934,9 +993,11 @@ namespace YiSha.CodeGenerator.Template
             }
             return path;
         }
+
         #endregion
 
         #region SetClassDescription
+
         private void SetClassDescription(string type, BaseConfigModel baseConfigModel, StringBuilder sb)
         {
             sb.AppendLine("    /// <summary>");
@@ -945,9 +1006,11 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("    /// 描 述：" + baseConfigModel.FileConfig.ClassDescription + type);
             sb.AppendLine("    /// </summary>");
         }
+
         #endregion
 
         #region GetButtonAuthorizeList
+
         private List<KeyValue> GetButtonAuthorizeList()
         {
             var list = new List<KeyValue>();
@@ -957,7 +1020,8 @@ namespace YiSha.CodeGenerator.Template
             list.Add(new KeyValue { Key = "btnDelete", Value = "delete", Description = "删除" });
             return list;
         }
-        #endregion 
+
+        #endregion
 
         private string GetModulePrefix(BaseConfigModel baseConfigModel)
         {
@@ -1047,6 +1111,7 @@ namespace YiSha.CodeGenerator.Template
             }
             return line;
         }
+
         #endregion
     }
 }

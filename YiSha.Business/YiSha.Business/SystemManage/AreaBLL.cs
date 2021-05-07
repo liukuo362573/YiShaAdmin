@@ -1,28 +1,28 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using YiSha.Util;
-using YiSha.Util.Extension;
-using YiSha.Util.Model;
+using YiSha.Business.Cache;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
-using YiSha.Service.SystemManage;
-using YiSha.Business.Cache;
 using YiSha.Model.Result;
+using YiSha.Service.SystemManage;
+using YiSha.Util.Extension;
+using YiSha.Util.Model;
 
 namespace YiSha.Business.SystemManage
 {
     public class AreaBLL
     {
-        private AreaService areaService = new AreaService();
-        private AreaCache areaCache = new AreaCache();
+        private readonly AreaService _areaService = new();
+        private readonly AreaCache _areaCache = new();
 
         #region 获取数据
+
         public async Task<TData<List<AreaEntity>>> GetList(AreaListParam param)
         {
             TData<List<AreaEntity>> obj = new TData<List<AreaEntity>>();
-            List<AreaEntity> areaList = await areaCache.GetList();
+            List<AreaEntity> areaList = await _areaCache.GetList();
             if (param != null)
             {
                 if (!param.AreaName.IsEmpty())
@@ -38,7 +38,7 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<List<AreaEntity>>> GetPageList(AreaListParam param, Pagination pagination)
         {
             TData<List<AreaEntity>> obj = new TData<List<AreaEntity>>();
-            obj.Data = await areaService.GetPageList(param, pagination);
+            obj.Data = await _areaService.GetPageList(param, pagination);
             obj.Total = pagination.TotalCount;
             obj.Tag = 1;
             return obj;
@@ -48,7 +48,7 @@ namespace YiSha.Business.SystemManage
         {
             var obj = new TData<List<ZtreeInfo>>();
             obj.Data = new List<ZtreeInfo>();
-            List<AreaEntity> list = await areaCache.GetList();
+            List<AreaEntity> list = await _areaCache.GetList();
             foreach (AreaEntity area in list)
             {
                 obj.Data.Add(new ZtreeInfo
@@ -65,7 +65,7 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<AreaEntity>> GetEntity(long id)
         {
             TData<AreaEntity> obj = new TData<AreaEntity>();
-            obj.Data = await areaService.GetEntity(id);
+            obj.Data = await _areaService.GetEntity(id);
             if (obj.Data != null)
             {
                 obj.Tag = 1;
@@ -76,20 +76,22 @@ namespace YiSha.Business.SystemManage
         public async Task<TData<AreaEntity>> GetEntityByAreaCode(string areaCode)
         {
             TData<AreaEntity> obj = new TData<AreaEntity>();
-            obj.Data = await areaService.GetEntityByAreaCode(areaCode);
+            obj.Data = await _areaService.GetEntityByAreaCode(areaCode);
             if (obj.Data != null)
             {
                 obj.Tag = 1;
             }
             return obj;
         }
+
         #endregion
 
         #region 提交数据
+
         public async Task<TData<string>> SaveForm(AreaEntity entity)
         {
             TData<string> obj = new TData<string>();
-            await areaService.SaveForm(entity);
+            await _areaService.SaveForm(entity);
             obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
             return obj;
@@ -98,13 +100,15 @@ namespace YiSha.Business.SystemManage
         public async Task<TData> DeleteForm(string ids)
         {
             TData obj = new TData();
-            await areaService.DeleteForm(ids);
+            await _areaService.DeleteForm(ids);
             obj.Tag = 1;
             return obj;
         }
+
         #endregion
 
         #region 公有方法
+
         public void SetAreaParam<T>(T t) where T : BaseAreaParam
         {
             if (t != null)
@@ -114,7 +118,7 @@ namespace YiSha.Business.SystemManage
                 {
                     if (!string.IsNullOrEmpty(param.AreaId))
                     {
-                        string[] areaIdArr = param.AreaId.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                        string[] areaIdArr = param.AreaId.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
                         if (areaIdArr.Length >= 1)
                         {
                             param.ProvinceId = areaIdArr[0].ParseToInt();
@@ -141,7 +145,7 @@ namespace YiSha.Business.SystemManage
                 {
                     if (!string.IsNullOrEmpty(entity.AreaId))
                     {
-                        string[] areaIdArr = entity.AreaId.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                        string[] areaIdArr = entity.AreaId.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
                         if (areaIdArr.Length >= 1)
                         {
                             entity.ProvinceId = areaIdArr[0].ParseToInt();
@@ -195,6 +199,7 @@ namespace YiSha.Business.SystemManage
                 }
             }
         }
-        #endregion 
+
+        #endregion
     }
 }

@@ -17,7 +17,7 @@ namespace YiSha.Data
         /// <summary>
         /// 获取 当前使用的数据访问上下文对象
         /// </summary>
-        public DbContext dbContext { get; set; }
+        public DbContext DbContext { get; set; }
 
         /// <summary>
         /// 事务对象

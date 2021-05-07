@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using YiSha.Data;
+using YiSha.Data.Extension;
 using YiSha.Data.Repository;
 using YiSha.Model.Result.SystemManage;
-using YiSha.Util;
 using YiSha.Util.Extension;
 using YiSha.Util.Model;
 
@@ -17,11 +15,12 @@ namespace YiSha.Service.SystemManage
     public class DatabaseTableSqlServerService : RepositoryFactory, IDatabaseTableService
     {
         #region 获取数据
+
         public async Task<List<TableInfo>> GetTableList(string tableName)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"SELECT id Id,name TableName FROM sysobjects WHERE xtype = 'u' order by name");
-            IEnumerable<TableInfo> list = await this.BaseRepository().FindList<TableInfo>(strSql.ToString());
+            IEnumerable<TableInfo> list = await BaseRepository().FindList<TableInfo>(strSql.ToString());
             if (!tableName.IsEmpty())
             {
                 list = list.Where(p => p.TableName.Contains(tableName));
@@ -42,7 +41,7 @@ namespace YiSha.Service.SystemManage
                 parameter.Add(DbParameterHelper.CreateDbParameter("@TableName", '%' + tableName + '%'));
             }
 
-            IEnumerable<TableInfo> list = await this.BaseRepository().FindList<TableInfo>(strSql.ToString(), parameter.ToArray(), pagination);
+            IEnumerable<TableInfo> list = await BaseRepository().FindList<TableInfo>(strSql.ToString(), parameter.ToArray(), pagination);
             await SetTableDetail(list);
             return list.ToList();
         }
@@ -66,22 +65,26 @@ namespace YiSha.Service.SystemManage
                                   ORDER BY b.colid");
             var parameter = new List<DbParameter>();
             parameter.Add(DbParameterHelper.CreateDbParameter("@TableName", tableName));
-            var list = await this.BaseRepository().FindList<TableFieldInfo>(strSql.ToString(), parameter.ToArray());
+            var list = await BaseRepository().FindList<TableFieldInfo>(strSql.ToString(), parameter.ToArray());
             return list.ToList();
         }
+
         #endregion
 
         #region 公有方法
+
         public async Task<bool> DatabaseBackup(string database, string backupPath)
         {
             string backupFile = string.Format("{0}\\{1}_{2}.bak", backupPath, database, DateTime.Now.ToString("yyyyMMddHHmmss"));
             string strSql = string.Format(" backup database [{0}] to disk = '{1}'", database, backupFile);
-            var result = await this.BaseRepository().ExecuteBySql(strSql);
+            var result = await BaseRepository().ExecuteBySql(strSql);
             return result > 0 ? true : false;
         }
+
         #endregion
 
         #region 私有方法
+
         /// <summary>
         /// 获取所有表的主键、主键名称、记录数
         /// </summary>
@@ -98,7 +101,7 @@ namespace YiSha.Service.SystemManage
                                            AND sysindexkeys.indid = sysindexes.indid 
                                            AND sc.colid = sysindexkeys.colid;";
 
-            IEnumerable<TableInfo> list = await this.BaseRepository().FindList<TableInfo>(strSql.ToString());
+            IEnumerable<TableInfo> list = await BaseRepository().FindList<TableInfo>(strSql);
             return list.ToList();
         }
 
@@ -121,6 +124,7 @@ namespace YiSha.Service.SystemManage
                 }
             }
         }
+
         #endregion
     }
 }

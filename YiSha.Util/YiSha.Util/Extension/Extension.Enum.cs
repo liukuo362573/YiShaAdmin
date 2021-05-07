@@ -1,90 +1,100 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+using YiSha.Util.Helper;
 
 namespace YiSha.Util.Extension
 {
     public static partial class Extensions
     {
-        #region 枚举成员转成dictionary类型
         /// <summary>
-        /// 转成dictionary类型
+        /// 枚举成员转成dictionary类型
         /// </summary>
-        /// <param name="enumType"></param>
-        /// <returns></returns>
         public static Dictionary<int, string> EnumToDictionary(this Type enumType)
         {
-            Dictionary<int, string> dictionary = new Dictionary<int, string>();
-            Type typeDescription = typeof(DescriptionAttribute);
-            FieldInfo[] fields = enumType.GetFields();
-            int sValue = 0;
-            string sText = string.Empty;
-            foreach (FieldInfo field in fields)
+            if (enumType == null) throw new ArgumentNullException(nameof(enumType));
+            var dictionary = new Dictionary<int, string>();
+            var fields = ReflectionHelper.GetFields(enumType);
+            foreach (var info in fields)
             {
-                if (field.FieldType.IsEnum)
+                if (info.FieldType.IsEnum)
                 {
-                    sValue = ((int)enumType.InvokeMember(field.Name, BindingFlags.GetField, null, null, null));
-                    object[] arr = field.GetCustomAttributes(typeDescription, true);
-                    if (arr.Length > 0)
-                    {
-                        DescriptionAttribute da = (DescriptionAttribute)arr[0];
-                        sText = da.Description;
-                    }
-                    else
-                    {
-                        sText = field.Name;
-                    }
-                    dictionary.Add(sValue, sText);
+                    var enumValue = enumType.InvokeMember(info.Name, BindingFlags.GetField, null, null, null).ParseToInt();
+                    var enumAttributes = info.GetCustomAttributes<DescriptionAttribute>().ToArray();
+                    var enumDescription = enumAttributes.Any() ? enumAttributes[0].Description : info.Name;
+                    dictionary.Add(enumValue, enumDescription);
                 }
             }
             return dictionary;
         }
+
         /// <summary>
         /// 枚举成员转成键值对Json字符串
         /// </summary>
-        /// <param name="enumType"></param>
-        /// <returns></returns>
         public static string EnumToDictionaryString(this Type enumType)
         {
-            List<KeyValuePair<int, string>> dictionaryList = EnumToDictionary(enumType).ToList();
-            var sJson = JsonConvert.SerializeObject(dictionaryList);
-            return sJson;
+            var dictionaryList = EnumToDictionary(enumType).ToList();
+            return JsonConvert.SerializeObject(dictionaryList);
         }
-        #endregion
 
-        #region 获取枚举的描述
         /// <summary>
         /// 获取枚举值对应的描述
         /// </summary>
-        /// <param name="enumType"></param>
-        /// <returns></returns>
         public static string GetDescription(this System.Enum enumType)
         {
-            FieldInfo EnumInfo = enumType.GetType().GetField(enumType.ToString());
-            if (EnumInfo != null)
+            if (enumType == null) throw new ArgumentNullException(nameof(enumType));
+            return enumType.GetType()
+                           .GetField(enumType.ToString())?
+                           .GetCustomAttribute<DescriptionAttribute>()?
+                           .Description ?? enumType.ToString();
+        }
+
+        /// <summary>
+        /// 根据值获取枚举的描述
+        /// </summary>
+        public static string GetDescriptionByEnum<T>(this object o)
+        {
+            var e = System.Enum.Parse(typeof(T), o.ParseToString()) as System.Enum;
+            return e.GetDescription();
+        }
+    }
+
+    public static class EnumHelper
+    {
+        /// <summary>
+        /// 为有Flags特性的枚举类提供拆解后用逗号连接的值字符串
+        /// </summary>
+        public static string GetValueString<T>(T source) where T : System.Enum
+        {
+            var builder = new StringBuilder();
+            foreach (T value in System.Enum.GetValues(typeof(T)))
             {
-                DescriptionAttribute[] EnumAttributes = (DescriptionAttribute[])EnumInfo.GetCustomAttributes(typeof(DescriptionAttribute), false);
-                if (EnumAttributes.Length > 0)
+                if ((source.ParseToInt() & value.ParseToInt()) != 0)
                 {
-                    return EnumAttributes[0].Description;
+                    builder.Append(value.ToString("d") + ",");
                 }
             }
-            return enumType.ToString();
+            return builder.ToString().TrimEnd(',');
         }
-        #endregion
 
-        #region 根据值获取枚举的描述
-        public static string GetDescriptionByEnum<T>(this object obj)
+        /// <summary>
+        /// 为有Flags特性的枚举类提供拆解后用逗号连接的Description字符串
+        /// </summary>
+        public static string GetDescription<T>(T source) where T : System.Enum
         {
-            var tEnum = System.Enum.Parse(typeof(T), obj.ParseToString()) as System.Enum;
-            var description = tEnum.GetDescription();
-            return description;
+            var builder = new StringBuilder();
+            foreach (T value in System.Enum.GetValues(typeof(T)))
+            {
+                if ((source.ParseToInt() & value.ParseToInt()) != 0)
+                {
+                    builder.Append(value.GetDescription() + ",");
+                }
+            }
+            return builder.ToString().TrimEnd(',');
         }
-        #endregion
     }
 }

@@ -1,32 +1,25 @@
 ﻿using Quartz;
 using Quartz.Impl;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace YiSha.Business.AutoJob
 {
     public class JobScheduler
     {
-        private static object lockHelper = new object();
+        private static readonly object _lockHelper = new();
 
-        private static IScheduler scheduler = null;
+        private static readonly IScheduler _scheduler = null;
+
         public static IScheduler GetScheduler()
         {
-            lock (lockHelper)
+            lock (_lockHelper)
             {
-                if (scheduler != null)
+                if (_scheduler != null)
                 {
-                    return scheduler;
+                    return _scheduler;
                 }
-                else
-                {
-                    ISchedulerFactory schedf = new StdSchedulerFactory();
-                    IScheduler sched = schedf.GetScheduler().Result;
-                    return sched;
-                }
+                ISchedulerFactory schedf = new StdSchedulerFactory();
+                IScheduler sched = schedf.GetScheduler().Result;
+                return sched;
             }
         }
     }

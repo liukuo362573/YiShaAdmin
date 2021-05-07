@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
-using YiSha.Util;
+﻿using NUnit.Framework;
 using YiSha.Util.Model;
 
 namespace YiSha.DataTest
@@ -15,17 +11,14 @@ namespace YiSha.DataTest
         {
             GlobalContext.SystemConfig = new SystemConfig
             {
-                DBProvider = "MySql",
-                DBConnectionString = "server=localhost;database=YiShaAdmin;user=root;password=123456;port=3306;",
-                DBCommandTimeout = 180,
-                DBBackup = "DataBase"
+                DbProvider = "MySql",
+                DbConnectionString = "server=localhost;database=YiShaAdmin;user=root;password=123456;port=3306;",
+                DbCommandTimeout = 180,
+                DbBackup = "DataBase"
             };
         }
 
         [OneTimeTearDown]
-        public void OneTimeTearDown()
-        {
-
-        }
+        public void OneTimeTearDown() { }
     }
 }

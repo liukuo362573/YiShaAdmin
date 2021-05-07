@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using YiSha.Util.Model;
+﻿using YiSha.Util.Model;
 
 namespace YiSha.Model.Param.SystemManage
 {
@@ -10,6 +8,7 @@ namespace YiSha.Model.Param.SystemManage
         /// 字典类型
         /// </summary>
         public string DictType { get; set; }
+
         /// <summary>
         /// 备注
         /// </summary>

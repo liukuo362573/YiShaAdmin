@@ -1,6 +1,6 @@
-﻿using YiSha.Data.EF.Database;
+﻿using YiSha.Data.EF.DbContext;
 
-namespace YiSha.Data.EF
+namespace YiSha.Data.EF.Database
 {
     public sealed class SqlServerDatabase : AbstractDatabase
     {
@@ -9,7 +9,7 @@ namespace YiSha.Data.EF
         /// </summary>
         public SqlServerDatabase(string connString)
         {
-            dbContext = new SqlServerDbContext(connString);
+            DbContext = new SqlServerDbContext(connString);
         }
     }
 }

@@ -1,22 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using YiSha.Business.Cache;
-using YiSha.Business.SystemManage;
 using YiSha.Cache.Factory;
-using YiSha.Entity;
 using YiSha.Entity.OrganizationManage;
-using YiSha.Entity.SystemManage;
 using YiSha.Enum;
 using YiSha.Enum.OrganizationManage;
-using YiSha.Model;
 using YiSha.Model.Param;
 using YiSha.Model.Param.OrganizationManage;
 using YiSha.Service.OrganizationManage;
-using YiSha.Util;
 using YiSha.Util.Extension;
+using YiSha.Util.Helper;
 using YiSha.Util.Model;
 using YiSha.Web.Code;
 
@@ -24,17 +18,18 @@ namespace YiSha.Business.OrganizationManage
 {
     public class UserBLL
     {
-        private UserService userService = new UserService();
-        private UserBelongService userBelongService = new UserBelongService();
-        private DepartmentService departmentService = new DepartmentService();
+        private readonly UserService _userService = new();
+        private readonly UserBelongService _userBelongService = new();
+        private readonly DepartmentService _departmentService = new();
 
-        private DepartmentBLL departmentBLL = new DepartmentBLL();
+        private readonly DepartmentBLL _departmentBLL = new();
 
         #region 获取数据
+
         public async Task<TData<List<UserEntity>>> GetList(UserListParam param)
         {
             TData<List<UserEntity>> obj = new TData<List<UserEntity>>();
-            obj.Data = await userService.GetList(param);
+            obj.Data = await _userService.GetList(param);
             obj.Tag = 1;
             return obj;
         }
@@ -44,16 +39,16 @@ namespace YiSha.Business.OrganizationManage
             TData<List<UserEntity>> obj = new TData<List<UserEntity>>();
             if (param?.DepartmentId != null)
             {
-                param.ChildrenDepartmentIdList = await departmentBLL.GetChildrenDepartmentIdList(null, param.DepartmentId.Value);
+                param.ChildrenDepartmentIdList = await _departmentBLL.GetChildrenDepartmentIdList(null, param.DepartmentId.Value);
             }
             else
             {
                 OperatorInfo user = await Operator.Instance.Current();
-                param.ChildrenDepartmentIdList = await departmentBLL.GetChildrenDepartmentIdList(null, user.DepartmentId.Value);
+                param.ChildrenDepartmentIdList = await _departmentBLL.GetChildrenDepartmentIdList(null, user.DepartmentId.Value);
             }
-            obj.Data = await userService.GetPageList(param, pagination);
-            List<UserBelongEntity> userBelongList = await userBelongService.GetList(new UserBelongEntity { UserIds = obj.Data.Select(p => p.Id.Value).ParseToStrings<long>() });
-            List<DepartmentEntity> departmentList = await departmentService.GetList(new DepartmentListParam { Ids = userBelongList.Select(p => p.BelongId.Value).ParseToStrings<long>() });
+            obj.Data = await _userService.GetPageList(param, pagination);
+            List<UserBelongEntity> userBelongList = await _userBelongService.GetList(new UserBelongEntity { UserIds = obj.Data.Select(p => p.Id.Value).ParseToStrings<long>() });
+            List<DepartmentEntity> departmentList = await _departmentService.GetList(new DepartmentListParam { Ids = userBelongList.Select(p => p.BelongId.Value).ParseToStrings<long>() });
             foreach (UserEntity user in obj.Data)
             {
                 user.DepartmentName = departmentList.Where(p => p.Id == user.DepartmentId).Select(p => p.DepartmentName).FirstOrDefault();
@@ -66,13 +61,13 @@ namespace YiSha.Business.OrganizationManage
         public async Task<TData<UserEntity>> GetEntity(long id)
         {
             TData<UserEntity> obj = new TData<UserEntity>();
-            obj.Data = await userService.GetEntity(id);
+            obj.Data = await _userService.GetEntity(id);
 
             await GetUserBelong(obj.Data);
 
             if (obj.Data.DepartmentId > 0)
             {
-                DepartmentEntity departmentEntity = await departmentService.GetEntity(obj.Data.DepartmentId.Value);
+                DepartmentEntity departmentEntity = await _departmentService.GetEntity(obj.Data.DepartmentId.Value);
                 if (departmentEntity != null)
                 {
                     obj.Data.DepartmentName = departmentEntity.DepartmentName;
@@ -91,7 +86,7 @@ namespace YiSha.Business.OrganizationManage
                 obj.Message = "用户名或密码不能为空";
                 return obj;
             }
-            UserEntity user = await userService.CheckLogin(userName);
+            UserEntity user = await _userService.CheckLogin(userName);
             if (user != null)
             {
                 if (user.UserStatus == (int)StatusEnum.Yes)
@@ -102,6 +97,7 @@ namespace YiSha.Business.OrganizationManage
                         user.IsOnline = 1;
 
                         #region 设置日期
+
                         if (user.FirstVisit == GlobalConstant.DefaultTime)
                         {
                             user.FirstVisit = DateTime.Now;
@@ -115,6 +111,7 @@ namespace YiSha.Business.OrganizationManage
                             user.PreviousVisit = user.LastVisit;
                         }
                         user.LastVisit = DateTime.Now;
+
                         #endregion
 
                         switch (platform)
@@ -123,10 +120,12 @@ namespace YiSha.Business.OrganizationManage
                                 if (GlobalContext.SystemConfig.LoginMultiple)
                                 {
                                     #region 多次登录用同一个token
+
                                     if (string.IsNullOrEmpty(user.WebToken))
                                     {
                                         user.WebToken = SecurityHelper.GetGuid();
                                     }
+
                                     #endregion
                                 }
                                 else
@@ -161,13 +160,15 @@ namespace YiSha.Business.OrganizationManage
             }
             return obj;
         }
+
         #endregion
 
         #region 提交数据
+
         public async Task<TData<string>> SaveForm(UserEntity entity)
         {
             TData<string> obj = new TData<string>();
-            if (userService.ExistUserName(entity))
+            if (_userService.ExistUserName(entity))
             {
                 obj.Message = "用户名已经存在！";
                 return obj;
@@ -181,7 +182,7 @@ namespace YiSha.Business.OrganizationManage
             {
                 entity.Birthday = entity.Birthday.ParseToDateTime().ToString("yyyy-MM-dd");
             }
-            await userService.SaveForm(entity);
+            await _userService.SaveForm(entity);
 
             await RemoveCacheById(entity.Id.Value);
 
@@ -198,7 +199,7 @@ namespace YiSha.Business.OrganizationManage
                 obj.Message = "参数不能为空";
                 return obj;
             }
-            await userService.DeleteForm(ids);
+            await _userService.DeleteForm(ids);
 
             await RemoveCacheById(ids);
 
@@ -211,7 +212,7 @@ namespace YiSha.Business.OrganizationManage
             TData<long> obj = new TData<long>();
             if (entity.Id > 0)
             {
-                UserEntity dbUserEntity = await userService.GetEntity(entity.Id.Value);
+                UserEntity dbUserEntity = await _userService.GetEntity(entity.Id.Value);
                 if (dbUserEntity.Password == entity.Password)
                 {
                     obj.Message = "密码未更改";
@@ -219,7 +220,7 @@ namespace YiSha.Business.OrganizationManage
                 }
                 entity.Salt = GetPasswordSalt();
                 entity.Password = EncryptUserPassword(entity.Password, entity.Salt);
-                await userService.ResetPassword(entity);
+                await _userService.ResetPassword(entity);
 
                 await RemoveCacheById(entity.Id.Value);
 
@@ -239,7 +240,7 @@ namespace YiSha.Business.OrganizationManage
                     obj.Message = "新密码不能为空";
                     return obj;
                 }
-                UserEntity dbUserEntity = await userService.GetEntity(param.Id.Value);
+                UserEntity dbUserEntity = await _userService.GetEntity(param.Id.Value);
                 if (dbUserEntity.Password != EncryptUserPassword(param.Password, dbUserEntity.Salt))
                 {
                     obj.Message = "旧密码不正确";
@@ -247,7 +248,7 @@ namespace YiSha.Business.OrganizationManage
                 }
                 dbUserEntity.Salt = GetPasswordSalt();
                 dbUserEntity.Password = EncryptUserPassword(param.NewPassword, dbUserEntity.Salt);
-                await userService.ResetPassword(dbUserEntity);
+                await _userService.ResetPassword(dbUserEntity);
 
                 await RemoveCacheById(param.Id.Value);
 
@@ -267,7 +268,7 @@ namespace YiSha.Business.OrganizationManage
             TData<long> obj = new TData<long>();
             if (entity.Id > 0)
             {
-                await userService.ChangeUser(entity);
+                await _userService.ChangeUser(entity);
 
                 await RemoveCacheById(entity.Id.Value);
 
@@ -280,7 +281,7 @@ namespace YiSha.Business.OrganizationManage
         public async Task<TData> UpdateUser(UserEntity entity)
         {
             TData obj = new TData();
-            await userService.UpdateUser(entity);
+            await _userService.UpdateUser(entity);
 
             obj.Tag = 1;
             return obj;
@@ -293,19 +294,19 @@ namespace YiSha.Business.OrganizationManage
             {
                 foreach (UserEntity entity in list)
                 {
-                    UserEntity dbEntity = await userService.GetEntity(entity.UserName);
+                    UserEntity dbEntity = await _userService.GetEntity(entity.UserName);
                     if (dbEntity != null)
                     {
                         entity.Id = dbEntity.Id;
                         if (param.IsOverride == 1)
                         {
-                            await userService.SaveForm(entity);
+                            await _userService.SaveForm(entity);
                             await RemoveCacheById(entity.Id.Value);
                         }
                     }
                     else
                     {
-                        await userService.SaveForm(entity);
+                        await _userService.SaveForm(entity);
                         await RemoveCacheById(entity.Id.Value);
                     }
                 }
@@ -321,6 +322,7 @@ namespace YiSha.Business.OrganizationManage
         #endregion
 
         #region 私有方法
+
         /// <summary>
         /// 密码MD5处理
         /// </summary>
@@ -329,8 +331,8 @@ namespace YiSha.Business.OrganizationManage
         /// <returns></returns>
         private string EncryptUserPassword(string password, string salt)
         {
-            string md5Password = SecurityHelper.MD5Encrypt(password);
-            string encryptPassword = SecurityHelper.MD5Encrypt(md5Password + salt);
+            string md5Password = SecurityHelper.Md5Encrypt(password);
+            string encryptPassword = SecurityHelper.Md5Encrypt(md5Password + salt);
             return encryptPassword;
         }
 
@@ -357,7 +359,7 @@ namespace YiSha.Business.OrganizationManage
 
         private async Task RemoveCacheById(long id)
         {
-            var dbEntity = await userService.GetEntity(id);
+            var dbEntity = await _userService.GetEntity(id);
             if (dbEntity != null)
             {
                 CacheFactory.Cache.RemoveCache(dbEntity.WebToken);
@@ -370,7 +372,7 @@ namespace YiSha.Business.OrganizationManage
         /// <param name="user"></param>
         private async Task GetUserBelong(UserEntity user)
         {
-            List<UserBelongEntity> userBelongList = await userBelongService.GetList(new UserBelongEntity { UserId = user.Id });
+            List<UserBelongEntity> userBelongList = await _userBelongService.GetList(new UserBelongEntity { UserId = user.Id });
 
             List<UserBelongEntity> roleBelongList = userBelongList.Where(p => p.BelongType == UserBelongTypeEnum.Role.ParseToInt()).ToList();
             if (roleBelongList.Count > 0)
@@ -384,6 +386,7 @@ namespace YiSha.Business.OrganizationManage
                 user.PositionIds = string.Join(",", positionBelongList.Select(p => p.BelongId).ToList());
             }
         }
+
         #endregion
     }
 }

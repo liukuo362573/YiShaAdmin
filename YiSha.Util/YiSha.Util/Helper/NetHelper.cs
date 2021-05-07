@@ -1,24 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using YiSha.Util.Extension;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using YiSha.Util.Browser;
+using YiSha.Util.Extension;
+using YiSha.Util.Model;
 
-namespace YiSha.Util
+namespace YiSha.Util.Helper
 {
-    public class NetHelper
+    public static class NetHelper
     {
-        public static HttpContext HttpContext
-        {
-            get { return GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>().HttpContext; }
-        }
+        public static HttpContext HttpContext => GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>().HttpContext;
 
         public static string Ip
         {
@@ -90,7 +83,7 @@ namespace YiSha.Util
             {
                 string url = "http://www.net.cn/static/customercare/yourip.asp";
                 string html = HttpHelper.HttpGet(url);
-                if (!string.IsNullOrEmpty(html))
+                if (html?.Length > 0)
                 {
                     ip = HtmlHelper.Resove(html, "<h2>", "</h2>");
                 }
@@ -107,7 +100,7 @@ namespace YiSha.Util
             try
             {
                 string ip = HttpContext?.Connection?.RemoteIpAddress.ParseToString();
-                if (HttpContext != null && HttpContext.Request != null)
+                if (HttpContext is { Request: { } })
                 {
                     if (HttpContext.Request.Headers.ContainsKey("X-Real-IP"))
                     {
@@ -134,9 +127,9 @@ namespace YiSha.Util
             {
                 try
                 {
-                    var browser = HttpContext.Request.Headers["User-Agent"];
+                    var unused = HttpContext.Request.Headers["User-Agent"];
                     var agent = UserAgent.ParseToString();
-                    return BrowserHelper.GetBrwoserInfo(agent);
+                    return BrowserHelper.GetBrowserInfo(agent);
                 }
                 catch (Exception ex)
                 {
@@ -163,7 +156,7 @@ namespace YiSha.Util
             }
         }
 
-        public static string GetOSVersion()
+        public static string GetOsVersion()
         {
             var osVersion = string.Empty;
             try

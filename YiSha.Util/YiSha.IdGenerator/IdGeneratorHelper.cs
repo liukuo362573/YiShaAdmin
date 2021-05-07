@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YiSha.Util;
-using YiSha.Util.Extension;
+﻿using YiSha.Util.Model;
 
 namespace YiSha.IdGenerator
 {
@@ -13,26 +7,20 @@ namespace YiSha.IdGenerator
     /// </summary>
     public class IdGeneratorHelper
     {
-        private int SnowFlakeWorkerId = GlobalContext.SystemConfig.SnowFlakeWorkerId;
+        private readonly int _snowFlakeWorkerId = GlobalContext.SystemConfig.SnowFlakeWorkerId;
 
-        private Snowflake snowflake;
-
-        private static readonly IdGeneratorHelper instance = new IdGeneratorHelper();
+        private readonly Snowflake _snowflake;
 
         private IdGeneratorHelper()
         {
-            snowflake = new Snowflake(SnowFlakeWorkerId, 0, 0);
+            _snowflake = new Snowflake(_snowFlakeWorkerId, 0);
         }
-        public static IdGeneratorHelper Instance
-        {
-            get
-            {
-                return instance;
-            }
-        }
+
+        public static IdGeneratorHelper Instance { get; } = new();
+
         public long GetId()
         {
-            return snowflake.NextId();
+            return _snowflake.NextId();
         }
     }
 }

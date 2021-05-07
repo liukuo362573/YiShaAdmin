@@ -1,27 +1,20 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
-using System.Web;
 
-namespace YiSha.Util
+namespace YiSha.Util.Helper
 {
-    public class AsyncTaskHelper
+    public static class AsyncTaskHelper
     {
         /// <summary>
         /// 开始异步任务
         /// </summary>
-        /// <param name="action"></param>
         public static void StartTask(Action action)
         {
             try
             {
-                Action newAction = () =>
-                { };
+                Action newAction = () => { };
                 newAction += action;
-                Task task = new Task(newAction);
+                var task = new Task(newAction);
                 task.Start();
             }
             catch (Exception ex)

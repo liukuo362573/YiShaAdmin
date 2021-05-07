@@ -1,28 +1,26 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using YiSha.Util.Model;
 
-namespace YiSha.Admin.WebApi.Controllers
+namespace YiSha.Admin.WebApi.Filter
 {
     public class GlobalExceptionMiddleware
     {
-        private readonly RequestDelegate next;
+        private readonly RequestDelegate _next;
 
         public GlobalExceptionMiddleware(RequestDelegate next)
         {
-            this.next = next;
+            _next = next;
         }
 
         public async Task Invoke(HttpContext context /* other dependencies */)
         {
             try
             {
-                await next(context);
+                await _next(context);
             }
             catch (Exception ex)
             {

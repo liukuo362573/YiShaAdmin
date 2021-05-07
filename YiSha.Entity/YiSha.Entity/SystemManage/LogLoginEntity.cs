@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace YiSha.Entity.SystemManage
 {
@@ -11,11 +6,17 @@ namespace YiSha.Entity.SystemManage
     public class LogLoginEntity : BaseCreateEntity
     {
         public int? LogStatus { get; set; }
+
         public string IpAddress { get; set; }
+
         public string IpLocation { get; set; }
+
         public string Browser { get; set; }
-        public string OS { get; set; }
+
+        public string Os { get; set; }
+
         public string Remark { get; set; }
+
         public string ExtraRemark { get; set; }
 
         [NotMapped]

@@ -1,17 +1,17 @@
 ﻿using System;
-using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 
-namespace YiSha.Util
+namespace YiSha.Util.Helper
 {
-    public class CaptchaHelper
+    public static class CaptchaHelper
     {
         #region 得到验证码
+
         /// <summary>
         /// Tuple第一个值是表达式，第二个值是表达式结果
         /// </summary>
-        /// <returns></returns>
         public static Tuple<string, int> GetCaptchaCode()
         {
             int value = 0;
@@ -24,7 +24,10 @@ namespace YiSha.Util
             char operatorChar = operators[random.Next(0, operators.Length)];
             switch (operatorChar)
             {
-                case '+': value = first + second; break;
+                case '+':
+                    value = first + second;
+                    break;
+
                 case '-':
                     // 第1个数要大于第二个数
                     if (first < second)
@@ -35,7 +38,10 @@ namespace YiSha.Util
                     }
                     value = first - second;
                     break;
-                case '*': value = first * second; break;
+
+                case '*':
+                    value = first * second;
+                    break;
             }
 
             char code = (char)('0' + (char)first);
@@ -46,21 +52,25 @@ namespace YiSha.Util
             randomCode += "=?";
             return new Tuple<string, int>(randomCode, value);
         }
-        #endregion
+
+        #endregion 得到验证码
 
         #region 生成验证码图片
+
         /// <summary>
         /// 生成验证码图片
         /// </summary>
-        /// <param name="randomCode"></param>
-        /// <returns></returns>
         public static byte[] CreateCaptchaImage(string randomCode)
         {
+            if (randomCode == null)
+            {
+                throw new ArgumentNullException(nameof(randomCode));
+            }
             const int randAngle = 45; //随机转动角度
-            int mapwidth = (int)(randomCode.Length * 16);
-            Bitmap map = new Bitmap(mapwidth, 28);//创建图片背景
+            int mapwidth = randomCode.Length * 16;
+            Bitmap map = new Bitmap(mapwidth, 28); //创建图片背景
             Graphics graph = Graphics.FromImage(map);
-            graph.Clear(Color.AliceBlue);//清除画面，填充背景
+            graph.Clear(Color.AliceBlue); //清除画面，填充背景
 
             Random random = new Random();
             //背景噪点生成，为了在白色背景上显示，尽量生成深色
@@ -84,14 +94,12 @@ namespace YiSha.Util
                 Point p3 = new Point(random.Next(map.Width), random.Next(map.Height));
                 Point p4 = new Point(map.Width, random.Next(map.Height));
                 Point[] p = { p1, p2, p3, p4 };
-                using (Pen pen = new Pen(Color.Gray, 1))
-                {
-                    graph.DrawBeziers(pen, p);
-                }
+                using Pen pen = new Pen(Color.Gray, 1);
+                graph.DrawBeziers(pen, p);
             }
 
             //文字距中
-            using (StringFormat format = new StringFormat(StringFormatFlags.NoClip))
+            using (var format = new StringFormat(StringFormatFlags.NoClip))
             {
                 format.Alignment = StringAlignment.Center;
                 format.LineAlignment = StringAlignment.Center;
@@ -103,45 +111,41 @@ namespace YiSha.Util
                 int cindex = random.Next(7);
 
                 //验证码旋转，防止机器识别
-                char[] chars = randomCode.ToCharArray();//拆散字符串成单字符数组
+                char[] chars = randomCode.ToCharArray(); //拆散字符串成单字符数组
                 foreach (char t in chars)
                 {
                     int findex = random.Next(5);
-                    using (Font font = new Font(fonts[findex], 14, FontStyle.Bold))//字体样式(参数2为字体大小)
+                    using Font font = new Font(fonts[findex], 14, FontStyle.Bold);
+                    using Brush brush = new SolidBrush(c[cindex]);
+                    Point dot = new Point(14, 14);
+                    float angle = random.Next(-randAngle, randAngle); //转动的度数
+                    if (t is '+' or '-' or '*')
                     {
-                        using (Brush brush = new SolidBrush(c[cindex]))
-                        {
-                            Point dot = new Point(14, 14);
-                            float angle = random.Next(-randAngle, randAngle);//转动的度数
-                            if (t == '+' || t == '-' || t == '*')
-                            {
-                                //加减乘运算符不进行旋转
-                                graph.TranslateTransform(dot.X, dot.Y);//移动光标到指定位置
-                                graph.DrawString(t.ToString(), font, brush, 1, 1, format);
-                                graph.TranslateTransform(-2, -dot.Y);//移动光标到指定位置，每个字符紧凑显示，避免被软件识别
-                            }
-                            else
-                            {
-                                graph.TranslateTransform(dot.X, dot.Y);//移动光标到指定位置
-                                graph.RotateTransform(angle);
-                                graph.DrawString(t.ToString(), font, brush, 1, 1, format);
-                                graph.RotateTransform(-angle);//转回去
-                                graph.TranslateTransform(-2, -dot.Y);//移动光标到指定位置，每个字符紧凑显示，避免被软件识别
-                            }
-                        }
+                        //加减乘运算符不进行旋转
+                        graph.TranslateTransform(dot.X, dot.Y); //移动光标到指定位置
+                        graph.DrawString(t.ToString(), font, brush, 1, 1, format);
+                        graph.TranslateTransform(-2, -dot.Y); //移动光标到指定位置，每个字符紧凑显示，避免被软件识别
+                    }
+                    else
+                    {
+                        graph.TranslateTransform(dot.X, dot.Y); //移动光标到指定位置
+                        graph.RotateTransform(angle);
+                        graph.DrawString(t.ToString(), font, brush, 1, 1, format);
+                        graph.RotateTransform(-angle); //转回去
+                        graph.TranslateTransform(-2, -dot.Y); //移动光标到指定位置，每个字符紧凑显示，避免被软件识别
                     }
                 }
             }
             //生成图片
-            using (MemoryStream ms = new MemoryStream())
+            using (var ms = new MemoryStream())
             {
                 map.Save(ms, ImageFormat.Gif);
-
-                graph.Dispose();
                 map.Dispose();
+                graph.Dispose();
                 return ms.GetBuffer();
             }
         }
-        #endregion
+
+        #endregion 生成验证码图片
     }
 }

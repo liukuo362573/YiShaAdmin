@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace YiSha.Enum.SystemManage
 {
@@ -13,6 +8,6 @@ namespace YiSha.Enum.SystemManage
         Role = 1,
 
         [Description("用户")]
-        User = 2,
+        User = 2
     }
 }

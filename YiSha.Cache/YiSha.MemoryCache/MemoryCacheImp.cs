@@ -1,16 +1,17 @@
-﻿using System;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Caching.Memory;
 using YiSha.Cache.Interface;
-using YiSha.Util;
+using YiSha.Util.Helper;
+using YiSha.Util.Model;
 
 namespace YiSha.MemoryCache
 {
     public class MemoryCacheImp : ICache
     {
-        private IMemoryCache cache = GlobalContext.ServiceProvider.GetService<IMemoryCache>();
+        private readonly IMemoryCache _cache = GlobalContext.ServiceProvider.GetService<IMemoryCache>();
 
         public bool SetCache<T>(string key, T value, DateTime? expireTime = null)
         {
@@ -18,12 +19,9 @@ namespace YiSha.MemoryCache
             {
                 if (expireTime == null)
                 {
-                    return cache.Set<T>(key, value) != null;
+                    return _cache.Set(key, value) != null;
                 }
-                else
-                {
-                    return cache.Set(key, value, (expireTime.Value - DateTime.Now)) != null;
-                }
+                return _cache.Set(key, value, expireTime.Value - DateTime.Now) != null;
             }
             catch (Exception ex)
             {
@@ -34,42 +32,37 @@ namespace YiSha.MemoryCache
 
         public bool RemoveCache(string key)
         {
-            cache.Remove(key);
+            _cache.Remove(key);
             return true;
         }
 
         public T GetCache<T>(string key)
         {
-            var value = cache.Get<T>(key);
-            return value;
+            return _cache.Get<T>(key);
         }
 
         #region Hash
+
         public int SetHashFieldCache<T>(string key, string fieldKey, T fieldValue)
         {
-            return SetHashFieldCache<T>(key, new Dictionary<string, T> { { fieldKey, fieldValue } });
+            return SetHashFieldCache(key, new Dictionary<string, T> { { fieldKey, fieldValue } });
         }
 
         public int SetHashFieldCache<T>(string key, Dictionary<string, T> dict)
         {
-            int count = 0;
-            foreach (string fieldKey in dict.Keys)
-            {
-                count += cache.Set(key, dict) != null ? 1 : 0;
-            }
-            return count;
+            return dict.Keys.Sum(unused => _cache.Set(key, dict) != null ? 1 : 0);
         }
 
         public T GetHashFieldCache<T>(string key, string fieldKey)
         {
-            var dict = GetHashFieldCache<T>(key, new Dictionary<string, T> { { fieldKey, default(T) } });
+            var dict = GetHashFieldCache(key, new Dictionary<string, T> { { fieldKey, default } });
             return dict[fieldKey];
         }
 
         public Dictionary<string, T> GetHashFieldCache<T>(string key, Dictionary<string, T> dict)
         {
-            var hashFields = cache.Get<Dictionary<string, T>>(key);
-            foreach (KeyValuePair<string, T> keyValuePair in hashFields.Where(p => dict.Keys.Contains(p.Key)))
+            var hashFields = _cache.Get<Dictionary<string, T>>(key);
+            foreach (var keyValuePair in hashFields.Where(p => dict.Keys.Contains(p.Key)))
             {
                 dict[keyValuePair.Key] = keyValuePair.Value;
             }
@@ -78,8 +71,8 @@ namespace YiSha.MemoryCache
 
         public Dictionary<string, T> GetHashCache<T>(string key)
         {
-            Dictionary<string, T> dict = new Dictionary<string, T>();
-            var hashFields = cache.Get<Dictionary<string, T>>(key);
+            var dict = new Dictionary<string, T>();
+            var hashFields = _cache.Get<Dictionary<string, T>>(key);
             foreach (string field in hashFields.Keys)
             {
                 dict[field] = hashFields[field];
@@ -89,31 +82,27 @@ namespace YiSha.MemoryCache
 
         public List<T> GetHashToListCache<T>(string key)
         {
-            List<T> list = new List<T>();
-            var hashFields = cache.Get<Dictionary<string, T>>(key);
-            foreach (string field in hashFields.Keys)
-            {
-                list.Add(hashFields[field]);
-            }
-            return list;
+            var hashFields = _cache.Get<Dictionary<string, T>>(key);
+            return hashFields.Keys.Select(field => hashFields[field]).ToList();
         }
 
         public bool RemoveHashFieldCache(string key, string fieldKey)
         {
-            Dictionary<string, bool> dict = new Dictionary<string, bool> { { fieldKey, false } };
+            var dict = new Dictionary<string, bool> { { fieldKey, false } };
             dict = RemoveHashFieldCache(key, dict);
             return dict[fieldKey];
         }
 
         public Dictionary<string, bool> RemoveHashFieldCache(string key, Dictionary<string, bool> dict)
         {
-            var hashFields = cache.Get<Dictionary<string, object>>(key);
+            var hashFields = _cache.Get<Dictionary<string, object>>(key);
             foreach (string fieldKey in dict.Keys)
             {
                 dict[fieldKey] = hashFields.Remove(fieldKey);
             }
             return dict;
         }
-        #endregion
+
+        #endregion Hash
     }
 }

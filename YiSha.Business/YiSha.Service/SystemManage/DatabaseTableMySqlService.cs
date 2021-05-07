@@ -4,14 +4,13 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using YiSha.Data;
-using YiSha.Data.EF;
+using YiSha.Data.EF.Database;
+using YiSha.Data.Extension;
 using YiSha.Data.Repository;
-using YiSha.Entity;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Result.SystemManage;
-using YiSha.Util;
+using YiSha.Util.Helper;
 using YiSha.Util.Model;
 
 namespace YiSha.Service.SystemManage
@@ -19,11 +18,12 @@ namespace YiSha.Service.SystemManage
     public class DatabaseTableMySqlService : RepositoryFactory, IDatabaseTableService
     {
         #region 获取数据
+
         public async Task<List<TableInfo>> GetTableList(string tableName)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"SELECT table_name TableName FROM information_schema.tables WHERE table_schema='" + GetDatabase() + "' AND table_type='base table'");
-            IEnumerable<TableInfo> list = await this.BaseRepository().FindList<TableInfo>(strSql.ToString());
+            IEnumerable<TableInfo> list = await BaseRepository().FindList<TableInfo>(strSql.ToString());
             if (!string.IsNullOrEmpty(tableName))
             {
                 list = list.Where(p => p.TableName.Contains(tableName));
@@ -44,7 +44,7 @@ namespace YiSha.Service.SystemManage
                 parameter.Add(DbParameterHelper.CreateDbParameter("@TableName", '%' + tableName + '%'));
             }
 
-            IEnumerable<TableInfo> list = await this.BaseRepository().FindList<TableInfo>(strSql.ToString(), parameter.ToArray(), pagination);
+            IEnumerable<TableInfo> list = await BaseRepository().FindList<TableInfo>(strSql.ToString(), parameter.ToArray(), pagination);
             await SetTableDetail(list);
             return list.ToList();
         }
@@ -62,17 +62,19 @@ namespace YiSha.Service.SystemManage
                              FROM information_schema.columns WHERE table_schema='" + GetDatabase() + "' AND table_name=@TableName");
             var parameter = new List<DbParameter>();
             parameter.Add(DbParameterHelper.CreateDbParameter("@TableName", tableName));
-            var list = await this.BaseRepository().FindList<TableFieldInfo>(strSql.ToString(), parameter.ToArray());
+            var list = await BaseRepository().FindList<TableFieldInfo>(strSql.ToString(), parameter.ToArray());
             return list.ToList();
         }
+
         #endregion
 
         #region 公有方法
+
         public async Task<bool> DatabaseBackup(string database, string backupPath)
         {
             string backupFile = string.Format("{0}\\{1}_{2}.bak", backupPath, database, DateTime.Now.ToString("yyyyMMddHHmmss"));
             string strSql = string.Format(" backup database [{0}] to disk = '{1}'", database, backupFile);
-            var result = await this.BaseRepository().ExecuteBySql(strSql);
+            var result = await BaseRepository().ExecuteBySql(strSql);
             return result > 0 ? true : false;
         }
 
@@ -83,6 +85,7 @@ namespace YiSha.Service.SystemManage
         public async Task SyncDatabase()
         {
             #region 同步SqlServer数据库
+
             await SyncSqlServerTable<AreaEntity>();
             await SyncSqlServerTable<AutoJobEntity>();
             await SyncSqlServerTable<AutoJobLogEntity>();
@@ -97,16 +100,19 @@ namespace YiSha.Service.SystemManage
             await SyncSqlServerTable<RoleEntity>();
             await SyncSqlServerTable<UserEntity>();
             await SyncSqlServerTable<UserBelongEntity>();
+
             #endregion
         }
+
         private async Task SyncSqlServerTable<T>() where T : class, new()
         {
             string sqlServerConnectionString = "Server=localhost;Database=YiShaAdmin;User Id=sa;Password=123456;";
-            IEnumerable<T> list = await this.BaseRepository().FindList<T>();
+            IEnumerable<T> list = await BaseRepository().FindList<T>();
 
             await new SqlServerDatabase(sqlServerConnectionString).Delete<T>(p => true);
-            await new SqlServerDatabase(sqlServerConnectionString).Insert<T>(list);
+            await new SqlServerDatabase(sqlServerConnectionString).Insert(list);
         }
+
         #endregion
 
         #region 私有方法
@@ -124,9 +130,9 @@ namespace YiSha.Service.SystemManage
                                      WHERE t1.TABLE_SCHEMA='" + GetDatabase() + "' AND t2.TABLE_SCHEMA='" + GetDatabase() + "'";
             if (list != null && list.Count() > 0)
             {
-                strSql += " AND t1.TABLE_NAME in(" + string.Join(",", list.Select(p => "'" + p.TableName + "'")) + ")";//生成 Where In 条件
+                strSql += " AND t1.TABLE_NAME in(" + string.Join(",", list.Select(p => "'" + p.TableName + "'")) + ")"; //生成 Where In 条件
             }
-            IEnumerable<TableInfo> result = await BaseRepository().FindList<TableInfo>(strSql.ToString());
+            IEnumerable<TableInfo> result = await BaseRepository().FindList<TableInfo>(strSql);
             return result.ToList();
         }
 
@@ -149,11 +155,13 @@ namespace YiSha.Service.SystemManage
                 }
             }
         }
+
         private string GetDatabase()
         {
-            string database = HtmlHelper.Resove(GlobalContext.SystemConfig.DBConnectionString, "database=", ";");
+            string database = HtmlHelper.Resove(GlobalContext.SystemConfig.DbConnectionString, "database=", ";");
             return database;
         }
+
         #endregion
     }
 }

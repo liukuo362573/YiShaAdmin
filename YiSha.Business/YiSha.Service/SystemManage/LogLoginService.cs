@@ -4,13 +4,12 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using YiSha.Data;
+using YiSha.Data.Extension;
 using YiSha.Data.Repository;
 using YiSha.Entity.SystemManage;
-using YiSha.Model;
 using YiSha.Model.Param.SystemManage;
-using YiSha.Util;
 using YiSha.Util.Extension;
+using YiSha.Util.Helper;
 using YiSha.Util.Model;
 
 namespace YiSha.Service.SystemManage
@@ -18,11 +17,12 @@ namespace YiSha.Service.SystemManage
     public class LogLoginService : RepositoryFactory
     {
         #region 获取数据
+
         public async Task<List<LogLoginEntity>> GetList(LogLoginListParam param)
         {
             var strSql = new StringBuilder();
             List<DbParameter> filter = ListFilter(param, strSql);
-            var list = await this.BaseRepository().FindList<LogLoginEntity>(strSql.ToString(), filter.ToArray());
+            var list = await BaseRepository().FindList<LogLoginEntity>(strSql.ToString(), filter.ToArray());
             return list.ToList();
         }
 
@@ -30,43 +30,47 @@ namespace YiSha.Service.SystemManage
         {
             var strSql = new StringBuilder();
             List<DbParameter> filter = ListFilter(param, strSql);
-            var list = await this.BaseRepository().FindList<LogLoginEntity>(strSql.ToString(), filter.ToArray(), pagination);
+            var list = await BaseRepository().FindList<LogLoginEntity>(strSql.ToString(), filter.ToArray(), pagination);
             return list.ToList();
         }
 
         public async Task<LogLoginEntity> GetEntity(long id)
         {
-            return await this.BaseRepository().FindEntity<LogLoginEntity>(id);
+            return await BaseRepository().FindEntity<LogLoginEntity>(id);
         }
+
         #endregion
 
         #region 提交数据
+
         public async Task SaveForm(LogLoginEntity entity)
         {
             if (entity.Id.IsNullOrZero())
             {
                 await entity.Create();
-                await this.BaseRepository().Insert(entity);
+                await BaseRepository().Insert(entity);
             }
             else
             {
-                await this.BaseRepository().Update(entity);
+                await BaseRepository().Update(entity);
             }
         }
 
         public async Task DeleteForm(string ids)
         {
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
-            await this.BaseRepository().Delete<LogLoginEntity>(idArr);
+            await BaseRepository().Delete<LogLoginEntity>(idArr);
         }
 
         public async Task RemoveAllForm()
         {
-            await this.BaseRepository().ExecuteBySql("truncate table SysLogLogin");
+            await BaseRepository().ExecuteBySql("truncate table SysLogLogin");
         }
+
         #endregion
 
         #region 私有方法
+
         private List<DbParameter> ListFilter(LogLoginListParam param, StringBuilder strSql)
         {
             strSql.Append(@"SELECT  a.Id,
@@ -114,6 +118,7 @@ namespace YiSha.Service.SystemManage
             }
             return parameter;
         }
+
         #endregion
     }
 }

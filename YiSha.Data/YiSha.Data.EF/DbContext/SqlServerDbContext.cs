@@ -1,17 +1,15 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
-using System.Configuration;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using YiSha.Util;
+using YiSha.Util.Model;
 
-namespace YiSha.Data.EF
+namespace YiSha.Data.EF.DbContext
 {
-    public class SqlServerDbContext : DbContext
+    public class SqlServerDbContext : Microsoft.EntityFrameworkCore.DbContext
     {
         private static readonly ILoggerFactory _loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
 
@@ -30,7 +28,7 @@ namespace YiSha.Data.EF
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(ConnectionString, p => p.CommandTimeout(GlobalContext.SystemConfig.DBCommandTimeout));
+            optionsBuilder.UseSqlServer(ConnectionString, p => p.CommandTimeout(GlobalContext.SystemConfig.DbCommandTimeout));
             optionsBuilder.AddInterceptors(new DbCommandCustomInterceptor());
             optionsBuilder.UseLoggerFactory(_loggerFactory);
         }

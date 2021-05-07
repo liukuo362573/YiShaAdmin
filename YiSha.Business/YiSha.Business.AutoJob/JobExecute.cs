@@ -1,37 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Quartz;
+﻿using Quartz;
 using Quartz.Impl.Triggers;
+using System;
+using System.Threading.Tasks;
+using YiSha.Business.AutoJob.Job;
 using YiSha.Entity.SystemManage;
 using YiSha.Enum;
 using YiSha.Service.SystemManage;
-using YiSha.Util;
 using YiSha.Util.Extension;
+using YiSha.Util.Helper;
 using YiSha.Util.Model;
 
 namespace YiSha.Business.AutoJob
 {
     public class JobExecute : IJob
     {
-        private AutoJobService autoJobService = new AutoJobService();
-        private AutoJobLogService autoJobLogService = new AutoJobLogService();
+        private readonly AutoJobService _autoJobService = new();
+
+        private readonly AutoJobLogService _autoJobLogService = new();
 
         public Task Execute(IJobExecutionContext context)
         {
             return Task.Run(async () =>
             {
-                TData obj = new TData();
-                long jobId = 0;
-                JobDataMap jobData = null;
+                TData obj = new();
                 AutoJobEntity dbJobEntity = null;
                 try
                 {
-                    jobData = context.JobDetail.JobDataMap;
-                    jobId = jobData["Id"].ParseToLong();
+                    var jobData = context.JobDetail.JobDataMap;
+                    var jobId = jobData["Id"].ParseToLong();
                     // 获取数据库中的任务
-                    dbJobEntity = await autoJobService.GetEntity(jobId);
+                    dbJobEntity = await _autoJobService.GetEntity(jobId);
                     if (dbJobEntity != null)
                     {
                         if (dbJobEntity.JobStatus == StatusEnum.Yes.ParseToInt())
@@ -47,13 +45,14 @@ namespace YiSha.Business.AutoJob
                                 }
 
                                 #region 执行任务
-                                switch (context.JobDetail.Key.Name)
+
+                                obj = context.JobDetail.Key.Name switch
                                 {
-                                    case "数据库备份":
-                                        obj = await new DatabasesBackupJob().Start();
-                                        break;
-                                }
-                                #endregion
+                                    "数据库备份" => await new DatabasesBackupJob().Start(),
+                                    _ => obj
+                                };
+
+                                #endregion 执行任务
                             }
                         }
                     }
@@ -71,22 +70,26 @@ namespace YiSha.Business.AutoJob
                         if (dbJobEntity.JobStatus == StatusEnum.Yes.ParseToInt())
                         {
                             #region 更新下次运行时间
-                            await autoJobService.SaveForm(new AutoJobEntity
+
+                            await _autoJobService.SaveForm(new AutoJobEntity
                             {
                                 Id = dbJobEntity.Id,
                                 NextStartTime = context.NextFireTimeUtc.Value.DateTime.AddHours(8)
                             });
-                            #endregion
+
+                            #endregion 更新下次运行时间
 
                             #region 记录执行状态
-                            await autoJobLogService.SaveForm(new AutoJobLogEntity
+
+                            await _autoJobLogService.SaveForm(new AutoJobLogEntity
                             {
                                 JobGroupName = context.JobDetail.Key.Group,
                                 JobName = context.JobDetail.Key.Name,
                                 LogStatus = obj.Tag,
                                 Remark = obj.Message
                             });
-                            #endregion
+
+                            #endregion 记录执行状态
                         }
                     }
                 }

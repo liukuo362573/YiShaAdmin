@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using System.Threading.Tasks;
 using YiSha.Business.SystemManage;
-using YiSha.Util;
 using YiSha.Util.Model;
 
-namespace YiSha.Business.AutoJob
+namespace YiSha.Business.AutoJob.Job
 {
     public class DatabasesBackupJob : IJobTask
     {
         public async Task<TData> Start()
         {
             TData obj = new TData();
-            string backupPath = GlobalContext.SystemConfig.DBBackup;
+            string backupPath = GlobalContext.SystemConfig.DbBackup;
             if (string.IsNullOrEmpty(backupPath))
             {
                 backupPath = Path.Combine(GlobalContext.HostingEnvironment.ContentRootPath, "Database");

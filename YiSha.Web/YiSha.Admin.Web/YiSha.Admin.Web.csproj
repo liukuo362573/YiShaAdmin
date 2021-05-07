@@ -9,6 +9,7 @@
     <Product>YiShaAdmin</Product>
     <Copyright>YiShaAdmin</Copyright>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <LangVersion>9</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,5 +33,82 @@
     <ProjectReference Include="..\..\YiSha.Util\YiSha.CodeGenerator\YiSha.CodeGenerator.csproj" />
     <ProjectReference Include="..\..\YiSha.Util\YiSha.Util\YiSha.Util.csproj" />
     <ProjectReference Include="..\YiSha.Web.Code\YiSha.Web.Code.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Areas\DemoManage\Views\Form\AutoComplete.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\DemoManage\Views\Form\Button.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\DemoManage\Views\Form\Card.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\DemoManage\Views\Form\Datetime.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\DemoManage\Views\Form\Editor.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\DemoManage\Views\Form\Grid.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\DemoManage\Views\Form\Panel.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\DemoManage\Views\Form\Select.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\DemoManage\Views\Form\Tab.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\DemoManage\Views\Form\Timeline.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\DemoManage\Views\Form\Upload.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\DemoManage\Views\Icon\FontAwesome.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\DemoManage\Views\Report\ECharts.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\DemoManage\Views\Report\Peity.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\DemoManage\Views\Table\Editable.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\DemoManage\Views\Table\Footer.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\DemoManage\Views\Table\GroupHeader.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\DemoManage\Views\Table\Image.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\DemoManage\Views\Table\MultiToolbar.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\OrganizationManage\Views\Department\DepartmentForm.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\OrganizationManage\Views\Department\DepartmentIndex.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\OrganizationManage\Views\News\NewsForm.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\OrganizationManage\Views\News\NewsIndex.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\OrganizationManage\Views\Position\PositionForm.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\OrganizationManage\Views\Position\PositionIndex.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\OrganizationManage\Views\User\ChangePassword.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\OrganizationManage\Views\User\ChangeUser.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\OrganizationManage\Views\User\ResetPassword.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\OrganizationManage\Views\User\UserDetail.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\OrganizationManage\Views\User\UserForm.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\OrganizationManage\Views\User\UserImport.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\OrganizationManage\Views\User\UserIndex.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\OrganizationManage\Views\User\UserPortrait.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\SystemManage\Views\Area\AreaIndex.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\SystemManage\Views\AutoJobLog\AutoJobLogIndex.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\SystemManage\Views\AutoJob\AutoJobForm.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\SystemManage\Views\AutoJob\AutoJobIndex.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\SystemManage\Views\Database\DatatableIndex.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\SystemManage\Views\DataDictDetail\DataDictDetailForm.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\SystemManage\Views\DataDictDetail\DataDictDetailIndex.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\SystemManage\Views\DataDict\DataDictForm.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\SystemManage\Views\DataDict\DataDictIndex.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\SystemManage\Views\LogApi\LogApiDetail.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\SystemManage\Views\LogApi\LogApiIndex.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\SystemManage\Views\LogLogin\LogLoginIndex.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\SystemManage\Views\LogOperate\LogOperateDetail.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\SystemManage\Views\LogOperate\LogOperateIndex.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\SystemManage\Views\Menu\MenuChoose.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\SystemManage\Views\Menu\MenuForm.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\SystemManage\Views\Menu\MenuIcon.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\SystemManage\Views\Menu\MenuIndex.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\SystemManage\Views\Role\RoleForm.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\SystemManage\Views\Role\RoleIndex.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\SystemManage\Shared\AreaFormPartial.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\SystemManage\Shared\AreaIndexPartial.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\ToolManage\Views\CodeGenerator\CodeGeneratorEditList.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\ToolManage\Views\CodeGenerator\CodeGeneratorEditSearch.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\ToolManage\Views\CodeGenerator\CodeGeneratorEditToolbar.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\ToolManage\Views\CodeGenerator\CodeGeneratorForm.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\ToolManage\Views\CodeGenerator\CodeGeneratorIndex.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\ToolManage\Views\Server\ServerIndex.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Home\Error.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Home\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Home\Login.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Home\NoPermission.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Home\Skin.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Home\Welcome.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\_Form.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\_FormGray.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\_FormWhite.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\_Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\_Layout.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\_ViewImports.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\_ViewStart.cshtml" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,6 @@
-﻿using System;
+﻿using NUnit.Framework;
 using System.Text;
-using NUnit.Framework;
-using YiSha.Util;
+using YiSha.Util.Helper;
 
 namespace YiSha.UtilTest
 {
@@ -10,13 +9,13 @@ namespace YiSha.UtilTest
         [Test]
         public void TestMD5Encrypt()
         {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);  // 注册Encoding
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // 注册Encoding
 
             HttpResult httpResult = new HttpHelper().GetHtml(new HttpItem
             {
-                URL = "http://whois.pconline.com.cn/ip.jsp?ip=117.64.156.76",
+                Url = "http://whois.pconline.com.cn/ip.jsp?ip=117.64.156.76",
                 ContentType = "text/html; charset=gb2312"
-            });           
+            });
         }
     }
 }

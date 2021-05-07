@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace YiSha.Admin.Web.Areas.DemoManage.Controllers
 {
@@ -25,11 +21,6 @@ namespace YiSha.Admin.Web.Areas.DemoManage.Controllers
         }
 
         public IActionResult Timeline()
-        {
-            return View();
-        }
-
-        public IActionResult Basic()
         {
             return View();
         }

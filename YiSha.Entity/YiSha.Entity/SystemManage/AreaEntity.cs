@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using YiSha.Util;
+using YiSha.Util.Helper;
 
 namespace YiSha.Entity.SystemManage
 {
@@ -13,21 +12,25 @@ namespace YiSha.Entity.SystemManage
         /// </summary>
         /// <returns></returns>
         public string AreaCode { get; set; }
+
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public string ParentAreaCode { get; set; }
+
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public string AreaName { get; set; }
+
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public string ZipCode { get; set; }
+
         /// <summary>
         /// 
         /// </summary>
@@ -46,24 +49,30 @@ namespace YiSha.Entity.SystemManage
         /// <returns></returns>
         [JsonConverter(typeof(StringJsonConverter))]
         public long? ProvinceId { get; set; }
+
         /// <summary>
         /// 城市ID
         /// </summary>
         /// <returns></returns>
         [JsonConverter(typeof(StringJsonConverter))]
         public long? CityId { get; set; }
+
         /// <summary>
         /// 区域ID
         /// </summary>
         /// <returns></returns>
         [JsonConverter(typeof(StringJsonConverter))]
         public long? CountyId { get; set; }
+
         [NotMapped]
         public string ProvinceName { get; set; }
+
         [NotMapped]
         public string CityName { get; set; }
+
         [NotMapped]
         public string CountryName { get; set; }
+
         [NotMapped]
         public string AreaId { get; set; }
     }

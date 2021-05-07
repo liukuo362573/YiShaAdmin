@@ -1,11 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Data.Common;
-using System.Reflection;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System;
+using System.Data.Common;
 using System.Globalization;
-using YiSha.Util;
+using System.Linq;
+using System.Reflection;
+using YiSha.Data.Extension;
+using YiSha.Util.Helper;
+using YiSha.Util.Model;
 
 namespace YiSha.Data.EF
 {
@@ -42,7 +44,7 @@ namespace YiSha.Data.EF
         /// <summary>
         /// 获取实体映射对象
         /// </summary>
-        public static IEntityType GetEntityType<T>(DbContext dbContext) where T : class
+        public static IEntityType GetEntityType<T>(Microsoft.EntityFrameworkCore.DbContext dbContext) where T : class
         {
             return dbContext.Model.FindEntityType(typeof(T));
         }
@@ -58,7 +60,7 @@ namespace YiSha.Data.EF
         /// <summary>
         /// 把null设置成对应属性类型的默认值
         /// </summary>
-        public static void SetEntityDefaultValue(DbContext dbContext)
+        public static void SetEntityDefaultValue(Microsoft.EntityFrameworkCore.DbContext dbContext)
         {
             foreach (var entry in dbContext.ChangeTracker.Entries().Where(p => p.State == EntityState.Added))
             {

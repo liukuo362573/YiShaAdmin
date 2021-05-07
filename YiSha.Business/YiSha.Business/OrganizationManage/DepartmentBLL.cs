@@ -1,38 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using YiSha.Entity.OrganizationManage;
-using YiSha.Enum.OrganizationManage;
-using YiSha.Model;
-using YiSha.Model.Result;
 using YiSha.Model.Param.OrganizationManage;
+using YiSha.Model.Result;
 using YiSha.Service.OrganizationManage;
-using YiSha.Util;
-using YiSha.Util.Model;
 using YiSha.Util.Extension;
+using YiSha.Util.Helper;
+using YiSha.Util.Model;
 using YiSha.Web.Code;
 
 namespace YiSha.Business.OrganizationManage
 {
     public class DepartmentBLL
     {
-        private DepartmentService departmentService = new DepartmentService();
-        private UserService userService = new UserService();
+        private readonly DepartmentService _departmentService = new();
+        private readonly UserService _userService = new();
 
         #region 获取数据
+
         public async Task<TData<List<DepartmentEntity>>> GetList(DepartmentListParam param)
         {
             TData<List<DepartmentEntity>> obj = new TData<List<DepartmentEntity>>();
-            obj.Data = await departmentService.GetList(param);
+            obj.Data = await _departmentService.GetList(param);
             OperatorInfo operatorInfo = await Operator.Instance.Current();
             if (operatorInfo.IsSystem != 1)
             {
                 List<long> childrenDepartmentIdList = await GetChildrenDepartmentIdList(obj.Data, operatorInfo.DepartmentId.Value);
                 obj.Data = obj.Data.Where(p => childrenDepartmentIdList.Contains(p.Id.Value)).ToList();
             }
-            List<UserEntity> userList = await userService.GetList(new UserListParam { UserIds = string.Join(",", obj.Data.Select(p => p.PrincipalId).ToArray()) });
+            List<UserEntity> userList = await _userService.GetList(new UserListParam { UserIds = string.Join(",", obj.Data.Select(p => p.PrincipalId).ToArray()) });
             foreach (DepartmentEntity entity in obj.Data)
             {
                 if (entity.PrincipalId > 0)
@@ -52,7 +49,7 @@ namespace YiSha.Business.OrganizationManage
         {
             var obj = new TData<List<ZtreeInfo>>();
             obj.Data = new List<ZtreeInfo>();
-            List<DepartmentEntity> departmentList = await departmentService.GetList(param);
+            List<DepartmentEntity> departmentList = await _departmentService.GetList(param);
             OperatorInfo operatorInfo = await Operator.Instance.Current();
             if (operatorInfo.IsSystem != 1)
             {
@@ -76,14 +73,14 @@ namespace YiSha.Business.OrganizationManage
         {
             var obj = new TData<List<ZtreeInfo>>();
             obj.Data = new List<ZtreeInfo>();
-            List<DepartmentEntity> departmentList = await departmentService.GetList(param);
+            List<DepartmentEntity> departmentList = await _departmentService.GetList(param);
             OperatorInfo operatorInfo = await Operator.Instance.Current();
             if (operatorInfo.IsSystem != 1)
             {
                 List<long> childrenDepartmentIdList = await GetChildrenDepartmentIdList(departmentList, operatorInfo.DepartmentId.Value);
                 departmentList = departmentList.Where(p => childrenDepartmentIdList.Contains(p.Id.Value)).ToList();
             }
-            List<UserEntity> userList = await userService.GetList(null);
+            List<UserEntity> userList = await _userService.GetList(null);
             foreach (DepartmentEntity department in departmentList)
             {
                 obj.Data.Add(new ZtreeInfo
@@ -110,7 +107,7 @@ namespace YiSha.Business.OrganizationManage
         public async Task<TData<DepartmentEntity>> GetEntity(long id)
         {
             TData<DepartmentEntity> obj = new TData<DepartmentEntity>();
-            obj.Data = await departmentService.GetEntity(id);
+            obj.Data = await _departmentService.GetEntity(id);
             obj.Tag = 1;
             return obj;
         }
@@ -118,13 +115,15 @@ namespace YiSha.Business.OrganizationManage
         public async Task<TData<int>> GetMaxSort()
         {
             TData<int> obj = new TData<int>();
-            obj.Data = await departmentService.GetMaxSort();
+            obj.Data = await _departmentService.GetMaxSort();
             obj.Tag = 1;
             return obj;
         }
+
         #endregion
 
         #region 提交数据
+
         public async Task<TData<string>> SaveForm(DepartmentEntity entity)
         {
             TData<string> obj = new TData<string>();
@@ -133,12 +132,12 @@ namespace YiSha.Business.OrganizationManage
                 obj.Message = "不能选择自己作为上级部门！";
                 return obj;
             }
-            if (departmentService.ExistDepartmentName(entity))
+            if (_departmentService.ExistDepartmentName(entity))
             {
                 obj.Message = "部门名称已经存在！";
                 return obj;
             }
-            await departmentService.SaveForm(entity);
+            await _departmentService.SaveForm(entity);
             obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
             return obj;
@@ -149,19 +148,21 @@ namespace YiSha.Business.OrganizationManage
             TData obj = new TData();
             foreach (long id in TextHelper.SplitToArray<long>(ids, ','))
             {
-                if (departmentService.ExistChildrenDepartment(id))
+                if (_departmentService.ExistChildrenDepartment(id))
                 {
                     obj.Message = "该部门下面有子部门！";
                     return obj;
                 }
             }
-            await departmentService.DeleteForm(ids);
+            await _departmentService.DeleteForm(ids);
             obj.Tag = 1;
             return obj;
         }
+
         #endregion
 
         #region 公共方法
+
         /// <summary>
         /// 获取当前部门及下面所有的部门
         /// </summary>
@@ -172,16 +173,18 @@ namespace YiSha.Business.OrganizationManage
         {
             if (departmentList == null)
             {
-                departmentList = await departmentService.GetList(null);
+                departmentList = await _departmentService.GetList(null);
             }
             List<long> departmentIdList = new List<long>();
             departmentIdList.Add(departmentId);
             GetChildrenDepartmentIdList(departmentList, departmentId, departmentIdList);
             return departmentIdList;
         }
-        #endregion 
+
+        #endregion
 
         #region 私有方法
+
         /// <summary>
         /// 获取该部门下面所有的子部门
         /// </summary>
@@ -200,6 +203,7 @@ namespace YiSha.Business.OrganizationManage
                 }
             }
         }
+
         #endregion
     }
 }

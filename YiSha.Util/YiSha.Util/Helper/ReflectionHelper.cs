@@ -4,14 +4,13 @@ using System.Collections.Concurrent;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
-using YiSha.Util.Extension;
 
-namespace YiSha.Util
+namespace YiSha.Util.Helper
 {
     public static class ReflectionHelper
     {
-        private static readonly ConcurrentDictionary<string, object> _propCache = new ConcurrentDictionary<string, object>();
-        private static readonly ConcurrentDictionary<string, object> _fieldCache = new ConcurrentDictionary<string, object>();
+        private static readonly ConcurrentDictionary<string, object> _propCache = new();
+        private static readonly ConcurrentDictionary<string, object> _fieldCache = new();
 
         /// <summary>
         /// 获取实体类键值（缓存）
@@ -19,8 +18,8 @@ namespace YiSha.Util
         public static Hashtable GetPropertyInfo<T>(T entity)
         {
             var hashtable = new Hashtable();
-            var props = GetProperties(typeof(T))
-                .Where(p => p.GetCustomAttribute<NotMappedAttribute>(true) == null);
+            var notMapped = typeof(NotMappedAttribute);
+            var props = GetProperties(typeof(T)).Where(p => p.GetCustomAttribute(notMapped, true) is not NotMappedAttribute);
             foreach (var prop in props)
             {
                 string name = prop.Name;
@@ -105,6 +104,38 @@ namespace YiSha.Util
                 return result;
             }
             return Convert.ChangeType(value, trueType);
+        }
+    }
+
+    public static class TypeExtension
+    {
+        /// <summary>
+        /// 返回指定nullable类型的底层类型参数
+        /// </summary>
+        public static Type GetUnderlyingType(this Type type)
+        {
+            while (true)
+            {
+                if (type == null)
+                {
+                    throw new ArgumentNullException(nameof(type));
+                }
+
+                if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+                {
+                    // nullable type, check if the nested type is simple.
+                    type = type.GetGenericArguments()[0];
+                    continue;
+                }
+
+                return type;
+            }
+        }
+
+        public static bool IsElementaryType(this Type type)
+        {
+            var underlyingType = type.GetUnderlyingType();
+            return underlyingType.IsPrimitive || underlyingType.IsEnum || underlyingType == typeof(string) || underlyingType == typeof(decimal);
         }
     }
 }

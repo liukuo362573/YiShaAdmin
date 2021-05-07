@@ -1,28 +1,27 @@
-﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Data.Common;
+using System.Linq;
 using System.Text;
-using YiSha.Util;
-using YiSha.Util.Extension;
-using YiSha.Util.Model;
-using YiSha.Data;
+using System.Threading.Tasks;
+using YiSha.Data.Extension;
 using YiSha.Data.Repository;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Model.Param.OrganizationManage;
+using YiSha.Util.Extension;
+using YiSha.Util.Helper;
+using YiSha.Util.Model;
 
 namespace YiSha.Service.OrganizationManage
 {
     public class NewsService : RepositoryFactory
     {
         #region 获取数据
+
         public async Task<List<NewsEntity>> GetList(NewsListParam param)
         {
             var strSql = new StringBuilder();
             List<DbParameter> filter = ListFilter(param, strSql);
-            var list = await this.BaseRepository().FindList<NewsEntity>(strSql.ToString(), filter.ToArray());
+            var list = await BaseRepository().FindList<NewsEntity>(strSql.ToString(), filter.ToArray());
             return list.ToList();
         }
 
@@ -30,7 +29,7 @@ namespace YiSha.Service.OrganizationManage
         {
             var strSql = new StringBuilder();
             List<DbParameter> filter = ListFilter(param, strSql);
-            var list = await this.BaseRepository().FindList<NewsEntity>(strSql.ToString(), filter.ToArray(), pagination);
+            var list = await BaseRepository().FindList<NewsEntity>(strSql.ToString(), filter.ToArray(), pagination);
             return list.ToList();
         }
 
@@ -38,45 +37,49 @@ namespace YiSha.Service.OrganizationManage
         {
             var strSql = new StringBuilder();
             List<DbParameter> filter = ListFilter(param, strSql, true);
-            var list = await this.BaseRepository().FindList<NewsEntity>(strSql.ToString(), filter.ToArray(), pagination);
+            var list = await BaseRepository().FindList<NewsEntity>(strSql.ToString(), filter.ToArray(), pagination);
             return list.ToList();
         }
 
         public async Task<NewsEntity> GetEntity(long id)
         {
-            return await this.BaseRepository().FindEntity<NewsEntity>(id);
+            return await BaseRepository().FindEntity<NewsEntity>(id);
         }
 
         public async Task<int> GetMaxSort()
         {
-            var result =  await BaseRepository().FindEntity<int>("SELECT MAX(NewsSort) FROM SysNews");
+            var result = await BaseRepository().FindEntity<int>("SELECT MAX(NewsSort) FROM SysNews");
             return result + 1;
         }
+
         #endregion
 
         #region 提交数据
+
         public async Task SaveForm(NewsEntity entity)
         {
             if (entity.Id.IsNullOrZero())
             {
                 await entity.Create();
-                await this.BaseRepository().Insert<NewsEntity>(entity);
+                await BaseRepository().Insert(entity);
             }
             else
             {
                 await entity.Modify();
-                await this.BaseRepository().Update<NewsEntity>(entity);
+                await BaseRepository().Update(entity);
             }
         }
 
         public async Task DeleteForm(string ids)
         {
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
-            await this.BaseRepository().Delete<NewsEntity>(idArr);
+            await BaseRepository().Delete<NewsEntity>(idArr);
         }
+
         #endregion
 
         #region 私有方法
+
         private List<DbParameter> ListFilter(NewsListParam param, StringBuilder strSql, bool bNewsContent = false)
         {
             strSql.Append(@"SELECT  a.Id,
@@ -135,6 +138,7 @@ namespace YiSha.Service.OrganizationManage
             }
             return parameter;
         }
+
         #endregion
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace YiSha.Entity.SystemManage
 {
@@ -11,11 +10,13 @@ namespace YiSha.Entity.SystemManage
         /// </summary>
         /// <returns></returns>
         public string DictType { get; set; }
+
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public int? DictSort { get; set; }
+
         /// <summary>
         /// 
         /// </summary>

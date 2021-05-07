@@ -1,29 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using StackExchange.Redis;
+using System;
+using System.Collections.Generic;
 using YiSha.Cache.Interface;
-using YiSha.Util;
+using YiSha.Util.Helper;
+using YiSha.Util.Model;
 
 namespace YiSha.RedisCache
 {
     public class RedisCacheImp : ICache
     {
-        private IDatabase cache;
-        private ConnectionMultiplexer connection;
+        private readonly IDatabase _cache;
+
+        private readonly ConnectionMultiplexer _connection;
 
         public RedisCacheImp()
         {
-            connection = ConnectionMultiplexer.Connect(GlobalContext.SystemConfig.RedisConnectionString);
-            cache = connection.GetDatabase();
+            _connection = ConnectionMultiplexer.Connect(GlobalContext.SystemConfig.RedisConnectionString);
+            _cache = _connection.GetDatabase();
         }
 
         public bool SetCache<T>(string key, T value, DateTime? expireTime = null)
         {
             try
             {
-                var jsonOption = new JsonSerializerSettings()
+                var jsonOption = new JsonSerializerSettings
                 {
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 };
@@ -34,12 +35,9 @@ namespace YiSha.RedisCache
                 }
                 if (expireTime == null)
                 {
-                    return cache.StringSet(key, strValue);
+                    return _cache.StringSet(key, strValue);
                 }
-                else
-                {
-                    return cache.StringSet(key, strValue, (expireTime.Value - DateTime.Now));
-                }
+                return _cache.StringSet(key, strValue, expireTime.Value - DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -50,7 +48,7 @@ namespace YiSha.RedisCache
 
         public bool RemoveCache(string key)
         {
-            return cache.KeyDelete(key);
+            return _cache.KeyDelete(key);
         }
 
         public T GetCache<T>(string key)
@@ -58,7 +56,7 @@ namespace YiSha.RedisCache
             var t = default(T);
             try
             {
-                var value = cache.StringGet(key);
+                var value = _cache.StringGet(key);
                 if (string.IsNullOrEmpty(value))
                 {
                     return t;
@@ -73,29 +71,30 @@ namespace YiSha.RedisCache
         }
 
         #region Hash
+
         public int SetHashFieldCache<T>(string key, string fieldKey, T fieldValue)
         {
-            return SetHashFieldCache<T>(key, new Dictionary<string, T> { { fieldKey, fieldValue } });
+            return SetHashFieldCache(key, new Dictionary<string, T> { { fieldKey, fieldValue } });
         }
 
         public int SetHashFieldCache<T>(string key, Dictionary<string, T> dict)
         {
             int count = 0;
-            var jsonOption = new JsonSerializerSettings()
+            var jsonOption = new JsonSerializerSettings
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             };
             foreach (string fieldKey in dict.Keys)
             {
                 string fieldValue = JsonConvert.SerializeObject(dict[fieldKey], jsonOption);
-                count += cache.HashSet(key, fieldKey, fieldValue) ? 1 : 0;
+                count += _cache.HashSet(key, fieldKey, fieldValue) ? 1 : 0;
             }
             return count;
         }
 
         public T GetHashFieldCache<T>(string key, string fieldKey)
         {
-            var dict = GetHashFieldCache<T>(key, new Dictionary<string, T> { { fieldKey, default(T) } });
+            var dict = GetHashFieldCache(key, new Dictionary<string, T> { { fieldKey, default } });
             return dict[fieldKey];
         }
 
@@ -103,7 +102,7 @@ namespace YiSha.RedisCache
         {
             foreach (string fieldKey in dict.Keys)
             {
-                string fieldValue = cache.HashGet(key, fieldKey);
+                string fieldValue = _cache.HashGet(key, fieldKey);
                 dict[fieldKey] = JsonConvert.DeserializeObject<T>(fieldValue);
             }
             return dict;
@@ -112,7 +111,7 @@ namespace YiSha.RedisCache
         public Dictionary<string, T> GetHashCache<T>(string key)
         {
             Dictionary<string, T> dict = new Dictionary<string, T>();
-            var hashFields = cache.HashGetAll(key);
+            var hashFields = _cache.HashGetAll(key);
             foreach (HashEntry field in hashFields)
             {
                 dict[field.Name] = JsonConvert.DeserializeObject<T>(field.Value);
@@ -123,7 +122,7 @@ namespace YiSha.RedisCache
         public List<T> GetHashToListCache<T>(string key)
         {
             List<T> list = new List<T>();
-            var hashFields = cache.HashGetAll(key);
+            var hashFields = _cache.HashGetAll(key);
             foreach (HashEntry field in hashFields)
             {
                 list.Add(JsonConvert.DeserializeObject<T>(field.Value));
@@ -133,8 +132,7 @@ namespace YiSha.RedisCache
 
         public bool RemoveHashFieldCache(string key, string fieldKey)
         {
-            Dictionary<string, bool> dict = new Dictionary<string, bool> { { fieldKey, false } };
-            dict = RemoveHashFieldCache(key, dict);
+            var dict = RemoveHashFieldCache(key, new Dictionary<string, bool> { { fieldKey, false } });
             return dict[fieldKey];
         }
 
@@ -142,18 +140,16 @@ namespace YiSha.RedisCache
         {
             foreach (string fieldKey in dict.Keys)
             {
-                dict[fieldKey] = cache.HashDelete(key, fieldKey);
+                dict[fieldKey] = _cache.HashDelete(key, fieldKey);
             }
             return dict;
         }
-        #endregion
+
+        #endregion Hash
 
         public void Dispose()
         {
-            if (connection != null)
-            {
-                connection.Close();
-            }
+            _connection?.Close();
             GC.SuppressFinalize(this);
         }
     }

@@ -6,24 +6,25 @@ using System.Threading.Tasks;
 using YiSha.Data.Repository;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
-using YiSha.Util;
 using YiSha.Util.Extension;
+using YiSha.Util.Helper;
 
 namespace YiSha.Service.SystemManage
 {
     public class MenuService : RepositoryFactory
     {
         #region 获取数据
+
         public async Task<List<MenuEntity>> GetList(MenuListParam param)
         {
             var expression = ListFilter(param);
-            var list = await this.BaseRepository().FindList<MenuEntity>(expression);
+            var list = await BaseRepository().FindList(expression);
             return list.OrderBy(p => p.MenuSort).ToList();
         }
 
         public async Task<MenuEntity> GetEntity(long id)
         {
-            return await this.BaseRepository().FindEntity<MenuEntity>(id);
+            return await BaseRepository().FindEntity<MenuEntity>(id);
         }
 
         public async Task<int> GetMaxSort(long parentId)
@@ -49,28 +50,30 @@ namespace YiSha.Service.SystemManage
             {
                 expression = expression.And(t => t.MenuName == entity.MenuName && t.MenuType == entity.MenuType && t.Id != entity.Id);
             }
-            return this.BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
+            return BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
         }
+
         #endregion
 
         #region 提交数据
+
         public async Task SaveForm(MenuEntity entity)
         {
             if (entity.Id.IsNullOrZero())
             {
                 await entity.Create();
-                await this.BaseRepository().Insert(entity);
+                await BaseRepository().Insert(entity);
             }
             else
             {
                 await entity.Modify();
-                await this.BaseRepository().Update(entity);
+                await BaseRepository().Update(entity);
             }
         }
 
         public async Task DeleteForm(string ids)
         {
-            var db = await this.BaseRepository().BeginTrans();
+            var db = await BaseRepository().BeginTrans();
             try
             {
                 long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
@@ -84,9 +87,11 @@ namespace YiSha.Service.SystemManage
                 throw;
             }
         }
+
         #endregion
 
         #region 私有方法
+
         private Expression<Func<MenuEntity, bool>> ListFilter(MenuListParam param)
         {
             var expression = LinqExtensions.True<MenuEntity>();
@@ -103,7 +108,7 @@ namespace YiSha.Service.SystemManage
             }
             return expression;
         }
-        #endregion
 
+        #endregion
     }
 }

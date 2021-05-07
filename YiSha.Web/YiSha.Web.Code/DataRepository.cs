@@ -4,8 +4,8 @@ using System.Text;
 using System.Threading.Tasks;
 using YiSha.Data.Repository;
 using YiSha.Enum.OrganizationManage;
-using YiSha.Util;
 using YiSha.Util.Extension;
+using YiSha.Util.Helper;
 
 namespace YiSha.Web.Code
 {
