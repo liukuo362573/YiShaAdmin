@@ -4,12 +4,15 @@ using System.Linq;
 using System.Reflection;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using YiSha.Util;
 
 namespace YiSha.Data.EF
 {
     public class MySqlDbContext : DbContext
     {
+        private static readonly ILoggerFactory _loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+
         private string ConnectionString { get; }
 
         private ServerVersion ServerVersion { get; }
@@ -27,6 +30,7 @@ namespace YiSha.Data.EF
         {
             optionsBuilder.UseMySql(ConnectionString, ServerVersion, p => p.CommandTimeout(GlobalContext.SystemConfig.DBCommandTimeout));
             optionsBuilder.AddInterceptors(new DbCommandCustomInterceptor());
+            optionsBuilder.UseLoggerFactory(_loggerFactory);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
