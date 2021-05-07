@@ -439,7 +439,7 @@
 
     function loadTableFieldTree() {
         $('#tableFieldTree').ysTree({
-            url: '@Url.Content("~/ToolManage/CodeGenerator/GetTableFieldTreePartListJson")' + '?tableName=' + tableName + '&upper=1',
+            url: '@Url.Action("GetTableFieldTreePartListJson")' + '?tableName=' + tableName + '&upper=1',
             async: false,
             maxHeight: "400px",
             check: { enable: true },
@@ -485,7 +485,7 @@
 
     function loadInitialConfig() {
         ys.ajax({
-            url: '@Url.Content("~/ToolManage/CodeGenerator/GetBaseConfigJson")' + '?tableName=' + tableName,
+            url: '@Url.Action("GetBaseConfigJson")' + '?tableName=' + tableName,
             type: "get",
             success: function (obj) {
                 if (obj.Tag == 1) {
@@ -564,7 +564,7 @@
         postData.PageForm = getPageForm();
 
         ys.ajax({
-            url: '@Url.Content("~/ToolManage/CodeGenerator/CodePreviewJson")',
+            url: '@Url.Action("CodePreviewJson")',
             type: "post",
             async: false,
             data: postData,
@@ -601,7 +601,7 @@
         postData.PageForm = getPageForm();
         postData.Code = encodeURIComponent(JSON.stringify(codeList));
         ys.ajax({
-            url: '@Url.Content("~/ToolManage/CodeGenerator/CodeGenerateJson")',
+            url: '@Url.Action("CodeGenerateJson")',
             type: "post",
             async: false,
             data: postData,
@@ -624,7 +624,7 @@
     function showEditSearchForm() {
         ys.openDialog({
             title: "搜索编辑",
-            content: '@Url.Content("~/ToolManage/CodeGenerator/CodeGeneratorEditSearch")',
+            content: '@Url.Action("CodeGeneratorEditSearch")',
             height: "130px",
             btn: [],
             shadeClose: true,
@@ -638,7 +638,7 @@
      function showEditToolbarForm() {
         ys.openDialog({
             title: "工具栏编辑",
-            content: '@Url.Content("~/ToolManage/CodeGenerator/CodeGeneratorEditToolbar")',
+            content: '@Url.Action("CodeGeneratorEditToolbar")',
             height: "220px",
             btn: [],
             shadeClose: true,
@@ -652,7 +652,7 @@
     function showEditListForm() {
         ys.openDialog({
             title: "列表编辑",
-            content: '@Url.Content("~/ToolManage/CodeGenerator/CodeGeneratorEditList")' + '?tableName=' + tableName + '&tableNameUpper=' + tableNameUpper,
+            content: '@Url.Action("CodeGeneratorEditList")' + '?tableName=' + tableName + '&tableNameUpper=' + tableNameUpper,
             height: "300px",
             btn: [],
             shadeClose: true,

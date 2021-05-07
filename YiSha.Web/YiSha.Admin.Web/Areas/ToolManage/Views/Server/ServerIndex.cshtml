@@ -127,12 +127,8 @@
                     <div class="ibox-title">
                         <h5>.NET Core信息</h5>
                         <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                            <a class="close-link">
-                                <i class="fa fa-times"></i>
-                            </a>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            <a class="close-link"><i class="fa fa-times"></i></a>
                         </div>
                     </div>
                     <div class="ibox-content">
@@ -171,7 +167,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -199,7 +194,7 @@
 
     function GetServer() {
         $.ajax({
-            url: '@Url.Content("~/ToolManage/Server/GetServerJson")',
+            url: '@Url.Action("GetServerJson")',
             type: "get",
             success: function (obj) {
                 if (obj.Tag == 1) {
@@ -211,7 +206,7 @@
 
     function GetServerIp() {
         $.ajax({
-            url: '@Url.Content("~/ToolManage/Server/GetServerIpJson")',
+            url: '@Url.Action("GetServerIpJson")',
             type: "get",
             success: function (obj) {
                 if (obj.Tag == 1) {

@@ -65,7 +65,7 @@
     function getForm() {
         if (id > 0) {
             ys.ajax({
-                url: '@Url.Content("~/SystemManage/AutoJob/GetFormJson")' + '?id=' + id,
+                url: '@Url.Action("GetFormJson")' + '?id=' + id,
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
@@ -89,7 +89,7 @@
                 postData.EndTime = "9999-12-31 00:00:00";
             }
             ys.ajax({
-                url: '@Url.Content("~/SystemManage/AutoJob/SaveFormJson")',
+                url: '@Url.Action("SaveFormJson")',
                 type: "post",
                 data: postData,
                 success: function (obj) {
@@ -106,4 +106,3 @@
         }
     }
 </script>
-

@@ -17,32 +17,32 @@
 <div class="wrapper animated fadeInRight">
     <form id="form" class="form-horizontal m">
         <div class="form-group">
-            <label class="col-sm-2 control-label ">标题 <font class="red"> *</font> </label>
+            <label class="col-sm-2 control-label ">标题 <span class="red"> *</span> </label>
             <div class="col-sm-10">
                 <input id="newsTitle" col="NewsTitle" type="text" class="form-control" />
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label ">文章类别<font class="red"> *</font></label>
+            <label class="col-sm-2 control-label ">文章类别<span class="red"> *</span></label>
             <div class="col-sm-4">
                 <div id="newsType" col="NewsType"></div>
             </div>
-            <label class="col-sm-2 control-label ">发布时间<font class="red"> *</font></label>
+            <label class="col-sm-2 control-label ">发布时间<span class="red"> *</span></label>
             <div class="col-sm-4">
                 <input id="newsDate" col="NewsDate" type="text" class="form-control" />
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label ">作者<font class="red"> *</font></label>
+            <label class="col-sm-2 control-label ">作者<span class="red"> *</span></label>
             <div class="col-sm-4">
                 <input id="newsAuthor" col="NewsAuthor" type="text" class="form-control" />
             </div>
-            <label class="col-sm-2 control-label ">排序<font class="red"> *</font></label>
+            <label class="col-sm-2 control-label ">排序<span class="red"> *</span></label>
             <div class="col-sm-4">
                 <input id="newsSort" col="NewsSort" type="text" class="form-control" />
             </div>
         </div>
-        @await Html.PartialAsync("/Areas/SystemManage/Shared/AreaFormPartial.cshtml", new ViewDataDictionary(this.ViewData) { { "Label", "2" }, { "Content", "10" } })
+        @await Html.PartialAsync("/Areas/SystemManage/Shared/AreaFormPartial.cshtml", new ViewDataDictionary(ViewData) { { "Label", "2" }, { "Content", "10" } })
         <div class="form-group">
             <label class="col-sm-2 control-label ">文章标签</label>
             <div class="col-sm-10">
@@ -111,7 +111,7 @@
     function getForm() {
         if (id > 0) {
             ys.ajax({
-                url: '@Url.Content("~/OrganizationManage/News/GetFormJson")' + '?id=' + id,
+                url: '@Url.Action("GetFormJson")' + '?id=' + id,
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
@@ -129,7 +129,7 @@
         }
         else {
             ys.ajax({
-                url: '@Url.Content("~/OrganizationManage/News/GetMaxSortJson")',
+                url: '@Url.Action("GetMaxSortJson")',
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
@@ -150,7 +150,7 @@
             postData.NewsContent = $("#newsContent").summernote('code');
             postData.ThumbImage = $("#thumbImage").imageUpload("getImageUrl");
             ys.ajax({
-                url: '@Url.Content("~/OrganizationManage/News/SaveFormJson")',
+                url: '@Url.Action("SaveFormJson")',
                 type: "post",
                 data: postData,
                 success: function (obj) {
@@ -203,4 +203,3 @@
         })
     }
 </script>
-

@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using YiSha.Admin.Web.Controllers;
 using YiSha.Admin.Web.Filter;
 using YiSha.Business.SystemManage;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
-using YiSha.Model.Result;
 using YiSha.Util.Model;
 
 namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
@@ -14,7 +12,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
     [Area("SystemManage")]
     public class AreaController : BaseController
     {
-        private readonly AreaBLL _areaBLL = new();
+        private readonly AreaBLL _areaBll = new();
 
         #region 视图功能
 
@@ -31,28 +29,28 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         [HttpGet, AuthorizeFilter("system:area:search")]
         public async Task<IActionResult> GetListJson(AreaListParam param)
         {
-            TData<List<AreaEntity>> obj = await _areaBLL.GetList(param);
+            var obj = await _areaBll.GetList(param);
             return Json(obj);
         }
 
         [HttpGet, AuthorizeFilter("system:area:search")]
         public async Task<IActionResult> GetPageListJson(AreaListParam param, Pagination pagination)
         {
-            TData<List<AreaEntity>> obj = await _areaBLL.GetPageList(param, pagination);
+            var obj = await _areaBll.GetPageList(param, pagination);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetZtreeAreaListJson(AreaListParam param)
         {
-            TData<List<ZtreeInfo>> obj = await _areaBLL.GetZtreeAreaList(param);
+            var obj = await _areaBll.GetZtreeAreaList(param);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetFormJson(long id)
         {
-            TData<AreaEntity> obj = await _areaBLL.GetEntity(id);
+            var obj = await _areaBll.GetEntity(id);
             return Json(obj);
         }
 
@@ -63,14 +61,14 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         [HttpPost, AuthorizeFilter("system:area:add,ystem:area:edit")]
         public async Task<IActionResult> SaveFormJson(AreaEntity entity)
         {
-            TData<string> obj = await _areaBLL.SaveForm(entity);
+            var obj = await _areaBll.SaveForm(entity);
             return Json(obj);
         }
 
         [HttpPost, AuthorizeFilter("system:area:delete")]
         public async Task<IActionResult> DeleteFormJson(string ids)
         {
-            TData obj = await _areaBLL.DeleteForm(ids);
+            var obj = await _areaBll.DeleteForm(ids);
             return Json(obj);
         }
 

@@ -7,6 +7,6 @@
 
 <script type="text/javascript">
     $(function () {
-        $('#areaId').ysComboBoxTree({ url: '@Url.Content("~/SystemManage/Area/GetZtreeAreaListJson")', expandLevel: 0 });
+        $('#areaId').ysComboBoxTree({ url: '@Url.Action("GetZtreeAreaListJson", "Area", new { area = "SystemManage" })', expandLevel: 0 });
     });
 </script>

@@ -1,20 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using YiSha.Admin.Web.Controllers;
 using YiSha.Admin.Web.Filter;
 using YiSha.Business.SystemManage;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
-using YiSha.Model.Result;
-using YiSha.Util.Model;
 
 namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
 {
     [Area("SystemManage")]
     public class MenuController : BaseController
     {
-        private readonly MenuBLL _menuBLL = new();
+        private readonly MenuBLL _menuBll = new();
 
         #region 视图功能
 
@@ -46,28 +43,28 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         [HttpGet, AuthorizeFilter("system:menu:search,system:role:search")]
         public async Task<IActionResult> GetListJson(MenuListParam param)
         {
-            TData<List<MenuEntity>> obj = await _menuBLL.GetList(param);
+            var obj = await _menuBll.GetList(param);
             return Json(obj);
         }
 
         [HttpGet, AuthorizeFilter("system:menu:search,system:role:search")]
         public async Task<IActionResult> GetMenuTreeListJson(MenuListParam param)
         {
-            TData<List<ZtreeInfo>> obj = await _menuBLL.GetZtreeList(param);
+            var obj = await _menuBll.GetZtreeList(param);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetFormJson(long id)
         {
-            TData<MenuEntity> obj = await _menuBLL.GetEntity(id);
+            var obj = await _menuBll.GetEntity(id);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetMaxSortJson(long parentId = 0)
         {
-            TData<int> obj = await _menuBLL.GetMaxSort(parentId);
+            var obj = await _menuBll.GetMaxSort(parentId);
             return Json(obj);
         }
 
@@ -78,14 +75,14 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         [HttpPost, AuthorizeFilter("system:menu:add,system:menu:edit")]
         public async Task<IActionResult> SaveFormJson(MenuEntity entity)
         {
-            TData<string> obj = await _menuBLL.SaveForm(entity);
+            var obj = await _menuBll.SaveForm(entity);
             return Json(obj);
         }
 
         [HttpPost, AuthorizeFilter("system:menu:delete")]
         public async Task<IActionResult> DeleteFormJson(string ids)
         {
-            TData obj = await _menuBLL.DeleteForm(ids);
+            var obj = await _menuBll.DeleteForm(ids);
             return Json(obj);
         }
 

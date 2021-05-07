@@ -34,7 +34,7 @@
     });
 
     function initGrid() {
-        var queryUrl = '@Url.Content("~/SystemManage/Database/GetTablePageListJson")';
+        var queryUrl = '@Url.Action("GetTablePageListJson", "Database", new { area = "SystemManage" })';
         $('#gridTable').ysTable({
             url: queryUrl,
             sortName: 'TableName',
@@ -73,7 +73,7 @@
 
         ys.openDialog({
             title: "生成代码",
-            content: '@Url.Content("~/ToolManage/CodeGenerator/CodeGeneratorForm")' + '?tableName=' + tableName,
+            content: '@Url.Action("CodeGeneratorForm")' + '?tableName=' + tableName,
             width: "1100px",
             height: "600px",
             btn: [],

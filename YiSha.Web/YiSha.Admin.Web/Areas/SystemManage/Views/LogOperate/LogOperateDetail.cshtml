@@ -40,7 +40,7 @@
     function getForm() {
         if (id > 0) {
             ys.ajax({
-                url: '@Url.Content("~/SystemManage/LogOperate/GetFormJson")' + '?id=' + id,
+                url: '@Url.Action("GetFormJson")' + '?id=' + id,
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {

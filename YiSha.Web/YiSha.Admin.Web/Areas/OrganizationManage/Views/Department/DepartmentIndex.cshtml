@@ -50,7 +50,7 @@
             expandFirst: true,
             toolbar: '#toolbar',
             expandColumn: '1',
-            url: '@Url.Content("~/OrganizationManage/Department/GetListJson")',
+            url: '@Url.Action("GetListJson")',
             modalName: "部门",
             columns: [
                 { field: 'selectItem', radio: true },
@@ -94,7 +94,7 @@
         }
         ys.openDialog({
             title: id > 0 ? "编辑部门" : "添加部门",
-            content: '@Url.Content("~/OrganizationManage/Department/DepartmentForm")' + '?id=' + id,
+            content: '@Url.Action("DepartmentForm")' + '?id=' + id,
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 iframeWin.saveForm(index);
@@ -108,7 +108,7 @@
             ys.confirm("确认要删除选中的" + selectedRow.length + "条数据吗？", function () {
                 var ids = ys.getIds(selectedRow);
                 ys.ajax({
-                    url: '@Url.Content("~/OrganizationManage/Department/DeleteFormJson")' + '?ids=' + ids,
+                    url: '@Url.Action("DeleteFormJson")' + '?ids=' + ids,
                     type: "post",
                     error: ys.ajaxError,
                     success: function (obj) {

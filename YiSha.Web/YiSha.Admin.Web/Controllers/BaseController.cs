@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
-using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -11,7 +10,6 @@ using YiSha.Entity.SystemManage;
 using YiSha.Enum;
 using YiSha.Util.Extension;
 using YiSha.Util.Helper;
-using YiSha.Util.Model;
 using YiSha.Web.Code;
 
 namespace YiSha.Admin.Web.Controllers
@@ -21,116 +19,100 @@ namespace YiSha.Admin.Web.Controllers
     /// </summary>
     public class BaseController : Controller
     {
+        protected OperatorInfo Current { get; private set; }
+
+        private string Action { get; set; }
+
+        private string Method { get; set; }
+
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            await Initialize(context);
 
-            string action = context.RouteData.Values["Action"].ParseToString();
-            OperatorInfo user = await Operator.Instance.Current();
-
-            if (GlobalContext.SystemConfig.Demo)
-            {
-                if (context.HttpContext.Request.Method.ToUpper() == "POST")
-                {
-                    string[] allowAction = new[] { "LoginJson", "ExportUserJson", "CodePreviewJson" };
-                    if (!allowAction.Select(p => p.ToUpper()).Contains(action.ToUpper()))
-                    {
-                        TData obj = new TData();
-                        obj.Message = "演示模式，不允许操作";
-                        context.Result = new JsonResult(obj);
-                        return;
-                    }
-                }
-            }
-
+            var stopwatch = Stopwatch.StartNew();
             var resultContext = await next();
+            stopwatch.Stop();
 
-            sw.Stop();
-            string ip = NetHelper.Ip;
-            LogOperateEntity operateEntity = new LogOperateEntity();
-            var areaName = context.RouteData.DataTokens["area"] + "/";
-            var controllerName = context.RouteData.Values["controller"] + "/";
-            string currentUrl = "/" + areaName + controllerName + action;
-
-            string[] notLogAction = new[] { "GetServerJson", "Error" };
-            if (!notLogAction.Select(p => p.ToUpper()).Contains(action.ToUpper()))
+            string[] notLogAction = { "GetServerJson", "Error" };
+            if (!notLogAction.Select(p => p.ToUpper()).Contains(Action.ToUpper()))
             {
-                #region 获取请求参数
-
-                switch (context.HttpContext.Request.Method.ToUpper())
-                {
-                    case "GET":
-                        operateEntity.ExecuteParam = context.HttpContext.Request.QueryString.Value.ParseToString();
-                        break;
-
-                    case "POST":
-                        if (context.ActionArguments?.Count > 0)
-                        {
-                            operateEntity.ExecuteUrl += context.HttpContext.Request.QueryString.Value.ParseToString();
-                            operateEntity.ExecuteParam = TextHelper.GetSubString(JsonConvert.SerializeObject(context.ActionArguments), 4000);
-                        }
-                        else
-                        {
-                            operateEntity.ExecuteParam = context.HttpContext.Request.QueryString.Value.ParseToString();
-                        }
-                        break;
-                }
-
-                #endregion
-
-                #region 异常获取
-
-                StringBuilder sbException = new StringBuilder();
-                if (resultContext.Exception != null)
-                {
-                    Exception exception = resultContext.Exception;
-                    sbException.AppendLine(exception.Message);
-                    while (exception.InnerException != null)
-                    {
-                        sbException.AppendLine(exception.InnerException.Message);
-                        exception = exception.InnerException;
-                    }
-                    sbException.AppendLine(resultContext.Exception.StackTrace);
-                    operateEntity.LogStatus = OperateStatusEnum.Fail.ParseToInt();
-                }
-                else
-                {
-                    operateEntity.LogStatus = OperateStatusEnum.Success.ParseToInt();
-                }
-
-                #endregion
-
-                #region 日志实体
-
-                if (user != null)
-                {
-                    operateEntity.BaseCreatorId = user.UserId;
-                }
-
-                operateEntity.ExecuteTime = sw.ElapsedMilliseconds.ParseToInt();
-                operateEntity.IpAddress = ip;
-                operateEntity.ExecuteUrl = currentUrl.Replace("//", "/");
-                operateEntity.ExecuteResult = TextHelper.GetSubString(sbException.ToString(), 4000);
-
-                #endregion
-
-                Action taskAction = async () =>
-                {
-                    // 让底层不用获取HttpContext
-                    operateEntity.BaseCreatorId = operateEntity.BaseCreatorId ?? 0;
-
-                    // 耗时的任务异步完成
-                    // operateEntity.IpLocation = IpLocationHelper.GetIpLocation(ip);
-                    await new LogOperateBLL().SaveForm(operateEntity);
-                };
-                AsyncTaskHelper.StartTask(taskAction);
+                var operateEntity = BuildLogOperateEntity(context, resultContext, stopwatch);
+                AsyncTaskHelper.StartTask(async () => await new LogOperateBLL().SaveForm(operateEntity));
             }
         }
 
-        public override void OnActionExecuted(ActionExecutedContext context)
+        private async Task Initialize(ActionContext context)
         {
-            base.OnActionExecuted(context);
+            Current = await Operator.Instance.Current();
+            Action = context.RouteData.Values["Action"].ParseToString();
+            Method = context.HttpContext.Request.Method.ToUpper();
+        }
+
+        private LogOperateEntity BuildLogOperateEntity(ActionExecutingContext context, ActionExecutedContext resultContext, Stopwatch stopwatch)
+        {
+            var operateEntity = LogRequestParam(context);
+            operateEntity.ExecuteTime = stopwatch.ElapsedMilliseconds.ParseToInt();
+            operateEntity.IpAddress = NetHelper.Ip;
+            operateEntity.ExecuteUrl = BuildExecuteUrl(context);
+            operateEntity.ExecuteResult = BuildExecuteResult(resultContext);
+            operateEntity.LogStatus = GetLogStatus(resultContext);
+            operateEntity.BaseCreatorId = Current?.UserId ?? 0;
+            // operateEntity.IpLocation = IpLocationHelper.GetIpLocation(ipAddress);
+            return operateEntity;
+        }
+
+        private LogOperateEntity LogRequestParam(ActionExecutingContext context)
+        {
+            var operateEntity = new LogOperateEntity();
+            string queryString = context.HttpContext.Request.QueryString.Value.ParseToString();
+            if (Method == "GET")
+            {
+                operateEntity.ExecuteParam = queryString;
+            }
+            else if (Method == "POST")
+            {
+                if (context.ActionArguments?.Count > 0)
+                {
+                    string json = JsonConvert.SerializeObject(context.ActionArguments);
+                    operateEntity.ExecuteUrl += queryString;
+                    operateEntity.ExecuteParam = TextHelper.GetSubString(json, 4000);
+                }
+                else
+                {
+                    operateEntity.ExecuteParam = queryString;
+                }
+            }
+            return operateEntity;
+        }
+
+        private string BuildExecuteUrl(ActionContext context)
+        {
+            var area = context.RouteData.DataTokens["area"] + "/";
+            var controller = context.RouteData.Values["controller"] + "/";
+            string url = "/" + area + controller + Action;
+            return url.Replace("//", "/");
+        }
+
+        private string BuildExecuteResult(ActionExecutedContext resultContext)
+        {
+            var builder = new StringBuilder();
+            if (resultContext.Exception != null)
+            {
+                var exception = resultContext.Exception;
+                builder.AppendLine(exception.Message);
+                while (exception.InnerException != null)
+                {
+                    builder.AppendLine(exception.InnerException.Message);
+                    exception = exception.InnerException;
+                }
+                builder.AppendLine(resultContext.Exception.StackTrace);
+            }
+            return TextHelper.GetSubString(builder.ToString(), 4000);
+        }
+
+        private int GetLogStatus(ActionExecutedContext resultContext)
+        {
+            return resultContext.Exception != null ? OperateStatusEnum.Fail.ParseToInt() : OperateStatusEnum.Success.ParseToInt();
         }
     }
 }

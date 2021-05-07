@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using YiSha.Admin.Web.Controllers;
 using YiSha.Admin.Web.Filter;
 using YiSha.Business.SystemManage;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
-using YiSha.Model.Result.SystemManage;
 using YiSha.Util.Model;
 
 namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
@@ -14,7 +12,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
     [Area("SystemManage")]
     public class DataDictController : BaseController
     {
-        private readonly DataDictBLL _dataDictBLL = new();
+        private readonly DataDictBLL _dataDictBll = new();
 
         #region 视图功能
 
@@ -36,35 +34,35 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         [HttpGet, AuthorizeFilter("system:datadict:search")]
         public async Task<IActionResult> GetListJson(DataDictListParam param)
         {
-            TData<List<DataDictEntity>> obj = await _dataDictBLL.GetList(param);
+            var obj = await _dataDictBll.GetList(param);
             return Json(obj);
         }
 
         [HttpGet, AuthorizeFilter("system:datadict:search")]
         public async Task<IActionResult> GetPageListJson(DataDictListParam param, Pagination pagination)
         {
-            TData<List<DataDictEntity>> obj = await _dataDictBLL.GetPageList(param, pagination);
+            var obj = await _dataDictBll.GetPageList(param, pagination);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetFormJson(long id)
         {
-            TData<DataDictEntity> obj = await _dataDictBLL.GetEntity(id);
+            var obj = await _dataDictBll.GetEntity(id);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetMaxSortJson()
         {
-            TData<int> obj = await _dataDictBLL.GetMaxSort();
+            var obj = await _dataDictBll.GetMaxSort();
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetDataDictListJson()
         {
-            TData<List<DataDictInfo>> obj = await _dataDictBLL.GetDataDictList();
+            var obj = await _dataDictBll.GetDataDictList();
             return Json(obj);
         }
 
@@ -75,14 +73,14 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         [HttpPost, AuthorizeFilter("system:datadict:add,system:datadict:edit")]
         public async Task<IActionResult> SaveFormJson(DataDictEntity entity)
         {
-            TData<string> obj = await _dataDictBLL.SaveForm(entity);
+            var obj = await _dataDictBll.SaveForm(entity);
             return Json(obj);
         }
 
         [HttpPost, AuthorizeFilter("system:datadict:delete")]
         public async Task<IActionResult> DeleteFormJson(string ids)
         {
-            TData obj = await _dataDictBLL.DeleteForm(ids);
+            var obj = await _dataDictBll.DeleteForm(ids);
             return Json(obj);
         }
 

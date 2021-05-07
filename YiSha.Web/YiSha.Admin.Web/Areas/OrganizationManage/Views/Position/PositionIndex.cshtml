@@ -35,7 +35,7 @@
     });
 
     function initGrid() {
-        var queryUrl = '@Url.Content("~/OrganizationManage/Position/GetPageListJson")';
+        var queryUrl = '@Url.Action("GetPageListJson")';
         $('#gridTable').ysTable({
             url: queryUrl,
             sortName: 'PositionSort',
@@ -77,7 +77,7 @@
         }
         ys.openDialog({
             title: id > 0 ? "编辑职位" : "添加职位",
-            content: '@Url.Content("~/OrganizationManage/Position/PositionForm")' + '?id=' + id,
+            content: '@Url.Action("PositionForm")' + '?id=' + id,
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 iframeWin.saveForm(index);
@@ -91,7 +91,7 @@
             ys.confirm("确认要删除选中的" + selectedRow.length + "条数据吗？", function () {
                 var ids = ys.getIds(selectedRow);
                 ys.ajax({
-                    url: '@Url.Content("~/OrganizationManage/Position/DeleteFormJson")' + '?ids=' + ids,
+                    url: '@Url.Action("DeleteFormJson")' + '?ids=' + ids,
                     type: "post",
                     success: function (obj) {
                         if (obj.Tag == 1) {

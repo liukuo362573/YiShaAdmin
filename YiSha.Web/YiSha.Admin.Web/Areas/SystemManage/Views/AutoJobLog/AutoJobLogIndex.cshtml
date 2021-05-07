@@ -30,7 +30,7 @@
     });
 
     function initGrid() {
-        var queryUrl = '@Url.Content("~/SystemManage/AutoJobLog/GetPageListJson")';
+        var queryUrl = '@Url.Action("GetPageListJson")';
         $('#gridTable').ysTable({
             url: queryUrl,
             columns: [
@@ -73,7 +73,7 @@
             ys.confirm("确认要删除选中的" + selectedRow.length + "条数据吗？", function () {
                 var ids = ys.getIds(selectedRow);
                 ys.ajax({
-                    url: '@Url.Content("~/SystemManage/AutoJobLog/DeleteFormJson")' + '?ids=' + ids,
+                    url: '@Url.Action("DeleteFormJson")' + '?ids=' + ids,
                     type: "post",
                     success: function (obj) {
                         if (obj.Tag == 1) {
