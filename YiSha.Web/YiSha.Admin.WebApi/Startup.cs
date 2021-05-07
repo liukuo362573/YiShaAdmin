@@ -7,7 +7,9 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
+using System;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using YiSha.Admin.WebApi.Filter;
 using YiSha.Business.AutoJob;
@@ -31,8 +33,12 @@ namespace YiSha.Admin.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSwaggerGen(config => { config.SwaggerDoc("v1", new OpenApiInfo { Title = "YiSha Api", Version = "v1" }); });
-
+            services.AddSwaggerGen(options =>
+            {
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml");
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "YiSha Api", Version = "v1" });
+                options.IncludeXmlComments(xmlPath, true);
+            });
             services.AddOptions();
             services.AddCors();
             services.AddControllers(options => { options.ModelMetadataDetailsProviders.Add(new ModelBindingMetadataProvider()); }).AddNewtonsoftJson(options =>
