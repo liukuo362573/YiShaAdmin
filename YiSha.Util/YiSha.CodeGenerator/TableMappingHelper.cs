@@ -1,28 +1,35 @@
-﻿using System.Text;
+﻿using System;
+using System.Linq;
 using YiSha.Util.Extension;
 
 namespace YiSha.CodeGenerator
 {
-    public class TableMappingHelper
+    public static class TableMappingHelper
     {
         /// <summary>
         /// UserService转成userService
         /// </summary>
-        /// <param name="s"></param>
-        /// <returns></returns>
         public static string FirstLetterLowercase(string instanceName)
         {
             instanceName = instanceName.ParseToString();
-            if (!instanceName.IsEmpty())
-            {
-                StringBuilder sb = new StringBuilder();
-                sb.Append(instanceName[0].ToString().ToLower() + instanceName.Substring(1));
-                return sb.ToString();
-            }
-            else
+            if (string.IsNullOrEmpty(instanceName))
             {
                 return instanceName;
             }
+            return instanceName[0].ToString().ToLower() + instanceName[1..];
+        }
+
+        /// <summary>
+        /// UserService转成userService
+        /// </summary>
+        public static string FirstLetterUppercase(string instanceName)
+        {
+            instanceName = instanceName.ParseToString();
+            if (string.IsNullOrEmpty(instanceName))
+            {
+                return instanceName;
+            }
+            return instanceName[0].ToString().ToUpper() + instanceName[1..];
         }
 
         /// <summary>
@@ -30,78 +37,41 @@ namespace YiSha.CodeGenerator
         /// </summary>
         public static string GetClassNamePrefix(string tableName)
         {
-            string[] arr = tableName.Split('_');
-            StringBuilder sb = new StringBuilder();
-            for (int i = 1; i < arr.Length; i++)
-            {
-                sb.Append(arr[i][0].ToString().ToUpper() + arr[i].Substring(1));
-            }
-            return sb.ToString();
+            return string.Join("", tableName?.Split('_').Select(FirstLetterUppercase) ?? Array.Empty<string>());
         }
 
-        public static string GetPropertyDatatype(string sDatatype)
+        public static string GetPropertyDatatype(string datatype)
         {
-            string sTempDatatype = string.Empty;
-            sDatatype = sDatatype.ToLower();
-            switch (sDatatype)
+            return datatype?.ToLower() switch
             {
-                case "int":
-                case "number":
-                case "integer":
-                case "smallint":
-                    sTempDatatype = "int?";
-                    break;
-
-                case "bigint":
-                    sTempDatatype = "long?";
-                    break;
-
-                case "tinyint":
-                    sTempDatatype = "byte?";
-                    break;
-
-                case "numeric":
-                case "real":
-                    sTempDatatype = "Single?";
-                    break;
-
-                case "float":
-                    sTempDatatype = "float?";
-                    break;
-
-                case "decimal":
-                case "numer(8,2)":
-                    sTempDatatype = "decimal?";
-                    break;
-
-                case "bit":
-                    sTempDatatype = "bool?";
-                    break;
-
-                case "date":
-                case "datetime":
-                case "datetime2":
-                case "smalldatetime":
-                    sTempDatatype = "DateTime?";
-                    break;
-
-                case "money":
-                case "smallmoney":
-                    sTempDatatype = "double?";
-                    break;
-
-                case "char":
-                case "varchar":
-                case "nvarchar2":
-                case "text":
-                case "nchar":
-                case "nvarchar":
-                case "ntext":
-                default:
-                    sTempDatatype = "string";
-                    break;
-            }
-            return sTempDatatype;
+                "int" => "int?",
+                "number" => "int?",
+                "integer" => "int?",
+                "smallint" => "int?",
+                "bigint" => "long?",
+                "tinyint" => "byte?",
+                "numeric" => "Single?",
+                "real" => "Single?",
+                "float" => "float?",
+                "decimal" => "decimal?",
+                "numer(8,2)" => "decimal?",
+                "bit" => "bool?",
+                "date" => "DateTime?",
+                "time" => "TimeSpan?",
+                "datetime" => "DateTime?",
+                "datetime2" => "DateTime?",
+                "smalldatetime" => "DateTime?",
+                "money" => "double?",
+                "smallmoney" => "double?",
+                "char" => "string",
+                "varchar" => "string",
+                "nvarchar2" => "string",
+                "text" => "string",
+                "nchar" => "string",
+                "nvarchar" => "string",
+                "ntext" => "string",
+                _ => "string"
+            };
         }
     }
 }
