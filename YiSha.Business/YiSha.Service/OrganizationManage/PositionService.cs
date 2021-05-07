@@ -71,7 +71,7 @@ namespace YiSha.Service.OrganizationManage
 
         public async Task DeleteForm(string ids)
         {
-            var idArr = TextHelper.SplitToArray<long>(ids, ',');
+            var idArr = TextHelper.SplitToArray<object>(ids, ',');
             await BaseRepository().Delete<PositionEntity>(idArr);
         }
 
