@@ -11,7 +11,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label ">部门名称<font class="red"> *</font></label>
+            <label class="col-sm-3 control-label ">部门名称<span class="red"> *</span></label>
             <div class="col-sm-8">
                 <input id="departmentName" col="DepartmentName" type="text" class="form-control" />
             </div>
@@ -58,8 +58,8 @@
 <script type="text/javascript">
     var id = ys.request("id");
     $(function () {
-        $('#parentId').ysComboBoxTree({ url: '@Url.Content("~/OrganizationManage/Department/GetDepartmentTreeListJson")', async: false });
-        $('#principalId').ysComboBoxTree({ url: '@Url.Content("~/OrganizationManage/Department/GetUserTreeListJson")', async: false });
+        $('#parentId').ysComboBoxTree({ url: '@Url.Action("GetDepartmentTreeListJson")', async: false });
+        $('#principalId').ysComboBoxTree({ url: '@Url.Action("GetUserTreeListJson")', async: false });
 
         getForm();
 
@@ -74,7 +74,7 @@
     function getForm() {
         if (id > 0) {
             ys.ajax({
-                url: '@Url.Content("~/OrganizationManage/Department/GetFormJson")' + '?id=' + id,
+                url: '@Url.Action("GetFormJson")' + '?id=' + id,
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
@@ -86,7 +86,7 @@
         }
         else {
              ys.ajax({
-                 url: '@Url.Content("~/OrganizationManage/Department/GetMaxSortJson")',
+                 url: '@Url.Action("GetMaxSortJson")',
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
@@ -103,7 +103,7 @@
             postData.ParentId = ys.getLastValue(postData.ParentId);
             postData.PrincipalId = ys.getLastValue(postData.PrincipalId);
             ys.ajax({
-                url: '@Url.Content("~/OrganizationManage/Department/SaveFormJson")',
+                url: '@Url.Action("SaveFormJson")',
                 type: "post",
                 data: postData,
                 success: function (obj) {

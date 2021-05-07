@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using YiSha.Admin.Web.Controllers;
 using YiSha.Admin.Web.Filter;
 using YiSha.Business.SystemManage;
-using YiSha.Model.Result.SystemManage;
 using YiSha.Util.Model;
 
 namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
@@ -12,7 +10,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
     [Area("SystemManage")]
     public class DatabaseController : BaseController
     {
-        private readonly DatabaseTableBLL _databaseTableBLL = new();
+        private readonly DatabaseTableBLL _databaseTableBll = new();
 
         #region 视图功能
 
@@ -29,35 +27,30 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         [HttpGet, AuthorizeFilter("system:datatable:search")]
         public async Task<IActionResult> GetTableListJson(string tableName)
         {
-            TData<List<TableInfo>> obj = await _databaseTableBLL.GetTableList(tableName);
+            var obj = await _databaseTableBll.GetTableList(tableName);
             return Json(obj);
         }
 
         [HttpGet, AuthorizeFilter("system:datatable:search")]
         public async Task<IActionResult> GetTablePageListJson(string tableName, Pagination pagination)
         {
-            TData<List<TableInfo>> obj = await _databaseTableBLL.GetTablePageList(tableName, pagination);
+            var obj = await _databaseTableBll.GetTablePageList(tableName, pagination);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetTableFieldListJson(string tableName)
         {
-            TData<List<TableFieldInfo>> obj = await _databaseTableBLL.GetTableFieldList(tableName);
+            var obj = await _databaseTableBll.GetTableFieldList(tableName);
             return Json(obj);
         }
 
         #endregion
 
-        #region 提交数据
-
-        [HttpPost]
         public async Task<IActionResult> SyncDatabaseJson()
         {
-            TData obj = await _databaseTableBLL.SyncDatabase();
+            var obj = await _databaseTableBll.SyncDatabase();
             return Json(obj);
         }
-
-        #endregion
     }
 }

@@ -63,7 +63,7 @@
 
     function loadTableFieldTree() {
         $('#tableFieldTree').ysTree({
-            url: '@Url.Content("~/ToolManage/CodeGenerator/GetTableFieldTreePartListJson")' + '?tableName=' + tableName + '&upper=1',
+            url: '@Url.Action("GetTableFieldTreePartListJson")' + '?tableName=' + tableName + '&upper=1',
             maxHeight: "400px",
             async: false,
             check: { enable: true },

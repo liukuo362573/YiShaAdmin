@@ -37,15 +37,9 @@
             <input type="hidden" id="departmentId" col="DepartmentId">
             <div class="select-list">
                 <ul>
-                    <li>
-                        登录名称：<input id="userName" col="UserName" type="text" />
-                    </li>
-                    <li>
-                        手机号码：<input id="mobile" col="Mobile" type="text" />
-                    </li>
-                    <li>
-                        用户状态：<span id="userStatus" col="UserStatus"></span>
-                    </li>
+                    <li>登录名称：<input id="userName" col="UserName" type="text" /></li>
+                    <li>手机号码：<input id="mobile" col="Mobile" type="text" /></li>
+                    <li>用户状态：<span id="userStatus" col="UserStatus"></span></li>
                     <li class="select-time">
                         <label>创建时间： </label>
                         <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="开始时间" />
@@ -106,7 +100,7 @@
 
     function initTree() {
         $('#departmentTree').ysTree({
-            url: '@Url.Content("~/OrganizationManage/Department/GetDepartmentTreeListJson")',
+            url: '@Url.Action("GetDepartmentTreeListJson", "Department", new { area = "OrganizationManage" })',
             async: true,
             expandLevel: 2,
             maxHeight: "700px",
@@ -120,7 +114,7 @@
     }
 
     function initGrid() {
-        var queryUrl = '@Url.Content("~/OrganizationManage/User/GetPageListJson")';
+        var queryUrl = '@Url.Action("GetPageListJson")';
         $('#gridTable').ysTable({
             url: queryUrl,
             columns: [
@@ -180,7 +174,7 @@
         }
         ys.openDialog({
             title: id > 0 ? "编辑用户" : "添加用户",
-            content: '@Url.Content("~/OrganizationManage/User/UserForm")' + '?id=' + id,
+            content: '@Url.Action("UserForm")' + '?id=' + id,
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 iframeWin.saveForm(index);
@@ -194,7 +188,7 @@
             ys.confirm("确认要删除选中的" + selectedRow.length + "条数据吗？", function () {
                 var ids = ys.getIds(selectedRow);
                 ys.ajax({
-                    url: '@Url.Content("~/OrganizationManage/User/DeleteFormJson")' + '?ids=' + ids,
+                    url: '@Url.Action("DeleteFormJson")' + '?ids=' + ids,
                     type: "post",
                     error: ys.ajaxError,
                     success: function (obj) {
@@ -212,14 +206,14 @@
     }
 
     function showDepartmentForm() {
-        var url = '@Url.Content("~/OrganizationManage/Department/DepartmentIndex")';
+        var url = '@Url.Action("DepartmentIndex", "Department", new { area = "OrganizationManage" })';
         createMenuItem(url, "部门管理");
     }
 
     function showResetPasswordForm(id) {
         ys.openDialog({
             title: "重置密码",
-            content: '@Url.Content("~/OrganizationManage/User/ResetPassword")' + '?id=' + id,
+            content: '@Url.Action("ResetPassword")' + '?id=' + id,
             height: "220px",
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
@@ -229,7 +223,7 @@
     }
 
     function exportForm() {
-        var url = '@Url.Content("~/OrganizationManage/User/ExportUserJson")';
+        var url = '@Url.Action("ExportUserJson")';
         var postData = $("#searchDiv").getWebControls();
         ys.exportExcel(url, postData);
     }
@@ -237,7 +231,7 @@
     function importForm() {
       ys.openDialog({
             title: "导入用户数据",
-            content: '@Url.Content("~/OrganizationManage/User/UserImport")',
+            content: '@Url.Action("UserImport")',
             height: "280px",
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];

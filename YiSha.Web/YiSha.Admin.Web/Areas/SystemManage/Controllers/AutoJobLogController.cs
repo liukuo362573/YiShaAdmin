@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using YiSha.Admin.Web.Controllers;
 using YiSha.Admin.Web.Filter;
@@ -13,7 +12,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
     [Area("SystemManage")]
     public class AutoJobLogController : BaseController
     {
-        private readonly AutoJobLogBLL _autoJobLogBLL = new();
+        private readonly AutoJobLogBLL _autoJobLogBll = new();
 
         #region 视图功能
 
@@ -30,21 +29,21 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         [HttpGet]
         public async Task<IActionResult> GetListJson(AutoJobLogListParam param)
         {
-            TData<List<AutoJobLogEntity>> obj = await _autoJobLogBLL.GetList(param);
+            var obj = await _autoJobLogBll.GetList(param);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetPageListJson(AutoJobLogListParam param, Pagination pagination)
         {
-            TData<List<AutoJobLogEntity>> obj = await _autoJobLogBLL.GetPageList(param, pagination);
+            var obj = await _autoJobLogBll.GetPageList(param, pagination);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetFormJson(long id)
         {
-            TData<AutoJobLogEntity> obj = await _autoJobLogBLL.GetEntity(id);
+            var obj = await _autoJobLogBll.GetEntity(id);
             return Json(obj);
         }
 
@@ -55,14 +54,14 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveFormJson(AutoJobLogEntity entity)
         {
-            TData<string> obj = await _autoJobLogBLL.SaveForm(entity);
+            var obj = await _autoJobLogBll.SaveForm(entity);
             return Json(obj);
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteFormJson(string ids)
         {
-            TData obj = await _autoJobLogBLL.DeleteForm(ids);
+            var obj = await _autoJobLogBll.DeleteForm(ids);
             return Json(obj);
         }
 

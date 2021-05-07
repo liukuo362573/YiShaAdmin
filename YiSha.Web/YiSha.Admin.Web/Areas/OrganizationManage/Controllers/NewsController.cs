@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using YiSha.Admin.Web.Controllers;
 using YiSha.Admin.Web.Filter;
@@ -37,28 +36,28 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
         [HttpGet, AuthorizeFilter("organization:news:search")]
         public async Task<IActionResult> GetListJson(NewsListParam param)
         {
-            TData<List<NewsEntity>> obj = await _newsBLL.GetList(param);
+            var obj = await _newsBLL.GetList(param);
             return Json(obj);
         }
 
         [HttpGet, AuthorizeFilter("organization:news:search")]
         public async Task<IActionResult> GetPageListJson(NewsListParam param, Pagination pagination)
         {
-            TData<List<NewsEntity>> obj = await _newsBLL.GetPageList(param, pagination);
+            var obj = await _newsBLL.GetPageList(param, pagination);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetFormJson(long id)
         {
-            TData<NewsEntity> obj = await _newsBLL.GetEntity(id);
+            var obj = await _newsBLL.GetEntity(id);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetMaxSortJson()
         {
-            TData<int> obj = await _newsBLL.GetMaxSort();
+            var obj = await _newsBLL.GetMaxSort();
             return Json(obj);
         }
 
@@ -69,14 +68,14 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
         [HttpPost, AuthorizeFilter("organization:news:add,organization:news:edit")]
         public async Task<IActionResult> SaveFormJson(NewsEntity entity)
         {
-            TData<string> obj = await _newsBLL.SaveForm(entity);
+            var obj = await _newsBLL.SaveForm(entity);
             return Json(obj);
         }
 
         [HttpPost, AuthorizeFilter("organization:news:delete")]
         public async Task<IActionResult> DeleteFormJson(string ids)
         {
-            TData obj = await _newsBLL.DeleteForm(ids);
+            var obj = await _newsBLL.DeleteForm(ids);
             return Json(obj);
         }
 

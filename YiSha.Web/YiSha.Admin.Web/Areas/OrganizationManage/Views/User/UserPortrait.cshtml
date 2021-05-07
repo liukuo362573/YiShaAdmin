@@ -107,7 +107,7 @@
         postData.Id = id;
         postData.Portrait = data.Data;
         ys.ajax({
-            url: '@Url.Content("~/OrganizationManage/User/ChangeUserJson")',
+            url: '@Url.Action("ChangeUserJson")',
             type: "post",
             data: postData,
             success: function (obj) {

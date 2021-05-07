@@ -79,7 +79,7 @@
     function getForm() {
         if (id > 0) {
             ys.ajax({
-                url: '@Url.Content("~/SystemManage/DataDictDetail/GetFormJson")' + '?id=' + id,
+                url: '@Url.Action("GetFormJson")' + '?id=' + id,
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
@@ -90,7 +90,7 @@
         }
         else {
             ys.ajax({
-                url: '@Url.Content("~/SystemManage/DataDictDetail/GetMaxSortJson")',
+                url: '@Url.Action("GetMaxSortJson")',
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
@@ -108,7 +108,7 @@
         if ($("#form").validate().form()) {
             var postData = $("#form").getWebControls({ Id: id });
             ys.ajax({
-                url: '@Url.Content("~/SystemManage/DataDictDetail/SaveFormJson")',
+                url: '@Url.Action("SaveFormJson")',
                 type: "post",
                 data: postData,
                 success: function (obj) {
@@ -128,4 +128,3 @@
         }
     }
 </script>
-

@@ -43,7 +43,7 @@
 
         $("#importFile").fileinput({
             language: 'zh',
-            'uploadUrl': '@Url.Content("~/File/UploadFile")' + '?fileModule=@UploadFileType.Import.ParseToInt()',
+            'uploadUrl': '@Url.Action("UploadFile", "File")' + '?fileModule=@UploadFileType.Import.ParseToInt()',
             showPreview: false,
             allowedFileExtensions: ['xls', 'xlsx']
         }).on("fileuploaded", function (event, data) {
@@ -66,7 +66,7 @@
         var postData =$("#form").getWebControls();
         postData.FilePath = filePath;
         ys.ajax({
-            url: '@Url.Content("~/OrganizationManage/User/ImportUserJson")',
+            url: '@Url.Action("ImportUserJson")',
             type: "post",
             data: postData,
             success: function (obj) {

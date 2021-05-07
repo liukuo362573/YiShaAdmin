@@ -23,30 +23,22 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
         [HttpGet]
         public IActionResult GetServerJson()
         {
-            TData<ComputerInfo> obj = new TData<ComputerInfo>();
-            ComputerInfo computerInfo = null;
             try
             {
-                computerInfo = ComputerHelper.GetComputerInfo();
+                return Json(new TData<ComputerInfo> { Tag = 1, Data = ComputerHelper.GetComputerInfo() });
             }
             catch (Exception ex)
             {
                 LogHelper.Error(ex);
-                obj.Message = ex.Message;
+                return Json(new TData<ComputerInfo> { Tag = 0, Message = ex.Message });
             }
-            obj.Data = computerInfo;
-            obj.Tag = 1;
-            return Json(obj);
         }
 
         public IActionResult GetServerIpJson()
         {
-            TData<string> obj = new TData<string>();
             string ip = NetHelper.GetWanIp();
             string ipLocation = IpLocationHelper.GetIpLocation(ip);
-            obj.Data = string.Format("{0} ({1})", ip, ipLocation);
-            obj.Tag = 1;
-            return Json(obj);
+            return Json(new TData<string> { Data = $"{ip} ({ipLocation})", Tag = 1 });
         }
 
         #endregion

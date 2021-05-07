@@ -4,9 +4,7 @@
 
 @*<div class="row cl">
         <div id="menuTree" class="ztree"></div>
-
     </div>*@
-
 
 <div class="wrapper">
     @*<div class="treeShowHideButton" onclick="$.tree.toggleSearch();">
@@ -31,7 +29,7 @@
     $(function () {
         $('#menuTree').ysTree({
             id: "menuTree",
-            url: '@Url.Content("~/SystemManage/Menu/GetMenuTreeListJson")',
+            url: '@Url.Action("GetMenuTreeListJson")',
             check: { enable: false },
             expandLevel: 0,
             callback: { onClick: saveChoose }

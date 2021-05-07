@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using YiSha.Admin.Web.Controllers;
 using YiSha.Admin.Web.Filter;
 using YiSha.Business.SystemManage;
-using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Util.Model;
 
@@ -13,7 +11,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
     [Area("SystemManage")]
     public class LogLoginController : BaseController
     {
-        private readonly LogLoginBLL _logLoginBLL = new();
+        private readonly LogLoginBLL _logLoginBll = new();
 
         #region 视图功能
 
@@ -30,21 +28,21 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         [HttpGet, AuthorizeFilter("system:loglogin:search")]
         public async Task<IActionResult> GetListJson(LogLoginListParam param)
         {
-            TData<List<LogLoginEntity>> obj = await _logLoginBLL.GetList(param);
+            var obj = await _logLoginBll.GetList(param);
             return Json(obj);
         }
 
         [HttpGet, AuthorizeFilter("system:loglogin:search")]
         public async Task<IActionResult> GetPageListJson(LogLoginListParam param, Pagination pagination)
         {
-            TData<List<LogLoginEntity>> obj = await _logLoginBLL.GetPageList(param, pagination);
+            var obj = await _logLoginBll.GetPageList(param, pagination);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetFormJson(long id)
         {
-            TData<LogLoginEntity> obj = await _logLoginBLL.GetEntity(id);
+            var obj = await _logLoginBll.GetEntity(id);
             return Json(obj);
         }
 
@@ -55,14 +53,14 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         [HttpPost, AuthorizeFilter("system:loglogin:delete")]
         public async Task<IActionResult> DeleteFormJson(string ids)
         {
-            TData obj = await _logLoginBLL.DeleteForm(ids);
+            var obj = await _logLoginBll.DeleteForm(ids);
             return Json(obj);
         }
 
         [HttpPost, AuthorizeFilter("system:loglogin:delete")]
         public async Task<IActionResult> RemoveAllFormJson()
         {
-            TData obj = await _logLoginBLL.RemoveAllForm();
+            var obj = await _logLoginBll.RemoveAllForm();
             return Json(obj);
         }
 

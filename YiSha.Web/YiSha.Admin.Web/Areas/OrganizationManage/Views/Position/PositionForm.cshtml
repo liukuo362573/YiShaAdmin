@@ -5,7 +5,7 @@
 <div class="wrapper animated fadeInRight">
     <form id="form" class="form-horizontal m">
         <div class="form-group">
-            <label class="col-sm-3 control-label">职位名称<font class="red"> *</font></label>
+            <label class="col-sm-3 control-label">职位名称<span class="red"> *</span></label>
             <div class="col-sm-8">
                 <input id="positionName" col="PositionName" type="text" class="form-control" />
             </div>
@@ -48,7 +48,7 @@
     function getForm() {
         if (id > 0) {
             ys.ajax({
-                url: '@Url.Content("~/OrganizationManage/Position/GetFormJson")' + '?id=' + id,
+                url: '@Url.Action("GetFormJson")' + '?id=' + id,
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
@@ -60,7 +60,7 @@
         }
         else {
             ys.ajax({
-                url: '@Url.Content("~/OrganizationManage/Position/GetMaxSortJson")',
+                url: '@Url.Action("GetMaxSortJson")',
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
@@ -78,7 +78,7 @@
         if ($("#form").validate().form()) {
             var postData = $("#form").getWebControls({ Id: id });
             ys.ajax({
-                url: '@Url.Content("~/OrganizationManage/Position/SaveFormJson")',
+                url: '@Url.Action("SaveFormJson")',
                 type: "post",
                 data: postData,
                 success: function (obj) {

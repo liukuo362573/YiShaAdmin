@@ -36,7 +36,7 @@
     });
 
     function initGrid() {
-        var queryUrl = '@Url.Content("~/SystemManage/Database/GetTablePageListJson")';
+        var queryUrl = '@Url.Action("GetTablePageListJson")';
         $('#gridTable').ysTable({
             url: queryUrl,
             detailView: true,
@@ -63,7 +63,7 @@
     }
 
     function initChildGrid(index, row, $detail) {
-        var queryUrl = '@Url.Content("~/SystemManage/Database/GetTableFieldListJson")' + '?tableName=' + row.TableName;
+        var queryUrl = '@Url.Action("GetTableFieldListJson")' + '?tableName=' + row.TableName;
         var cur_table = $detail.html('<div style="border:1px solid #666666"><table></table></div>').find('table');
         $detail.css("padding-left", "28px");
         $(cur_table).ysTable({
@@ -90,7 +90,7 @@
 
     function syncDatabase() {
         ys.ajax({
-            url: '@Url.Content("~/SystemManage/Database/SyncDatabaseJson")',
+            url: '@Url.Action("SyncDatabaseJson")',
             type: "post",
             success: function (obj) {
                 if (obj.Tag == 1) {

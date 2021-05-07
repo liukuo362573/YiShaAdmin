@@ -18,7 +18,6 @@
                             <li><a href="javascript:showChangePasswordForm()">修改密码</a></li>
                             <li><a href="javascript:showUserAvatarForm()">修改头像</a></li>
                         </ul>
-
                     </div>
                 </div>
                 <div class="contact-box">
@@ -53,7 +52,7 @@
     function getForm() {
         if (id > 0) {
             ys.ajax({
-                url: '@Url.Content("~/OrganizationManage/User/GetFormJson")' + '?id=' + id,
+                url: '@Url.Action("GetFormJson")' + '?id=' + id,
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
@@ -81,7 +80,7 @@
     function getRoleName(roleIds) {
         if (!ys.isNullOrEmpty(roleIds)) {
             ys.ajax({
-                url: '@Url.Content("~/SystemManage/Role/GetRoleName")' + '?RoleIds=' + roleIds,
+                url: '@Url.Action("GetRoleName", "Role", new { area = "SystemManage" })' + '?RoleIds=' + roleIds,
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
@@ -95,7 +94,7 @@
     function getPositionName(positionIds) {
         if (!ys.isNullOrEmpty(positionIds)) {
             ys.ajax({
-                url: '@Url.Content("~/OrganizationManage/Position/GetPositionName")' + '?PositionIds=' + positionIds,
+                url: '@Url.Action("GetPositionName", "Position", new { area = "OrganizationManage" })' + '?PositionIds=' + positionIds,
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
@@ -109,7 +108,7 @@
     function getDepartmentName(id) {
         if (id > 0) {
             ys.ajax({
-                url: '@Url.Content("~/OrganizationManage/Department/GetFormJson")' + '?id=' + id,
+                url: '@Url.Action("GetFormJson", "Department", new { area = "OrganizationManage" })' + '?id=' + id,
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
@@ -124,7 +123,7 @@
         if ($("#form").validate().form()) {
             var postData = $("#form").getWebControls({ Id: id });
             ys.ajax({
-                url: '@Url.Content("~/OrganizationManage/User/SaveFormJson")',
+                url: '@Url.Action("SaveFormJson")',
                 type: "post",
                 data: postData,
                 success: function (obj) {
@@ -144,7 +143,7 @@
     function showChangePasswordForm() {
         ys.openDialog({
             title: "修改密码",
-            content: '@Url.Content("~/OrganizationManage/User/ChangePassword")' + '?id=' + id,
+            content: '@Url.Action("ChangePassword")' + '?id=' + id,
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 iframeWin.saveForm(index);
@@ -155,7 +154,7 @@
     function showChangeUserForm() {
         ys.openDialog({
             title: "修改信息",
-            content: '@Url.Content("~/OrganizationManage/User/ChangeUser")' + '?id=' + id,
+            content: '@Url.Action("ChangeUser")' + '?id=' + id,
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 iframeWin.saveForm(index);
@@ -166,7 +165,7 @@
     function showUserAvatarForm() {
         ys.openDialog({
             title: "修改头像",
-            content: '@Url.Content("~/OrganizationManage/User/UserPortrait")' + '?id=' + id,
+            content: '@Url.Action("UserPortrait")' + '?id=' + id,
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 iframeWin.saveForm(index);

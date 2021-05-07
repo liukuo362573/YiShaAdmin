@@ -16,23 +16,20 @@ namespace YiSha.Admin.Web.Filter
         public void OnException(ExceptionContext context)
         {
             LogHelper.Error(context.Exception);
+            string message = context.Exception.GetOriginalException().Message;
+            IActionResult result = new RedirectResult("~/Home/Error?message=" + HttpUtility.UrlEncode(message));
+
             if (context.HttpContext.Request.IsAjaxRequest())
             {
-                TData obj = new TData();
-                obj.Message = context.Exception.GetOriginalException().Message;
-                if (string.IsNullOrEmpty(obj.Message))
+                if (string.IsNullOrEmpty(message))
                 {
-                    obj.Message = "抱歉，系统错误，请联系管理员！";
+                    message = "抱歉，系统错误，请联系管理员！";
                 }
-                context.Result = new JsonResult(obj);
-                context.ExceptionHandled = true;
+                result = new JsonResult(new TData { Message = message });
             }
-            else
-            {
-                string errorMessage = context.Exception.GetOriginalException().Message;
-                context.Result = new RedirectResult("~/Home/Error?message=" + HttpUtility.UrlEncode(errorMessage));
-                context.ExceptionHandled = true;
-            }
+
+            context.Result = result;
+            context.ExceptionHandled = true;
         }
 
         public Task OnExceptionAsync(ExceptionContext context)

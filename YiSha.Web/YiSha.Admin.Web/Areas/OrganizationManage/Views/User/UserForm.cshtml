@@ -5,11 +5,11 @@
 <div class="wrapper animated fadeInRight">
     <form id="form" class="form-horizontal m">
         <div class="form-group">
-            <label class="col-sm-2 control-label ">登录名称<font class="red"> *</font></label>
+            <label class="col-sm-2 control-label ">登录名称<span class="red"> *</span></label>
             <div class="col-sm-4">
                 <input id="userName" col="UserName" type="text" class="form-control" />
             </div>
-            <label class="col-sm-2 control-label ">登录密码<font class="red"> *</font></label>
+            <label class="col-sm-2 control-label ">登录密码<span class="red"> *</span></label>
             <div class="col-sm-4">
                 <input id="password" col="Password" type="password" class="form-control" />
             </div>
@@ -67,23 +67,23 @@
     var id = ys.request("id");
     $(function () {
         $("#userStatus").ysRadioBox({ data: ys.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
-        $("#gender").ysRadioBox({ data: ys.getJson(@Html.Raw(typeof(YiSha.Enum.OrganizationManage.GenderTypeEnum).EnumToDictionaryString())) });
+        $("#gender").ysRadioBox({ data: ys.getJson(@Html.Raw(typeof(GenderTypeEnum).EnumToDictionaryString())) });
 
         $("#role").ysCheckBox({
-            url: '@Url.Content("~/SystemManage/Role/GetListJson")',
+            url: '@Url.Action("GetListJson", "Role", new { area = "SystemManage" })',
             key: "Id",
             value: "RoleName"
         });
 
         $("#positionId").ysComboBox({
-            url: '@Url.Content("~/OrganizationManage/Position/GetListJson")',
+            url: '@Url.Action("GetListJson", "Position", new { area = "OrganizationManage" })',
             key: "Id",
             value: "PositionName",
             class: "form-control",
             multiple: true
         });
 
-        $('#departmentId').ysComboBoxTree({ url: '@Url.Content("~/OrganizationManage/Department/GetDepartmentTreeListJson")' });
+        $('#departmentId').ysComboBoxTree({ url: '@Url.Action("GetDepartmentTreeListJson", "Department", new { area = "OrganizationManage" })' });
 
         laydate.render({ elem: '#birthday', format: 'yyyy-MM-dd' });
 
@@ -108,7 +108,7 @@
             $('#password').attr("readonly", "readonly").attr("disabled", "disabled");
 
             ys.ajax({
-                url: '@Url.Content("~/OrganizationManage/User/GetFormJson")' + '?id=' + id,
+                url: '@Url.Action("GetFormJson")' + '?id=' + id,
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
@@ -132,7 +132,7 @@
             var postData = $("#form").getWebControls({ Id: id });
             postData.DepartmentId = ys.getLastValue(postData.DepartmentId);
             ys.ajax({
-                url: '@Url.Content("~/OrganizationManage/User/SaveFormJson")',
+                url: '@Url.Action("SaveFormJson")',
                 type: "post",
                 data: postData,
                 success: function (obj) {

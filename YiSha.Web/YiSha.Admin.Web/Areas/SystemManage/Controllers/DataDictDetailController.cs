@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using YiSha.Admin.Web.Controllers;
 using YiSha.Admin.Web.Filter;
@@ -13,7 +12,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
     [Area("SystemManage")]
     public class DataDictDetailController : BaseController
     {
-        private readonly DataDictDetailBLL _dataDictDetailBLL = new();
+        private readonly DataDictDetailBLL _dataDictDetailBll = new();
 
         #region 视图功能
 
@@ -35,28 +34,28 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         [HttpGet, AuthorizeFilter("system:datadict:search")]
         public async Task<IActionResult> GetListJson(DataDictDetailListParam param)
         {
-            TData<List<DataDictDetailEntity>> obj = await _dataDictDetailBLL.GetList(param);
+            var obj = await _dataDictDetailBll.GetList(param);
             return Json(obj);
         }
 
         [HttpGet, AuthorizeFilter("system:datadict:search")]
         public async Task<IActionResult> GetPageListJson(DataDictDetailListParam param, Pagination pagination)
         {
-            TData<List<DataDictDetailEntity>> obj = await _dataDictDetailBLL.GetPageList(param, pagination);
+            var obj = await _dataDictDetailBll.GetPageList(param, pagination);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetFormJson(long id)
         {
-            TData<DataDictDetailEntity> obj = await _dataDictDetailBLL.GetEntity(id);
+            var obj = await _dataDictDetailBll.GetEntity(id);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetMaxSortJson()
         {
-            TData<int> obj = await _dataDictDetailBLL.GetMaxSort();
+            var obj = await _dataDictDetailBll.GetMaxSort();
             return Json(obj);
         }
 
@@ -67,14 +66,14 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         [HttpPost, AuthorizeFilter("system:datadict:add,system:datadict:edit")]
         public async Task<IActionResult> SaveFormJson(DataDictDetailEntity entity)
         {
-            TData<string> obj = await _dataDictDetailBLL.SaveForm(entity);
+            var obj = await _dataDictDetailBll.SaveForm(entity);
             return Json(obj);
         }
 
         [HttpPost, AuthorizeFilter("system:datadict:delete")]
         public async Task<IActionResult> DeleteFormJson(string ids)
         {
-            TData obj = await _dataDictDetailBLL.DeleteForm(ids);
+            var obj = await _dataDictDetailBll.DeleteForm(ids);
             return Json(obj);
         }
 

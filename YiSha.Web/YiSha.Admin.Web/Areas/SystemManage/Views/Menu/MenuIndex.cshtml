@@ -55,7 +55,7 @@
             expandFirst: false,
             toolbar: '#toolbar',
             expandColumn: '1',
-            url: '@Url.Content("~/SystemManage/Menu/GetListJson")',
+            url: '@Url.Action("GetListJson")',
             modalName: "菜单",
             columns: [
                 { field: 'selectItem', radio: true },
@@ -134,7 +134,7 @@
 
         ys.openDialog({
             title: id > 0 ? "编辑菜单" : "添加菜单",
-            content: '@Url.Content("~/SystemManage/Menu/MenuForm")' + '?id=' + id + '&parentId=' + parentId + '&parentName=' + encodeURIComponent(parentName),
+            content: '@Url.Action("MenuForm")' + '?id=' + id + '&parentId=' + parentId + '&parentName=' + encodeURIComponent(parentName),
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 iframeWin.saveForm(index);
@@ -148,7 +148,7 @@
             ys.confirm("确认要删除选中的" + selectedRow.length + "条数据吗？", function () {
                 var ids = ys.getIds(selectedRow);
                 ys.ajax({
-                    url: '@Url.Content("~/SystemManage/Menu/DeleteFormJson")' + '?ids=' + ids,
+                    url: '@Url.Action("DeleteFormJson")' + '?ids=' + ids,
                     type: "post",
                     error: ys.ajaxError,
                     success: function (obj) {

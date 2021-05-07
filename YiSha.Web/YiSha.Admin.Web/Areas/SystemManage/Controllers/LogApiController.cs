@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using YiSha.Admin.Web.Controllers;
 using YiSha.Business.SystemManage;
-using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Util.Model;
 
@@ -12,7 +10,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
     [Area("SystemManage")]
     public class LogApiController : BaseController
     {
-        private readonly LogApiBLL _logApiBLL = new();
+        private readonly LogApiBLL _logApiBll = new();
 
         #region 视图功能
 
@@ -33,21 +31,21 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         [HttpGet]
         public async Task<IActionResult> GetListJson(LogApiListParam param)
         {
-            TData<List<LogApiEntity>> obj = await _logApiBLL.GetList(param);
+            var obj = await _logApiBll.GetList(param);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetPageListJson(LogApiListParam param, Pagination pagination)
         {
-            TData<List<LogApiEntity>> obj = await _logApiBLL.GetPageList(param, pagination);
+            var obj = await _logApiBll.GetPageList(param, pagination);
             return Json(obj);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetFormJson(long id)
         {
-            TData<LogApiEntity> obj = await _logApiBLL.GetEntity(id);
+            var obj = await _logApiBll.GetEntity(id);
             return Json(obj);
         }
 
@@ -58,14 +56,14 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteFormJson(string ids)
         {
-            TData obj = await _logApiBLL.DeleteForm(ids);
+            var obj = await _logApiBll.DeleteForm(ids);
             return Json(obj);
         }
 
         [HttpPost]
         public async Task<IActionResult> RemoveAllFormJson()
         {
-            TData obj = await _logApiBLL.RemoveAllForm();
+            var obj = await _logApiBll.RemoveAllForm();
             return Json(obj);
         }
 

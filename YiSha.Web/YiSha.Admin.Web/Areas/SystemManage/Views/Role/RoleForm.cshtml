@@ -55,7 +55,7 @@
     function loadMenuTree() {
         $('#menuTree').ysTree({
             async: false,
-            url: '@Url.Content("~/SystemManage/Menu/GetMenuTreeListJson")',
+            url: '@Url.Action("GetMenuTreeListJson", "Menu", new { area = "SystemManage" })',
             check: { enable: true },
             expandLevel: 0
         })
@@ -64,7 +64,7 @@
     function getForm() {
         if (id > 0) {
             ys.ajax({
-                url: '@Url.Content("~/SystemManage/Role/GetFormJson")' + '?id=' + id,
+                url: '@Url.Action("GetFormJson")' + '?id=' + id,
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
@@ -76,7 +76,7 @@
         }
         else {
             ys.ajax({
-                url: '@Url.Content("~/SystemManage/Role/GetMaxSortJson")',
+                url: '@Url.Action("GetMaxSortJson")',
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
@@ -95,7 +95,7 @@
             var postData = $("#form").getWebControls({ Id: id });
             postData.MenuIds = $('#menuTree').ysTree("getCheckedNodes");
             ys.ajax({
-                url: '@Url.Content("~/SystemManage/Role/SaveFormJson")',
+                url: '@Url.Action("SaveFormJson")',
                 type: "post",
                 data: postData,
                 success: function (obj) {
