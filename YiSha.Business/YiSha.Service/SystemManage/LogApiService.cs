@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Common;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using YiSha.Data.Extension;
@@ -20,18 +18,16 @@ namespace YiSha.Service.SystemManage
 
         public async Task<List<LogApiEntity>> GetList(LogApiListParam param)
         {
-            var strSql = new StringBuilder();
-            List<DbParameter> filter = ListFilter(param, strSql);
-            var list = await BaseRepository().FindList<LogApiEntity>(strSql.ToString(), filter.ToArray());
-            return list.ToList();
+            var builder = new StringBuilder();
+            var filter = ListFilter(param, builder).ToArray();
+            return await BaseRepository().FindList<LogApiEntity>(builder.ToString(), filter);
         }
 
         public async Task<List<LogApiEntity>> GetPageList(LogApiListParam param, Pagination pagination)
         {
-            var strSql = new StringBuilder();
-            List<DbParameter> filter = ListFilter(param, strSql);
-            var list = await BaseRepository().FindList<LogApiEntity>(strSql.ToString(), filter.ToArray(), pagination);
-            return list.ToList();
+            var builder = new StringBuilder();
+            var filter = ListFilter(param, builder).ToArray();
+            return await BaseRepository().FindList<LogApiEntity>(builder.ToString(), pagination, filter);
         }
 
         public async Task<LogApiEntity> GetEntity(long id)
@@ -58,7 +54,7 @@ namespace YiSha.Service.SystemManage
 
         public async Task DeleteForm(string ids)
         {
-            long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
+            var idArr = TextHelper.SplitToArray<long>(ids, ',');
             await BaseRepository().Delete<LogApiEntity>(idArr);
         }
 
@@ -71,9 +67,9 @@ namespace YiSha.Service.SystemManage
 
         #region 私有方法
 
-        private List<DbParameter> ListFilter(LogApiListParam param, StringBuilder strSql)
+        private List<DbParameter> ListFilter(LogApiListParam param, StringBuilder builder)
         {
-            strSql.Append(@"SELECT  a.Id,
+            builder.Append(@"SELECT  a.Id,
                                     a.BaseCreateTime,
                                     a.BaseCreatorId,
                                     a.LogStatus,
@@ -91,30 +87,30 @@ namespace YiSha.Service.SystemManage
             var parameter = new List<DbParameter>();
             if (param != null)
             {
-                if (!string.IsNullOrEmpty(param.UserName))
+                if (param.UserName?.Length > 0)
                 {
-                    strSql.Append(" AND b.UserName like @UserName");
+                    builder.Append(" AND b.UserName like @UserName");
                     parameter.Add(DbParameterHelper.CreateDbParameter("@UserName", '%' + param.UserName + '%'));
                 }
                 if (param.LogStatus > -1)
                 {
-                    strSql.Append(" AND a.LogStatus = @LogStatus");
+                    builder.Append(" AND a.LogStatus = @LogStatus");
                     parameter.Add(DbParameterHelper.CreateDbParameter("@LogStatus", param.LogStatus));
                 }
-                if (!string.IsNullOrEmpty(param.ExecuteUrl))
+                if (param.ExecuteUrl?.Length > 0)
                 {
-                    strSql.Append(" AND a.ExecuteUrl like @ExecuteUrl");
+                    builder.Append(" AND a.ExecuteUrl like @ExecuteUrl");
                     parameter.Add(DbParameterHelper.CreateDbParameter("@ExecuteUrl", '%' + param.ExecuteUrl + '%'));
                 }
-                if (!string.IsNullOrEmpty(param.StartTime.ParseToString()))
+                if (param.StartTime.ParseToString()?.Length > 0)
                 {
-                    strSql.Append(" AND a.BaseCreateTime >= @StartTime");
+                    builder.Append(" AND a.BaseCreateTime >= @StartTime");
                     parameter.Add(DbParameterHelper.CreateDbParameter("@StartTime", param.StartTime));
                 }
-                if (!string.IsNullOrEmpty(param.EndTime.ParseToString()))
+                if (param.EndTime.ParseToString()?.Length > 0)
                 {
-                    param.EndTime = param.EndTime.Value.Date.Add(new TimeSpan(23, 59, 59));
-                    strSql.Append(" AND a.BaseCreateTime <= @EndTime");
+                    param.EndTime = (param.EndTime?.ToString("yyyy-MM-dd") + " 23:59:59").ParseToDateTime();
+                    builder.Append(" AND a.BaseCreateTime <= @EndTime");
                     parameter.Add(DbParameterHelper.CreateDbParameter("@EndTime", param.EndTime));
                 }
             }

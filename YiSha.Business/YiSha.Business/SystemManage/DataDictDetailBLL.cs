@@ -19,36 +19,28 @@ namespace YiSha.Business.SystemManage
 
         public async Task<TData<List<DataDictDetailEntity>>> GetList(DataDictDetailListParam param)
         {
-            TData<List<DataDictDetailEntity>> obj = new TData<List<DataDictDetailEntity>>();
-            obj.Data = await _dataDictDetailService.GetList(param);
-            obj.Total = obj.Data.Count;
-            obj.Tag = 1;
-            return obj;
+            var list = await _dataDictDetailService.GetList(param);
+            return new() { Data = list, Total = list.Count, Tag = 1 };
         }
 
         public async Task<TData<List<DataDictDetailEntity>>> GetPageList(DataDictDetailListParam param, Pagination pagination)
         {
-            TData<List<DataDictDetailEntity>> obj = new TData<List<DataDictDetailEntity>>();
-            obj.Data = await _dataDictDetailService.GetPageList(param, pagination);
-            obj.Total = pagination.TotalCount;
-            obj.Tag = 1;
-            return obj;
+            return new()
+            {
+                Data = await _dataDictDetailService.GetPageList(param, pagination),
+                Total = pagination.TotalCount,
+                Tag = 1
+            };
         }
 
         public async Task<TData<DataDictDetailEntity>> GetEntity(long id)
         {
-            TData<DataDictDetailEntity> obj = new TData<DataDictDetailEntity>();
-            obj.Data = await _dataDictDetailService.GetEntity(id);
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = await _dataDictDetailService.GetEntity(id), Tag = 1 };
         }
 
         public async Task<TData<int>> GetMaxSort()
         {
-            TData<int> obj = new TData<int>();
-            obj.Data = await _dataDictDetailService.GetMaxSort();
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = await _dataDictDetailService.GetMaxSort(), Tag = 1 };
         }
 
         #endregion
@@ -57,31 +49,24 @@ namespace YiSha.Business.SystemManage
 
         public async Task<TData<string>> SaveForm(DataDictDetailEntity entity)
         {
-            TData<string> obj = new TData<string>();
             if (entity.DictKey <= 0)
             {
-                obj.Message = "字典键必须大于0";
-                return obj;
+                return new() { Tag = 0, Message = "字典键必须大于0" };
             }
             if (_dataDictDetailService.ExistDictKeyValue(entity))
             {
-                obj.Message = "字典键或值已经存在！";
-                return obj;
+                return new() { Tag = 0, Message = "字典键或值已经存在！" };
             }
             await _dataDictDetailService.SaveForm(entity);
             _dataDictDetailCache.Remove();
-            obj.Data = entity.Id.ParseToString();
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = entity.Id.ParseToString(), Tag = 1 };
         }
 
         public async Task<TData> DeleteForm(string ids)
         {
-            TData<long> obj = new TData<long>();
             await _dataDictDetailService.DeleteForm(ids);
             _dataDictDetailCache.Remove();
-            obj.Tag = 1;
-            return obj;
+            return new() { Tag = 1 };
         }
 
         #endregion

@@ -15,58 +15,51 @@ namespace YiSha.Business.SystemManage
     public class MenuAuthorizeBLL
     {
         private readonly MenuAuthorizeCache _menuAuthorizeCache = new();
+
         private readonly MenuCache _menuCache = new();
 
         #region 获取数据
 
         public async Task<TData<List<MenuAuthorizeInfo>>> GetAuthorizeList(OperatorInfo user)
         {
-            TData<List<MenuAuthorizeInfo>> obj = new TData<List<MenuAuthorizeInfo>>();
-            obj.Data = new List<MenuAuthorizeInfo>();
-
-            List<MenuAuthorizeEntity> authorizeList = new List<MenuAuthorizeEntity>();
-            List<MenuAuthorizeEntity> userAuthorizeList = null;
-            List<MenuAuthorizeEntity> roleAuthorizeList = null;
-
-            var menuAuthorizeCacheList = await _menuAuthorizeCache.GetList();
+            var authorizeList = new List<MenuAuthorizeEntity>();
             var menuList = await _menuCache.GetList();
-            var enableMenuIdList = menuList.Where(p => p.MenuStatus == (int)StatusEnum.Yes).Select(p => p.Id).ToList();
-
-            menuAuthorizeCacheList = menuAuthorizeCacheList.Where(p => enableMenuIdList.Contains(p.MenuId)).ToList();
-
-            // 用户
-            userAuthorizeList = menuAuthorizeCacheList.Where(p => p.AuthorizeId == user.UserId && p.AuthorizeType == AuthorizeTypeEnum.User.ParseToInt()).ToList();
+            var enableMenuIdList = menuList.Where(p => p.MenuStatus == (int)StatusEnum.Yes).Select(p => p.Id);
+            var menuAuthorizeCacheList = await _menuAuthorizeCache.GetList(p => enableMenuIdList.Contains(p.MenuId));
 
             // 角色
-            if (!string.IsNullOrEmpty(user.RoleIds))
+            IEnumerable<MenuAuthorizeEntity> roleAuthorizeList = null;
+            if (user.RoleIds?.Length > 0)
             {
-                List<long> roleIdList = user.RoleIds.Split(',').Select(p => long.Parse(p)).ToList();
-                roleAuthorizeList = menuAuthorizeCacheList.Where(p => roleIdList.Contains(p.AuthorizeId.Value) && p.AuthorizeType == AuthorizeTypeEnum.Role.ParseToInt()).ToList();
+                var roleIdList = user.RoleIds.Split(',').Select(long.Parse);
+                roleAuthorizeList = menuAuthorizeCacheList.Where(p => roleIdList.Contains(p.AuthorizeId!.Value) && p.AuthorizeType == AuthorizeTypeEnum.Role.ParseToInt());
+            }
+
+            // 用户
+            var userAuthorizeList = menuAuthorizeCacheList.Where(p => p.AuthorizeId == user.UserId && p.AuthorizeType == AuthorizeTypeEnum.User.ParseToInt());
+            if (userAuthorizeList.Any())
+            {
+                authorizeList.AddRange(userAuthorizeList);
+                roleAuthorizeList = roleAuthorizeList!.Where(p => !userAuthorizeList.Select(u => u.AuthorizeId).Contains(p.AuthorizeId));
             }
 
             // 排除重复的记录
-            if (userAuthorizeList.Count > 0)
-            {
-                authorizeList.AddRange(userAuthorizeList);
-                roleAuthorizeList = roleAuthorizeList.Where(p => !userAuthorizeList.Select(u => u.AuthorizeId).Contains(p.AuthorizeId)).ToList();
-            }
-            if (roleAuthorizeList != null && roleAuthorizeList.Count > 0)
+            if (roleAuthorizeList?.Any() ?? false)
             {
                 authorizeList.AddRange(roleAuthorizeList);
             }
 
-            foreach (MenuAuthorizeEntity authorize in authorizeList)
+            return new()
             {
-                obj.Data.Add(new MenuAuthorizeInfo
+                Tag = 1,
+                Data = authorizeList.Select(authorize => new MenuAuthorizeInfo
                 {
                     MenuId = authorize.MenuId,
                     AuthorizeId = authorize.AuthorizeId,
                     AuthorizeType = authorize.AuthorizeType,
                     Authorize = menuList.Where(t => t.Id == authorize.MenuId).Select(t => t.Authorize).FirstOrDefault()
-                });
-            }
-            obj.Tag = 1;
-            return obj;
+                }).ToList()
+            };
         }
 
         #endregion

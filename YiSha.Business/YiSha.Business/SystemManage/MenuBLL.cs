@@ -21,68 +21,48 @@ namespace YiSha.Business.SystemManage
 
         public async Task<TData<List<MenuEntity>>> GetList(MenuListParam param)
         {
-            var obj = new TData<List<MenuEntity>>();
-
-            List<MenuEntity> list = await _menuCache.GetList();
+            var list = await _menuCache.GetList();
             list = ListFilter(param, list);
-
-            obj.Data = list;
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = list, Tag = 1 };
         }
 
         public async Task<TData<List<ZtreeInfo>>> GetZtreeList(MenuListParam param)
         {
-            var obj = new TData<List<ZtreeInfo>>();
-            obj.Data = new List<ZtreeInfo>();
-
-            List<MenuEntity> list = await _menuCache.GetList();
+            var list = await _menuCache.GetList();
             list = ListFilter(param, list);
-
-            foreach (MenuEntity menu in list)
+            return new()
             {
-                obj.Data.Add(new ZtreeInfo
+                Data = list.Select(menu => new ZtreeInfo
                 {
                     id = menu.Id,
                     pId = menu.ParentId,
                     name = menu.MenuName
-                });
-            }
-
-            obj.Tag = 1;
-            return obj;
+                }).ToList(),
+                Tag = 1
+            };
         }
 
         public async Task<TData<MenuEntity>> GetEntity(long id)
         {
-            TData<MenuEntity> obj = new TData<MenuEntity>();
-            obj.Data = await _menuService.GetEntity(id);
-            if (obj.Data != null)
+            var entity = await _menuService.GetEntity(id);
+            if (entity != null)
             {
-                long parentId = obj.Data.ParentId.Value;
-                if (parentId > 0)
+                if (entity.ParentId > 0)
                 {
-                    MenuEntity parentMenu = await _menuService.GetEntity(parentId);
-                    if (parentMenu != null)
-                    {
-                        obj.Data.ParentName = parentMenu.MenuName;
-                    }
+                    var parentMenu = await _menuService.GetEntity(entity.ParentId.Value);
+                    entity.ParentName = parentMenu?.MenuName;
                 }
                 else
                 {
-                    obj.Data.ParentName = "主目录";
+                    entity.ParentName = "主目录";
                 }
             }
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = entity, Tag = 1 };
         }
 
         public async Task<TData<int>> GetMaxSort(long parentId)
         {
-            TData<int> obj = new TData<int>();
-            obj.Data = await _menuService.GetMaxSort(parentId);
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = await _menuService.GetMaxSort(parentId), Tag = 1 };
         }
 
         #endregion
@@ -91,34 +71,20 @@ namespace YiSha.Business.SystemManage
 
         public async Task<TData<string>> SaveForm(MenuEntity entity)
         {
-            TData<string> obj = new TData<string>();
-            if (!entity.Id.IsNullOrZero() && entity.Id == entity.ParentId)
-            {
-                obj.Message = "不能选择自己作为上级菜单！";
-                return obj;
-            }
             if (_menuService.ExistMenuName(entity))
             {
-                obj.Message = "菜单名称已经存在！";
-                return obj;
+                return new() { Tag = 0, Message = "菜单名称已经存在！" };
             }
             await _menuService.SaveForm(entity);
-
             _menuCache.Remove();
-
-            obj.Data = entity.Id.ParseToString();
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = entity.Id.ParseToString(), Tag = 1 };
         }
 
         public async Task<TData> DeleteForm(string ids)
         {
-            TData obj = new TData();
             await _menuService.DeleteForm(ids);
-
             _menuCache.Remove();
-            obj.Tag = 1;
-            return obj;
+            return new() { Tag = 1 };
         }
 
         #endregion
@@ -129,11 +95,11 @@ namespace YiSha.Business.SystemManage
         {
             if (param != null)
             {
-                if (!string.IsNullOrEmpty(param.MenuName))
+                if (param.MenuName?.Length > 0)
                 {
                     list = list.Where(p => p.MenuName.Contains(param.MenuName)).ToList();
                 }
-                if (param.MenuStatus > 0)
+                if (param.MenuStatus > -1)
                 {
                     list = list.Where(p => p.MenuStatus == param.MenuStatus).ToList();
                 }

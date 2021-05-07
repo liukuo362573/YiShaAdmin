@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using YiSha.Data.Repository;
@@ -19,15 +18,13 @@ namespace YiSha.Service.SystemManage
         public async Task<List<AutoJobLogEntity>> GetList(AutoJobLogListParam param)
         {
             var expression = ListFilter(param);
-            var list = await BaseRepository().FindList(expression);
-            return list.ToList();
+            return await BaseRepository().FindList(expression);
         }
 
         public async Task<List<AutoJobLogEntity>> GetPageList(AutoJobLogListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
-            var list = await BaseRepository().FindList(expression, pagination);
-            return list.ToList();
+            return await BaseRepository().FindList(expression, pagination);
         }
 
         public async Task<AutoJobLogEntity> GetEntity(long id)
@@ -54,7 +51,7 @@ namespace YiSha.Service.SystemManage
 
         public async Task DeleteForm(string ids)
         {
-            long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
+            var idArr = TextHelper.SplitToArray<long>(ids, ',');
             await BaseRepository().Delete<AutoJobLogEntity>(idArr);
         }
 
@@ -65,12 +62,9 @@ namespace YiSha.Service.SystemManage
         private Expression<Func<AutoJobLogEntity, bool>> ListFilter(AutoJobLogListParam param)
         {
             var expression = LinqExtensions.True<AutoJobLogEntity>();
-            if (param != null)
+            if (param is { JobName: { Length: > 0 } })
             {
-                if (!string.IsNullOrEmpty(param.JobName))
-                {
-                    expression = expression.And(t => t.JobName.Contains(param.JobName));
-                }
+                expression = expression.And(t => t.JobName.Contains(param.JobName));
             }
             return expression;
         }

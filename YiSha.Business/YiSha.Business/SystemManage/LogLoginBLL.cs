@@ -16,27 +16,18 @@ namespace YiSha.Business.SystemManage
 
         public async Task<TData<List<LogLoginEntity>>> GetList(LogLoginListParam param)
         {
-            TData<List<LogLoginEntity>> obj = new TData<List<LogLoginEntity>>();
-            obj.Data = await _logLoginService.GetList(param);
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = await _logLoginService.GetList(param), Tag = 1 };
         }
 
         public async Task<TData<List<LogLoginEntity>>> GetPageList(LogLoginListParam param, Pagination pagination)
         {
-            TData<List<LogLoginEntity>> obj = new TData<List<LogLoginEntity>>();
-            obj.Data = await _logLoginService.GetPageList(param, pagination);
-            obj.Total = pagination.TotalCount;
-            obj.Tag = 1;
-            return obj;
+            var data = await _logLoginService.GetPageList(param, pagination);
+            return new() { Data = data, Total = pagination.TotalCount, Tag = 1 };
         }
 
         public async Task<TData<LogLoginEntity>> GetEntity(long id)
         {
-            TData<LogLoginEntity> obj = new TData<LogLoginEntity>();
-            obj.Data = await _logLoginService.GetEntity(id);
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = await _logLoginService.GetEntity(id), Tag = 1 };
         }
 
         #endregion
@@ -45,27 +36,20 @@ namespace YiSha.Business.SystemManage
 
         public async Task<TData<string>> SaveForm(LogLoginEntity entity)
         {
-            TData<string> obj = new TData<string>();
             await _logLoginService.SaveForm(entity);
-            obj.Data = entity.Id.ParseToString();
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = entity.Id.ParseToString(), Tag = 1 };
         }
 
         public async Task<TData> DeleteForm(string ids)
         {
-            TData obj = new TData();
             await _logLoginService.DeleteForm(ids);
-            obj.Tag = 1;
-            return obj;
+            return new() { Tag = 1 };
         }
 
         public async Task<TData> RemoveAllForm()
         {
-            TData obj = new TData();
             await _logLoginService.RemoveAllForm();
-            obj.Tag = 1;
-            return obj;
+            return new() { Tag = 1 };
         }
 
         #endregion

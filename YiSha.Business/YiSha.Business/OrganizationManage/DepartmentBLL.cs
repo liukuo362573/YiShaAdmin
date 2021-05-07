@@ -15,109 +15,84 @@ namespace YiSha.Business.OrganizationManage
     public class DepartmentBLL
     {
         private readonly DepartmentService _departmentService = new();
+
         private readonly UserService _userService = new();
 
         #region 获取数据
 
         public async Task<TData<List<DepartmentEntity>>> GetList(DepartmentListParam param)
         {
-            TData<List<DepartmentEntity>> obj = new TData<List<DepartmentEntity>>();
-            obj.Data = await _departmentService.GetList(param);
-            OperatorInfo operatorInfo = await Operator.Instance.Current();
+            var list = await _departmentService.GetList(param);
+            var operatorInfo = await Operator.Instance.Current();
             if (operatorInfo.IsSystem != 1)
             {
-                List<long> childrenDepartmentIdList = await GetChildrenDepartmentIdList(obj.Data, operatorInfo.DepartmentId.Value);
-                obj.Data = obj.Data.Where(p => childrenDepartmentIdList.Contains(p.Id.Value)).ToList();
+                var childrenDepartmentIdList = await GetChildrenDepartmentIdList(list, operatorInfo.DepartmentId!.Value);
+                list = list.Where(p => childrenDepartmentIdList.Contains(p.Id!.Value)).ToList();
             }
-            List<UserEntity> userList = await _userService.GetList(new UserListParam { UserIds = string.Join(",", obj.Data.Select(p => p.PrincipalId).ToArray()) });
-            foreach (DepartmentEntity entity in obj.Data)
+            var userList = await _userService.GetList(new UserListParam { UserIds = string.Join(",", list.Select(p => p.PrincipalId).ToArray()) });
+            foreach (var entity in list)
             {
-                if (entity.PrincipalId > 0)
-                {
-                    entity.PrincipalName = userList.Where(p => p.Id == entity.PrincipalId).Select(p => p.RealName).FirstOrDefault();
-                }
-                else
-                {
-                    entity.PrincipalName = string.Empty;
-                }
+                entity.PrincipalName = entity.PrincipalId > 0 ? userList.Where(p => p.Id == entity.PrincipalId).Select(p => p.RealName).FirstOrDefault() : string.Empty;
             }
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = list, Tag = 1 };
         }
 
         public async Task<TData<List<ZtreeInfo>>> GetZtreeDepartmentList(DepartmentListParam param)
         {
-            var obj = new TData<List<ZtreeInfo>>();
-            obj.Data = new List<ZtreeInfo>();
-            List<DepartmentEntity> departmentList = await _departmentService.GetList(param);
-            OperatorInfo operatorInfo = await Operator.Instance.Current();
+            var departmentList = await _departmentService.GetList(param);
+            var operatorInfo = await Operator.Instance.Current();
             if (operatorInfo.IsSystem != 1)
             {
-                List<long> childrenDepartmentIdList = await GetChildrenDepartmentIdList(departmentList, operatorInfo.DepartmentId.Value);
-                departmentList = departmentList.Where(p => childrenDepartmentIdList.Contains(p.Id.Value)).ToList();
+                var childrenDepartmentIdList = await GetChildrenDepartmentIdList(departmentList, operatorInfo.DepartmentId!.Value);
+                departmentList = departmentList.Where(p => childrenDepartmentIdList.Contains(p.Id!.Value)).ToList();
             }
-            foreach (DepartmentEntity department in departmentList)
+            var list = departmentList.Select(department => new ZtreeInfo
             {
-                obj.Data.Add(new ZtreeInfo
-                {
-                    id = department.Id,
-                    pId = department.ParentId,
-                    name = department.DepartmentName
-                });
-            }
-            obj.Tag = 1;
-            return obj;
+                id = department.Id,
+                pId = department.ParentId,
+                name = department.DepartmentName
+            }).ToList();
+            return new() { Data = list, Tag = 1 };
         }
 
         public async Task<TData<List<ZtreeInfo>>> GetZtreeUserList(DepartmentListParam param)
         {
-            var obj = new TData<List<ZtreeInfo>>();
-            obj.Data = new List<ZtreeInfo>();
-            List<DepartmentEntity> departmentList = await _departmentService.GetList(param);
-            OperatorInfo operatorInfo = await Operator.Instance.Current();
+            var list = new List<ZtreeInfo>();
+            var departmentList = await _departmentService.GetList(param);
+            var operatorInfo = await Operator.Instance.Current();
             if (operatorInfo.IsSystem != 1)
             {
-                List<long> childrenDepartmentIdList = await GetChildrenDepartmentIdList(departmentList, operatorInfo.DepartmentId.Value);
-                departmentList = departmentList.Where(p => childrenDepartmentIdList.Contains(p.Id.Value)).ToList();
+                var childrenDepartmentIdList = await GetChildrenDepartmentIdList(departmentList, operatorInfo.DepartmentId!.Value);
+                departmentList = departmentList.Where(p => childrenDepartmentIdList.Contains(p.Id!.Value)).ToList();
             }
-            List<UserEntity> userList = await _userService.GetList(null);
-            foreach (DepartmentEntity department in departmentList)
+            var userList = await _userService.GetList(null);
+            foreach (var department in departmentList)
             {
-                obj.Data.Add(new ZtreeInfo
+                list.Add(new ZtreeInfo
                 {
                     id = department.Id,
                     pId = department.ParentId,
                     name = department.DepartmentName
                 });
-                List<long> userIdList = userList.Where(t => t.DepartmentId == department.Id).Select(t => t.Id.Value).ToList();
-                foreach (UserEntity user in userList.Where(t => userIdList.Contains(t.Id.Value)))
+                var userIdList = userList.Where(t => t.DepartmentId == department.Id).Select(t => t.Id!.Value);
+                list.AddRange(userList.Where(t => userIdList.Contains(t.Id!.Value)).Select(user => new ZtreeInfo
                 {
-                    obj.Data.Add(new ZtreeInfo
-                    {
-                        id = user.Id,
-                        pId = department.Id,
-                        name = user.RealName
-                    });
-                }
+                    id = user.Id,
+                    pId = department.Id,
+                    name = user.RealName
+                }));
             }
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = list, Tag = 1 };
         }
 
         public async Task<TData<DepartmentEntity>> GetEntity(long id)
         {
-            TData<DepartmentEntity> obj = new TData<DepartmentEntity>();
-            obj.Data = await _departmentService.GetEntity(id);
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = await _departmentService.GetEntity(id), Tag = 1 };
         }
 
         public async Task<TData<int>> GetMaxSort()
         {
-            TData<int> obj = new TData<int>();
-            obj.Data = await _departmentService.GetMaxSort();
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = await _departmentService.GetMaxSort(), Tag = 1 };
         }
 
         #endregion
@@ -126,37 +101,22 @@ namespace YiSha.Business.OrganizationManage
 
         public async Task<TData<string>> SaveForm(DepartmentEntity entity)
         {
-            TData<string> obj = new TData<string>();
-            if (!entity.Id.IsNullOrZero() && entity.Id == entity.ParentId)
-            {
-                obj.Message = "不能选择自己作为上级部门！";
-                return obj;
-            }
             if (_departmentService.ExistDepartmentName(entity))
             {
-                obj.Message = "部门名称已经存在！";
-                return obj;
+                return new() { Tag = 0, Message = "部门名称已经存在" };
             }
             await _departmentService.SaveForm(entity);
-            obj.Data = entity.Id.ParseToString();
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = entity.Id.ParseToString(), Tag = 1 };
         }
 
         public async Task<TData> DeleteForm(string ids)
         {
-            TData obj = new TData();
-            foreach (long id in TextHelper.SplitToArray<long>(ids, ','))
+            if (_departmentService.ExistChildrenDepartment(TextHelper.SplitToArray<long>(ids, ',')))
             {
-                if (_departmentService.ExistChildrenDepartment(id))
-                {
-                    obj.Message = "该部门下面有子部门！";
-                    return obj;
-                }
+                return new() { Tag = 0, Message = "该部门下面有子部门" };
             }
             await _departmentService.DeleteForm(ids);
-            obj.Tag = 1;
-            return obj;
+            return new() { Tag = 1 };
         }
 
         #endregion
@@ -166,17 +126,10 @@ namespace YiSha.Business.OrganizationManage
         /// <summary>
         /// 获取当前部门及下面所有的部门
         /// </summary>
-        /// <param name="departmentList"></param>
-        /// <param name="departmentId"></param>
-        /// <returns></returns>
         public async Task<List<long>> GetChildrenDepartmentIdList(List<DepartmentEntity> departmentList, long departmentId)
         {
-            if (departmentList == null)
-            {
-                departmentList = await _departmentService.GetList(null);
-            }
-            List<long> departmentIdList = new List<long>();
-            departmentIdList.Add(departmentId);
+            departmentList ??= await _departmentService.GetList(null);
+            var departmentIdList = new List<long> { departmentId };
             GetChildrenDepartmentIdList(departmentList, departmentId, departmentIdList);
             return departmentIdList;
         }
@@ -188,19 +141,14 @@ namespace YiSha.Business.OrganizationManage
         /// <summary>
         /// 获取该部门下面所有的子部门
         /// </summary>
-        /// <param name="departmentList"></param>
-        /// <param name="departmentId"></param>
-        /// <param name="departmentIdList"></param>
         private void GetChildrenDepartmentIdList(List<DepartmentEntity> departmentList, long departmentId, List<long> departmentIdList)
         {
-            var children = departmentList.Where(p => p.ParentId == departmentId).Select(p => p.Id.Value).ToList();
-            if (children.Count > 0)
+            var children = departmentList.Where(p => p.ParentId == departmentId).Select(p => p.Id!.Value);
+            if (!children.Any()) return;
+            departmentIdList.AddRange(children);
+            foreach (long id in children)
             {
-                departmentIdList.AddRange(children);
-                foreach (long id in children)
-                {
-                    GetChildrenDepartmentIdList(departmentList, id, departmentIdList);
-                }
+                GetChildrenDepartmentIdList(departmentList, id, departmentIdList);
             }
         }
 

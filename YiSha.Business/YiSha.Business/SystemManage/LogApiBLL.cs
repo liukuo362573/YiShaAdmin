@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using YiSha.Entity.OrganizationManage;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Service.OrganizationManage;
@@ -18,41 +17,34 @@ namespace YiSha.Business.SystemManage
 
         public async Task<TData<List<LogApiEntity>>> GetList(LogApiListParam param)
         {
-            TData<List<LogApiEntity>> obj = new TData<List<LogApiEntity>>();
-            obj.Data = await _logApiService.GetList(param);
-            obj.Total = obj.Data.Count;
-            obj.Tag = 1;
-            return obj;
+            var list = await _logApiService.GetList(param);
+            return new() { Data = list, Total = list.Count, Tag = 1 };
         }
 
         public async Task<TData<List<LogApiEntity>>> GetPageList(LogApiListParam param, Pagination pagination)
         {
-            TData<List<LogApiEntity>> obj = new TData<List<LogApiEntity>>();
-            obj.Data = await _logApiService.GetPageList(param, pagination);
-            obj.Total = pagination.TotalCount;
-            obj.Tag = 1;
-            return obj;
+            return new()
+            {
+                Data = await _logApiService.GetPageList(param, pagination),
+                Total = pagination.TotalCount,
+                Tag = 1
+            };
         }
 
         public async Task<TData<LogApiEntity>> GetEntity(long id)
         {
-            TData<LogApiEntity> obj = new TData<LogApiEntity>();
-            obj.Data = await _logApiService.GetEntity(id);
-            if (obj.Data != null)
+            var logEntity = await _logApiService.GetEntity(id);
+            if (logEntity != null)
             {
-                UserEntity userEntity = await new UserService().GetEntity(obj.Data.BaseCreatorId.Value);
+                var userEntity = await new UserService().GetEntity(logEntity.BaseCreatorId!.Value);
                 if (userEntity != null)
                 {
-                    obj.Data.UserName = userEntity.UserName;
-                    DepartmentEntity departmentEntitty = await new DepartmentService().GetEntity(userEntity.DepartmentId.Value);
-                    if (departmentEntitty != null)
-                    {
-                        obj.Data.DepartmentName = departmentEntitty.DepartmentName;
-                    }
+                    var department = await new DepartmentService().GetEntity(userEntity.DepartmentId!.Value);
+                    logEntity.DepartmentName = department?.DepartmentName;
+                    logEntity.UserName = userEntity.UserName;
                 }
             }
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = logEntity, Tag = 1 };
         }
 
         #endregion
@@ -61,32 +53,21 @@ namespace YiSha.Business.SystemManage
 
         public async Task<TData<string>> SaveForm(LogApiEntity entity)
         {
-            TData<string> obj = new TData<string>();
             await _logApiService.SaveForm(entity);
-            obj.Data = entity.Id.ParseToString();
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = entity.Id.ParseToString(), Tag = 1 };
         }
 
         public async Task<TData> DeleteForm(string ids)
         {
-            TData obj = new TData();
             await _logApiService.DeleteForm(ids);
-            obj.Tag = 1;
-            return obj;
+            return new() { Tag = 1 };
         }
 
         public async Task<TData> RemoveAllForm()
         {
-            TData obj = new TData();
             await _logApiService.RemoveAllForm();
-            obj.Tag = 1;
-            return obj;
+            return new() { Tag = 1 };
         }
-
-        #endregion
-
-        #region 私有方法
 
         #endregion
     }

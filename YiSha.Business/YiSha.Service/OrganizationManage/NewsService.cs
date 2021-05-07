@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Data.Common;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using YiSha.Data.Extension;
@@ -19,26 +18,23 @@ namespace YiSha.Service.OrganizationManage
 
         public async Task<List<NewsEntity>> GetList(NewsListParam param)
         {
-            var strSql = new StringBuilder();
-            List<DbParameter> filter = ListFilter(param, strSql);
-            var list = await BaseRepository().FindList<NewsEntity>(strSql.ToString(), filter.ToArray());
-            return list.ToList();
+            var builder = new StringBuilder();
+            var listFilter = ListFilter(param, builder).ToArray();
+            return await BaseRepository().FindList<NewsEntity>(builder.ToString(), listFilter);
         }
 
         public async Task<List<NewsEntity>> GetPageList(NewsListParam param, Pagination pagination)
         {
-            var strSql = new StringBuilder();
-            List<DbParameter> filter = ListFilter(param, strSql);
-            var list = await BaseRepository().FindList<NewsEntity>(strSql.ToString(), filter.ToArray(), pagination);
-            return list.ToList();
+            var builder = new StringBuilder();
+            var listFilter = ListFilter(param, builder).ToArray();
+            return await BaseRepository().FindList<NewsEntity>(builder.ToString(), pagination, listFilter);
         }
 
         public async Task<List<NewsEntity>> GetPageContentList(NewsListParam param, Pagination pagination)
         {
-            var strSql = new StringBuilder();
-            List<DbParameter> filter = ListFilter(param, strSql, true);
-            var list = await BaseRepository().FindList<NewsEntity>(strSql.ToString(), filter.ToArray(), pagination);
-            return list.ToList();
+            var builder = new StringBuilder();
+            var listFilter = ListFilter(param, builder, true).ToArray();
+            return await BaseRepository().FindList<NewsEntity>(builder.ToString(), pagination, listFilter);
         }
 
         public async Task<NewsEntity> GetEntity(long id)
@@ -72,7 +68,7 @@ namespace YiSha.Service.OrganizationManage
 
         public async Task DeleteForm(string ids)
         {
-            long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
+            var idArr = TextHelper.SplitToArray<long>(ids, ',');
             await BaseRepository().Delete<NewsEntity>(idArr);
         }
 
@@ -80,9 +76,9 @@ namespace YiSha.Service.OrganizationManage
 
         #region 私有方法
 
-        private List<DbParameter> ListFilter(NewsListParam param, StringBuilder strSql, bool bNewsContent = false)
+        private List<DbParameter> ListFilter(NewsListParam param, StringBuilder builder, bool bNewsContent = false)
         {
-            strSql.Append(@"SELECT  a.Id,
+            builder.Append(@"SELECT  a.Id,
                                     a.BaseModifyTime,
                                     a.BaseModifierId,
                                     a.NewsTitle,
@@ -98,41 +94,40 @@ namespace YiSha.Service.OrganizationManage
                                     a.ViewTimes");
             if (bNewsContent)
             {
-                strSql.Append(",a.NewsContent");
+                builder.Append(",a.NewsContent");
             }
-            strSql.Append(@"         FROM    SysNews a
-                            WHERE   1 = 1");
+            builder.Append(@" FROM SysNews a WHERE 1 = 1");
             var parameter = new List<DbParameter>();
             if (param != null)
             {
-                if (!string.IsNullOrEmpty(param.NewsTitle))
+                if (param.NewsTitle?.Length > 0)
                 {
-                    strSql.Append(" AND a.NewsTitle like @NewsTitle");
+                    builder.Append(" AND a.NewsTitle like @NewsTitle");
                     parameter.Add(DbParameterHelper.CreateDbParameter("@NewsTitle", '%' + param.NewsTitle + '%'));
                 }
                 if (param.NewsType > 0)
                 {
-                    strSql.Append(" AND a.NewsType = @NewsType");
+                    builder.Append(" AND a.NewsType = @NewsType");
                     parameter.Add(DbParameterHelper.CreateDbParameter("@NewsType", param.NewsType));
                 }
-                if (!string.IsNullOrEmpty(param.NewsTag))
+                if (param.NewsTag?.Length > 0)
                 {
-                    strSql.Append(" AND a.NewsTag like @NewsTag");
+                    builder.Append(" AND a.NewsTag like @NewsTag");
                     parameter.Add(DbParameterHelper.CreateDbParameter("@NewsTag", '%' + param.NewsTag + '%'));
                 }
                 if (param.ProvinceId > 0)
                 {
-                    strSql.Append(" AND a.ProvinceId = @ProvinceId");
+                    builder.Append(" AND a.ProvinceId = @ProvinceId");
                     parameter.Add(DbParameterHelper.CreateDbParameter("@ProvinceId", param.ProvinceId));
                 }
                 if (param.CityId > 0)
                 {
-                    strSql.Append(" AND a.CityId = @CityId");
+                    builder.Append(" AND a.CityId = @CityId");
                     parameter.Add(DbParameterHelper.CreateDbParameter("@CityId", param.CityId));
                 }
                 if (param.CountyId > 0)
                 {
-                    strSql.Append(" AND a.CountId = @CountId");
+                    builder.Append(" AND a.CountId = @CountId");
                     parameter.Add(DbParameterHelper.CreateDbParameter("@CountyId", param.CountyId));
                 }
             }

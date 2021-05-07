@@ -18,28 +18,23 @@ namespace YiSha.Business.SystemManage
 
         public async Task<TData<List<AutoJobEntity>>> GetList(AutoJobListParam param)
         {
-            TData<List<AutoJobEntity>> obj = new TData<List<AutoJobEntity>>();
-            obj.Data = await _autoJobService.GetList(param);
-            obj.Total = obj.Data.Count;
-            obj.Tag = 1;
-            return obj;
+            var list = await _autoJobService.GetList(param);
+            return new() { Data = list, Total = list.Count, Tag = 1 };
         }
 
         public async Task<TData<List<AutoJobEntity>>> GetPageList(AutoJobListParam param, Pagination pagination)
         {
-            TData<List<AutoJobEntity>> obj = new TData<List<AutoJobEntity>>();
-            obj.Data = await _autoJobService.GetPageList(param, pagination);
-            obj.Total = pagination.TotalCount;
-            obj.Tag = 1;
-            return obj;
+            return new()
+            {
+                Data = await _autoJobService.GetPageList(param, pagination),
+                Total = pagination.TotalCount,
+                Tag = 1
+            };
         }
 
         public async Task<TData<AutoJobEntity>> GetEntity(long id)
         {
-            TData<AutoJobEntity> obj = new TData<AutoJobEntity>();
-            obj.Data = await _autoJobService.GetEntity(id);
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = await _autoJobService.GetEntity(id), Tag = 1 };
         }
 
         #endregion
@@ -48,49 +43,33 @@ namespace YiSha.Business.SystemManage
 
         public async Task<TData<string>> SaveForm(AutoJobEntity entity)
         {
-            TData<string> obj = new TData<string>();
             if (_autoJobService.ExistJob(entity))
             {
-                obj.Message = "任务已经存在！";
-                return obj;
+                return new() { Tag = 0, Message = "任务已经存在！" };
             }
             await _autoJobService.SaveForm(entity);
-            obj.Data = entity.Id.ParseToString();
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = entity.Id.ParseToString(), Tag = 1 };
         }
 
         public async Task<TData> DeleteForm(string ids)
         {
-            TData<long> obj = new TData<long>();
             foreach (long id in TextHelper.SplitToArray<long>(ids, ','))
             {
-                AutoJobEntity dbEntity = await _autoJobService.GetEntity(id);
+                var dbEntity = await _autoJobService.GetEntity(id);
                 if (dbEntity.JobStatus == StatusEnum.Yes.ParseToInt())
                 {
-                    obj.Message = "请先暂停 " + dbEntity.JobName + " 定时任务";
-                    return obj;
+                    return new() { Tag = 0, Message = "请先暂停 " + dbEntity.JobName + " 定时任务" };
                 }
             }
             await _autoJobService.DeleteForm(ids);
-
-            obj.Tag = 1;
-            return obj;
+            return new() { Tag = 1 };
         }
 
         public async Task<TData> ChangeJobStatus(AutoJobEntity entity)
         {
-            TData obj = new TData();
-
             await _autoJobService.SaveForm(entity);
-
-            obj.Tag = 1;
-            return obj;
+            return new() { Tag = 1 };
         }
-
-        #endregion
-
-        #region 私有方法
 
         #endregion
     }

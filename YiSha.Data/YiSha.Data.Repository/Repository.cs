@@ -135,7 +135,7 @@ namespace YiSha.Data.Repository
             return Db.AsQueryable(condition);
         }
 
-        public async Task<T> FindEntity<T>(long id) where T : class
+        public async Task<T> FindEntity<T>(object id) where T : class
         {
             return await Db.FindEntity<T>(id);
         }
@@ -150,27 +150,27 @@ namespace YiSha.Data.Repository
             return await Db.FindEntity<T>(sql, dbParameter);
         }
 
-        public async Task<IEnumerable<T>> FindList<T>() where T : class, new()
+        public async Task<List<T>> FindList<T>() where T : class, new()
         {
             return await Db.FindList<T>();
         }
 
-        public async Task<IEnumerable<T>> FindList<T>(Expression<Func<T, bool>> condition) where T : class, new()
+        public async Task<List<T>> FindList<T>(Expression<Func<T, bool>> condition) where T : class, new()
         {
             return await Db.FindList(condition);
         }
 
-        public async Task<IEnumerable<T>> FindList<T>(string strSql) where T : class
+        public async Task<List<T>> FindList<T>(string strSql) where T : class
         {
             return await Db.FindList<T>(strSql);
         }
 
-        public async Task<IEnumerable<T>> FindList<T>(string strSql, DbParameter[] dbParameter) where T : class
+        public async Task<List<T>> FindList<T>(string strSql, params DbParameter[] dbParameter) where T : class
         {
             return await Db.FindList<T>(strSql, dbParameter);
         }
 
-        public async Task<(int total, IEnumerable<T> list)> FindList<T>(Pagination pagination) where T : class, new()
+        public async Task<(int total, List<T> list)> FindList<T>(Pagination pagination) where T : class, new()
         {
             int total = pagination.TotalCount;
             var data = await Db.FindList<T>(pagination.Sort, pagination.SortType.ToLower() == "asc", pagination.PageSize, pagination.PageIndex, null);
@@ -178,14 +178,14 @@ namespace YiSha.Data.Repository
             return data;
         }
 
-        public async Task<IEnumerable<T>> FindList<T>(Expression<Func<T, bool>> condition, Pagination pagination) where T : class, new()
+        public async Task<List<T>> FindList<T>(Expression<Func<T, bool>> condition, Pagination pagination) where T : class, new()
         {
             var data = await Db.FindList(pagination.Sort, pagination.SortType.ToLower() == "asc", pagination.PageSize, pagination.PageIndex, condition);
             pagination.TotalCount = data.total;
             return data.list;
         }
 
-        public async Task<(int total, IEnumerable<T> list)> FindList<T>(string strSql, Pagination pagination) where T : class
+        public async Task<(int total, List<T> list)> FindList<T>(string strSql, Pagination pagination) where T : class
         {
             int total = pagination.TotalCount;
             var data = await Db.FindList<T>(strSql, pagination.Sort, pagination.SortType.ToLower() == "asc", pagination.PageSize, pagination.PageIndex);
@@ -193,7 +193,7 @@ namespace YiSha.Data.Repository
             return data;
         }
 
-        public async Task<IEnumerable<T>> FindList<T>(string strSql, DbParameter[] dbParameter, Pagination pagination) where T : class
+        public async Task<List<T>> FindList<T>(string strSql, Pagination pagination, params DbParameter[] dbParameter) where T : class
         {
             var data = await Db.FindList<T>(strSql, pagination.Sort, pagination.SortType.ToLower() == "asc", pagination.PageSize, pagination.PageIndex, dbParameter);
             pagination.TotalCount = data.total;

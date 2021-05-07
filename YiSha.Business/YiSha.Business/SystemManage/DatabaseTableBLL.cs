@@ -19,20 +19,13 @@ namespace YiSha.Business.SystemManage
 
         public DatabaseTableBLL()
         {
-            string dbType = GlobalContext.SystemConfig.DbProvider;
-            switch (dbType)
+            _databaseTableService = GlobalContext.SystemConfig.DbProvider switch
             {
-                case "SqlServer":
-                    _databaseTableService = new DatabaseTableSqlServerService();
-                    break;
-                case "MySql":
-                    _databaseTableService = new DatabaseTableMySqlService();
-                    break;
-                case "Oracle":
-                    _databaseTableService = new DatabaseTableOracleService();
-                    break;
-                default: throw new Exception("未找到数据库配置");
-            }
+                "MySql" => new DatabaseTableMySqlService(),
+                "Oracle" => new DatabaseTableOracleService(),
+                "SqlServer" => new DatabaseTableSqlServerService(),
+                _ => throw new Exception("未找到数据库配置")
+            };
         }
 
         #endregion
@@ -41,77 +34,54 @@ namespace YiSha.Business.SystemManage
 
         public async Task<TData<List<TableInfo>>> GetTableList(string tableName)
         {
-            TData<List<TableInfo>> obj = new TData<List<TableInfo>>();
-            List<TableInfo> list = await _databaseTableService.GetTableList(tableName);
-            obj.Data = list;
-            obj.Total = list.Count;
-            obj.Tag = 1;
-            return obj;
+            var list = await _databaseTableService.GetTableList(tableName);
+            return new() { Data = list, Total = list.Count, Tag = 1 };
         }
 
         public async Task<TData<List<TableInfo>>> GetTablePageList(string tableName, Pagination pagination)
         {
-            TData<List<TableInfo>> obj = new TData<List<TableInfo>>();
-            List<TableInfo> list = await _databaseTableService.GetTablePageList(tableName, pagination);
-            obj.Data = list;
-            obj.Total = pagination.TotalCount;
-            obj.Tag = 1;
-            return obj;
+            return new()
+            {
+                Data = await _databaseTableService.GetTablePageList(tableName, pagination),
+                Total = pagination.TotalCount,
+                Tag = 1
+            };
         }
 
         /// <summary>
         /// 获取表字段
         /// </summary>
-        /// <param name="tableName"></param>
-        /// <returns></returns>
         public async Task<TData<List<TableFieldInfo>>> GetTableFieldList(string tableName)
         {
-            TData<List<TableFieldInfo>> obj = new TData<List<TableFieldInfo>>();
-            List<TableFieldInfo> list = await _databaseTableService.GetTableFieldList(tableName);
-            obj.Data = list;
-            obj.Total = list.Count;
-            obj.Tag = 1;
-            return obj;
+            var list = await _databaseTableService.GetTableFieldList(tableName);
+            return new() { Data = list, Total = list.Count, Tag = 1 };
         }
 
         /// <summary>
         /// 获取表字段，去掉基础字段
         /// </summary>
-        /// <param name="tableName"></param>
-        /// <returns></returns>
         public async Task<TData<List<TableFieldInfo>>> GetTableFieldPartList(string tableName)
         {
-            TData<List<TableFieldInfo>> obj = new TData<List<TableFieldInfo>>();
-            List<TableFieldInfo> list = await _databaseTableService.GetTableFieldList(tableName);
-            obj.Data = list;
-            obj.Data.RemoveAll(p => BaseField.BaseFieldList.Contains(p.TableColumn));
-            obj.Tag = 1;
-            return obj;
+            var list = await _databaseTableService.GetTableFieldList(tableName);
+            list.RemoveAll(p => BaseField.BaseFieldList.Contains(p.TableColumn));
+            return new() { Data = list, Tag = 1 };
         }
 
         public async Task<TData<List<ZtreeInfo>>> GetTableFieldZtreeList(string tableName)
         {
-            var obj = new TData<List<ZtreeInfo>>();
-            obj.Data = new List<ZtreeInfo>();
             if (string.IsNullOrEmpty(tableName))
             {
-                return obj;
+                return new();
             }
-            List<TableFieldInfo> list = await _databaseTableService.GetTableFieldList(tableName);
-            obj.Data.Add(new ZtreeInfo { id = 1, pId = 0, name = tableName });
-            string sName = string.Empty;
-            for (int i = 0; i < list.Count; i++)
+            var list = await _databaseTableService.GetTableFieldList(tableName);
+            var treeList = new List<ZtreeInfo> { new() { id = 1, pId = 0, name = tableName } };
+            treeList.AddRange(list.Select(t => t.TableColumn).Select((s, i) => new ZtreeInfo
             {
-                sName = list[i].TableColumn;
-                obj.Data.Add(new ZtreeInfo
-                {
-                    id = (i + 2),
-                    pId = 1,
-                    name = sName
-                });
-            }
-            obj.Tag = 1;
-            return obj;
+                id = i + 2,
+                pId = 1,
+                name = s
+            }));
+            return new() { Data = treeList, Tag = 1 };
         }
 
         #endregion
@@ -127,10 +97,8 @@ namespace YiSha.Business.SystemManage
 
         public async Task<TData> SyncDatabase()
         {
-            TData obj = new TData();
             await new DatabaseTableMySqlService().SyncDatabase();
-            obj.Tag = 1;
-            return obj;
+            return new() { Tag = 1 };
         }
 
         #endregion
