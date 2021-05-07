@@ -145,7 +145,7 @@ namespace YiSha.RedisCache
             return dict;
         }
 
-        #endregion Hash
+        #endregion
 
         public void Dispose()
         {

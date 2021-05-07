@@ -61,7 +61,7 @@ namespace YiSha.Business.AutoJob
             }
         }
 
-        #endregion 添加任务计划
+        #endregion
 
         #region 添加任务计划
 
@@ -80,6 +80,6 @@ namespace YiSha.Business.AutoJob
             }
         }
 
-        #endregion 添加任务计划
+        #endregion
     }
 }

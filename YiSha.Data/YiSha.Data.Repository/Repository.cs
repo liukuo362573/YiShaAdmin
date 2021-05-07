@@ -25,7 +25,7 @@ namespace YiSha.Data.Repository
             Db = iDb;
         }
 
-        #endregion Constructor
+        #endregion
 
         #region Transaction
 
@@ -45,7 +45,7 @@ namespace YiSha.Data.Repository
             await Db.RollbackTrans();
         }
 
-        #endregion Transaction
+        #endregion
 
         #region Execute
 
@@ -59,7 +59,7 @@ namespace YiSha.Data.Repository
             return await Db.ExecuteByProc(procName, dbParameter);
         }
 
-        #endregion Execute
+        #endregion
 
         #region Insert
 
@@ -73,7 +73,7 @@ namespace YiSha.Data.Repository
             return await Db.Insert(entity);
         }
 
-        #endregion Insert
+        #endregion
 
         #region Delete
 
@@ -107,7 +107,7 @@ namespace YiSha.Data.Repository
             return await Db.Delete<T>(propertyName, propertyValue);
         }
 
-        #endregion Delete
+        #endregion
 
         #region Update
 
@@ -126,7 +126,7 @@ namespace YiSha.Data.Repository
             return await Db.Update(condition);
         }
 
-        #endregion Update
+        #endregion
 
         #region Find
 

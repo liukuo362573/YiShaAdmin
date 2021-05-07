@@ -52,7 +52,7 @@ namespace YiSha.Business.AutoJob
                                     _ => obj
                                 };
 
-                                #endregion 执行任务
+                                #endregion
                             }
                         }
                     }
@@ -77,7 +77,7 @@ namespace YiSha.Business.AutoJob
                                 NextStartTime = context.NextFireTimeUtc.Value.DateTime.AddHours(8)
                             });
 
-                            #endregion 更新下次运行时间
+                            #endregion
 
                             #region 记录执行状态
 
@@ -89,7 +89,7 @@ namespace YiSha.Business.AutoJob
                                 Remark = obj.Message
                             });
 
-                            #endregion 记录执行状态
+                            #endregion
                         }
                     }
                 }

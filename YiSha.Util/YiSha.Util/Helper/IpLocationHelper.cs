@@ -64,7 +64,7 @@ namespace YiSha.Util.Helper
             return ipLocation;
         }
 
-        #endregion IP位置查询
+        #endregion
 
         #region 判断是否是外网IP
 
@@ -110,6 +110,6 @@ namespace YiSha.Util.Helper
             return userIp >= begin && userIp <= end;
         }
 
-        #endregion 判断是否是外网IP
+        #endregion
     }
 }

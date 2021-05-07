@@ -103,6 +103,6 @@ namespace YiSha.MemoryCache
             return dict;
         }
 
-        #endregion Hash
+        #endregion
     }
 }
