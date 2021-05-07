@@ -31,8 +31,7 @@ namespace YiSha.Service.SystemManage
                     expression = expression.And(t => authorizeIdArr.Contains(t.AuthorizeId.Value));
                 }
             }
-            var list = await BaseRepository().FindList(expression);
-            return list.ToList();
+            return await BaseRepository().FindList(expression);
         }
 
         public async Task<MenuAuthorizeEntity> GetEntity(long id)

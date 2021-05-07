@@ -19,15 +19,13 @@ namespace YiSha.Service.SystemManage
         public async Task<List<DataDictEntity>> GetList(DataDictListParam param)
         {
             var expression = ListFilter(param);
-            var list = await BaseRepository().FindList(expression);
-            return list.ToList();
+            return await BaseRepository().FindList(expression);
         }
 
         public async Task<List<DataDictEntity>> GetPageList(DataDictListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
-            var list = await BaseRepository().FindList(expression, pagination);
-            return list.ToList();
+            return await BaseRepository().FindList(expression, pagination);
         }
 
         public async Task<DataDictEntity> GetEntity(long id)
@@ -45,27 +43,17 @@ namespace YiSha.Service.SystemManage
         {
             var expression = LinqExtensions.True<DataDictEntity>();
             expression = expression.And(t => t.BaseIsDelete == 0);
-            if (entity.Id.IsNullOrZero())
+            expression = expression.And(t => t.DictType == entity.DictType);
+            if (!entity.Id.IsNullOrZero())
             {
-                expression = expression.And(t => t.DictType == entity.DictType);
+                expression = expression.And(t => t.Id != entity.Id);
             }
-            else
-            {
-                expression = expression.And(t => t.DictType == entity.DictType && t.Id != entity.Id);
-            }
-            return BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
+            return BaseRepository().AsQueryable(expression).Any();
         }
 
-        /// <summary>
-        /// 是否存在字典值
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         public bool ExistDictDetail(string dictType)
         {
-            var expression = LinqExtensions.True<DataDictDetailEntity>();
-            expression = expression.And(t => t.DictType == dictType);
-            return BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
+            return BaseRepository().AsQueryable<DataDictDetailEntity>(t => t.DictType == dictType).Any();
         }
 
         #endregion
@@ -74,45 +62,52 @@ namespace YiSha.Service.SystemManage
 
         public async Task SaveForm(DataDictEntity entity)
         {
-            var db = await BaseRepository().BeginTrans();
+            var repo = await BaseRepository().BeginTrans();
             try
             {
                 if (!entity.Id.IsNullOrZero())
                 {
-                    var dbEntity = await db.FindEntity<DataDictEntity>(entity.Id.Value);
-                    if (dbEntity.DictType != entity.DictType)
-                    {
-                        // 更新子表的DictType，因为2个表用DictType进行关联
-                        IEnumerable<DataDictDetailEntity> detailList = await db.FindList<DataDictDetailEntity>(p => p.DictType == dbEntity.DictType);
-                        foreach (DataDictDetailEntity detailEntity in detailList)
-                        {
-                            detailEntity.DictType = entity.DictType;
-                            await detailEntity.Modify();
-                        }
-                    }
-                    dbEntity.DictType = entity.DictType;
-                    dbEntity.Remark = entity.Remark;
-                    dbEntity.DictSort = entity.DictSort;
-                    await dbEntity.Modify();
-                    await db.Update(dbEntity);
+                    await UpdateForm(entity, repo);
                 }
                 else
                 {
                     await entity.Create();
-                    await db.Insert(entity);
+                    await repo.Insert(entity);
                 }
-                await db.CommitTrans();
+                await repo.CommitTrans();
             }
             catch
             {
-                await db.RollbackTrans();
+                await repo.RollbackTrans();
                 throw;
             }
         }
 
+        private async Task UpdateForm(DataDictEntity entity, Repository repo)
+        {
+            // ReSharper disable once PossibleInvalidOperationException
+            var dbEntity = await repo.FindEntity<DataDictEntity>(entity.Id.Value);
+            if (dbEntity.DictType != entity.DictType)
+            {
+                // 更新子表的DictType，因为2个表用DictType进行关联
+                var detailList = await repo.FindList<DataDictDetailEntity>(p => p.DictType == dbEntity.DictType);
+                foreach (var detailEntity in detailList)
+                {
+                    detailEntity.DictType = entity.DictType;
+                    await detailEntity.Modify();
+                }
+            }
+            dbEntity.DictType = entity.DictType;
+            dbEntity.Remark = entity.Remark;
+            dbEntity.DictSort = entity.DictSort;
+
+            await dbEntity.Modify();
+            await repo.Update(dbEntity);
+        }
+
         public async Task DeleteForm(string ids)
         {
-            long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
+            var idArr = TextHelper.SplitToArray<object>(ids, ',');
             await BaseRepository().Delete<DataDictEntity>(idArr);
         }
 

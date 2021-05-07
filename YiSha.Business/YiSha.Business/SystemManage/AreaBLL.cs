@@ -15,73 +15,56 @@ namespace YiSha.Business.SystemManage
     public class AreaBLL
     {
         private readonly AreaService _areaService = new();
+
         private readonly AreaCache _areaCache = new();
 
         #region 获取数据
 
         public async Task<TData<List<AreaEntity>>> GetList(AreaListParam param)
         {
-            TData<List<AreaEntity>> obj = new TData<List<AreaEntity>>();
-            List<AreaEntity> areaList = await _areaCache.GetList();
-            if (param != null)
+            var areaList = await _areaCache.GetList();
+            if (param?.AreaName?.Length > 0)
             {
-                if (!param.AreaName.IsEmpty())
-                {
-                    areaList = areaList.Where(t => t.AreaName.Contains(param.AreaName)).ToList();
-                }
+                areaList = areaList.Where(t => t.AreaName.Contains(param.AreaName)).ToList();
             }
-            obj.Data = areaList;
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = areaList, Tag = 1 };
         }
 
         public async Task<TData<List<AreaEntity>>> GetPageList(AreaListParam param, Pagination pagination)
         {
-            TData<List<AreaEntity>> obj = new TData<List<AreaEntity>>();
-            obj.Data = await _areaService.GetPageList(param, pagination);
-            obj.Total = pagination.TotalCount;
-            obj.Tag = 1;
-            return obj;
+            return new()
+            {
+                Data = await _areaService.GetPageList(param, pagination),
+                Total = pagination.TotalCount,
+                Tag = 1
+            };
         }
 
         public async Task<TData<List<ZtreeInfo>>> GetZtreeAreaList(AreaListParam param)
         {
-            var obj = new TData<List<ZtreeInfo>>();
-            obj.Data = new List<ZtreeInfo>();
-            List<AreaEntity> list = await _areaCache.GetList();
-            foreach (AreaEntity area in list)
+            var list = await _areaCache.GetList();
+            return new()
             {
-                obj.Data.Add(new ZtreeInfo
+                Tag = 1,
+                Data = list.Select(area => new ZtreeInfo
                 {
                     id = area.AreaCode.ParseToLong(),
                     pId = area.ParentAreaCode.ParseToLong(),
                     name = area.AreaName
-                });
-            }
-            obj.Tag = 1;
-            return obj;
+                }).ToList()
+            };
         }
 
         public async Task<TData<AreaEntity>> GetEntity(long id)
         {
-            TData<AreaEntity> obj = new TData<AreaEntity>();
-            obj.Data = await _areaService.GetEntity(id);
-            if (obj.Data != null)
-            {
-                obj.Tag = 1;
-            }
-            return obj;
+            var data = await _areaService.GetEntity(id);
+            return new() { Tag = data == null ? 0 : 1, Data = data };
         }
 
         public async Task<TData<AreaEntity>> GetEntityByAreaCode(string areaCode)
         {
-            TData<AreaEntity> obj = new TData<AreaEntity>();
-            obj.Data = await _areaService.GetEntityByAreaCode(areaCode);
-            if (obj.Data != null)
-            {
-                obj.Tag = 1;
-            }
-            return obj;
+            var data = await _areaService.GetEntityByAreaCode(areaCode);
+            return new() { Tag = data == null ? 0 : 1, Data = data };
         }
 
         #endregion
@@ -90,19 +73,14 @@ namespace YiSha.Business.SystemManage
 
         public async Task<TData<string>> SaveForm(AreaEntity entity)
         {
-            TData<string> obj = new TData<string>();
             await _areaService.SaveForm(entity);
-            obj.Data = entity.Id.ParseToString();
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = entity.Id.ParseToString(), Tag = 1 };
         }
 
         public async Task<TData> DeleteForm(string ids)
         {
-            TData obj = new TData();
             await _areaService.DeleteForm(ids);
-            obj.Tag = 1;
-            return obj;
+            return new() { Tag = 1 };
         }
 
         #endregion
@@ -111,92 +89,53 @@ namespace YiSha.Business.SystemManage
 
         public void SetAreaParam<T>(T t) where T : BaseAreaParam
         {
-            if (t != null)
+            if (t is BaseAreaParam { AreaId: { Length: > 0 } } param)
             {
-                BaseAreaParam param = t as BaseAreaParam;
-                if (param != null)
+                string[] areaIdArr = param.AreaId.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                if (areaIdArr.Length >= 1)
                 {
-                    if (!string.IsNullOrEmpty(param.AreaId))
-                    {
-                        string[] areaIdArr = param.AreaId.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-                        if (areaIdArr.Length >= 1)
-                        {
-                            param.ProvinceId = areaIdArr[0].ParseToInt();
-                        }
-                        if (areaIdArr.Length >= 2)
-                        {
-                            param.CityId = areaIdArr[1].ParseToInt();
-                        }
-                        if (areaIdArr.Length >= 3)
-                        {
-                            param.CountyId = areaIdArr[2].ParseToInt();
-                        }
-                    }
+                    param.ProvinceId = areaIdArr[0].ParseToInt();
+                }
+                if (areaIdArr.Length >= 2)
+                {
+                    param.CityId = areaIdArr[1].ParseToInt();
+                }
+                if (areaIdArr.Length >= 3)
+                {
+                    param.CountyId = areaIdArr[2].ParseToInt();
                 }
             }
         }
 
         public void SetAreaEntity<T>(T t) where T : BaseAreaEntity
         {
-            if (t != null)
+            if (t is BaseAreaEntity { AreaId: { Length: > 0 } } entity)
             {
-                BaseAreaEntity entity = t as BaseAreaEntity;
-                if (entity != null)
-                {
-                    if (!string.IsNullOrEmpty(entity.AreaId))
-                    {
-                        string[] areaIdArr = entity.AreaId.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-                        if (areaIdArr.Length >= 1)
-                        {
-                            entity.ProvinceId = areaIdArr[0].ParseToInt();
-                        }
-                        else
-                        {
-                            entity.ProvinceId = 0;
-                        }
-                        if (areaIdArr.Length >= 2)
-                        {
-                            entity.CityId = areaIdArr[1].ParseToInt();
-                        }
-                        else
-                        {
-                            entity.CityId = 0;
-                        }
-                        if (areaIdArr.Length >= 3)
-                        {
-                            entity.CountyId = areaIdArr[2].ParseToInt();
-                        }
-                        else
-                        {
-                            entity.CountyId = 0;
-                        }
-                    }
-                }
+                string[] areaIdArr = entity.AreaId.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                entity.ProvinceId = areaIdArr.Length >= 1 ? areaIdArr[0].ParseToInt() : 0;
+                entity.CityId = areaIdArr.Length >= 2 ? areaIdArr[1].ParseToInt() : 0;
+                entity.CountyId = areaIdArr.Length >= 3 ? areaIdArr[2].ParseToInt() : 0;
             }
         }
 
         public void SetAreaId<T>(T t) where T : BaseAreaEntity
         {
-            if (t != null)
+            if (t is BaseAreaEntity entity)
             {
-                BaseAreaEntity entity = t as BaseAreaEntity;
-                if (entity != null)
+                entity.AreaId = string.Empty;
+                if (!entity.ProvinceId.IsNullOrZero())
                 {
-                    entity.AreaId = string.Empty;
-                    if (!entity.ProvinceId.IsNullOrZero())
+                    entity.AreaId += entity.ProvinceId.ParseToString() + ",";
+                    if (!entity.CityId.IsNullOrZero())
                     {
-                        entity.AreaId += entity.ProvinceId.ParseToString() + ",";
-                        if (!entity.CityId.IsNullOrZero())
+                        entity.AreaId += entity.CityId.ParseToString() + ",";
+                        if (!entity.CountyId.IsNullOrZero())
                         {
-                            entity.AreaId += entity.CityId.ParseToString() + ",";
-                            if (!entity.CountyId.IsNullOrZero())
-                            {
-                                entity.AreaId += entity.CountyId.ParseToString() + ",";
-                            }
+                            entity.AreaId += entity.CountyId.ParseToString() + ",";
                         }
                     }
-                    entity.AreaId = entity.AreaId.Trim(',');
                 }
+                entity.AreaId = entity.AreaId.Trim(',');
             }
         }
 

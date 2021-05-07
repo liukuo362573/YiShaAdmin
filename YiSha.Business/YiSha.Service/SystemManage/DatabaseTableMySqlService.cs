@@ -10,6 +10,7 @@ using YiSha.Data.Repository;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Result.SystemManage;
+using YiSha.Util.Extension;
 using YiSha.Util.Helper;
 using YiSha.Util.Model;
 
@@ -21,10 +22,10 @@ namespace YiSha.Service.SystemManage
 
         public async Task<List<TableInfo>> GetTableList(string tableName)
         {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@"SELECT table_name TableName FROM information_schema.tables WHERE table_schema='" + GetDatabase() + "' AND table_type='base table'");
-            IEnumerable<TableInfo> list = await BaseRepository().FindList<TableInfo>(strSql.ToString());
-            if (!string.IsNullOrEmpty(tableName))
+            var builder = new StringBuilder("SELECT table_name TableName FROM information_schema.tables ");
+            builder.Append($"WHERE table_schema='{GetDatabase()}' AND table_type='base table'");
+            IEnumerable<TableInfo> list = await BaseRepository().FindList<TableInfo>(builder.ToString());
+            if (tableName.TryAny())
             {
                 list = list.Where(p => p.TableName.Contains(tableName));
             }
@@ -34,36 +35,54 @@ namespace YiSha.Service.SystemManage
 
         public async Task<List<TableInfo>> GetTablePageList(string tableName, Pagination pagination)
         {
-            StringBuilder strSql = new StringBuilder();
-            var parameter = new List<DbParameter>();
-            strSql.Append(@"SELECT table_name TableName FROM information_schema.tables where table_schema='" + GetDatabase() + "' and (table_type='base table' or table_type='BASE TABLE')");
+            var builder = new StringBuilder("SELECT table_name TableName FROM information_schema.tables ");
+            builder.Append($"WHERE table_schema='{GetDatabase()}' AND (table_type='base table' OR table_type='BASE TABLE')");
 
-            if (!string.IsNullOrEmpty(tableName))
+            var parameter = new List<DbParameter>();
+            if (tableName?.Length > 0)
             {
-                strSql.Append(" AND table_name like @TableName ");
+                builder.Append(" AND table_name like @TableName ");
                 parameter.Add(DbParameterHelper.CreateDbParameter("@TableName", '%' + tableName + '%'));
             }
 
-            IEnumerable<TableInfo> list = await BaseRepository().FindList<TableInfo>(strSql.ToString(), parameter.ToArray(), pagination);
+            IEnumerable<TableInfo> list = await BaseRepository().FindList<TableInfo>(builder.ToString(), pagination, parameter.ToArray());
             await SetTableDetail(list);
             return list.ToList();
         }
 
         public async Task<List<TableFieldInfo>> GetTableFieldList(string tableName)
         {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@"SELECT COLUMN_NAME TableColumn, 
-		                           DATA_TYPE Datatype,
-		                           (CASE COLUMN_KEY WHEN 'PRI' THEN COLUMN_NAME ELSE '' END) TableIdentity,
-		                           REPLACE(REPLACE(SUBSTRING(COLUMN_TYPE,LOCATE('(',COLUMN_TYPE)),'(',''),')','') FieldLength,
-	                               (CASE IS_NULLABLE WHEN 'NO' THEN 'N' ELSE 'Y' END) IsNullable,
-                                   IFNULL(COLUMN_DEFAULT,'') FieldDefault,
-                                   COLUMN_COMMENT Remark
-                             FROM information_schema.columns WHERE table_schema='" + GetDatabase() + "' AND table_name=@TableName");
-            var parameter = new List<DbParameter>();
-            parameter.Add(DbParameterHelper.CreateDbParameter("@TableName", tableName));
-            var list = await BaseRepository().FindList<TableFieldInfo>(strSql.ToString(), parameter.ToArray());
-            return list.ToList();
+            string sql = $@"
+            SELECT
+                COLUMN_NAME TableColumn,
+                DATA_TYPE Datatype,
+                (
+                    CASE COLUMN_KEY
+                        WHEN 'PRI' THEN COLUMN_NAME
+                        ELSE ''
+                    END
+                ) TableIdentity,
+                REPLACE(
+                    REPLACE(
+                        SUBSTRING(COLUMN_TYPE, LOCATE('(', COLUMN_TYPE)),
+                        '(', ''
+                    ), ')', ''
+                ) FieldLength,
+                (
+                    CASE IS_NULLABLE
+                        WHEN 'NO' THEN 'N'
+                        ELSE 'Y'
+                    END
+                ) IsNullable,
+                COALESCE(COLUMN_DEFAULT, '') FieldDefault,
+                COLUMN_COMMENT Remark
+            FROM
+                information_schema.columns
+            WHERE
+                table_schema = '{GetDatabase()}'
+                AND table_name = @TableName";
+            var dbParameter = DbParameterHelper.CreateDbParameter("@TableName", tableName);
+            return await BaseRepository().FindList<TableFieldInfo>(sql, dbParameter);
         }
 
         #endregion
@@ -72,16 +91,14 @@ namespace YiSha.Service.SystemManage
 
         public async Task<bool> DatabaseBackup(string database, string backupPath)
         {
-            string backupFile = string.Format("{0}\\{1}_{2}.bak", backupPath, database, DateTime.Now.ToString("yyyyMMddHHmmss"));
-            string strSql = string.Format(" backup database [{0}] to disk = '{1}'", database, backupFile);
-            var result = await BaseRepository().ExecuteBySql(strSql);
-            return result > 0 ? true : false;
+            string backupFile = $"{backupPath}\\{database}_{DateTime.Now:yyyyMMddHHmmss}.bak";
+            string sql = $" backup database [{database}] to disk = '{backupFile}'";
+            return await BaseRepository().ExecuteBySql(sql) > 0;
         }
 
         /// <summary>
         /// 仅用在YiShaAdmin框架里面，同步不同数据库之间的数据，以 MySql 为主库，同步 MySql 的数据到SqlServer和Oracle，保证各个数据库的数据是一样的
         /// </summary>
-        /// <returns></returns>
         public async Task SyncDatabase()
         {
             #region 同步SqlServer数据库
@@ -107,8 +124,7 @@ namespace YiSha.Service.SystemManage
         private async Task SyncSqlServerTable<T>() where T : class, new()
         {
             string sqlServerConnectionString = "Server=localhost;Database=YiShaAdmin;User Id=sa;Password=123456;";
-            IEnumerable<T> list = await BaseRepository().FindList<T>();
-
+            var list = await BaseRepository().FindList<T>();
             await new SqlServerDatabase(sqlServerConnectionString).Delete<T>(p => true);
             await new SqlServerDatabase(sqlServerConnectionString).Insert(list);
         }
@@ -120,33 +136,36 @@ namespace YiSha.Service.SystemManage
         /// <summary>
         /// 获取所有表的主键、主键名称、记录数
         /// </summary>
-        /// <param name="list"></param>
-        /// <returns></returns>
-        private async Task<List<TableInfo>> GetTableDetailList(IEnumerable<TableInfo> list)
+        private async Task<List<TableInfo>> GetTableDetailList()
         {
-            string strSql = @"SELECT t1.TABLE_NAME TableName,t1.TABLE_COMMENT Remark,t1.TABLE_ROWS TableCount,t2.CONSTRAINT_NAME TableKeyName,t2.column_name TableKey
-                                     FROM information_schema.TABLES as t1
-                                     LEFT JOIN INFORMATION_SCHEMA.`KEY_COLUMN_USAGE` as t2 on t1.TABLE_NAME = t2.TABLE_NAME
-                                     WHERE t1.TABLE_SCHEMA='" + GetDatabase() + "' AND t2.TABLE_SCHEMA='" + GetDatabase() + "'";
-            if (list != null && list.Count() > 0)
-            {
-                strSql += " AND t1.TABLE_NAME in(" + string.Join(",", list.Select(p => "'" + p.TableName + "'")) + ")"; //生成 Where In 条件
-            }
-            IEnumerable<TableInfo> result = await BaseRepository().FindList<TableInfo>(strSql);
-            return result.ToList();
+            string sql = $@"
+            SELECT
+                t1.TABLE_NAME TableName,
+                t1.TABLE_COMMENT Remark,
+                t1.TABLE_ROWS TableCount,
+                t2.CONSTRAINT_NAME TableKeyName,
+                t2.column_name TableKey
+            FROM
+                information_schema.TABLES t1
+                LEFT JOIN INFORMATION_SCHEMA.`KEY_COLUMN_USAGE` t2 ON t1.TABLE_NAME = t2.TABLE_NAME
+            WHERE
+                t1.TABLE_SCHEMA = '{GetDatabase()}'
+                AND t2.TABLE_SCHEMA = '{GetDatabase()}'";
+
+            IEnumerable<TableInfo> list = await BaseRepository().FindList<TableInfo>(sql);
+            return list.ToList();
         }
 
         /// <summary>
         /// 赋值表的主键、主键名称、记录数
         /// </summary>
-        /// <param name="list"></param>
         private async Task SetTableDetail(IEnumerable<TableInfo> list)
         {
-            List<TableInfo> detailList = await GetTableDetailList(list);
-            foreach (TableInfo table in list)
+            var detailList = await GetTableDetailList();
+            foreach (var table in list)
             {
                 table.TableKey = string.Join(",", detailList.Where(p => p.TableName == table.TableName).Select(p => p.TableKey));
-                var tableInfo = detailList.Where(p => p.TableName == table.TableName).FirstOrDefault();
+                var tableInfo = detailList.FirstOrDefault(p => p.TableName == table.TableName);
                 if (tableInfo != null)
                 {
                     table.TableKeyName = tableInfo.TableKeyName;
@@ -158,8 +177,7 @@ namespace YiSha.Service.SystemManage
 
         private string GetDatabase()
         {
-            string database = HtmlHelper.Resove(GlobalContext.SystemConfig.DbConnectionString, "database=", ";");
-            return database;
+            return HtmlHelper.Resove(GlobalContext.SystemConfig.DbConnectionString, "database=", ";");
         }
 
         #endregion

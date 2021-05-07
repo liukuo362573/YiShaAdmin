@@ -19,15 +19,13 @@ namespace YiSha.Service.SystemManage
         public async Task<List<AutoJobEntity>> GetList(AutoJobListParam param)
         {
             var expression = ListFilter(param);
-            var list = await BaseRepository().FindList(expression);
-            return list.ToList();
+            return await BaseRepository().FindList(expression);
         }
 
         public async Task<List<AutoJobEntity>> GetPageList(AutoJobListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
-            var list = await BaseRepository().FindList(expression, pagination);
-            return list.ToList();
+            return await BaseRepository().FindList(expression, pagination);
         }
 
         public async Task<AutoJobEntity> GetEntity(long id)
@@ -39,15 +37,13 @@ namespace YiSha.Service.SystemManage
         {
             var expression = LinqExtensions.True<AutoJobEntity>();
             expression = expression.And(t => t.BaseIsDelete == 0);
-            if (entity.Id.IsNullOrZero())
+            expression = expression.And(t => t.JobGroupName == entity.JobGroupName);
+            expression = expression.And(t => t.JobName == entity.JobName);
+            if (!entity.Id.IsNullOrZero())
             {
-                expression = expression.And(t => t.JobGroupName == entity.JobGroupName && t.JobName == entity.JobName);
+                expression = expression.And(t => t.Id != entity.Id);
             }
-            else
-            {
-                expression = expression.And(t => t.JobGroupName == entity.JobGroupName && t.JobName == entity.JobName && t.Id != entity.Id);
-            }
-            return BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
+            return BaseRepository().AsQueryable(expression).Any();
         }
 
         #endregion
@@ -70,7 +66,7 @@ namespace YiSha.Service.SystemManage
 
         public async Task DeleteForm(string ids)
         {
-            long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
+            var idArr = TextHelper.SplitToArray<object>(ids, ',');
             await BaseRepository().Delete<AutoJobEntity>(idArr);
         }
 
@@ -81,12 +77,9 @@ namespace YiSha.Service.SystemManage
         private Expression<Func<AutoJobEntity, bool>> ListFilter(AutoJobListParam param)
         {
             var expression = LinqExtensions.True<AutoJobEntity>();
-            if (param != null)
+            if (param is { JobName: { Length: > 0 } })
             {
-                if (!string.IsNullOrEmpty(param.JobName))
-                {
-                    expression = expression.And(t => t.JobName.Contains(param.JobName));
-                }
+                expression = expression.And(t => t.JobName.Contains(param.JobName));
             }
             return expression;
         }

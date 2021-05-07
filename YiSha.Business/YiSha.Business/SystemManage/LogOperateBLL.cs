@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using YiSha.Entity.OrganizationManage;
 using YiSha.Entity.SystemManage;
 using YiSha.Enum;
 using YiSha.Model.Param.SystemManage;
@@ -19,40 +18,33 @@ namespace YiSha.Business.SystemManage
 
         public async Task<TData<List<LogOperateEntity>>> GetList(LogOperateListParam param)
         {
-            TData<List<LogOperateEntity>> obj = new TData<List<LogOperateEntity>>();
-            obj.Data = await _logOperateService.GetList(param);
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = await _logOperateService.GetList(param), Tag = 1 };
         }
 
         public async Task<TData<List<LogOperateEntity>>> GetPageList(LogOperateListParam param, Pagination pagination)
         {
-            TData<List<LogOperateEntity>> obj = new TData<List<LogOperateEntity>>();
-            obj.Data = await _logOperateService.GetPageList(param, pagination);
-            obj.Total = pagination.TotalCount;
-            obj.Tag = 1;
-            return obj;
+            return new()
+            {
+                Data = await _logOperateService.GetPageList(param, pagination),
+                Total = pagination.TotalCount,
+                Tag = 1
+            };
         }
 
         public async Task<TData<LogOperateEntity>> GetEntity(long id)
         {
-            TData<LogOperateEntity> obj = new TData<LogOperateEntity>();
-            obj.Data = await _logOperateService.GetEntity(id);
-            if (obj.Data != null)
+            var logEntity = await _logOperateService.GetEntity(id);
+            if (logEntity != null)
             {
-                UserEntity userEntity = await new UserService().GetEntity(obj.Data.BaseCreatorId.Value);
+                var userEntity = await new UserService().GetEntity(logEntity.BaseCreatorId!.Value);
                 if (userEntity != null)
                 {
-                    obj.Data.UserName = userEntity.UserName;
-                    DepartmentEntity departmentEntitty = await new DepartmentService().GetEntity(userEntity.DepartmentId.Value);
-                    if (departmentEntitty != null)
-                    {
-                        obj.Data.DepartmentName = departmentEntitty.DepartmentName;
-                    }
+                    var department = await new DepartmentService().GetEntity(userEntity.DepartmentId!.Value);
+                    logEntity.DepartmentName = department?.DepartmentName;
+                    logEntity.UserName = userEntity.UserName;
                 }
             }
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = logEntity, Tag = 1 };
         }
 
         #endregion
@@ -61,39 +53,29 @@ namespace YiSha.Business.SystemManage
 
         public async Task<TData<string>> SaveForm(LogOperateEntity entity)
         {
-            TData<string> obj = new TData<string>();
             await _logOperateService.SaveForm(entity);
-            obj.Data = entity.Id.ParseToString();
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = entity.Id.ParseToString(), Tag = 1 };
         }
 
         public async Task<TData<string>> SaveForm(string remark)
         {
-            TData<string> obj = new TData<string>();
-            LogOperateEntity entity = new LogOperateEntity();
+            var entity = new LogOperateEntity();
             await _logOperateService.SaveForm(entity);
             entity.LogStatus = OperateStatusEnum.Success.ParseToInt();
             entity.ExecuteUrl = remark;
-            obj.Data = entity.Id.ParseToString();
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = entity.Id.ParseToString(), Tag = 1 };
         }
 
         public async Task<TData> DeleteForm(string ids)
         {
-            TData obj = new TData();
             await _logOperateService.DeleteForm(ids);
-            obj.Tag = 1;
-            return obj;
+            return new() { Tag = 1 };
         }
 
         public async Task<TData> RemoveAllForm()
         {
-            TData obj = new TData();
             await _logOperateService.RemoveAllForm();
-            obj.Tag = 1;
-            return obj;
+            return new() { Tag = 1 };
         }
 
         #endregion

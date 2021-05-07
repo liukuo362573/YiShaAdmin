@@ -20,15 +20,13 @@ namespace YiSha.Service.SystemManage
         public async Task<List<RoleEntity>> GetList(RoleListParam param)
         {
             var expression = ListFilter(param);
-            var list = await BaseRepository().FindList(expression);
-            return list.ToList();
+            return await BaseRepository().FindList(expression);
         }
 
         public async Task<List<RoleEntity>> GetPageList(RoleListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
-            var list = await BaseRepository().FindList(expression, pagination);
-            return list.ToList();
+            return await BaseRepository().FindList(expression, pagination);
         }
 
         public async Task<RoleEntity> GetEntity(long id)
@@ -46,15 +44,12 @@ namespace YiSha.Service.SystemManage
         {
             var expression = LinqExtensions.True<RoleEntity>();
             expression = expression.And(t => t.BaseIsDelete == 0);
-            if (entity.Id.IsNullOrZero())
+            expression = expression.And(t => t.RoleName == entity.RoleName);
+            if (!entity.Id.IsNullOrZero())
             {
-                expression = expression.And(t => t.RoleName == entity.RoleName);
+                expression = expression.And(t => t.Id != entity.Id);
             }
-            else
-            {
-                expression = expression.And(t => t.RoleName == entity.RoleName && t.Id != entity.Id);
-            }
-            return BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
+            return BaseRepository().AsQueryable(expression).Any();
         }
 
         #endregion
@@ -78,14 +73,16 @@ namespace YiSha.Service.SystemManage
                     await db.Update(entity);
                 }
                 // 角色对应的菜单、页面和按钮权限
-                if (!string.IsNullOrEmpty(entity.MenuIds))
+                if (entity.MenuIds?.Length > 0)
                 {
                     foreach (long menuId in TextHelper.SplitToArray<long>(entity.MenuIds, ','))
                     {
-                        MenuAuthorizeEntity menuAuthorizeEntity = new MenuAuthorizeEntity();
-                        menuAuthorizeEntity.AuthorizeId = entity.Id;
-                        menuAuthorizeEntity.MenuId = menuId;
-                        menuAuthorizeEntity.AuthorizeType = AuthorizeTypeEnum.Role.ParseToInt();
+                        MenuAuthorizeEntity menuAuthorizeEntity = new MenuAuthorizeEntity
+                        {
+                            AuthorizeId = entity.Id,
+                            MenuId = menuId,
+                            AuthorizeType = AuthorizeTypeEnum.Role.ParseToInt()
+                        };
                         await menuAuthorizeEntity.Create();
                         await db.Insert(menuAuthorizeEntity);
                     }
@@ -101,7 +98,7 @@ namespace YiSha.Service.SystemManage
 
         public async Task DeleteForm(string ids)
         {
-            long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
+            var idArr = TextHelper.SplitToArray<object>(ids, ',');
             await BaseRepository().Delete<RoleEntity>(idArr);
         }
 
@@ -114,16 +111,16 @@ namespace YiSha.Service.SystemManage
             var expression = LinqExtensions.True<RoleEntity>();
             if (param != null)
             {
-                if (!string.IsNullOrEmpty(param.RoleName))
+                if (param.RoleName?.Length > 0)
                 {
                     expression = expression.And(t => t.RoleName.Contains(param.RoleName));
                 }
-                if (!string.IsNullOrEmpty(param.RoleIds))
+                if (param.RoleIds?.Length > 0)
                 {
                     long[] roleIdArr = TextHelper.SplitToArray<long>(param.RoleIds, ',');
                     expression = expression.And(t => roleIdArr.Contains(t.Id.Value));
                 }
-                if (!string.IsNullOrEmpty(param.RoleName))
+                if (param.RoleName?.Length > 0)
                 {
                     expression = expression.And(t => t.RoleName.Contains(param.RoleName));
                 }
@@ -131,11 +128,11 @@ namespace YiSha.Service.SystemManage
                 {
                     expression = expression.And(t => t.RoleStatus == param.RoleStatus);
                 }
-                if (!string.IsNullOrEmpty(param.StartTime.ParseToString()))
+                if (param.StartTime.HasValue)
                 {
                     expression = expression.And(t => t.BaseModifyTime >= param.StartTime);
                 }
-                if (!string.IsNullOrEmpty(param.EndTime.ParseToString()))
+                if (param.EndTime.HasValue)
                 {
                     param.EndTime = param.EndTime.Value.Date.Add(new TimeSpan(23, 59, 59));
                     expression = expression.And(t => t.BaseModifyTime <= param.EndTime);

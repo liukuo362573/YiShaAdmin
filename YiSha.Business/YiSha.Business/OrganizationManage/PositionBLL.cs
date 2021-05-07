@@ -16,35 +16,27 @@ namespace YiSha.Business.OrganizationManage
 
         public async Task<TData<List<PositionEntity>>> GetList(PositionListParam param)
         {
-            TData<List<PositionEntity>> obj = new TData<List<PositionEntity>>();
-            obj.Data = await _positionService.GetList(param);
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = await _positionService.GetList(param), Tag = 1 };
         }
 
         public async Task<TData<List<PositionEntity>>> GetPageList(PositionListParam param, Pagination pagination)
         {
-            TData<List<PositionEntity>> obj = new TData<List<PositionEntity>>();
-            obj.Data = await _positionService.GetPageList(param, pagination);
-            obj.Total = pagination.TotalCount;
-            obj.Tag = 1;
-            return obj;
+            return new()
+            {
+                Data = await _positionService.GetPageList(param, pagination),
+                Total = pagination.TotalCount,
+                Tag = 1
+            };
         }
 
         public async Task<TData<PositionEntity>> GetEntity(long id)
         {
-            TData<PositionEntity> obj = new TData<PositionEntity>();
-            obj.Data = await _positionService.GetEntity(id);
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = await _positionService.GetEntity(id), Tag = 1 };
         }
 
         public async Task<TData<int>> GetMaxSort()
         {
-            TData<int> obj = new TData<int>();
-            obj.Data = await _positionService.GetMaxSort();
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = await _positionService.GetMaxSort(), Tag = 1 };
         }
 
         #endregion
@@ -53,24 +45,18 @@ namespace YiSha.Business.OrganizationManage
 
         public async Task<TData<string>> SaveForm(PositionEntity entity)
         {
-            TData<string> obj = new TData<string>();
             if (_positionService.ExistPositionName(entity))
             {
-                obj.Message = "职位名称已经存在！";
-                return obj;
+                return new() { Tag = 0, Message = "职位名称已经存在" };
             }
             await _positionService.SaveForm(entity);
-            obj.Data = entity.Id.ParseToString();
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = entity.Id.ParseToString(), Tag = 1 };
         }
 
         public async Task<TData> DeleteForm(string ids)
         {
-            TData obj = new TData();
             await _positionService.DeleteForm(ids);
-            obj.Tag = 1;
-            return obj;
+            return new() { Tag = 1 };
         }
 
         #endregion

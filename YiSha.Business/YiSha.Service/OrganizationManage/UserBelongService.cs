@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using YiSha.Data.Repository;
 using YiSha.Entity.OrganizationManage;
@@ -14,19 +13,15 @@ namespace YiSha.Service.OrganizationManage
         public async Task<List<UserBelongEntity>> GetList(UserBelongEntity entity)
         {
             var expression = LinqExtensions.True<UserBelongEntity>();
-            if (entity != null)
+            if (entity?.BelongType != null)
             {
-                if (entity.BelongType != null)
-                {
-                    expression = expression.And(t => t.BelongType == entity.BelongType);
-                }
-                if (entity.UserId != null)
-                {
-                    expression = expression.And(t => t.UserId == entity.UserId);
-                }
+                expression = expression.And(t => t.BelongType == entity.BelongType);
             }
-            var list = await BaseRepository().FindList(expression);
-            return list.ToList();
+            if (entity?.UserId != null)
+            {
+                expression = expression.And(t => t.UserId == entity.UserId);
+            }
+            return await BaseRepository().FindList(expression);
         }
 
         public async Task<UserBelongEntity> GetEntity(long id)

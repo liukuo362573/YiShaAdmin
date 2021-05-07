@@ -20,15 +20,13 @@ namespace YiSha.Service.OrganizationManage
         public async Task<List<UserEntity>> GetList(UserListParam param)
         {
             var expression = ListFilter(param);
-            var list = await BaseRepository().FindList(expression);
-            return list.ToList();
+            return await BaseRepository().FindList(expression);
         }
 
         public async Task<List<UserEntity>> GetPageList(UserListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
-            var list = await BaseRepository().FindList(expression, pagination);
-            return list.ToList();
+            return await BaseRepository().FindList(expression, pagination);
         }
 
         public async Task<UserEntity> GetEntity(long id)
@@ -54,15 +52,12 @@ namespace YiSha.Service.OrganizationManage
         {
             var expression = LinqExtensions.True<UserEntity>();
             expression = expression.And(t => t.BaseIsDelete == 0);
-            if (entity.Id.IsNullOrZero())
+            expression = expression.And(t => t.UserName == entity.UserName);
+            if (!entity.Id.IsNullOrZero())
             {
-                expression = expression.And(t => t.UserName == entity.UserName);
+                expression = expression.And(t => t.Id != entity.Id);
             }
-            else
-            {
-                expression = expression.And(t => t.UserName == entity.UserName && t.Id != entity.Id);
-            }
-            return BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
+            return BaseRepository().AsQueryable(expression).Any();
         }
 
         #endregion
@@ -93,28 +88,34 @@ namespace YiSha.Service.OrganizationManage
                     await entity.Modify();
                     await db.Update(entity);
                 }
+
                 // 职位
-                if (!string.IsNullOrEmpty(entity.PositionIds))
+                if (entity.PositionIds?.Length > 0)
                 {
                     foreach (long positionId in TextHelper.SplitToArray<long>(entity.PositionIds, ','))
                     {
-                        UserBelongEntity positionBelongEntity = new UserBelongEntity();
-                        positionBelongEntity.UserId = entity.Id;
-                        positionBelongEntity.BelongId = positionId;
-                        positionBelongEntity.BelongType = UserBelongTypeEnum.Position.ParseToInt();
+                        var positionBelongEntity = new UserBelongEntity
+                        {
+                            UserId = entity.Id,
+                            BelongId = positionId,
+                            BelongType = UserBelongTypeEnum.Position.ParseToInt()
+                        };
                         await positionBelongEntity.Create();
                         await db.Insert(positionBelongEntity);
                     }
                 }
+
                 // 角色
-                if (!string.IsNullOrEmpty(entity.RoleIds))
+                if (entity.RoleIds?.Length > 0)
                 {
                     foreach (long roleId in TextHelper.SplitToArray<long>(entity.RoleIds, ','))
                     {
-                        UserBelongEntity departmentBelongEntity = new UserBelongEntity();
-                        departmentBelongEntity.UserId = entity.Id;
-                        departmentBelongEntity.BelongId = roleId;
-                        departmentBelongEntity.BelongType = UserBelongTypeEnum.Role.ParseToInt();
+                        var departmentBelongEntity = new UserBelongEntity
+                        {
+                            UserId = entity.Id,
+                            BelongId = roleId,
+                            BelongType = UserBelongTypeEnum.Role.ParseToInt()
+                        };
                         await departmentBelongEntity.Create();
                         await db.Insert(departmentBelongEntity);
                     }
@@ -133,7 +134,7 @@ namespace YiSha.Service.OrganizationManage
             var db = await BaseRepository().BeginTrans();
             try
             {
-                long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
+                var idArr = TextHelper.SplitToArray<object>(ids, ',');
                 await db.Delete<UserEntity>(idArr);
                 await db.Delete<UserBelongEntity>(t => idArr.Contains(t.UserId.Value));
                 await db.CommitTrans();
@@ -166,16 +167,16 @@ namespace YiSha.Service.OrganizationManage
             var expression = LinqExtensions.True<UserEntity>();
             if (param != null)
             {
-                if (!string.IsNullOrEmpty(param.UserName))
+                if (param.UserName?.Length > 0)
                 {
                     expression = expression.And(t => t.UserName.Contains(param.UserName));
                 }
-                if (!string.IsNullOrEmpty(param.UserIds))
+                if (param.UserIds?.Length > 0)
                 {
                     long[] userIdList = TextHelper.SplitToArray<long>(param.UserIds, ',');
                     expression = expression.And(t => userIdList.Contains(t.Id.Value));
                 }
-                if (!string.IsNullOrEmpty(param.Mobile))
+                if (param.Mobile?.Length > 0)
                 {
                     expression = expression.And(t => t.Mobile.Contains(param.Mobile));
                 }
@@ -183,16 +184,16 @@ namespace YiSha.Service.OrganizationManage
                 {
                     expression = expression.And(t => t.UserStatus == param.UserStatus);
                 }
-                if (!string.IsNullOrEmpty(param.StartTime.ParseToString()))
+                if (param.StartTime.HasValue)
                 {
                     expression = expression.And(t => t.BaseModifyTime >= param.StartTime);
                 }
-                if (!string.IsNullOrEmpty(param.EndTime.ParseToString()))
+                if (param.EndTime.HasValue)
                 {
                     param.EndTime = param.EndTime.Value.Date.Add(new TimeSpan(23, 59, 59));
                     expression = expression.And(t => t.BaseModifyTime <= param.EndTime);
                 }
-                if (param.ChildrenDepartmentIdList != null && param.ChildrenDepartmentIdList.Count > 0)
+                if (param.ChildrenDepartmentIdList is { Count: > 0 })
                 {
                     expression = expression.And(t => param.ChildrenDepartmentIdList.Contains(t.DepartmentId.Value));
                 }

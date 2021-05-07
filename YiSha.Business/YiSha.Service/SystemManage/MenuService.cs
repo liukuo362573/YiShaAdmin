@@ -42,15 +42,13 @@ namespace YiSha.Service.SystemManage
         {
             var expression = LinqExtensions.True<MenuEntity>();
             expression = expression.And(t => t.BaseIsDelete == 0);
-            if (entity.Id.IsNullOrZero())
+            expression = expression.And(t => t.MenuName == entity.MenuName);
+            expression = expression.And(t => t.MenuType == entity.MenuType);
+            if (!entity.Id.IsNullOrZero())
             {
-                expression = expression.And(t => t.MenuName == entity.MenuName && t.MenuType == entity.MenuType);
+                expression = expression.And(t => t.Id != entity.Id);
             }
-            else
-            {
-                expression = expression.And(t => t.MenuName == entity.MenuName && t.MenuType == entity.MenuType && t.Id != entity.Id);
-            }
-            return BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
+            return BaseRepository().AsQueryable(expression).Any();
         }
 
         #endregion
@@ -76,7 +74,7 @@ namespace YiSha.Service.SystemManage
             var db = await BaseRepository().BeginTrans();
             try
             {
-                long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
+                var idArr = TextHelper.SplitToArray<object>(ids, ',');
                 await db.Delete<MenuEntity>(p => idArr.Contains(p.Id.Value) || idArr.Contains(p.ParentId.Value));
                 await db.Delete<MenuAuthorizeEntity>(p => idArr.Contains(p.MenuId.Value));
                 await db.CommitTrans();
@@ -97,7 +95,7 @@ namespace YiSha.Service.SystemManage
             var expression = LinqExtensions.True<MenuEntity>();
             if (param != null)
             {
-                if (!string.IsNullOrEmpty(param.MenuName))
+                if (param.MenuName?.Length > 0)
                 {
                     expression = expression.And(t => t.MenuName.Contains(param.MenuName));
                 }

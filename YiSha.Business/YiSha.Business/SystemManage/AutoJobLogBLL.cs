@@ -16,28 +16,23 @@ namespace YiSha.Business.SystemManage
 
         public async Task<TData<List<AutoJobLogEntity>>> GetList(AutoJobLogListParam param)
         {
-            TData<List<AutoJobLogEntity>> obj = new TData<List<AutoJobLogEntity>>();
-            obj.Data = await _autoJobLogService.GetList(param);
-            obj.Total = obj.Data.Count;
-            obj.Tag = 1;
-            return obj;
+            var list = await _autoJobLogService.GetList(param);
+            return new() { Data = list, Total = list.Count, Tag = 1 };
         }
 
         public async Task<TData<List<AutoJobLogEntity>>> GetPageList(AutoJobLogListParam param, Pagination pagination)
         {
-            TData<List<AutoJobLogEntity>> obj = new TData<List<AutoJobLogEntity>>();
-            obj.Data = await _autoJobLogService.GetPageList(param, pagination);
-            obj.Total = pagination.TotalCount;
-            obj.Tag = 1;
-            return obj;
+            return new()
+            {
+                Data = await _autoJobLogService.GetPageList(param, pagination),
+                Total = pagination.TotalCount,
+                Tag = 1
+            };
         }
 
         public async Task<TData<AutoJobLogEntity>> GetEntity(long id)
         {
-            TData<AutoJobLogEntity> obj = new TData<AutoJobLogEntity>();
-            obj.Data = await _autoJobLogService.GetEntity(id);
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = await _autoJobLogService.GetEntity(id), Tag = 1 };
         }
 
         #endregion
@@ -46,24 +41,15 @@ namespace YiSha.Business.SystemManage
 
         public async Task<TData<string>> SaveForm(AutoJobLogEntity entity)
         {
-            TData<string> obj = new TData<string>();
             await _autoJobLogService.SaveForm(entity);
-            obj.Data = entity.Id.ParseToString();
-            obj.Tag = 1;
-            return obj;
+            return new() { Data = entity.Id.ParseToString(), Tag = 1 };
         }
 
         public async Task<TData> DeleteForm(string ids)
         {
-            TData<long> obj = new TData<long>();
             await _autoJobLogService.DeleteForm(ids);
-            obj.Tag = 1;
-            return obj;
+            return new() { Tag = 1 };
         }
-
-        #endregion
-
-        #region 私有方法
 
         #endregion
     }

@@ -19,15 +19,13 @@ namespace YiSha.Service.OrganizationManage
         public async Task<List<PositionEntity>> GetList(PositionListParam param)
         {
             var expression = ListFilter(param);
-            var list = await BaseRepository().FindList(expression);
-            return list.ToList();
+            return await BaseRepository().FindList(expression);
         }
 
         public async Task<List<PositionEntity>> GetPageList(PositionListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
-            var list = await BaseRepository().FindList(expression, pagination);
-            return list.ToList();
+            return await BaseRepository().FindList(expression, pagination);
         }
 
         public async Task<PositionEntity> GetEntity(long id)
@@ -45,15 +43,12 @@ namespace YiSha.Service.OrganizationManage
         {
             var expression = LinqExtensions.True<PositionEntity>();
             expression = expression.And(t => t.BaseIsDelete == 0);
-            if (entity.Id.IsNullOrZero())
+            expression = expression.And(t => t.PositionName == entity.PositionName);
+            if (!entity.Id.IsNullOrZero())
             {
-                expression = expression.And(t => t.PositionName == entity.PositionName);
+                expression = expression.And(t => t.Id != entity.Id);
             }
-            else
-            {
-                expression = expression.And(t => t.PositionName == entity.PositionName && t.Id != entity.Id);
-            }
-            return BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
+            return BaseRepository().AsQueryable(expression).Any();
         }
 
         #endregion
@@ -76,7 +71,7 @@ namespace YiSha.Service.OrganizationManage
 
         public async Task DeleteForm(string ids)
         {
-            long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
+            var idArr = TextHelper.SplitToArray<object>(ids, ',');
             await BaseRepository().Delete<PositionEntity>(idArr);
         }
 
@@ -89,11 +84,11 @@ namespace YiSha.Service.OrganizationManage
             var expression = LinqExtensions.True<PositionEntity>();
             if (param != null)
             {
-                if (!string.IsNullOrEmpty(param.PositionName))
+                if (param.PositionName?.Length > 0)
                 {
                     expression = expression.And(t => t.PositionName.Contains(param.PositionName));
                 }
-                if (!string.IsNullOrEmpty(param.PositionIds))
+                if (param.PositionIds?.Length > 0)
                 {
                     long[] positionIdArr = TextHelper.SplitToArray<long>(param.PositionIds, ',');
                     expression = expression.And(t => positionIdArr.Contains(t.Id.Value));

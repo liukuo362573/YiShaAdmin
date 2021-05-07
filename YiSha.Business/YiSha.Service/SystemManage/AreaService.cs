@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using YiSha.Data.Repository;
@@ -19,15 +18,13 @@ namespace YiSha.Service.SystemManage
         public async Task<List<AreaEntity>> GetList(AreaListParam param)
         {
             var expression = ListFilter(param);
-            var list = await BaseRepository().FindList(expression);
-            return list.ToList();
+            return await BaseRepository().FindList(expression);
         }
 
         public async Task<List<AreaEntity>> GetPageList(AreaListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
-            var list = await BaseRepository().FindList(expression, pagination);
-            return list.ToList();
+            return await BaseRepository().FindList(expression, pagination);
         }
 
         public async Task<AreaEntity> GetEntity(long id)
@@ -60,7 +57,7 @@ namespace YiSha.Service.SystemManage
 
         public async Task DeleteForm(string ids)
         {
-            long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
+            var idArr = TextHelper.SplitToArray<object>(ids, ',');
             await BaseRepository().Delete<AreaEntity>(idArr);
         }
 
@@ -71,12 +68,9 @@ namespace YiSha.Service.SystemManage
         private Expression<Func<AreaEntity, bool>> ListFilter(AreaListParam param)
         {
             var expression = LinqExtensions.True<AreaEntity>();
-            if (param != null)
+            if (param is { AreaName: { Length: > 0 } })
             {
-                if (!param.AreaName.IsEmpty())
-                {
-                    expression = expression.And(t => t.AreaName.Contains(param.AreaName));
-                }
+                expression = expression.And(t => t.AreaName.Contains(param.AreaName));
             }
             return expression;
         }
