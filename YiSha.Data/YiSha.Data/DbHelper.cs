@@ -35,7 +35,7 @@ namespace YiSha.Data
             DbCommand = DbConnection.CreateCommand();
         }
 
-        #endregion 构造函数
+        #endregion
 
         #region 属性
 
@@ -69,7 +69,7 @@ namespace YiSha.Data
             DbCommand?.Dispose();
         }
 
-        #endregion 属性
+        #endregion
 
         /// <summary>
         /// 执行SQL返回 DataReader

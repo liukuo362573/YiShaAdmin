@@ -49,6 +49,6 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
             return Json(obj);
         }
 
-        #endregion 　
+        #endregion
     }
 }

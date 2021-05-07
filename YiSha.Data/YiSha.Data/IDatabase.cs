@@ -24,7 +24,7 @@ namespace YiSha.Data
         /// </summary>
         public IDbContextTransaction DbContextTransaction { get; set; }
 
-        #endregion 属性
+        #endregion
 
         #region Transaction
 
@@ -36,7 +36,7 @@ namespace YiSha.Data
 
         Task Close();
 
-        #endregion Transaction
+        #endregion
 
         #region Execute
 
@@ -44,7 +44,7 @@ namespace YiSha.Data
 
         Task<int> ExecuteByProc(string procName, params DbParameter[] dbParameter);
 
-        #endregion Execute
+        #endregion
 
         #region Insert
 
@@ -52,7 +52,7 @@ namespace YiSha.Data
 
         Task<int> Insert<T>(IEnumerable<T> entities) where T : class;
 
-        #endregion Insert
+        #endregion
 
         #region Delete
 
@@ -68,7 +68,7 @@ namespace YiSha.Data
 
         Task<int> Delete<T>(string propertyName, object propertyValue) where T : class;
 
-        #endregion Delete
+        #endregion
 
         #region Update
 
@@ -78,7 +78,7 @@ namespace YiSha.Data
 
         Task<int> Update<T>(Expression<Func<T, bool>> condition) where T : class, new();
 
-        #endregion Update
+        #endregion
 
         #region Find
 
@@ -106,6 +106,6 @@ namespace YiSha.Data
 
         Task<(int total, DataTable)> FindTable(string sql, string sort, bool isAsc, int pageSize, int pageIndex, params DbParameter[] dbParameter);
 
-        #endregion Find
+        #endregion
     }
 }

@@ -25,7 +25,7 @@ namespace YiSha.Util.Helper
         }
     }
 
-    #endregion JsonHelper
+    #endregion
 
     #region JsonConverter
 
@@ -96,5 +96,5 @@ namespace YiSha.Util.Helper
         }
     }
 
-    #endregion JsonConverter
+    #endregion
 }

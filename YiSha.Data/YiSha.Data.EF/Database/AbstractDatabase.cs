@@ -27,7 +27,7 @@ namespace YiSha.Data.EF.Database
         /// </summary>
         public virtual IDbContextTransaction DbContextTransaction { get; set; }
 
-        #endregion 属性
+        #endregion
 
         #region Transaction
 
@@ -83,7 +83,7 @@ namespace YiSha.Data.EF.Database
             await DbContext.DisposeAsync();
         }
 
-        #endregion Transaction
+        #endregion
 
         #region Execute
 
@@ -99,7 +99,7 @@ namespace YiSha.Data.EF.Database
             return DbContextTransaction == null ? await CommitTrans() : 0;
         }
 
-        #endregion Execute
+        #endregion
 
         #region Insert
 
@@ -115,7 +115,7 @@ namespace YiSha.Data.EF.Database
             return DbContextTransaction == null ? await CommitTrans() : 0;
         }
 
-        #endregion Insert
+        #endregion
 
         #region Delete
 
@@ -170,7 +170,7 @@ namespace YiSha.Data.EF.Database
             return -1;
         }
 
-        #endregion Delete
+        #endregion
 
         #region Update
 
@@ -210,7 +210,7 @@ namespace YiSha.Data.EF.Database
             return list.Any() ? await Update(list) : 0;
         }
 
-        #endregion Update
+        #endregion
 
         #region Find
 
@@ -307,6 +307,6 @@ namespace YiSha.Data.EF.Database
             return (total, new DataTable());
         }
 
-        #endregion Find
+        #endregion
     }
 }

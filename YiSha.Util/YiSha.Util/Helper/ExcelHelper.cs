@@ -71,7 +71,7 @@ namespace YiSha.Util.Helper
                 arrColWidth[columnIndex] = properties[columnIndex].Name.Length;
             }
 
-            #endregion 取得每列的列宽（最大宽度）
+            #endregion
 
             for (var rowIndex = 0; rowIndex < list.Count; rowIndex++)
             {
@@ -103,7 +103,7 @@ namespace YiSha.Util.Helper
                         sheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, properties.Length - 1));
                     }
 
-                    #endregion 表头及样式
+                    #endregion
 
                     #region 列头及样式
 
@@ -133,10 +133,10 @@ namespace YiSha.Util.Helper
                         }
                     }
 
-                    #endregion 列头及样式
+                    #endregion
                 }
 
-                #endregion 新建表，填充表头，填充列头，样式
+                #endregion
 
                 #region 填充内容
 
@@ -200,7 +200,7 @@ namespace YiSha.Util.Helper
                     }
                 }
 
-                #endregion 填充内容
+                #endregion
             }
 
             using var ms = new MemoryStream();
@@ -211,7 +211,7 @@ namespace YiSha.Util.Helper
             return ms;
         }
 
-        #endregion List导出到Excel文件
+        #endregion
 
         #region Excel导入
 
@@ -343,6 +343,6 @@ namespace YiSha.Util.Helper
             ).FirstOrDefault();
         }
 
-        #endregion Excel导入
+        #endregion
     }
 }

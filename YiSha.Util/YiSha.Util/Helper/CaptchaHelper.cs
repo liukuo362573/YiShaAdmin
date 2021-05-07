@@ -53,7 +53,7 @@ namespace YiSha.Util.Helper
             return new Tuple<string, int>(randomCode, value);
         }
 
-        #endregion 得到验证码
+        #endregion
 
         #region 生成验证码图片
 
@@ -146,6 +146,6 @@ namespace YiSha.Util.Helper
             }
         }
 
-        #endregion 生成验证码图片
+        #endregion
     }
 }

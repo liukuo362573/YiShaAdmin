@@ -24,7 +24,7 @@ namespace YiSha.Util.Helper
             return url.StartsWith("http://") || url.StartsWith("https://");
         }
 
-        #endregion 是否是网址
+        #endregion
 
         #region 模拟GET
 
@@ -47,7 +47,7 @@ namespace YiSha.Util.Helper
             return myStreamReader.ReadToEnd();
         }
 
-        #endregion 模拟GET
+        #endregion
 
         #region 模拟POST
 
@@ -117,7 +117,7 @@ namespace YiSha.Util.Helper
             return html.ToString();
         }
 
-        #endregion 模拟POST
+        #endregion
 
         #region 预定义方法或者变更
 
@@ -216,7 +216,7 @@ namespace YiSha.Util.Helper
                     stream.Close();
                 }
 
-                #endregion 得到请求的response
+                #endregion
             }
             catch (WebException ex)
             {
@@ -421,7 +421,7 @@ namespace YiSha.Util.Helper
             return true;
         }
 
-        #endregion 预定义方法或者变更
+        #endregion
 
         #region 普通类型
 
@@ -460,7 +460,7 @@ namespace YiSha.Util.Helper
             throw new NotImplementedException();
         }
 
-        #endregion 普通类型
+        #endregion
     }
 
     /// <summary>
