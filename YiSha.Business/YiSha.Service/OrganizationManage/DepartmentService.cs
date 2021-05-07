@@ -31,10 +31,8 @@ namespace YiSha.Service.OrganizationManage
 
         public async Task<int> GetMaxSort()
         {
-            object result = await this.BaseRepository().FindObject("SELECT MAX(DepartmentSort) FROM SysDepartment");
-            int sort = result.ParseToInt();
-            sort++;
-            return sort;
+            var result = await BaseRepository().FindEntity<int>("SELECT MAX(DepartmentSort) FROM SysDepartment");
+            return result + 1;
         }
 
         /// <summary>
@@ -54,7 +52,7 @@ namespace YiSha.Service.OrganizationManage
             {
                 expression = expression.And(t => t.DepartmentName == entity.DepartmentName && t.Id != entity.Id);
             }
-            return this.BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
+            return this.BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
         }
 
         /// <summary>
@@ -66,7 +64,7 @@ namespace YiSha.Service.OrganizationManage
         {
             var expression = LinqExtensions.True<DepartmentEntity>();
             expression = expression.And(t => t.ParentId == id);
-            return this.BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
+            return this.BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
         }
         #endregion
 

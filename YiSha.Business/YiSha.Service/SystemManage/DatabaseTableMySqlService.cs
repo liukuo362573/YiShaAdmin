@@ -41,7 +41,7 @@ namespace YiSha.Service.SystemManage
             if (!string.IsNullOrEmpty(tableName))
             {
                 strSql.Append(" AND table_name like @TableName ");
-                parameter.Add(DbParameterExtension.CreateDbParameter("@TableName", '%' + tableName + '%'));
+                parameter.Add(DbParameterHelper.CreateDbParameter("@TableName", '%' + tableName + '%'));
             }
 
             IEnumerable<TableInfo> list = await this.BaseRepository().FindList<TableInfo>(strSql.ToString(), parameter.ToArray(), pagination);
@@ -61,7 +61,7 @@ namespace YiSha.Service.SystemManage
                                    COLUMN_COMMENT Remark
                              FROM information_schema.columns WHERE table_schema='" + GetDatabase() + "' AND table_name=@TableName");
             var parameter = new List<DbParameter>();
-            parameter.Add(DbParameterExtension.CreateDbParameter("@TableName", tableName));
+            parameter.Add(DbParameterHelper.CreateDbParameter("@TableName", tableName));
             var list = await this.BaseRepository().FindList<TableFieldInfo>(strSql.ToString(), parameter.ToArray());
             return list.ToList();
         }

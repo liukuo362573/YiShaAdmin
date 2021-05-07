@@ -35,12 +35,15 @@ namespace YiSha.Util.Extension
 
         public static bool IsAjaxRequest(this HttpRequest request)
         {
-            if (request == null)
-                throw new ArgumentNullException("request");
+            if (request == null) throw new ArgumentNullException("request");
 
-            if (request.Headers != null)
-                return request.Headers["X-Requested-With"] == "XMLHttpRequest";
+            if (request.Headers != null) return request.Headers["X-Requested-With"] == "XMLHttpRequest";
             return false;
+        }
+
+        public static bool TryAny<TSource>(this IEnumerable<TSource> source)
+        {
+            return source != null && source.Any();
         }
     }
 }

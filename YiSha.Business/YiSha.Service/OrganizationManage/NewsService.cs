@@ -49,10 +49,8 @@ namespace YiSha.Service.OrganizationManage
 
         public async Task<int> GetMaxSort()
         {
-            object result = await this.BaseRepository().FindObject("SELECT MAX(NewsSort) FROM SysNews");
-            int sort = result.ParseToInt();
-            sort++;
-            return sort;
+            var result =  await BaseRepository().FindEntity<int>("SELECT MAX(NewsSort) FROM SysNews");
+            return result + 1;
         }
         #endregion
 
@@ -107,32 +105,32 @@ namespace YiSha.Service.OrganizationManage
                 if (!string.IsNullOrEmpty(param.NewsTitle))
                 {
                     strSql.Append(" AND a.NewsTitle like @NewsTitle");
-                    parameter.Add(DbParameterExtension.CreateDbParameter("@NewsTitle", '%' + param.NewsTitle + '%'));
+                    parameter.Add(DbParameterHelper.CreateDbParameter("@NewsTitle", '%' + param.NewsTitle + '%'));
                 }
                 if (param.NewsType > 0)
                 {
                     strSql.Append(" AND a.NewsType = @NewsType");
-                    parameter.Add(DbParameterExtension.CreateDbParameter("@NewsType", param.NewsType));
+                    parameter.Add(DbParameterHelper.CreateDbParameter("@NewsType", param.NewsType));
                 }
                 if (!string.IsNullOrEmpty(param.NewsTag))
                 {
                     strSql.Append(" AND a.NewsTag like @NewsTag");
-                    parameter.Add(DbParameterExtension.CreateDbParameter("@NewsTag", '%' + param.NewsTag + '%'));
+                    parameter.Add(DbParameterHelper.CreateDbParameter("@NewsTag", '%' + param.NewsTag + '%'));
                 }
                 if (param.ProvinceId > 0)
                 {
                     strSql.Append(" AND a.ProvinceId = @ProvinceId");
-                    parameter.Add(DbParameterExtension.CreateDbParameter("@ProvinceId", param.ProvinceId));
+                    parameter.Add(DbParameterHelper.CreateDbParameter("@ProvinceId", param.ProvinceId));
                 }
                 if (param.CityId > 0)
                 {
                     strSql.Append(" AND a.CityId = @CityId");
-                    parameter.Add(DbParameterExtension.CreateDbParameter("@CityId", param.CityId));
+                    parameter.Add(DbParameterHelper.CreateDbParameter("@CityId", param.CityId));
                 }
                 if (param.CountyId > 0)
                 {
                     strSql.Append(" AND a.CountId = @CountId");
-                    parameter.Add(DbParameterExtension.CreateDbParameter("@CountyId", param.CountyId));
+                    parameter.Add(DbParameterHelper.CreateDbParameter("@CountyId", param.CountyId));
                 }
             }
             return parameter;

@@ -13,8 +13,4 @@
     <ProjectReference Include="..\..\YiSha.Util\YiSha.Util\YiSha.Util.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ToolManage\" />
-  </ItemGroup>
-
 </Project>

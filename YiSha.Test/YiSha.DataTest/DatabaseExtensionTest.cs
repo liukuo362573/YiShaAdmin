@@ -1,9 +1,8 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using NUnit.Framework;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using NUnit.Framework;
-using YiSha.Data;
+using System.Linq;
+using System.Threading.Tasks;
+using YiSha.Data.Extension;
 using YiSha.Data.Repository;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
@@ -60,10 +59,10 @@ namespace YiSha.DataTest
             int pageSize = 10;
             int pageIndex = 1;
             RepositoryFactory repositoryFactory = new RepositoryFactory();
-            var tempData = repositoryFactory.BaseRepository().db.dbContext.Set<RoleEntity>().AsQueryable();
-            tempData = DatabasesExtension.AppendSort<RoleEntity>(tempData, sort, isAsc);
-            tempData = tempData.Skip<RoleEntity>(pageSize * (pageIndex - 1)).Take<RoleEntity>(pageSize).AsQueryable();
-            string strSql = DatabasesExtension.GetSql<RoleEntity>(tempData);
+            var tempData = repositoryFactory.BaseRepository().Db.DbContext.Set<RoleEntity>().AsQueryable();
+            tempData = tempData.AppendSort(sort, isAsc);
+            tempData = tempData.Skip(pageSize * (pageIndex - 1)).Take(pageSize).AsQueryable();
+            string strSql = tempData.GetSql();
             Assert.IsTrue(strSql.ToUpper().Contains("SELECT"));
         }
     }

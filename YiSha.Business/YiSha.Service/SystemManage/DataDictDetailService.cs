@@ -36,10 +36,8 @@ namespace YiSha.Service.SystemManage
 
         public async Task<int> GetMaxSort()
         {
-            object result = await this.BaseRepository().FindObject("SELECT MAX(DictSort) FROM SysDataDictDetail");
-            int sort = result.ParseToInt();
-            sort++;
-            return sort;
+            var result =  await BaseRepository().FindEntity<int>("SELECT MAX(DictSort) FROM SysDataDictDetail");
+            return result + 1;
         }
 
         public bool ExistDictKeyValue(DataDictDetailEntity entity)
@@ -54,7 +52,7 @@ namespace YiSha.Service.SystemManage
             {
                 expression = expression.And(t => t.DictType == entity.DictType && (t.DictKey == entity.DictKey || t.DictValue == entity.DictValue) && t.Id != entity.Id);
             }
-            return this.BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
+            return this.BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
         }
         #endregion
 

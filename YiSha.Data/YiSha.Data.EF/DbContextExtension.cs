@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data;
 using System.Data.Common;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Globalization;
 using YiSha.Util;
 
 namespace YiSha.Data.EF
@@ -18,150 +14,100 @@ namespace YiSha.Data.EF
         /// <summary>
         /// 拼接删除SQL语句
         /// </summary>
-        /// <param name="tableName">表名</param>
-        /// <returns></returns>
         public static string DeleteSql(string tableName)
         {
-            StringBuilder strSql = new StringBuilder("DELETE FROM " + tableName + "");
-            return strSql.ToString();
+            return $"DELETE FROM {tableName}";
         }
 
         /// <summary>
         /// 拼接删除SQL语句
         /// </summary>
-        /// <param name="tableName">表名</param>
-        /// <param name="propertyName">实体属性名称</param>
-        /// <param name="propertyValue">字段值：数组1,2,3,4,5,6.....</param>
-        /// <returns></returns>
-        public static string DeleteSql(string tableName, string propertyName, long propertyValue)
+        public static (string sql, DbParameter parameter) DeleteSql(string tableName, string propertyName, object propertyValue)
         {
-            StringBuilder strSql = new StringBuilder("DELETE FROM " + tableName + " WHERE " + propertyName + " = " + propertyValue + "");
-            return strSql.ToString();
+            var parameter = DbParameterHelper.CreateDbParameter($"@{propertyName}", propertyValue);
+            var sql = $"DELETE FROM {tableName} WHERE {propertyName} = {parameter.ParameterName}";
+            return (sql, parameter);
         }
 
         /// <summary>
         /// 拼接批量删除SQL语句
         /// </summary>
-        /// <param name="tableName">表名</param>
-        /// <param name="propertyName">实体属性名称</param>
-        /// <param name="propertyValue">字段值：数组1,2,3,4,5,6.....</param>
-        /// <returns></returns>
-        public static string DeleteSql(string tableName, string propertyName, long[] propertyValue)
+        public static (string sql, DbParameter[] parameters) DeleteSql(string tableName, string propertyName, object[] propertyValue)
         {
-            string strSql = "DELETE FROM " + tableName + " WHERE " + propertyName + " IN (" + string.Join(",", propertyValue) + ")";
-            return strSql.ToString();
+            var parameters = DbParameterHelper.CreateDbParameters($"@{propertyName}", propertyValue);
+            var sql = $"DELETE FROM {tableName} WHERE {propertyName} IN ({string.Join(',', parameters.Select(x => x.ParameterName))})";
+            return (sql, parameters);
         }
 
         /// <summary>
         /// 获取实体映射对象
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="dbcontext"></param>
-        /// <returns></returns>
-        public static IEntityType GetEntityType<T>(DbContext dbcontext) where T : class
+        public static IEntityType GetEntityType<T>(DbContext dbContext) where T : class
         {
-            return dbcontext.Model.FindEntityType(typeof(T));
+            return dbContext.Model.FindEntityType(typeof(T));
         }
 
         /// <summary>
         /// 存储过程语句
         /// </summary>
-        /// <param name="procName">存储过程名称</param>
-        /// <param name="dbParameter">执行命令所需的sql语句对应参数</param>
-        /// <returns></returns>
         public static string BuilderProc(string procName, params DbParameter[] dbParameter)
         {
-            StringBuilder strSql = new StringBuilder("exec " + procName);
-            if (dbParameter != null)
-            {
-                foreach (var item in dbParameter)
-                {
-                    strSql.Append(" " + item + ",");
-                }
-                strSql = strSql.Remove(strSql.Length - 1, 1);
-            }
-            return strSql.ToString();
+            return $"EXEC {procName} {string.Join(',', dbParameter.Select(x => $"{x.ParameterName}"))}";
         }
 
-        public static void SetEntityDefaultValue(DbContext dbcontext)
+        /// <summary>
+        /// 把null设置成对应属性类型的默认值
+        /// </summary>
+        public static void SetEntityDefaultValue(DbContext dbContext)
         {
-            foreach (EntityEntry entry in dbcontext.ChangeTracker.Entries().Where(p => p.State == EntityState.Added))
+            foreach (var entry in dbContext.ChangeTracker.Entries().Where(p => p.State == EntityState.Added))
             {
-                #region 把null设置成对应属性类型的默认值
-                Type type = entry.Entity.GetType();
-                PropertyInfo[] props = ReflectionHelper.GetProperties(type);
-                foreach (PropertyInfo prop in props)
+                var type = entry.Entity.GetType();
+                var props = ReflectionHelper.GetProperties(type).Where(p => p.Name != "Id");
+                foreach (var prop in props)
                 {
                     object value = prop.GetValue(entry.Entity, null);
                     if (value == null)
                     {
-                        string sType = string.Empty;
-                        if (prop.PropertyType.GenericTypeArguments.Length > 0)
-                        {
-                            sType = prop.PropertyType.GenericTypeArguments[0].Name;
-                        }
-                        else
-                        {
-                            sType = prop.PropertyType.Name;
-                        }
-                        switch (sType)
-                        {
-                            case "Boolean":
-                                prop.SetValue(entry.Entity, false);
-                                break;
-                            case "Char":
-                                prop.SetValue(entry.Entity, 0);
-                                break;
-                            case "SByte":
-                                prop.SetValue(entry.Entity, 0);
-                                break;
-                            case "Byte":
-                                prop.SetValue(entry.Entity, 0);
-                                break;
-                            case "Int16":
-                                prop.SetValue(entry.Entity, 0);
-                                break;
-                            case "UInt16":
-                                prop.SetValue(entry.Entity, 0);
-                                break;
-                            case "Int32":
-                                prop.SetValue(entry.Entity, 0);
-                                break;
-                            case "UInt32":
-                                prop.SetValue(entry.Entity, 0);
-                                break;
-                            case "Int64":
-                                prop.SetValue(entry.Entity, (Int64)0);
-                                break;
-                            case "UInt64":
-                                prop.SetValue(entry.Entity, 0);
-                                break;
-                            case "Single":
-                                prop.SetValue(entry.Entity, 0);
-                                break;
-                            case "Double":
-                                prop.SetValue(entry.Entity, 0);
-                                break;
-                            case "Decimal":
-                                prop.SetValue(entry.Entity, (decimal)0);
-                                break;
-                            case "DateTime":
-                                prop.SetValue(entry.Entity, GlobalConstant.DefaultTime);
-                                break;
-                            case "String":
-                                prop.SetValue(entry.Entity, string.Empty);
-                                break;
-                            default: break;
-                        }
+                        string typeName = GetPropertyTypeName(prop);
+                        var defaultValue = GetPropertyDefaultValue(typeName);
+                        prop.SetValue(entry.Entity, defaultValue);
                     }
-                    else if (value.ToString() == DateTime.MinValue.ToString())
+                    else if (value.ToString() == DateTime.MinValue.ToString(CultureInfo.InvariantCulture))
                     {
                         // sql server datetime类型的的范围不到0001-01-01，所以转成1970-01-01
                         prop.SetValue(entry.Entity, GlobalConstant.DefaultTime);
                     }
                 }
-                #endregion
             }
+        }
+
+        private static string GetPropertyTypeName(PropertyInfo prop)
+        {
+            return prop.PropertyType.GenericTypeArguments.Length > 0 ? prop.PropertyType.GenericTypeArguments[0].Name : prop.PropertyType.Name;
+        }
+
+        private static object GetPropertyDefaultValue(string typeName)
+        {
+            return typeName switch
+            {
+                "Boolean" => default(bool),
+                "Char" => default(char),
+                "SByte" => default(sbyte),
+                "Byte" => default(char),
+                "Int16" => default(short),
+                "UInt16" => default(ushort),
+                "Int32" => default(int),
+                "UInt32" => default(uint),
+                "Int64" => default(long),
+                "UInt64" => default(ulong),
+                "Single" => default(float),
+                "Double" => default(double),
+                "Decimal" => default(decimal),
+                "DateTime" => GlobalConstant.DefaultTime,
+                "String" => string.Empty,
+                _ => default
+            };
         }
     }
 }
