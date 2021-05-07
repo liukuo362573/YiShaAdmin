@@ -37,10 +37,8 @@ namespace YiSha.Service.SystemManage
 
         public async Task<int> GetMaxSort()
         {
-            object result = await this.BaseRepository().FindObject("SELECT MAX(RoleSort) FROM SysRole");
-            int sort = result.ParseToInt();
-            sort++;
-            return sort;
+            var result = await BaseRepository().FindEntity<int>("SELECT MAX(RoleSort) FROM SysRole");
+            return result + 1;
         }
 
         public bool ExistRoleName(RoleEntity entity)
@@ -55,7 +53,7 @@ namespace YiSha.Service.SystemManage
             {
                 expression = expression.And(t => t.RoleName == entity.RoleName && t.Id != entity.Id);
             }
-            return this.BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
+            return this.BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
         }
         #endregion
 

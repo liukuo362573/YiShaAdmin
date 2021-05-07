@@ -18,109 +18,112 @@ namespace YiSha.Data
         public static DatabaseType DbType { get; set; }
 
         #region 构造函数
+
         /// <summary>
         /// 构造方法
         /// </summary>
-        public DbHelper(DbConnection _dbConnection)
+        public DbHelper(DbConnection dbConnection)
         {
-            dbConnection = _dbConnection;
-            dbCommand = dbConnection.CreateCommand();
+            DbConnection = dbConnection;
+            DbCommand = DbConnection.CreateCommand();
         }
 
-        public DbHelper(DbContext _dbContext, DbConnection _dbConnection)
+        public DbHelper(DbContext dbContext, DbConnection dbConnection)
         {
-            dbContext = _dbContext;
-            dbConnection = _dbConnection;
-            dbCommand = dbConnection.CreateCommand();
+            DbContext = dbContext;
+            DbConnection = dbConnection;
+            DbCommand = DbConnection.CreateCommand();
         }
-        #endregion
+
+        #endregion 构造函数
 
         #region 属性
-        private DbContext dbContext { get; set; }
+
+        private DbContext DbContext { get; }
+
         /// <summary>
         /// 数据库连接对象
         /// </summary>
-        private DbConnection dbConnection { get; set; }
+        private DbConnection DbConnection { get; }
+
         /// <summary>
         /// 执行命令对象
         /// </summary>
-        private DbCommand dbCommand { get; set; }
+        private DbCommand DbCommand { get; }
+
+        /// <summary>
+        /// 执行命令对象的行为
+        /// </summary>
+        private static CommandBehavior CommandBehavior => CommandBehavior.CloseConnection | CommandBehavior.KeyInfo | CommandBehavior.SequentialAccess | CommandBehavior.SingleResult;
+
         /// <summary>
         /// 关闭数据库连接
         /// </summary>
-        public void Close()
+        private void Close()
         {
-            if (dbConnection != null)
+            if (DbConnection != null)
             {
-                dbConnection.Close();
-                dbConnection.Dispose();
+                DbConnection.Close();
+                DbConnection.Dispose();
             }
-            if (dbCommand != null)
-            {
-                dbCommand.Dispose();
-            }
+            DbCommand?.Dispose();
         }
-        #endregion
+
+        #endregion 属性
 
         /// <summary>
         /// 执行SQL返回 DataReader
         /// </summary>
         /// <param name="cmdType">命令的类型</param>
-        /// <param name="strSql">Sql语句</param>
+        /// <param name="sql">Sql语句</param>
         /// <param name="dbParameter">Sql参数</param>
-        /// <returns></returns>
-        public async Task<IDataReader> ExecuteReadeAsync(CommandType cmdType, string strSql, params DbParameter[] dbParameter)
+        public async Task<IDataReader> ExecuteReadeAsync(CommandType cmdType, string sql, params DbParameter[] dbParameter)
         {
             try
             {
-                if (dbContext == null)
+                if (DbContext == null)
                 {
-                    PrepareCommand(dbConnection, dbCommand, null, cmdType, strSql, dbParameter);
-                    var reader = await dbCommand.ExecuteReaderAsync(CommandBehavior.CloseConnection);
-                    return reader;
+                    await PrepareCommand(DbConnection, DbCommand, null, cmdType, sql, dbParameter);
+                    return await DbCommand.ExecuteReaderAsync(CommandBehavior);
                 }
-                else
+
+                // 兼容EF Core的DbCommandInterceptor
+                var dependencies = ((IDatabaseFacadeDependenciesAccessor)DbContext.Database).Dependencies;
+                var relationalDatabaseFacade = (IRelationalDatabaseFacadeDependencies)dependencies;
+                var connection = relationalDatabaseFacade.RelationalConnection;
+                var logger = relationalDatabaseFacade.CommandLogger;
+                var commandId = Guid.NewGuid();
+
+                await PrepareCommand(DbConnection, DbCommand, null, cmdType, sql, dbParameter);
+
+                var startTime = DateTimeOffset.UtcNow;
+                var stopwatch = Stopwatch.StartNew();
+
+                var interceptionResult = logger == null
+                    ? default
+                    : await logger.CommandReaderExecutingAsync(connection,
+                                                               DbCommand,
+                                                               DbContext,
+                                                               Guid.NewGuid(),
+                                                               connection.ConnectionId,
+                                                               startTime);
+
+                var reader = interceptionResult.HasResult
+                    ? interceptionResult.Result
+                    : await DbCommand.ExecuteReaderAsync(CommandBehavior);
+
+                if (logger != null)
                 {
-                    // 兼容EF Core的DbCommandInterceptor
-                    var dependencies = ((IDatabaseFacadeDependenciesAccessor)dbContext.Database).Dependencies;
-                    var relationalDatabaseFacade = (IRelationalDatabaseFacadeDependencies)dependencies;
-                    var connection = relationalDatabaseFacade.RelationalConnection;
-                    var logger = relationalDatabaseFacade.CommandLogger;
-                    var commandId = Guid.NewGuid();
-
-                    PrepareCommand(dbConnection, dbCommand, null, cmdType, strSql, dbParameter);
-
-                    var startTime = DateTimeOffset.UtcNow;
-                    var stopwatch = Stopwatch.StartNew();
-
-                    var interceptionResult = logger == null
-                       ? default
-                       : await logger.CommandReaderExecutingAsync(
-                           connection,
-                           dbCommand,
-                           dbContext,
-                           Guid.NewGuid(),
-                           connection.ConnectionId,
-                           startTime);
-
-                    var reader = interceptionResult.HasResult
-                        ? interceptionResult.Result
-                        : await dbCommand.ExecuteReaderAsync(CommandBehavior.CloseConnection);
-
-                    if (logger != null)
-                    {
-                        reader = await logger.CommandReaderExecutedAsync(
-                            connection,
-                            dbCommand,
-                            dbContext,
-                            commandId,
-                            connection.ConnectionId,
-                            reader,
-                            startTime,
-                            stopwatch.Elapsed);
-                    }
-                    return reader;
+                    reader = await logger.CommandReaderExecutedAsync(connection,
+                                                                     DbCommand,
+                                                                     DbContext,
+                                                                     commandId,
+                                                                     connection.ConnectionId,
+                                                                     reader,
+                                                                     startTime,
+                                                                     stopwatch.Elapsed);
                 }
+                return reader;
             }
             catch (Exception)
             {
@@ -133,62 +136,58 @@ namespace YiSha.Data
         /// 执行查询，并返回查询所返回的结果集
         /// </summary>
         /// <param name="cmdType">命令的类型</param>
-        /// <param name="strSql">Sql语句</param>
+        /// <param name="sql">Sql语句</param>
         /// <param name="dbParameter">Sql参数</param>
-        /// <returns></returns>
-        public async Task<object> ExecuteScalarAsync(CommandType cmdType, string strSql, params DbParameter[] dbParameter)
+        public async Task<object> ExecuteScalarAsync(CommandType cmdType, string sql, params DbParameter[] dbParameter)
         {
             try
             {
-                if (dbContext == null)
+                if (DbContext == null)
                 {
-                    PrepareCommand(dbConnection, dbCommand, null, cmdType, strSql, dbParameter);
-                    var obj = await dbCommand.ExecuteScalarAsync();
-                    dbCommand.Parameters.Clear();
-                    return obj;
+                    await PrepareCommand(DbConnection, DbCommand, null, cmdType, sql, dbParameter);
+                    var result = await DbCommand.ExecuteScalarAsync();
+                    DbCommand.Parameters.Clear();
+                    return result;
                 }
-                else
+
+                // 兼容EF Core的DbCommandInterceptor
+                var dependencies = ((IDatabaseFacadeDependenciesAccessor)DbContext.Database).Dependencies;
+                var relationalDatabaseFacade = (IRelationalDatabaseFacadeDependencies)dependencies;
+                var connection = relationalDatabaseFacade.RelationalConnection;
+                var logger = relationalDatabaseFacade.CommandLogger;
+                var commandId = Guid.NewGuid();
+
+                await PrepareCommand(DbConnection, DbCommand, null, cmdType, sql, dbParameter);
+
+                var startTime = DateTimeOffset.UtcNow;
+                var stopwatch = Stopwatch.StartNew();
+
+                var interceptionResult = logger == null
+                    ? default
+                    : await logger.CommandScalarExecutingAsync(connection,
+                                                               DbCommand,
+                                                               DbContext,
+                                                               Guid.NewGuid(),
+                                                               connection.ConnectionId,
+                                                               startTime);
+
+                var obj = interceptionResult.HasResult
+                    ? interceptionResult.Result
+                    : await DbCommand.ExecuteScalarAsync();
+
+                if (logger != null)
                 {
-                    // 兼容EF Core的DbCommandInterceptor
-                    var dependencies = ((IDatabaseFacadeDependenciesAccessor)dbContext.Database).Dependencies;
-                    var relationalDatabaseFacade = (IRelationalDatabaseFacadeDependencies)dependencies;
-                    var connection = relationalDatabaseFacade.RelationalConnection;
-                    var logger = relationalDatabaseFacade.CommandLogger;
-                    var commandId = Guid.NewGuid();
-
-                    PrepareCommand(dbConnection, dbCommand, null, cmdType, strSql, dbParameter);
-
-                    var startTime = DateTimeOffset.UtcNow;
-                    var stopwatch = Stopwatch.StartNew();
-
-                    var interceptionResult = logger == null
-                       ? default
-                       : await logger.CommandScalarExecutingAsync(
-                           connection,
-                           dbCommand,
-                           dbContext,
-                           Guid.NewGuid(),
-                           connection.ConnectionId,
-                           startTime);
-
-                    var obj = interceptionResult.HasResult
-                        ? interceptionResult.Result
-                        : await dbCommand.ExecuteScalarAsync();
-
-                    if (logger != null)
-                    {
-                        obj = await logger.CommandScalarExecutedAsync(
-                            connection,
-                            dbCommand,
-                            dbContext,
-                            commandId,
-                            connection.ConnectionId,
-                            obj,
-                            startTime,
-                            stopwatch.Elapsed);
-                    }
-                    return obj;
+                    obj = await logger.CommandScalarExecutedAsync(connection,
+                                                                  DbCommand,
+                                                                  DbContext,
+                                                                  commandId,
+                                                                  connection.ConnectionId,
+                                                                  obj,
+                                                                  startTime,
+                                                                  stopwatch.Elapsed);
                 }
+
+                return obj;
             }
             catch (Exception)
             {
@@ -204,31 +203,30 @@ namespace YiSha.Data
         /// <param name="cmd">SqlCommand对象</param>
         /// <param name="isOpenTrans">DbTransaction对象</param>
         /// <param name="cmdType">执行命令的类型（存储过程或T-SQL，等等）</param>
-        /// <param name="strSql">存储过程名称或者T-SQL命令行, e.g. Select * from Products</param>
+        /// <param name="sql">存储过程名称或者T-SQL命令行, e.g. Select * from Products</param>
         /// <param name="dbParameter">执行命令所需的sql语句对应参数</param>
-        private void PrepareCommand(DbConnection conn, IDbCommand cmd, DbTransaction isOpenTrans, CommandType cmdType, string strSql, params DbParameter[] dbParameter)
+        private static async Task PrepareCommand(DbConnection conn, IDbCommand cmd, IDbTransaction isOpenTrans, CommandType cmdType, string sql, params DbParameter[] dbParameter)
         {
             if (conn.State != ConnectionState.Open)
             {
-                conn.Open();
+                await conn.OpenAsync();
             }
-            cmd.Connection = conn;
-            cmd.CommandText = strSql;
-            cmd.CommandTimeout = GlobalContext.SystemConfig.DBCommandTimeout;
             if (isOpenTrans != null)
             {
                 cmd.Transaction = isOpenTrans;
             }
-            cmd.CommandType = cmdType;
             if (dbParameter != null)
             {
                 cmd.Parameters.Clear();
-                dbParameter = DbParameterExtension.ToDbParameter(dbParameter);
                 foreach (var parameter in dbParameter)
                 {
                     cmd.Parameters.Add(parameter);
                 }
             }
+            cmd.Connection = conn;
+            cmd.CommandText = sql;
+            cmd.CommandType = cmdType;
+            cmd.CommandTimeout = GlobalContext.SystemConfig.DBCommandTimeout;
         }
     }
 }

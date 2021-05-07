@@ -69,7 +69,7 @@ namespace YiSha.Service.OrganizationManage
             {
                 expression = expression.And(t => t.UserName == entity.UserName && t.Id != entity.Id);
             }
-            return this.BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
+            return this.BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
         }
         #endregion
 

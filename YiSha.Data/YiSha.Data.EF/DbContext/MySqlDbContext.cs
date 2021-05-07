@@ -17,8 +17,8 @@ namespace YiSha.Data.EF
         public MySqlDbContext(string connectionString)
         {
             ConnectionString = connectionString;
-            var versions = TextHelper.SplitToArray<int>(GlobalContext.SystemConfig.DBVersion, '.');
-            ServerVersion = new MySqlServerVersion(new Version(versions[0], versions[1], versions[2]));
+            var versions = TextHelper.SplitToArray<int>(GlobalContext.SystemConfig.DbVersion, '.');
+            ServerVersion = new MySqlServerVersion(new Version(versions[0], versions[1]));
         }
 
         #region 重载

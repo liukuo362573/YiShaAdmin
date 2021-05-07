@@ -39,7 +39,7 @@ namespace YiSha.Service.SystemManage
             if (!tableName.IsEmpty())
             {
                 strSql.Append(" AND name like @TableName ");
-                parameter.Add(DbParameterExtension.CreateDbParameter("@TableName", '%' + tableName + '%'));
+                parameter.Add(DbParameterHelper.CreateDbParameter("@TableName", '%' + tableName + '%'));
             }
 
             IEnumerable<TableInfo> list = await this.BaseRepository().FindList<TableInfo>(strSql.ToString(), parameter.ToArray(), pagination);
@@ -65,7 +65,7 @@ namespace YiSha.Service.SystemManage
                             Where (a.id=b.id)AND(a.id=object_id(@TableName))   
                                   ORDER BY b.colid");
             var parameter = new List<DbParameter>();
-            parameter.Add(DbParameterExtension.CreateDbParameter("@TableName", tableName));
+            parameter.Add(DbParameterHelper.CreateDbParameter("@TableName", tableName));
             var list = await this.BaseRepository().FindList<TableFieldInfo>(strSql.ToString(), parameter.ToArray());
             return list.ToList();
         }

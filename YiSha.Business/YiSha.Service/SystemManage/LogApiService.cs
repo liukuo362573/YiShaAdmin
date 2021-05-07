@@ -90,28 +90,28 @@ namespace YiSha.Service.SystemManage
                 if (!string.IsNullOrEmpty(param.UserName))
                 {
                     strSql.Append(" AND b.UserName like @UserName");
-                    parameter.Add(DbParameterExtension.CreateDbParameter("@UserName", '%' + param.UserName + '%'));
+                    parameter.Add(DbParameterHelper.CreateDbParameter("@UserName", '%' + param.UserName + '%'));
                 }
                 if (param.LogStatus > -1)
                 {
                     strSql.Append(" AND a.LogStatus = @LogStatus");
-                    parameter.Add(DbParameterExtension.CreateDbParameter("@LogStatus", param.LogStatus));
+                    parameter.Add(DbParameterHelper.CreateDbParameter("@LogStatus", param.LogStatus));
                 }
                 if (!string.IsNullOrEmpty(param.ExecuteUrl))
                 {
                     strSql.Append(" AND a.ExecuteUrl like @ExecuteUrl");
-                    parameter.Add(DbParameterExtension.CreateDbParameter("@ExecuteUrl", '%' + param.ExecuteUrl + '%'));
+                    parameter.Add(DbParameterHelper.CreateDbParameter("@ExecuteUrl", '%' + param.ExecuteUrl + '%'));
                 }
                 if (!string.IsNullOrEmpty(param.StartTime.ParseToString()))
                 {
                     strSql.Append(" AND a.BaseCreateTime >= @StartTime");
-                    parameter.Add(DbParameterExtension.CreateDbParameter("@StartTime", param.StartTime));
+                    parameter.Add(DbParameterHelper.CreateDbParameter("@StartTime", param.StartTime));
                 }
                 if (!string.IsNullOrEmpty(param.EndTime.ParseToString()))
                 {
                     param.EndTime = param.EndTime.Value.Date.Add(new TimeSpan(23, 59, 59));
                     strSql.Append(" AND a.BaseCreateTime <= @EndTime");
-                    parameter.Add(DbParameterExtension.CreateDbParameter("@EndTime", param.EndTime));
+                    parameter.Add(DbParameterHelper.CreateDbParameter("@EndTime", param.EndTime));
                 }
             }
             return parameter;

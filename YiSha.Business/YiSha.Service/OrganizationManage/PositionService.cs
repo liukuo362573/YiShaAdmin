@@ -36,10 +36,8 @@ namespace YiSha.Service.OrganizationManage
 
         public async Task<int> GetMaxSort()
         {
-            object result = await this.BaseRepository().FindObject("SELECT MAX(PositionSort) FROM SysPosition");
-            int sort = result.ParseToInt();
-            sort++;
-            return sort;
+            var result =  await BaseRepository().FindEntity<int>("SELECT MAX(PositionSort) FROM SysPosition");
+            return result + 1;
         }
 
         public bool ExistPositionName(PositionEntity entity)
@@ -54,7 +52,7 @@ namespace YiSha.Service.OrganizationManage
             {
                 expression = expression.And(t => t.PositionName == entity.PositionName && t.Id != entity.Id);
             }
-            return this.BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
+            return this.BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
         }
         #endregion
 

@@ -33,10 +33,8 @@ namespace YiSha.Service.SystemManage
             {
                 where += " AND ParentId = " + parentId;
             }
-            object result = await this.BaseRepository().FindObject("SELECT MAX(MenuSort) FROM SysMenu where BaseIsDelete = 0 " + where);
-            int sort = result.ParseToInt();
-            sort++;
-            return sort;
+            var result = await BaseRepository().FindEntity<int>("SELECT MAX(MenuSort) FROM SysMenu where BaseIsDelete = 0 " + where);
+            return result + 1;
         }
 
         public bool ExistMenuName(MenuEntity entity)
@@ -51,7 +49,7 @@ namespace YiSha.Service.SystemManage
             {
                 expression = expression.And(t => t.MenuName == entity.MenuName && t.MenuType == entity.MenuType && t.Id != entity.Id);
             }
-            return this.BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
+            return this.BaseRepository().AsQueryable(expression).Count() > 0 ? true : false;
         }
         #endregion
 
