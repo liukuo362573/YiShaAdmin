@@ -5,20 +5,15 @@ using YiSha.Util.Model;
 
 namespace YiSha.Web.Code.State
 {
-    public class CookieHelper
+    public static class CookieHelper
     {
         /// <summary>
         /// 写cookie值
         /// </summary>
-        /// <param name="sName">名称</param>
-        /// <param name="sValue">值</param>
-        /// <param name="httpOnly">true代表浏览器的js不能获取到的cookie</param>
-        public void WriteCookie(string sName, string sValue, bool httpOnly = true)
+        public static void WriteCookie(string sName, string sValue)
         {
-            IHttpContextAccessor hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
-            CookieOptions option = new CookieOptions();
-            option.Expires = DateTime.Now.AddDays(30);
-            option.HttpOnly = httpOnly;
+            var hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
+            var option = new CookieOptions { Expires = DateTime.Now.AddDays(30) };
             hca?.HttpContext?.Response.Cookies.Append(sName, sValue, option);
         }
 
@@ -28,13 +23,10 @@ namespace YiSha.Web.Code.State
         /// <param name="sName">名称</param>
         /// <param name="sValue">值</param>
         /// <param name="expires">过期时间(分钟)</param>
-        /// <param name="httpOnly">true代表浏览器的js不能获取到的cookie</param>
-        public void WriteCookie(string sName, string sValue, int expires, bool httpOnly = true)
+        public static void WriteCookie(string sName, string sValue, int expires)
         {
-            IHttpContextAccessor hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
-            CookieOptions option = new CookieOptions();
-            option.Expires = DateTime.Now.AddMinutes(expires);
-            option.HttpOnly = httpOnly;
+            var hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
+            var option = new CookieOptions { Expires = DateTime.Now.AddMinutes(expires) };
             hca?.HttpContext?.Response.Cookies.Append(sName, sValue, option);
         }
 
@@ -43,9 +35,9 @@ namespace YiSha.Web.Code.State
         /// </summary>
         /// <param name="sName">名称</param>
         /// <returns>cookie值</returns>
-        public string GetCookie(string sName)
+        public static string GetCookie(string sName)
         {
-            IHttpContextAccessor hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
+            var hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
             return hca?.HttpContext?.Request.Cookies[sName];
         }
 
@@ -53,9 +45,9 @@ namespace YiSha.Web.Code.State
         /// 删除Cookie对象
         /// </summary>
         /// <param name="sName">Cookie对象名称</param>
-        public void RemoveCookie(string sName)
+        public static void RemoveCookie(string sName)
         {
-            IHttpContextAccessor hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
+            var hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
             hca?.HttpContext?.Response.Cookies.Delete(sName);
         }
     }

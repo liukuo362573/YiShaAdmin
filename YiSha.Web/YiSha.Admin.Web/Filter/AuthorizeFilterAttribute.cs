@@ -34,7 +34,7 @@ namespace YiSha.Admin.Web.Filter
             if (user == null || user.UserId == 0)
             {
                 // 防止用户选择记住我，页面一直在首页刷新
-                if (new CookieHelper().GetCookie("RememberMe").ParseToInt() == 1)
+                if (CookieHelper.GetCookie("RememberMe").ParseToInt() == 1)
                 {
                     Operator.Instance.RemoveCurrent();
                 }
