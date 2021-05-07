@@ -41,6 +41,7 @@ namespace YiSha.Util.Model
         public string VirtualDirectory { get; set; }
 
         public string DBProvider { get; set; }
+        public string DBVersion { get; set; }
         public string DBConnectionString { get; set; }
         /// <summary>
         ///  数据库超时间（秒）
