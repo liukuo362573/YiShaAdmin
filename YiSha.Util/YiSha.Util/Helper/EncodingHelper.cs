@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
-namespace YiSha.Util
+namespace YiSha.Util.Helper
 {
-    public class EncodingHelper
+    public static class EncodingHelper
     {
         private static string HexStr = "0123456789abcdef";
         private static char[] HexCharArr = HexStr.ToCharArray();
