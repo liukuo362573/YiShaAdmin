@@ -329,8 +329,8 @@ namespace YiSha.Business.OrganizationManage
         /// <returns></returns>
         private string EncryptUserPassword(string password, string salt)
         {
-            string md5Password = SecurityHelper.MD5Encrypt(password);
-            string encryptPassword = SecurityHelper.MD5Encrypt(md5Password + salt);
+            string md5Password = SecurityHelper.MD5ToHex(password);
+            string encryptPassword = SecurityHelper.MD5ToHex(md5Password.ToLower() + salt).ToLower();
             return encryptPassword;
         }
 
