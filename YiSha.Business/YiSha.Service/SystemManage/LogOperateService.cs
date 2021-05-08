@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Common;
 using System.Text;
 using System.Threading.Tasks;
@@ -104,14 +105,14 @@ namespace YiSha.Service.SystemManage
                     builder.Append(" AND a.ExecuteUrl like @ExecuteUrl");
                     parameter.Add(DbParameterHelper.CreateDbParameter("@ExecuteUrl", '%' + param.ExecuteUrl + '%'));
                 }
-                if (param.StartTime.ParseToString()?.Length > 0)
+                if (param.StartTime.HasValue)
                 {
                     builder.Append(" AND a.BaseCreateTime >= @StartTime");
                     parameter.Add(DbParameterHelper.CreateDbParameter("@StartTime", param.StartTime));
                 }
-                if (param.EndTime.ParseToString()?.Length > 0)
+                if (param.EndTime.HasValue)
                 {
-                    param.EndTime = (param.EndTime?.ToString("yyyy-MM-dd") + " 23:59:59").ParseToDateTime();
+                    param.EndTime = param.EndTime.Value.Date.Add(new TimeSpan(23, 59, 59));
                     builder.Append(" AND a.BaseCreateTime <= @EndTime");
                     parameter.Add(DbParameterHelper.CreateDbParameter("@EndTime", param.EndTime));
                 }

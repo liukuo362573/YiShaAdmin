@@ -128,13 +128,13 @@ namespace YiSha.Service.SystemManage
                 {
                     expression = expression.And(t => t.RoleStatus == param.RoleStatus);
                 }
-                if (param.StartTime.ParseToString()?.Length > 0)
+                if (param.StartTime.HasValue)
                 {
                     expression = expression.And(t => t.BaseModifyTime >= param.StartTime);
                 }
-                if (param.EndTime.ParseToString()?.Length > 0)
+                if (param.EndTime.HasValue)
                 {
-                    param.EndTime = (param.EndTime?.ToString("yyyy-MM-dd") + " 23:59:59").ParseToDateTime();
+                    param.EndTime = param.EndTime.Value.Date.Add(new TimeSpan(23, 59, 59));
                     expression = expression.And(t => t.BaseModifyTime <= param.EndTime);
                 }
             }
