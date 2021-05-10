@@ -125,18 +125,18 @@ namespace YiSha.Business.OrganizationManage
                                     #region 多次登录用同一个token
                                     if (string.IsNullOrEmpty(user.WebToken))
                                     {
-                                        user.WebToken = SecurityHelper.GetGuid();
+                                        user.WebToken = SecurityHelper.GetGuid(true);
                                     }
                                     #endregion
                                 }
                                 else
                                 {
-                                    user.WebToken = SecurityHelper.GetGuid();
+                                    user.WebToken = SecurityHelper.GetGuid(true);
                                 }
                                 break;
 
                             case (int)PlatformEnum.WebApi:
-                                user.ApiToken = SecurityHelper.GetGuid();
+                                user.ApiToken = SecurityHelper.GetGuid(true);
                                 break;
                         }
                         await GetUserBelong(user);

@@ -100,7 +100,7 @@ namespace YiSha.Util
             }
             string fileExtension = TextHelper.GetCustomValue(Path.GetExtension(file.FileName), ".png");
 
-            string newFileName = SecurityHelper.GetGuid() + fileExtension;
+            string newFileName = SecurityHelper.GetGuid(true) + fileExtension;
             string dir = "Resource" + Path.DirectorySeparatorChar + dirModule + Path.DirectorySeparatorChar + DateTime.Now.ToString("yyyy-MM-dd").Replace('-', Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
 
             string absoluteDir = Path.Combine(GlobalContext.HostingEnvironment.ContentRootPath, dir);
