@@ -16,7 +16,17 @@ namespace YiSha.Data
         /// <returns></returns>
         public static DbParameter CreateDbParameter()
         {
-            return new SqlParameter();
+            switch (DbHelper.DbType)
+            {
+                case DatabaseType.SqlServer:
+                    return new SqlParameter();
+                case DatabaseType.MySql:
+                    return new MySqlParameter();
+                case DatabaseType.Oracle:
+                    return new OracleParameter();
+                default:
+                    throw new Exception("数据库类型目前不支持！");
+            }
         }
 
         /// <summary>
