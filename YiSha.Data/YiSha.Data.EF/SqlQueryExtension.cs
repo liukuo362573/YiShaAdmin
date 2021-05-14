@@ -36,9 +36,7 @@ namespace YiSha.Data.EF
                         optionsBuilder.UseSqlServer(connection, options => options.EnableRetryOnFailure());
                         break;
                     case "MySql":
-                        var versions = TextHelper.SplitToArray<int>(GlobalContext.SystemConfig.DBVersion, '.');
-                        var serverVersion = new MySqlServerVersion(new Version(versions[0], versions[1]));
-                        optionsBuilder.UseMySql(connection, serverVersion, options => options.EnableRetryOnFailure());
+                        optionsBuilder.UseMySql(connection, ServerVersion.AutoDetect(connection.ConnectionString), options => options.EnableRetryOnFailure());
                         break;
                     case "Oracle": break;
                     default: throw new Exception("未找到数据库配置");

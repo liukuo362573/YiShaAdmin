@@ -12,20 +12,16 @@ namespace YiSha.Data.EF
     {
         private string ConnectionString { get; set; }
 
-        private ServerVersion ServerVersion { get; }
-
         public MySqlDbContext(string connectionString)
         {
             ConnectionString = connectionString;
-            var versions = TextHelper.SplitToArray<int>(GlobalContext.SystemConfig.DBVersion, '.');
-            ServerVersion = new MySqlServerVersion(new Version(versions[0], versions[1]));
         }
 
         #region 重载
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql(ConnectionString, ServerVersion, p => p.CommandTimeout(GlobalContext.SystemConfig.DBCommandTimeout));
+            optionsBuilder.UseMySql(ConnectionString, ServerVersion.AutoDetect(ConnectionString), p => p.CommandTimeout(GlobalContext.SystemConfig.DBCommandTimeout));
             optionsBuilder.AddInterceptors(new DbCommandCustomInterceptor());
         }
 

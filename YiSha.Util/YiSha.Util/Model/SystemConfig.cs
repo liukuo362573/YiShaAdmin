@@ -46,8 +46,6 @@
 
         public string DBProvider { get; set; }
 
-        public string DBVersion { get; set; }
-
         public string DBConnectionString { get; set; }
 
         /// <summary>
