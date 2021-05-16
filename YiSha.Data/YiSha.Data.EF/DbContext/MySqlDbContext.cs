@@ -29,7 +29,7 @@ namespace YiSha.Data.EF
         {
             Assembly entityAssembly = Assembly.Load(new AssemblyName("YiSha.Entity"));
             IEnumerable<Type> typesToRegister = entityAssembly.GetTypes().Where(p => !string.IsNullOrEmpty(p.Namespace))
-                                                              .Where(p => !string.IsNullOrEmpty(p.GetCustomAttribute<TableAttribute>()?.Name));
+                                                                         .Where(p => !string.IsNullOrEmpty(p.GetCustomAttribute<TableAttribute>()?.Name));
             foreach (Type type in typesToRegister)
             {
                 dynamic configurationInstance = Activator.CreateInstance(type);
