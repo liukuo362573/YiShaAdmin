@@ -18,16 +18,18 @@ namespace YiSha.Data.EF
         }
 
         #region 重载
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql(ConnectionString, p => p.CommandTimeout(GlobalContext.SystemConfig.DBCommandTimeout));
+            optionsBuilder.UseMySql(ConnectionString, ServerVersion.AutoDetect(ConnectionString), p => p.CommandTimeout(GlobalContext.SystemConfig.DBCommandTimeout));
             optionsBuilder.AddInterceptors(new DbCommandCustomInterceptor());
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             Assembly entityAssembly = Assembly.Load(new AssemblyName("YiSha.Entity"));
             IEnumerable<Type> typesToRegister = entityAssembly.GetTypes().Where(p => !string.IsNullOrEmpty(p.Namespace))
-                                                                         .Where(p => !string.IsNullOrEmpty(p.GetCustomAttribute<TableAttribute>()?.Name));
+                                                              .Where(p => !string.IsNullOrEmpty(p.GetCustomAttribute<TableAttribute>()?.Name));
             foreach (Type type in typesToRegister)
             {
                 dynamic configurationInstance = Activator.CreateInstance(type);
@@ -48,6 +50,7 @@ namespace YiSha.Data.EF
 
             base.OnModelCreating(modelBuilder);
         }
+
         #endregion
     }
 }
