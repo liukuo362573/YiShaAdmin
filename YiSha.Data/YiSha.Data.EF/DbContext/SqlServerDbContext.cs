@@ -2,36 +2,44 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Configuration;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using YiSha.Util;
 
 namespace YiSha.Data.EF
 {
-    public class SqlServerDbContext : DbContext, IDisposable
+    public class SqlServerDbContext : DbContext
     {
+        private static readonly ILoggerFactory _loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+
         private string ConnectionString { get; set; }
 
         #region 构造函数
+
         public SqlServerDbContext(string connectionString)
         {
             ConnectionString = connectionString;
         }
+
         #endregion
 
         #region 重载
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(ConnectionString, p => p.CommandTimeout(GlobalContext.SystemConfig.DBCommandTimeout));
             optionsBuilder.AddInterceptors(new DbCommandCustomInterceptor());
+            optionsBuilder.UseLoggerFactory(_loggerFactory);
+            // 这里需要注意，不能采用这种写法：optionsBuilder.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
+            // 会导致内存泄露的问题
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             Assembly entityAssembly = Assembly.Load(new AssemblyName("YiSha.Entity"));
             IEnumerable<Type> typesToRegister = entityAssembly.GetTypes().Where(p => !string.IsNullOrEmpty(p.Namespace))
-                                                                         .Where(p => !string.IsNullOrEmpty(p.GetCustomAttribute<TableAttribute>()?.Name));
+                                                              .Where(p => !string.IsNullOrEmpty(p.GetCustomAttribute<TableAttribute>()?.Name));
             foreach (Type type in typesToRegister)
             {
                 dynamic configurationInstance = Activator.CreateInstance(type);
@@ -52,6 +60,7 @@ namespace YiSha.Data.EF
 
             base.OnModelCreating(modelBuilder);
         }
+
         #endregion
     }
 }
