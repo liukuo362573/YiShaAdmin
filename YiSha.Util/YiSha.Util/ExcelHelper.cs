@@ -28,7 +28,7 @@ namespace YiSha.Util
         /// <param name="list"></param>
         public string ExportToExcel(string sFileName, string sHeaderText, List<T> list, string[] columns)
         {
-            sFileName = string.Format("{0}_{1}", SecurityHelper.GetGuid(), sFileName);
+            sFileName = string.Format("{0}_{1}", SecurityHelper.GetGuid(true), sFileName);
             string sRoot = GlobalContext.HostingEnvironment.ContentRootPath;
             string partDirectory = string.Format("Resource{0}Export{0}Excel", Path.DirectorySeparatorChar);
             string sDirectory = Path.Combine(sRoot, partDirectory);

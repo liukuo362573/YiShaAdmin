@@ -125,18 +125,18 @@ namespace YiSha.Business.OrganizationManage
                                     #region 多次登录用同一个token
                                     if (string.IsNullOrEmpty(user.WebToken))
                                     {
-                                        user.WebToken = SecurityHelper.GetGuid();
+                                        user.WebToken = SecurityHelper.GetGuid(true);
                                     }
                                     #endregion
                                 }
                                 else
                                 {
-                                    user.WebToken = SecurityHelper.GetGuid();
+                                    user.WebToken = SecurityHelper.GetGuid(true);
                                 }
                                 break;
 
                             case (int)PlatformEnum.WebApi:
-                                user.ApiToken = SecurityHelper.GetGuid();
+                                user.ApiToken = SecurityHelper.GetGuid(true);
                                 break;
                         }
                         await GetUserBelong(user);
@@ -329,8 +329,8 @@ namespace YiSha.Business.OrganizationManage
         /// <returns></returns>
         private string EncryptUserPassword(string password, string salt)
         {
-            string md5Password = SecurityHelper.MD5Encrypt(password);
-            string encryptPassword = SecurityHelper.MD5Encrypt(md5Password + salt);
+            string md5Password = SecurityHelper.MD5ToHex(password);
+            string encryptPassword = SecurityHelper.MD5ToHex(md5Password.ToLower() + salt).ToLower();
             return encryptPassword;
         }
 

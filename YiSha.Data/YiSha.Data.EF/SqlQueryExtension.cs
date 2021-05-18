@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using YiSha.Util;
@@ -38,22 +36,17 @@ namespace YiSha.Data.EF
                         optionsBuilder.UseSqlServer(connection, options => options.EnableRetryOnFailure());
                         break;
                     case "MySql":
-                        optionsBuilder.UseMySql(connection, options => options.EnableRetryOnFailure());
+                        optionsBuilder.UseMySql(connection, ServerVersion.AutoDetect(connection.ConnectionString), options => options.EnableRetryOnFailure());
                         break;
-                    case "Oracle":
-                        break;
-                    default:
-                        throw new Exception("未找到数据库配置");
+                    case "Oracle": break;
+                    default: throw new Exception("未找到数据库配置");
                 }
                 base.OnConfiguring(optionsBuilder);
             }
 
             protected override void OnModelCreating(ModelBuilder modelBuilder)
             {
-                modelBuilder.Entity<T>(p =>
-                {
-                    p.HasNoKey();
-                });
+                modelBuilder.Entity<T>(p => { p.HasNoKey(); });
                 base.OnModelCreating(modelBuilder);
             }
         }
