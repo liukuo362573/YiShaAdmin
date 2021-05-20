@@ -30,11 +30,6 @@ namespace YiSha.Business.AutoJob
         }
 
         #region 添加任务计划
-
-        /// <summary>
-        /// 添加任务计划
-        /// </summary>
-        /// <returns></returns>
         private void AddScheduleJob(List<AutoJobEntity> entityList)
         {
             try
@@ -72,15 +67,9 @@ namespace YiSha.Business.AutoJob
                 LogHelper.Error(ex);
             }
         }
-
         #endregion
 
         #region 清除任务计划
-
-        /// <summary>
-        /// 清楚任务计划
-        /// </summary>
-        /// <returns></returns>
         public void ClearScheduleJob()
         {
             try
@@ -92,7 +81,6 @@ namespace YiSha.Business.AutoJob
                 LogHelper.Error(ex);
             }
         }
-
         #endregion
     }
 }
