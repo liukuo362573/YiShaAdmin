@@ -5,6 +5,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using NPOI.HSSF.UserModel;
 using NPOI.XSSF.UserModel;
 using NPOI.SS.UserModel;
@@ -143,7 +144,7 @@ namespace YiSha.Util
                     newCell.CellStyle = contentStyle;
                     string drValue = properties[columnIndex].GetValue(list[rowIndex], null).ParseToString();
                     //根据单元格内容设定列宽
-                    int length = (System.Text.Encoding.UTF8.GetBytes(drValue).Length+1)*256;
+                    int length = Math.Min(253, Encoding.UTF8.GetBytes(drValue).Length + 1) * 256;
                     if (sheet.GetColumnWidth(columnIndex) < length && !drValue.IsEmpty())
                     {
                         sheet.SetColumnWidth(columnIndex, length);
@@ -306,7 +307,7 @@ namespace YiSha.Util
                                 case "System.Nullable`1[System.Double]":
                                     mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ParseToString().ParseToDouble());
                                     break;
-                                
+
                                 case "System.Single":
                                 case "System.Nullable`1[System.Single]":
                                     mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ParseToString().ParseToDouble());
