@@ -48,11 +48,11 @@ namespace YiSha.Service.OrganizationManage
             expression = expression.And(t => t.BaseIsDelete == 0);
             if (entity.Id.IsNullOrZero())
             {
-                expression = expression.And(t => t.DepartmentName == entity.DepartmentName);
+                expression = expression.And(t => t.DepartmentName == entity.DepartmentName && t.ParentId == entity.ParentId);
             }
             else
             {
-                expression = expression.And(t => t.DepartmentName == entity.DepartmentName && t.Id != entity.Id);
+                expression = expression.And(t => t.DepartmentName == entity.DepartmentName && t.ParentId == entity.ParentId && t.Id != entity.Id);
             }
             return this.BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
         }
