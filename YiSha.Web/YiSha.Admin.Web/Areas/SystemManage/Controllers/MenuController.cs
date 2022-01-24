@@ -56,6 +56,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         }
 
         [HttpGet]
+        [AuthorizeFilter("system:menu:view")]
         public async Task<IActionResult> GetFormJson(long id)
         {
             TData<MenuEntity> obj = await menuBLL.GetEntity(id);

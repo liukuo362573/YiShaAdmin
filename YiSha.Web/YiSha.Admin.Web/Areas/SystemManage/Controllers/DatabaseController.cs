@@ -41,6 +41,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
             TData<List<TableInfo>> obj = await databaseTableBLL.GetTableList(tableName);
             return Json(obj);
         }
+
         [HttpGet]
         [AuthorizeFilter("system:datatable:search")]
         public async Task<IActionResult> GetTablePageListJson(string tableName, Pagination pagination)
@@ -48,6 +49,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
             TData<List<TableInfo>> obj = await databaseTableBLL.GetTablePageList(tableName, pagination);
             return Json(obj);
         }
+
         [HttpGet]
         public async Task<IActionResult> GetTableFieldListJson(string tableName)
         {

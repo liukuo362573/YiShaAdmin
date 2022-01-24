@@ -46,6 +46,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         }
 
         [HttpGet]
+        [AuthorizeFilter("system:role:view")]
         public async Task<IActionResult> GetFormJson(long id)
         {
             TData<RoleEntity> obj = await roleBLL.GetEntity(id);

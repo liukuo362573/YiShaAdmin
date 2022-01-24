@@ -39,12 +39,14 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
             TData<List<AutoJobLogEntity>> obj = await autoJobLogBLL.GetList(param);
             return Json(obj);
         }
+
         [HttpGet]
         public async Task<IActionResult> GetPageListJson(AutoJobLogListParam param, Pagination pagination)
         {
             TData<List<AutoJobLogEntity>> obj = await autoJobLogBLL.GetPageList(param, pagination);
             return Json(obj);
         }
+
         [HttpGet]
         public async Task<IActionResult> GetFormJson(long id)
         {
@@ -60,6 +62,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
             TData<string> obj = await autoJobLogBLL.SaveForm(entity);
             return Json(obj);
         }
+
         [HttpPost]
         public async Task<IActionResult> DeleteFormJson(string ids)
         {

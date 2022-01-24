@@ -86,6 +86,7 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
         }
 
         [HttpGet]
+        [AuthorizeFilter("organization:user:view")]
         public async Task<IActionResult> GetFormJson(long id)
         {
             TData<UserEntity> obj = await userBLL.GetEntity(id);
@@ -93,6 +94,7 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
         }
 
         [HttpGet]
+        [AuthorizeFilter("organization:user:view")]
         public async Task<IActionResult> GetUserAuthorizeJson()
         {
             TData<UserAuthorizeInfo> obj = new TData<UserAuthorizeInfo>();

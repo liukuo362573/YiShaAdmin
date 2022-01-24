@@ -50,6 +50,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         }
 
         [HttpGet]
+        [AuthorizeFilter("system:autojob:view")]
         public async Task<IActionResult> GetFormJson(long id)
         {
             TData<AutoJobEntity> obj = await autoJobBLL.GetEntity(id);
