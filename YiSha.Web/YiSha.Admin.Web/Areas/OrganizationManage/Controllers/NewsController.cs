@@ -53,6 +53,7 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
         }
 
         [HttpGet]
+        [AuthorizeFilter("organization:news:view")]
         public async Task<IActionResult> GetFormJson(long id)
         {
             TData<NewsEntity> obj = await newsBLL.GetEntity(id);
