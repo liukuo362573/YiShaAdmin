@@ -43,6 +43,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         }
 
         [HttpGet]
+        [AuthorizeFilter("system:loglogin:view")]
         public async Task<IActionResult> GetFormJson(long id)
         {
             TData<LogLoginEntity> obj = await logLoginBLL.GetEntity(id);

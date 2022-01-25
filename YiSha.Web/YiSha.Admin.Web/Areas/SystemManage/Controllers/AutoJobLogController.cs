@@ -34,6 +34,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
 
         #region 获取数据
         [HttpGet]
+        [AuthorizeFilter("system:autojob:logview")]
         public async Task<IActionResult> GetListJson(AutoJobLogListParam param)
         {
             TData<List<AutoJobLogEntity>> obj = await autoJobLogBLL.GetList(param);
@@ -41,6 +42,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         }
 
         [HttpGet]
+        [AuthorizeFilter("system:autojob:logview")]
         public async Task<IActionResult> GetPageListJson(AutoJobLogListParam param, Pagination pagination)
         {
             TData<List<AutoJobLogEntity>> obj = await autoJobLogBLL.GetPageList(param, pagination);
@@ -48,6 +50,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         }
 
         [HttpGet]
+        [AuthorizeFilter("system:autojob:logview")]
         public async Task<IActionResult> GetFormJson(long id)
         {
             TData<AutoJobLogEntity> obj = await autoJobLogBLL.GetEntity(id);
@@ -57,6 +60,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
 
         #region 提交数据
         [HttpPost]
+        [AuthorizeFilter("system:autojob:logview")]
         public async Task<IActionResult> SaveFormJson(AutoJobLogEntity entity)
         {
             TData<string> obj = await autoJobLogBLL.SaveForm(entity);
@@ -64,6 +68,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         }
 
         [HttpPost]
+        [AuthorizeFilter("system:autojob:logview")]
         public async Task<IActionResult> DeleteFormJson(string ids)
         {
             TData obj = await autoJobLogBLL.DeleteForm(ids);

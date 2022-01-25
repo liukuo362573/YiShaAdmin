@@ -25,6 +25,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
             return View();
         }
 
+        [AuthorizeFilter("system:logoperate:view")]
         public IActionResult LogOperateDetail()
         {
             return View();

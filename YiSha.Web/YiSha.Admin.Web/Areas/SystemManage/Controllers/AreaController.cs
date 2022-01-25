@@ -52,6 +52,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         }
 
         [HttpGet]
+        [AuthorizeFilter("system:area:view")]
         public async Task<IActionResult> GetZtreeAreaListJson(AreaListParam param)
         {
             TData<List<ZtreeInfo>> obj = await areaBLL.GetZtreeAreaList(param);
@@ -59,6 +60,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         }
 
         [HttpGet]
+        [AuthorizeFilter("system:area:view")]
         public async Task<IActionResult> GetFormJson(long id)
         {
             TData<AreaEntity> obj = await areaBLL.GetEntity(id);
