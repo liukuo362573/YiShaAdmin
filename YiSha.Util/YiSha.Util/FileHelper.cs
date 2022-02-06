@@ -178,6 +178,12 @@ namespace YiSha.Util
         /// <returns></returns>
         public static TData<FileContentResult> DownloadFile(string filePath, int delete)
         {
+            filePath = filePath.Replace("../", string.Empty);
+            filePath = filePath.TrimStart('/');
+            if (!filePath.StartsWith("wwwroot") && !filePath.StartsWith("Resource"))
+            {
+                throw new Exception("非法访问");
+            }
             TData<FileContentResult> obj = new TData<FileContentResult>();
             string absoluteFilePath = GlobalContext.HostingEnvironment.ContentRootPath + Path.DirectorySeparatorChar + filePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
             byte[] fileBytes = File.ReadAllBytes(absoluteFilePath);
@@ -185,9 +191,10 @@ namespace YiSha.Util
             {
                 File.Delete(absoluteFilePath);
             }
+            // md5 值
             string fileNamePrefix = DateTime.Now.ToString("yyyyMMddHHmmss");
             string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
-            string title = string.Empty;
+            string title = fileNameWithoutExtension;
             if (fileNameWithoutExtension.Contains("_"))
             {
                 title = fileNameWithoutExtension.Split('_')[1].Trim();
