@@ -316,7 +316,7 @@
                         $("#" + targetId).find(".select2-container").width(280);
                     }
 
-                    if (setting.default != undefined) {
+                    if (setting.default != undefined && setting.class) {
                         target.ysComboBox("setValue", setting.default);
                     }
                 }
