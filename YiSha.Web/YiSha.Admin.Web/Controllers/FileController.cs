@@ -24,6 +24,7 @@ namespace YiSha.Admin.Web.Controllers
 
         #region 删除单个文件
         [HttpPost]
+        [AuthorizeFilter]
         public TData<string> DeleteFile(int fileModule, string filePath)
         {
             TData<string> obj = FileHelper.DeleteFile(fileModule, filePath);

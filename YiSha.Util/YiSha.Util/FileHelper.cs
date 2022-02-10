@@ -147,6 +147,8 @@ namespace YiSha.Util
                 obj.Message = "请先选择文件！";
                 return obj;
             }
+
+            filePath = FilterFilePath(filePath);
             filePath = "Resource" + Path.DirectorySeparatorChar + dirModule + Path.DirectorySeparatorChar + filePath;
             string absoluteDir = Path.Combine(GlobalContext.HostingEnvironment.ContentRootPath, filePath);
             try
@@ -178,8 +180,7 @@ namespace YiSha.Util
         /// <returns></returns>
         public static TData<FileContentResult> DownloadFile(string filePath, int delete)
         {
-            filePath = filePath.Replace("../", string.Empty);
-            filePath = filePath.TrimStart('/');
+            filePath = FilterFilePath(filePath);
             if (!filePath.StartsWith("wwwroot") && !filePath.StartsWith("Resource"))
             {
                 throw new Exception("非法访问");
@@ -300,6 +301,13 @@ namespace YiSha.Util
                 obj.Message = "只有文件扩展名是 " + allowExtension + " 的文件才能上传";
             }
             return obj;
+        }
+
+        public static string FilterFilePath(string filePath)
+        {
+            filePath = filePath.Replace("../", string.Empty);
+            filePath = filePath.TrimStart('/');
+            return filePath;
         }
     }
 }
