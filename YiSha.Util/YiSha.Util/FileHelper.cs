@@ -306,6 +306,7 @@ namespace YiSha.Util
         public static string FilterFilePath(string filePath)
         {
             filePath = filePath.Replace("../", string.Empty);
+            filePath = filePath.Replace("..", string.Empty);
             filePath = filePath.TrimStart('/');
             return filePath;
         }
