@@ -15,6 +15,7 @@ namespace YiSha.Admin.Web.Controllers
     {
         #region 上传单个文件
         [HttpPost]
+        [AuthorizeFilter]
         public async Task<TData<string>> UploadFile(int fileModule, IFormCollection fileList)
         {
             TData<string> obj = await FileHelper.UploadFile(fileModule, fileList.Files);
