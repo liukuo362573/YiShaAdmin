@@ -1,16 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="StackExchange.Redis" Version="2.0.600" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="StackExchange.Redis" Version="2.6.48" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\YiSha.Util\YiSha.Util\YiSha.Util.csproj" />
-    <ProjectReference Include="..\YiSha.Cache.Interface\YiSha.Cache.Interface.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\YiSha.Util\YiSha.Util\YiSha.Util.csproj" />
+		<ProjectReference Include="..\YiSha.Cache.Interface\YiSha.Cache.Interface.csproj" />
+	</ItemGroup>
 
 </Project>

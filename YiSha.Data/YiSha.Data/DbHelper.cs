@@ -18,6 +18,7 @@ namespace YiSha.Data
         public static DatabaseType DbType { get; set; }
 
         #region 构造函数
+
         /// <summary>
         /// 构造方法
         /// </summary>
@@ -33,18 +34,26 @@ namespace YiSha.Data
             dbConnection = _dbConnection;
             dbCommand = dbConnection.CreateCommand();
         }
+
         #endregion
 
         #region 属性
+
+        /// <summary>
+        /// 数据库上下文
+        /// </summary>
         private DbContext dbContext { get; set; }
+
         /// <summary>
         /// 数据库连接对象
         /// </summary>
         private DbConnection dbConnection { get; set; }
+
         /// <summary>
         /// 执行命令对象
         /// </summary>
         private DbCommand dbCommand { get; set; }
+
         /// <summary>
         /// 关闭数据库连接
         /// </summary>
@@ -63,12 +72,12 @@ namespace YiSha.Data
         #endregion
 
         /// <summary>
-        /// 执行SQL返回 DataReader
+        /// 执行查询
         /// </summary>
         /// <param name="cmdType">命令的类型</param>
         /// <param name="strSql">Sql语句</param>
         /// <param name="dbParameter">Sql参数</param>
-        /// <returns></returns>
+        /// <returns>DataReader</returns>
         public async Task<IDataReader> ExecuteReadeAsync(CommandType cmdType, string strSql, params DbParameter[] dbParameter)
         {
             try
@@ -101,7 +110,8 @@ namespace YiSha.Data
                            dbContext,
                            Guid.NewGuid(),
                            connection.ConnectionId,
-                           startTime);
+                           startTime,
+                           CommandSource.Unknown);
 
                     var reader = interceptionResult.HasResult
                         ? interceptionResult.Result
@@ -117,7 +127,8 @@ namespace YiSha.Data
                             connection.ConnectionId,
                             reader,
                             startTime,
-                            stopwatch.Elapsed);
+                            stopwatch.Elapsed,
+                            CommandSource.Unknown);
                     }
                     return reader;
                 }
@@ -130,12 +141,12 @@ namespace YiSha.Data
         }
 
         /// <summary>
-        /// 执行查询，并返回查询所返回的结果集
+        /// 执行查询首行首列
         /// </summary>
         /// <param name="cmdType">命令的类型</param>
         /// <param name="strSql">Sql语句</param>
         /// <param name="dbParameter">Sql参数</param>
-        /// <returns></returns>
+        /// <returns>首行首列</returns>
         public async Task<object> ExecuteScalarAsync(CommandType cmdType, string strSql, params DbParameter[] dbParameter)
         {
             try
@@ -169,7 +180,8 @@ namespace YiSha.Data
                            dbContext,
                            Guid.NewGuid(),
                            connection.ConnectionId,
-                           startTime);
+                           startTime,
+                           CommandSource.Unknown);
 
                     var obj = interceptionResult.HasResult
                         ? interceptionResult.Result
@@ -185,7 +197,8 @@ namespace YiSha.Data
                             connection.ConnectionId,
                             obj,
                             startTime,
-                            stopwatch.Elapsed);
+                            stopwatch.Elapsed,
+                            CommandSource.Unknown);
                     }
                     return obj;
                 }
