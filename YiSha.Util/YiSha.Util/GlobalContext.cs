@@ -11,24 +11,40 @@ using Microsoft.AspNetCore.Http;
 
 namespace YiSha.Util
 {
+    /// <summary>
+    /// 全局上下文
+    /// </summary>
     public class GlobalContext
     {
         /// <summary>
-        /// All registered service and class instance container. Which are used for dependency injection.
+        /// 所有注册服务和类实例容器。用于依赖注入
         /// </summary>
         public static IServiceCollection Services { get; set; }
 
         /// <summary>
-        /// Configured service provider.
+        /// 已配置的服务提供商
         /// </summary>
         public static IServiceProvider ServiceProvider { get; set; }
 
+        /// <summary>
+        /// 配置对象
+        /// </summary>
         public static IConfiguration Configuration { get; set; }
 
+        /// <summary>
+        /// 主机环境
+        /// </summary>
         public static IWebHostEnvironment HostingEnvironment { get; set; }
 
+        /// <summary>
+        /// 系统配置
+        /// </summary>
         public static SystemConfig SystemConfig { get; set; }
 
+        /// <summary>
+        /// 获取版本号
+        /// </summary>
+        /// <returns></returns>
         public static string GetVersion()
         {
             Version version = Assembly.GetEntryAssembly().GetName().Version;
