@@ -208,7 +208,7 @@ namespace YiSha.Util
                         }
                         else
                         {
-                            if (response.CharacterSet.ToLower().Trim() == "iso-8859-1")
+                            if (response.CharacterSet !=null && response.CharacterSet.ToLower().Trim() == "iso-8859-1")
                             {
                                 encoding = Encoding.GetEncoding("gbk");
                             }
