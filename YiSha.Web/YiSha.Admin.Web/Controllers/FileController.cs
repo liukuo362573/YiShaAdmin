@@ -11,31 +11,48 @@ using YiSha.Util.Model;
 
 namespace YiSha.Admin.Web.Controllers
 {
+    /// <summary>
+    /// 文件控制器
+    /// </summary>
     public class FileController : BaseController
     {
-        #region 上传单个文件
+        /// <summary>
+        /// 上传单个文件
+        /// </summary>
+        /// <param name="fileModule"></param>
+        /// <param name="fileList"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<TData<string>> UploadFile(int fileModule, IFormCollection fileList)
         {
             TData<string> obj = await FileHelper.UploadFile(fileModule, fileList.Files);
             return obj;
         }
-        #endregion
 
-        #region 删除单个文件
+        /// <summary>
+        /// 删除单个文件
+        /// </summary>
+        /// <param name="fileModule"></param>
+        /// <param name="filePath">文件路径</param>
+        /// <returns></returns>
         [HttpPost]
         public TData<string> DeleteFile(int fileModule, string filePath)
         {
             TData<string> obj = FileHelper.DeleteFile(fileModule, filePath);
             return obj;
         }
-        #endregion
 
-        #region 下载文件
+        /// <summary>
+        /// 下载文件
+        /// </summary>
+        /// <param name="filePath">文件路径</param>
+        /// <param name="delete"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         [HttpGet]
         public FileContentResult DownloadFile(string filePath, int delete = 1)
         {
-            TData<FileContentResult> obj = FileHelper.DownloadFile(filePath, delete);
+            var obj = FileHelper.DownloadFile(filePath, delete);
             if (obj.Tag == 1)
             {
                 return obj.Data;
@@ -45,6 +62,5 @@ namespace YiSha.Admin.Web.Controllers
                 throw new Exception("下载失败：" + obj.Message);
             }
         }
-        #endregion
     }
 }

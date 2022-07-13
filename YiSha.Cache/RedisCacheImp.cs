@@ -6,11 +6,15 @@ using StackExchange.Redis;
 using YiSha.Cache.Interface;
 using YiSha.Util;
 
-namespace YiSha.RedisCache
+namespace YiSha.Cache
 {
+    /// <summary>
+    /// RedisCacheImp
+    /// </summary>
     public class RedisCacheImp : ICache
     {
         private IDatabase cache;
+
         private ConnectionMultiplexer connection;
 
         public RedisCacheImp()
@@ -73,6 +77,7 @@ namespace YiSha.RedisCache
         }
 
         #region Hash
+
         public int SetHashFieldCache<T>(string key, string fieldKey, T fieldValue)
         {
             return SetHashFieldCache<T>(key, new Dictionary<string, T> { { fieldKey, fieldValue } });
@@ -146,6 +151,7 @@ namespace YiSha.RedisCache
             }
             return dict;
         }
+
         #endregion
 
         public void Dispose()
