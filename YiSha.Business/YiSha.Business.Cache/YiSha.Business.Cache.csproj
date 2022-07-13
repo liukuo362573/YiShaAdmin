@@ -8,7 +8,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\YiSha.Cache\YiSha.Cache.csproj" />
-		<ProjectReference Include="..\..\YiSha.Cache\YiSha.Cache.Factory\YiSha.Cache.Factory.csproj" />
 		<ProjectReference Include="..\..\YiSha.Entity\YiSha.Entity\YiSha.Entity.csproj" />
 		<ProjectReference Include="..\YiSha.Service\YiSha.Service.csproj" />
 	</ItemGroup>
