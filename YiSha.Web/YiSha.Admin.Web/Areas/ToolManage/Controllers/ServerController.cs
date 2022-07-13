@@ -16,6 +16,7 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
     public class ServerController : BaseController
     {
         #region 视图功能
+        [AuthorizeFilter("tool:server:view")]
         public IActionResult ServerIndex()
         {
             return View();
@@ -24,6 +25,7 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
 
         #region 获取数据
         [HttpGet]
+        [AuthorizeFilter("tool:server:view")]
         public IActionResult GetServerJson()
         {
             TData<ComputerInfo> obj = new TData<ComputerInfo>();

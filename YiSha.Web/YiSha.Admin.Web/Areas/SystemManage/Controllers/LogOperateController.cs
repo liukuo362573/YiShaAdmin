@@ -25,6 +25,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
             return View();
         }
 
+        [AuthorizeFilter("system:logoperate:view")]
         public IActionResult LogOperateDetail()
         {
             return View();
@@ -49,6 +50,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         }
 
         [HttpGet]
+        [AuthorizeFilter("system:logoperate:view")]
         public async Task<IActionResult> GetFormJson(long id)
         {
             TData<LogOperateEntity> obj = await logOperateBLL.GetEntity(id);

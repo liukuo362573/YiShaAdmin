@@ -49,6 +49,7 @@ namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
         }
 
         [HttpGet]
+        [AuthorizeFilter("organization:position:view")]
         public async Task<IActionResult> GetFormJson(long id)
         {
             TData<PositionEntity> obj = await positionBLL.GetEntity(id);

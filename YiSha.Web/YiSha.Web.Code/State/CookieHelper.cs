@@ -24,6 +24,7 @@ namespace YiSha.Util
             CookieOptions option = new CookieOptions();
             option.Expires = DateTime.Now.AddDays(30);
             option.HttpOnly = httpOnly;
+            option.SameSite = SameSiteMode.Lax;
             hca?.HttpContext?.Response.Cookies.Append(sName, sValue, option);
         }
 
@@ -40,6 +41,7 @@ namespace YiSha.Util
             CookieOptions option = new CookieOptions();
             option.Expires = DateTime.Now.AddMinutes(expires);
             option.HttpOnly = httpOnly;
+            option.SameSite = SameSiteMode.Lax;
             hca?.HttpContext?.Response.Cookies.Append(sName, sValue, option);
         }
 

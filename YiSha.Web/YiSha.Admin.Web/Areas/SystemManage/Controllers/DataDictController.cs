@@ -52,6 +52,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         }
 
         [HttpGet]
+        [AuthorizeFilter("system:datadict:view")]
         public async Task<IActionResult> GetFormJson(long id)
         {
             TData<DataDictEntity> obj = await dataDictBLL.GetEntity(id);
@@ -66,6 +67,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         }
 
         [HttpGet]
+        [AuthorizeFilter("system:datadict:view")]
         public async Task<IActionResult> GetDataDictListJson()
         {
             TData<List<DataDictInfo>> obj = await dataDictBLL.GetDataDictList();

@@ -129,7 +129,7 @@
                             </li>
                             <li class="divider"></li>
                             <li>
-                                <a href="@Url.Content("~/Home/LoginOff")">
+                                <a href="#" onclick="loginOff()">
                                     <i class="fa fa-sign-out"></i> 退出登录
                                 </a>
                             </li>
@@ -202,5 +202,20 @@
             btn: null,
             maxmin: false
         });
+    }
+
+    function loginOff() {
+         ys.ajax({
+                url: '@Url.Content("~/Home/LoginOffJson")',
+                type: "post",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                       location.href = '@Url.Content("~/Home/Index")';
+                    }
+                    else {
+                        ys.msgError(obj.Message);
+                    }
+                }
+            });
     }
 </script>
