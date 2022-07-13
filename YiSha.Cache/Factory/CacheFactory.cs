@@ -1,15 +1,26 @@
 ﻿using YiSha.Util;
 using YiSha.Cache.Interface;
-using YiSha.MemoryCache;
-using YiSha.RedisCache;
 
 namespace YiSha.Cache.Factory
 {
+    /// <summary>
+    /// 缓存工厂
+    /// </summary>
     public class CacheFactory
     {
+        /// <summary>
+        /// ICache
+        /// </summary>
         private static ICache cache = null;
+
+        /// <summary>
+        /// 锁
+        /// </summary>
         private static readonly object lockHelper = new object();
 
+        /// <summary>
+        /// ICache
+        /// </summary>
         public static ICache Cache
         {
             get
@@ -20,12 +31,17 @@ namespace YiSha.Cache.Factory
                     {
                         if (cache == null)
                         {
-                            switch (GlobalContext.SystemConfig.CacheProvider)
+                            var cacheProvider = GlobalContext.SystemConfig.CacheProvider;
+                            switch (cacheProvider.ToLower())
                             {
-                                case "Redis": cache = new RedisCacheImp(); break;
+                                case "redis":
+                                    cache = new RedisCacheImp();
+                                    break;
 
                                 default:
-                                case "Memory": cache = new MemoryCacheImp(); break;
+                                case "memory":
+                                    cache = new MemoryCacheImp();
+                                    break;
                             }
                         }
                     }

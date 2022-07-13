@@ -7,10 +7,11 @@
 		<AssemblyVersion>3.1.0.0</AssemblyVersion>
 		<FileVersion>3.1.0.0</FileVersion>
 		<Copyright>YiShaAdmin</Copyright>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<DocumentationFile>YiSha.Admin.WebApi.xml</DocumentationFile>
+		<DocumentationFile></DocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>
