@@ -23,6 +23,7 @@ namespace YiSha.Admin.Web.Controllers
         /// <param name="fileList"></param>
         /// <returns></returns>
         [HttpPost]
+        [AuthorizeFilter]
         public async Task<TData<string>> UploadFile(int fileModule, IFormCollection fileList)
         {
             TData<string> obj = await FileHelper.UploadFile(fileModule, fileList.Files);
@@ -36,6 +37,7 @@ namespace YiSha.Admin.Web.Controllers
         /// <param name="filePath">文件路径</param>
         /// <returns></returns>
         [HttpPost]
+        [AuthorizeFilter]
         public TData<string> DeleteFile(int fileModule, string filePath)
         {
             TData<string> obj = FileHelper.DeleteFile(fileModule, filePath);

@@ -33,6 +33,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
             TData<List<LogLoginEntity>> obj = await logLoginBLL.GetList(param);
             return Json(obj);
         }
+
         [HttpGet]
         [AuthorizeFilter("system:loglogin:search")]
         public async Task<IActionResult> GetPageListJson(LogLoginListParam param, Pagination pagination)
@@ -40,7 +41,9 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
             TData<List<LogLoginEntity>> obj = await logLoginBLL.GetPageList(param, pagination);
             return Json(obj);
         }
+
         [HttpGet]
+        [AuthorizeFilter("system:loglogin:view")]
         public async Task<IActionResult> GetFormJson(long id)
         {
             TData<LogLoginEntity> obj = await logLoginBLL.GetEntity(id);
@@ -56,6 +59,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
             TData obj = await logLoginBLL.DeleteForm(ids);
             return Json(obj);
         }
+
         [HttpPost]
         [AuthorizeFilter("system:loglogin:delete")]
         public async Task<IActionResult> RemoveAllFormJson()

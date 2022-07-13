@@ -145,6 +145,8 @@ namespace YiSha.Util
                 obj.Message = "请先选择文件！";
                 return obj;
             }
+
+            filePath = FilterFilePath(filePath);
             filePath = "Resource" + Path.DirectorySeparatorChar + dirModule + Path.DirectorySeparatorChar + filePath;
             string absoluteDir = Path.Combine(GlobalContext.HostingEnvironment.ContentRootPath, filePath);
             try
@@ -174,6 +176,11 @@ namespace YiSha.Util
         /// <returns></returns>
         public static TData<FileContentResult> DownloadFile(string filePath, int delete)
         {
+            filePath = FilterFilePath(filePath);
+            if (!filePath.StartsWith("wwwroot") && !filePath.StartsWith("Resource"))
+            {
+                throw new Exception("非法访问");
+            }
             TData<FileContentResult> obj = new TData<FileContentResult>();
             string absoluteFilePath = GlobalContext.HostingEnvironment.ContentRootPath + Path.DirectorySeparatorChar + filePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
             byte[] fileBytes = File.ReadAllBytes(absoluteFilePath);
@@ -181,9 +188,10 @@ namespace YiSha.Util
             {
                 File.Delete(absoluteFilePath);
             }
+            // md5 值
             string fileNamePrefix = DateTime.Now.ToString("yyyyMMddHHmmss");
             string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
-            string title = string.Empty;
+            string title = fileNameWithoutExtension;
             if (fileNameWithoutExtension.Contains("_"))
             {
                 title = fileNameWithoutExtension.Split('_')[1].Trim();
@@ -312,6 +320,14 @@ namespace YiSha.Util
                 obj.Message = "只有文件扩展名是 " + allowExtension + " 的文件才能上传";
             }
             return obj;
+        }
+
+        public static string FilterFilePath(string filePath)
+        {
+            filePath = filePath.Replace("../", string.Empty);
+            filePath = filePath.Replace("..", string.Empty);
+            filePath = filePath.TrimStart('/');
+            return filePath;
         }
     }
 }

@@ -67,13 +67,13 @@ namespace YiSha.Admin.Web.Controllers
             return View();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> LoginOff()
+        [HttpPost]
+        public async Task<IActionResult> LoginOffJson()
         {
-            #region 退出系统
             OperatorInfo user = await Operator.Instance.Current();
             if (user != null)
             {
+                #region 退出系统
                 // 如果不允许同一个用户多次登录，当用户登出的时候，就不在线了
                 if (!GlobalContext.SystemConfig.LoginMultiple)
                 {
@@ -95,9 +95,14 @@ namespace YiSha.Admin.Web.Controllers
 
                 Operator.Instance.RemoveCurrent();
                 new CookieHelper().RemoveCookie("RememberMe");
+
+                return Json(new TData { Tag = 1 });
+                #endregion
             }
-            #endregion
-            return View(nameof(Login));
+            else
+            {
+                throw new Exception("非法请求");
+            }
         }
 
         [HttpGet]

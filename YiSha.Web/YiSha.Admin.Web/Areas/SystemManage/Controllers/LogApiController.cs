@@ -21,11 +21,13 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         private LogApiBLL logApiBLL = new LogApiBLL();
 
         #region 视图功能
+        [AuthorizeFilter("system:logapi:view")]
         public IActionResult LogApiIndex()
         {
             return View();
         }
 
+        [AuthorizeFilter("system:logapi:view")]
         public IActionResult LogApiDetail()
         {
             return View();
@@ -34,6 +36,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
 
         #region 获取数据
         [HttpGet]
+        [AuthorizeFilter("system:logapi:search")]
         public async Task<IActionResult> GetListJson(LogApiListParam param)
         {
             TData<List<LogApiEntity>> obj = await logApiBLL.GetList(param);
@@ -41,6 +44,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         }
 
         [HttpGet]
+        [AuthorizeFilter("system:logapi:search")]
         public async Task<IActionResult> GetPageListJson(LogApiListParam param, Pagination pagination)
         {
             TData<List<LogApiEntity>> obj = await logApiBLL.GetPageList(param, pagination);
@@ -48,6 +52,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         }
 
         [HttpGet]
+        [AuthorizeFilter("system:logapi:view")]
         public async Task<IActionResult> GetFormJson(long id)
         {
             TData<LogApiEntity> obj = await logApiBLL.GetEntity(id);
@@ -57,6 +62,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
 
         #region 提交数据
         [HttpPost]
+        [AuthorizeFilter("system:logapi:delete")]
         public async Task<IActionResult> DeleteFormJson(string ids)
         {
             TData obj = await logApiBLL.DeleteForm(ids);
@@ -64,6 +70,7 @@ namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
         }
 
         [HttpPost]
+        [AuthorizeFilter("system:logapi:delete")]
         public async Task<IActionResult> RemoveAllFormJson()
         {
             TData obj = await logApiBLL.RemoveAllForm();
