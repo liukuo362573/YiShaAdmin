@@ -6,12 +6,26 @@ using Microsoft.Extensions.Caching.Memory;
 using YiSha.Cache.Interface;
 using YiSha.Util;
 
-namespace YiSha.MemoryCache
+namespace YiSha.Cache
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class MemoryCacheImp : ICache
     {
+        /// <summary>
+        /// 
+        /// </summary>
         private IMemoryCache cache = GlobalContext.ServiceProvider.GetService<IMemoryCache>();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="expireTime"></param>
+        /// <returns></returns>
         public bool SetCache<T>(string key, T value, DateTime? expireTime = null)
         {
             try
@@ -32,12 +46,23 @@ namespace YiSha.MemoryCache
             return false;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public bool RemoveCache(string key)
         {
             cache.Remove(key);
             return true;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public T GetCache<T>(string key)
         {
             var value = cache.Get<T>(key);
@@ -45,6 +70,7 @@ namespace YiSha.MemoryCache
         }
 
         #region Hash
+
         public int SetHashFieldCache<T>(string key, string fieldKey, T fieldValue)
         {
             return SetHashFieldCache<T>(key, new Dictionary<string, T> { { fieldKey, fieldValue } });
@@ -114,6 +140,7 @@ namespace YiSha.MemoryCache
             }
             return dict;
         }
+
         #endregion
     }
 }
