@@ -13,9 +13,11 @@ using YiSha.Util.Extension;
 
 namespace YiSha.Util
 {
-    public class FileHelper
+    /// <summary>
+    /// 文件帮助
+    /// </summary>
+    public static class FileHelper
     {
-        #region 创建文本文件
         /// <summary>
         /// 创建文件
         /// </summary>
@@ -32,9 +34,7 @@ namespace YiSha.Util
                 sw.Write(content);
             }
         }
-        #endregion
 
-        #region 上传单个文件
         /// <summary>
         /// 上传单个文件
         /// </summary>
@@ -128,9 +128,7 @@ namespace YiSha.Util
             }
             return obj;
         }
-        #endregion
 
-        #region 删除单个文件
         /// <summary>
         /// 删除单个文件
         /// </summary>
@@ -169,9 +167,7 @@ namespace YiSha.Util
             }
             return obj;
         }
-        #endregion
 
-        #region 下载文件
         /// <summary>
         /// 下载文件
         /// </summary>
@@ -208,9 +204,12 @@ namespace YiSha.Util
             obj.Tag = 1;
             return obj;
         }
-        #endregion 
 
-        #region GetContentType
+        /// <summary>
+        /// GetContentType
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static string GetContentType(string path)
         {
             var types = GetMimeTypes();
@@ -222,9 +221,11 @@ namespace YiSha.Util
             }
             return contentType;
         }
-        #endregion
 
-        #region GetMimeTypes
+        /// <summary>
+        /// GetMimeTypes
+        /// </summary>
+        /// <returns></returns>
         public static Dictionary<string, string> GetMimeTypes()
         {
             return new Dictionary<string, string>
@@ -242,8 +243,11 @@ namespace YiSha.Util
                 {".csv", "text/csv"}
             };
         }
-        #endregion
 
+        /// <summary>
+        /// CreateDirectory
+        /// </summary>
+        /// <param name="directory"></param>
         public static void CreateDirectory(string directory)
         {
             if (!Directory.Exists(directory))
@@ -252,6 +256,10 @@ namespace YiSha.Util
             }
         }
 
+        /// <summary>
+        /// DeleteDirectory
+        /// </summary>
+        /// <param name="filePath"></param>
         public static void DeleteDirectory(string filePath)
         {
             try
@@ -274,6 +282,11 @@ namespace YiSha.Util
             }
         }
 
+        /// <summary>
+        /// ConvertDirectoryToHttp
+        /// </summary>
+        /// <param name="directory"></param>
+        /// <returns></returns>
         public static string ConvertDirectoryToHttp(string directory)
         {
             directory = directory.ParseToString();
@@ -288,6 +301,12 @@ namespace YiSha.Util
             return http;
         }
 
+        /// <summary>
+        /// CheckFileExtension
+        /// </summary>
+        /// <param name="fileExtension"></param>
+        /// <param name="allowExtension"></param>
+        /// <returns></returns>
         public static TData CheckFileExtension(string fileExtension, string allowExtension)
         {
             TData obj = new TData();

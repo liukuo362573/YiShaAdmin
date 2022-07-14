@@ -14,7 +14,7 @@ namespace YiSha.Util
     /// <summary>
     /// 全局上下文
     /// </summary>
-    public class GlobalContext
+    public static class GlobalContext
     {
         /// <summary>
         /// 所有注册服务和类实例容器。用于依赖注入
