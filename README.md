@@ -2,10 +2,11 @@
  YiShaAdmin 基于.NET Core Web开发，借鉴了很多开源项目的优点，让你开发Web管理系统和移动端Api更简单，所以我也把她开源了。
  她可以用于所有的Web应用程序，例如网站管理后台、CMS、CRM、ERP、OA这类的系统和移动端Api。<br />
  
-| YiShaAdmin 版本 | .NET Core 版本 | 是否支持 |
-|:-----|:-----|:-----|
-| 3.1（当前） | 3.1 | 支持 |
-| 2.2 | 2.2 | 支持(Released) |
+| YiShaAdmin 版本 | .NET Core 版本 | 是否支持 | 链接 | Developer |
+|:-----|:-----|:-----|:-----|:-----|
+| 6.0 | 6.0 | 支持 | [YiShaAdmin-Net6](https://github.com/liukuo362573/YiShaAdmin/tree/YiShaAdmin-Net6) | [zgcwkj](https://github.com/zgcwkj) |
+| 3.1 | 3.1 | 支持 | 支持 |  |
+| 2.2 | 2.2 | 支持(Released) | | |
 
 
 ## 内置功能
