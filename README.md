@@ -6,7 +6,7 @@
 |:-----|:-----|:-----|:-----|:-----|
 | 6.0 | 6.0 | 支持 | [YiShaAdmin-Net6](https://github.com/liukuo362573/YiShaAdmin/tree/YiShaAdmin-Net6) | [zgcwkj](https://github.com/zgcwkj) |
 | 3.1 | 3.1 | 支持 | [YiShaAdmin-Net3.1](https://github.com/liukuo362573/YiShaAdmin/tree/master) |  |
-| 2.2 | 2.2 | 支持(Released) | | |
+| 2.2 | 2.2 | 支持 | [YiShaAdmin-Net2.2](https://github.com/liukuo362573/YiShaAdmin/releases/tag/v2.2)| |
 
 
 ## 内置功能
