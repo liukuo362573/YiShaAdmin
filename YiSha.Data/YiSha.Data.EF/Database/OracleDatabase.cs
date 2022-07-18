@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage;
+using YiSha.Data.EF.Extension;
 using YiSha.Util.Extension;
 
 namespace YiSha.Data.EF
@@ -17,13 +18,24 @@ namespace YiSha.Data.EF
     public class OracleDatabase : IDatabase
     {
         #region 构造函数
+
         /// <summary>
         /// 构造方法
         /// </summary>
-        public OracleDatabase(string connString)
+        public OracleDatabase()
         {
-            dbContext = new OracleDbContext(connString);
+            dbContext = new DbCommon(DbFactory.Connect);
         }
+
+        /// <summary>
+        /// 构造方法
+        /// </summary>
+        /// <param name="connect">连接字符串</param>
+        public OracleDatabase(string connect)
+        {
+            dbContext = new DbCommon(connect);
+        }
+
         #endregion
 
         #region 属性

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using YiSha.Util;
 
-namespace YiSha.Data.EF
+namespace YiSha.Data.EF.Extension
 {
     /// <summary>
     /// DbContext 扩展
@@ -134,7 +134,7 @@ namespace YiSha.Data.EF
                                 prop.SetValue(entry.Entity, 0);
                                 break;
                             case "Int64":
-                                prop.SetValue(entry.Entity, (Int64)0);
+                                prop.SetValue(entry.Entity, (long)0);
                                 break;
                             case "UInt64":
                                 prop.SetValue(entry.Entity, 0);
