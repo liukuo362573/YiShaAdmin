@@ -1,27 +1,8 @@
 ﻿@{
     Layout = "~/Views/Shared/_FormGray.cshtml";
 }
-
 <div class="wrapper wrapper-content">
     <div class="col-sm-12">
-        <div class="row">
-            <div class="col-sm-12">
-                <blockquote class="text-warning" style="font-size:14px">
-                    <p>
-                        领取阿里云通用云产品最高2000元优惠券(仅限新用户)<br />
-                        <a target="_blank" href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=8lbflttm">https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=8lbflttm</a>
-                    </p>
-                    <p>
-                        腾讯云产品优惠采购<br />
-                        <a target="_blank" href="https://curl.qcloud.com/2eG1xiw8">https://curl.qcloud.com/2eG1xiw8</a>
-                    </p>
-                    <p>
-                        UCloud全球大促<br />
-                        <a target="_blank" href="https://www.ucloud.cn/site/active/kuaijie.html?invitation_code=C1x021080B8D32A">https://www.ucloud.cn/site/active/kuaijie.html?invitation_code=C1x021080B8D32A</a>
-                    </p>
-                </blockquote>
-            </div>
-        </div>
 
         <div class="row">
             <div class="col-sm-6">
@@ -49,11 +30,8 @@
                                 <p></p>
                                 <p>
                                     <a class="btn btn-success btn-outline" href="https://github.com/liukuo362573/YiShaAdmin" target="_blank">
-                                        <i class="fa fa-github"> </i> 访问 github
+                                        <i class="fa fa-github"> </i> 访问 GitHub
                                     </a>
-                                    @*<a class="btn btn-white btn-bitbucket" href="#" target="_blank">
-                                            <i class="fa fa-home"></i> 访问主页
-                                        </a>*@
                                 </p>
                             </div>
                         </div>
@@ -99,8 +77,8 @@
                     </div>
                     <div class="ibox-content">
                         @*<p>
-                                <i class="fa fa-send-o"></i> 官网：<a href="#" target="_blank"></a>
-                            </p>*@
+                        <i class="fa fa-send-o"></i> 官网：<a href="#" target="_blank"></a>
+                        </p>*@
                         <p>
                             <i class="fa fa-qq"></i> QQ群：<s>满 428703155</s> <a href="https://jq.qq.com/?_wv=1027&k=MQ6OdF8v" target="_blank">851661600</a>
                         </p>
@@ -119,6 +97,21 @@
                     <div class="ibox-content no-padding">
                         <div class="panel-body">
                             <div class="panel-group" id="version">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h5 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#version" href="#v310">v6.0.0</a><code class="pull-right">2022.07.09</code>
+                                        </h5>
+                                    </div>
+                                    <div id="v310" class="panel-collapse collapse in">
+                                        <div class="panel-body">
+                                            <ol>
+                                                <li>1. 框架由.NET Core 3.1升级到.NET 6</li>
+                                                <li>2. 整理项目代码</li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h5 class="panel-title">
@@ -196,24 +189,23 @@
     </div>
 </div>
 <script>
-    $(function () {
-
-        $(".modal").appendTo("body"), $("[data-toggle=popover]").popover(), $(".collapse-link").click(function () {
+    $(function() {
+        $(".modal").appendTo("body"), $("[data-toggle=popover]").popover(), $(".collapse-link").click(function() {
             var div_ibox = $(this).closest("div.ibox"),
                 e = $(this).find("i"),
                 i = div_ibox.find("div.ibox-content");
             i.slideToggle(200),
                 e.toggleClass("fa-chevron-up").toggleClass("fa-chevron-down"),
                 div_ibox.toggleClass("").toggleClass("border-bottom"),
-                setTimeout(function () {
+                setTimeout(function() {
                     div_ibox.resize();
                 }, 50);
-        }), $(".close-link").click(function () {
+        }), $(".close-link").click(function() {
             var div_ibox = $(this).closest("div.ibox");
             div_ibox.remove()
         });
 
-        $('#pay-qrcode').click(function () {
+        $('#pay-qrcode').click(function() {
             var html = $(this).html();
             ys.openDialogContent({
                 content: html,
@@ -221,7 +213,5 @@
                 height: '321px'
             });
         });
-
     });
-
 </script>

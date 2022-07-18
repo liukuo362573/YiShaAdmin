@@ -13,6 +13,9 @@ using YiSha.Util;
 
 namespace YiSha.Data.EF
 {
+    /// <summary>
+    /// DbContext 扩展
+    /// </summary>
     public static class DbContextExtension
     {
         /// <summary>

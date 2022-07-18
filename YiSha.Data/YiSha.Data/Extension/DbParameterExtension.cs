@@ -1,8 +1,8 @@
-﻿using System;
-using System.Data.Common;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using MySqlConnector;
 using Oracle.ManagedDataAccess.Client;
+using System;
+using System.Data.Common;
 
 namespace YiSha.Data
 {

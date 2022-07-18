@@ -1,7 +1,13 @@
 ﻿namespace YiSha.Util.Model
 {
+    /// <summary>
+    /// 系统配置
+    /// </summary>
     public class SystemConfig
     {
+        /// <summary>
+        /// 系统配置
+        /// </summary>
         public SystemConfig()
         {
             DBSlowSqlLogTime = 5;
@@ -22,15 +28,18 @@
         /// </summary>
         public bool LoginMultiple { get; set; }
 
+        /// <summary>
+        /// 登录提供者
+        /// </summary>
         public string LoginProvider { get; set; }
 
         /// <summary>
-        /// Snow Flake Worker Id
+        /// 雪花 ID
         /// </summary>
         public int SnowFlakeWorkerId { get; set; }
 
         /// <summary>
-        /// api地址
+        /// Api地址
         /// </summary>
         public string ApiSite { get; set; }
 
@@ -44,8 +53,14 @@
         /// </summary>
         public string VirtualDirectory { get; set; }
 
+        /// <summary>
+        /// 数据库类型
+        /// </summary>
         public string DBProvider { get; set; }
 
+        /// <summary>
+        /// 数据库字符串
+        /// </summary>
         public string DBConnectionString { get; set; }
 
         /// <summary>
@@ -63,8 +78,14 @@
         /// </summary>
         public string DBBackup { get; set; }
 
+        /// <summary>
+        /// 缓存类型
+        /// </summary>
         public string CacheProvider { get; set; }
 
+        /// <summary>
+        /// 缓存字符串
+        /// </summary>
         public string RedisConnectionString { get; set; }
     }
 }
