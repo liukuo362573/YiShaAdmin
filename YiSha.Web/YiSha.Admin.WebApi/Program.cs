@@ -104,8 +104,8 @@ namespace YiSha.Admin.WebApi
                 //PropertyNamingPolicy = null 默认不改变
                 //PropertyNamingPolicy = JsonNamingPolicy.CamelCase 默认小写
                 //https://docs.microsoft.com/zh-cn/dotnet/api/system.text.json.jsonserializeroptions.propertynamingpolicy?view=net-6.0
-                //返回数据首字母小写
-                options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                //返回数据首字不变
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
             });
             //添加 Swagger
             services.AddSwaggerGen(options =>
