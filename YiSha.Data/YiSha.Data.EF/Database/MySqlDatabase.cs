@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using YiSha.Util.Extension;
+using YiSha.Data.EF.Extension;
 
 namespace YiSha.Data.EF
 {
@@ -21,9 +22,18 @@ namespace YiSha.Data.EF
         /// <summary>
         /// 构造方法
         /// </summary>
-        public MySqlDatabase(string connString)
+        public MySqlDatabase()
         {
-            dbContext = new MySqlDbContext(connString);
+            dbContext = new DbCommon(DbFactory.Connect);
+        }
+
+        /// <summary>
+        /// 构造方法
+        /// </summary>
+        /// <param name="connect">连接字符串</param>
+        public MySqlDatabase(string connect)
+        {
+            dbContext = new DbCommon(connect);
         }
         #endregion
 

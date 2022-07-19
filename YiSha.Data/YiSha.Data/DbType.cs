@@ -9,10 +9,21 @@ namespace YiSha.Data
     /// <summary>
     /// 数据库类型枚举
     /// </summary>
-    public enum DatabaseType
+    public enum DbType
     {
+        /// <summary>
+        /// SqlServer
+        /// </summary>
         SqlServer,
+
+        /// <summary>
+        /// SqlServer
+        /// </summary>
         MySql,
-        Oracle
+
+        /// <summary>
+        /// Oracle
+        /// </summary>
+        Oracle,
     }
 }

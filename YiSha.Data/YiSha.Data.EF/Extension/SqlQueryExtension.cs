@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using YiSha.Util;
 
-namespace YiSha.Data.EF
+namespace YiSha.Data.EF.Extension
 {
     public static class SqlQueryExtension
     {

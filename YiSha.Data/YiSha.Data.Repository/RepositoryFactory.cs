@@ -13,21 +13,16 @@ namespace YiSha.Data.Repository
         public Repository BaseRepository()
         {
             IDatabase database = null;
-            string dbType = GlobalContext.SystemConfig.DBProvider;
-            string dbConnectionString = GlobalContext.SystemConfig.DBConnectionString;
-            switch (dbType)
+            switch (DbFactory.Type)
             {
-                case "SqlServer":
-                    DbHelper.DbType = DatabaseType.SqlServer;
-                    database = new SqlServerDatabase(dbConnectionString);
+                case DbType.SqlServer:
+                    database = new SqlServerDatabase();
                     break;
-                case "MySql":
-                    DbHelper.DbType = DatabaseType.MySql;
-                    database = new MySqlDatabase(dbConnectionString);
+                case DbType.MySql:
+                    database = new MySqlDatabase();
                     break;
-                case "Oracle":
-                    DbHelper.DbType = DatabaseType.Oracle;
-                    // 支持Oracle或是更多数据库请参考上面SqlServer或是MySql的写法
+                case DbType.Oracle:
+                    database = new OracleDatabase();
                     break;
                 default:
                     throw new Exception("未找到数据库配置");

@@ -10,9 +10,9 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.ComponentModel;
 using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using YiSha.Util;
 using YiSha.Util.Extension;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace YiSha.Data
 {
@@ -247,7 +247,7 @@ namespace YiSha.Data
                     string value = string.Empty;
                     switch (parameter.DbType)
                     {
-                        case DbType.Date:
+                        case System.Data.DbType.Date:
                             value = parameter.Value.ParseToString().ParseToDateTime().ToString("yyyy-MM-dd HH:mm:ss");
                             break;
                         default:

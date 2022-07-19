@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.DataProtection;
+﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.FileProviders;
-using Newtonsoft.Json.Serialization;
 using NLog.Web;
 using System.Text;
 using System.Text.Encodings.Web;
+using System.Text.Json;
 using System.Text.Unicode;
 using YiSha.Admin.Web.Controllers;
 using YiSha.Util;
@@ -24,9 +23,20 @@ namespace YiSha.Admin.Web
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            //WebHost
+            builder.WebHost.ConfigureLogging(logging =>
+            {
+                logging?.ClearProviders();
+                logging?.SetMinimumLevel(LogLevel.Trace);
+            }).UseNLog();
+            //Service
             builder.Services.ConfigureServices();
+            //Injection
+            builder.Services.AddInjection();
+            //App
             var app = builder.Build();
             app.Configure();
+            //Run
             app.Run();
         }
 
@@ -37,20 +47,13 @@ namespace YiSha.Admin.Web
         /// <param name="services">服务</param>
         public static void ConfigureServices(this IServiceCollection services)
         {
-            //添加 Razor 页面的 Razor 运行时编译
+            //添加 Razor 运行时编译
             services.AddRazorPages().AddRazorRuntimeCompilation();
-            //添加单例
+            //添加编码单例
             services.AddSingleton(HtmlEncoder.Create(UnicodeRanges.All));
-            services.AddControllersWithViews(options =>
-            {
-                options.Filters.Add<GlobalExceptionFilter>();
-                options.ModelMetadataDetailsProviders.Add(new ModelBindingMetadataProvider());
-            }).AddNewtonsoftJson(options =>
-            {
-                //返回数据首字母不小写，CamelCasePropertyNamesContractResolver是小写
-                options.SerializerSettings.ContractResolver = new DefaultContractResolver();
-            });
-            //启用缓存功能
+            //注册编码
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            //添加 Memory 缓存功能
             services.AddMemoryCache();
             //启动 Session
             services.AddSession(options =>
@@ -67,17 +70,30 @@ namespace YiSha.Admin.Web
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            //添加 Options 模式
+            //添加 Options
             services.AddOptions();
             //添加 MVC
-            services.AddMvc();
+            var mvcBuilder = services.AddMvc();
             //添加 HttpContext 存取器 
             services.AddHttpContextAccessor();
             //启动数据保护服务
             var directoryInfo = new DirectoryInfo($"{GlobalConstant.GetRunPath}{Path.DirectorySeparatorChar}DataProtection");
             services.AddDataProtection().PersistKeysToFileSystem(directoryInfo);
-            //注册Encoding
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            //添加过滤器控制器
+            services.AddControllers(options =>
+            {
+                options.Filters.Add<GlobalExceptionFilter>();
+                options.ModelMetadataDetailsProviders.Add(new ModelBindingMetadataProvider());
+            });
+            //返回数据首字母
+            mvcBuilder.AddJsonOptions(options =>
+            {
+                //PropertyNamingPolicy = null 默认不改变
+                //PropertyNamingPolicy = JsonNamingPolicy.CamelCase 默认小写
+                //https://docs.microsoft.com/zh-cn/dotnet/api/system.text.json.jsonserializeroptions.propertynamingpolicy?view=net-6.0
+                //返回数据首字不变
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+            });
             //
             GlobalContext.Services = services;
         }
@@ -157,7 +173,7 @@ namespace YiSha.Admin.Web
             app.UseSession();
             //用户路由
             app.UseRouting();
-            //用户授权
+            //用户鉴权
             app.UseAuthorization();
             //用户默认路由
             app.UseEndpoints(endpoints =>
@@ -171,14 +187,13 @@ namespace YiSha.Admin.Web
             });
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-        WebHost.CreateDefaultBuilder(args)
-               .UseUrls("http://*:5000")
-               //.UseStartup<Startup>()
-               .ConfigureLogging(logging =>
-               {
-                   logging.ClearProviders();
-                   logging.SetMinimumLevel(LogLevel.Trace);
-               }).UseNLog();
+        /// <summary>
+        /// 依赖注入
+        /// </summary>
+        /// <param name="services">服务</param>
+        public static void AddInjection(this IServiceCollection services)
+        {
+
+        }
     }
 }

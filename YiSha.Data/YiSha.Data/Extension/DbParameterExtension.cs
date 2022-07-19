@@ -1,8 +1,8 @@
-﻿using System;
-using System.Data.Common;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using MySqlConnector;
 using Oracle.ManagedDataAccess.Client;
+using System;
+using System.Data.Common;
 
 namespace YiSha.Data
 {
@@ -15,15 +15,15 @@ namespace YiSha.Data
         /// <returns></returns>
         public static DbParameter CreateDbParameter()
         {
-            switch (DbHelper.DbType)
+            switch (DbFactory.Type)
             {
-                case DatabaseType.SqlServer:
+                case DbType.SqlServer:
                     return new SqlParameter();
 
-                case DatabaseType.MySql:
+                case DbType.MySql:
                     return new MySqlParameter();
 
-                case DatabaseType.Oracle:
+                case DbType.Oracle:
                     return new OracleParameter();
 
                 default:
@@ -54,9 +54,9 @@ namespace YiSha.Data
             int i = 0;
             int size = dbParameter.Length;
             DbParameter[] _dbParameter = null;
-            switch (DbHelper.DbType)
+            switch (DbFactory.Type)
             {
-                case DatabaseType.SqlServer:
+                case DbType.SqlServer:
                     _dbParameter = new SqlParameter[size];
                     while (i < size)
                     {
@@ -64,7 +64,7 @@ namespace YiSha.Data
                         i++;
                     }
                     break;
-                case DatabaseType.MySql:
+                case DbType.MySql:
                     _dbParameter = new MySqlParameter[size];
                     while (i < size)
                     {
@@ -72,7 +72,7 @@ namespace YiSha.Data
                         i++;
                     }
                     break;
-                case DatabaseType.Oracle:
+                case DbType.Oracle:
                     _dbParameter = new OracleParameter[size];
                     while (i < size)
                     {

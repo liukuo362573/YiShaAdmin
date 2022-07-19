@@ -12,11 +12,6 @@ namespace YiSha.Data
 {
     public class DbHelper
     {
-        /// <summary>
-        /// 数据库类型
-        /// </summary>
-        public static DatabaseType DbType { get; set; }
-
         #region 构造函数
 
         /// <summary>

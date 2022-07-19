@@ -15,14 +15,14 @@ using YiSha.Util.Extension;
 
 namespace YiSha.Data.EF
 {
-    public class SqlServerDatabase : IDatabase
+    public class OracleDatabase : IDatabase
     {
         #region 构造函数
 
         /// <summary>
         /// 构造方法
         /// </summary>
-        public SqlServerDatabase()
+        public OracleDatabase()
         {
             dbContext = new DbCommon(DbFactory.Connect);
         }
@@ -31,7 +31,7 @@ namespace YiSha.Data.EF
         /// 构造方法
         /// </summary>
         /// <param name="connect">连接字符串</param>
-        public SqlServerDatabase(string connect)
+        public OracleDatabase(string connect)
         {
             dbContext = new DbCommon(connect);
         }

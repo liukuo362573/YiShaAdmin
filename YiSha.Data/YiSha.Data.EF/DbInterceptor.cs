@@ -9,7 +9,7 @@ namespace YiSha.Data.EF
     /// <summary>
     /// Sql执行拦截器
     /// </summary>
-    public class DbCommandCustomInterceptor : DbCommandInterceptor
+    public class DbInterceptor : DbCommandInterceptor
     {
         public override async ValueTask<InterceptionResult<int>> NonQueryExecutingAsync(DbCommand command, CommandEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
         {
