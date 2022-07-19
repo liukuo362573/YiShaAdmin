@@ -69,10 +69,10 @@ namespace YiSha.Data.EF
             this.dbType = dbType;
             this.dbTimeout = dbTimeout == 10 ? dbTimeout : DbFactory.Timeout;
             this.dbConnect = dbConnect;
-            if (!string.IsNullOrEmpty(Regex.Match(DbFactory.Connect, "version=.+?;").Value))
+            if (!string.IsNullOrEmpty(Regex.Match(dbConnect, "version=.+?;").Value))
             {
-                this.dbConnect = DbFactory.Connect.Replace(Regex.Match(DbFactory.Connect, "version=.+?;").Value, "");
-                this.dbVersion = Convert.ToInt32(Regex.Match(DbFactory.Connect, "(?<=version=).+?(?=;)").Value);
+                this.dbConnect = dbConnect.Replace(Regex.Match(dbConnect, "version=.+?;").Value, "");
+                this.dbVersion = Convert.ToInt32(Regex.Match(dbConnect, "(?<=version=).+?(?=;)").Value);
             }
         }
 
@@ -88,10 +88,10 @@ namespace YiSha.Data.EF
             this.dbType = DbFactory.Type;
             this.dbTimeout = dbTimeout == 10 ? dbTimeout : DbFactory.Timeout;
             this.dbConnect = dbConnect;
-            if (!string.IsNullOrEmpty(Regex.Match(DbFactory.Connect, "version=.+?;").Value))
+            if (!string.IsNullOrEmpty(Regex.Match(dbConnect, "version=.+?;").Value))
             {
-                this.dbConnect = DbFactory.Connect.Replace(Regex.Match(DbFactory.Connect, "version=.+?;").Value, "");
-                this.dbVersion = Convert.ToInt32(Regex.Match(DbFactory.Connect, "(?<=version=).+?(?=;)").Value);
+                this.dbConnect = dbConnect.Replace(Regex.Match(dbConnect, "version=.+?;").Value, "");
+                this.dbVersion = Convert.ToInt32(Regex.Match(dbConnect, "(?<=version=).+?(?=;)").Value);
             }
         }
 
