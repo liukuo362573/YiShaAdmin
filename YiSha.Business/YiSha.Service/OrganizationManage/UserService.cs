@@ -16,7 +16,6 @@ using YiSha.Util.Model;
 using YiSha.Util.Extension;
 using YiSha.Enum;
 using YiSha.Entity;
-using YiSha.Data.EF;
 using YiSha.Service.SystemManage;
 
 namespace YiSha.Service.OrganizationManage

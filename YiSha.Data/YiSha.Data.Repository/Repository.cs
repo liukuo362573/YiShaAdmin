@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using YiSha.Util;
 using YiSha.Util.Model;
+using YiSha.DataBase.Interface;
 
 namespace YiSha.Data.Repository
 {
@@ -21,11 +22,14 @@ namespace YiSha.Data.Repository
     public class Repository
     {
         #region 构造函数
-        public IDatabase db;
-        public Repository(IDatabase iDatabase)
+
+        public IDataBase db;
+
+        public Repository(IDataBase iDatabase)
         {
             this.db = iDatabase;
         }
+
         #endregion
 
         #region 事务提交

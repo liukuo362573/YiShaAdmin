@@ -7,9 +7,11 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using YiSha.DataBase.Common;
+using YiSha.DataBase.Interceptor;
 using YiSha.Util;
 
-namespace YiSha.Data.EF
+namespace YiSha.DataBase
 {
     /// <summary>
     /// <b>数据库连接对象</b>
@@ -126,14 +128,6 @@ namespace YiSha.Data.EF
                     p.CommandTimeout(dbTimeout);
                 });
             }
-            ////SQLite
-            //else if (dbType == DbType.SQLite)
-            //{
-            //    optionsBuilder.UseSqlite(dbConnect, p =>
-            //    {
-            //        p.CommandTimeout(dbTimeout);
-            //    });
-            //}
             //数据库拦截器
             optionsBuilder.AddInterceptors(new DbInterceptor());
             //输出日志

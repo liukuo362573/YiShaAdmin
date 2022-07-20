@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage;
-using YiSha.Data.EF.Extension;
+using System.Collections;
+using System.Data;
+using System.Data.Common;
+using System.Linq.Expressions;
+using System.Text;
+using YiSha.DataBase.Extension;
+using YiSha.DataBase.Interface;
 using YiSha.Util.Extension;
 
-namespace YiSha.Data.EF
+namespace YiSha.DataBase
 {
-    public class OracleDatabase : IDatabase
+    public class OracleDatabase : IDataBase
     {
         #region 构造函数
 
@@ -54,7 +51,7 @@ namespace YiSha.Data.EF
         /// 事务开始
         /// </summary>
         /// <returns></returns>
-        public async Task<IDatabase> BeginTrans()
+        public async Task<IDataBase> BeginTrans()
         {
             DbConnection dbConnection = dbContext.Database.GetDbConnection();
             if (dbConnection.State == ConnectionState.Closed)
@@ -247,7 +244,7 @@ namespace YiSha.Data.EF
         public async Task<int> Update<T>(T entity) where T : class
         {
             dbContext.Set<T>().Attach(entity);
-            Hashtable props = DatabasesExtension.GetPropertyInfo<T>(entity);
+            Hashtable props = DbExtension.GetPropertyInfo<T>(entity);
             foreach (string item in props.Keys)
             {
                 if (item == "Id")
@@ -321,7 +318,7 @@ namespace YiSha.Data.EF
             using (var dbConnection = dbContext.Database.GetDbConnection())
             {
                 var reader = await new DbScalarExtension(dbContext, dbConnection).ExecuteReadeAsync(CommandType.Text, strSql, dbParameter);
-                return DatabasesExtension.IDataReaderToList<T>(reader);
+                return DbExtension.IDataReaderToList<T>(reader);
             }
         }
         public async Task<(int total, IEnumerable<T> list)> FindList<T>(string sort, bool isAsc, int pageSize, int pageIndex) where T : class, new()
@@ -344,13 +341,13 @@ namespace YiSha.Data.EF
             {
                 DbScalarExtension DbScalarExtension = new DbScalarExtension(dbContext, dbConnection);
                 StringBuilder sb = new StringBuilder();
-                sb.Append(DatabasePageExtension.SqlServerPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
+                sb.Append(DbPageExtension.SqlServerPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
                 object tempTotal = await DbScalarExtension.ExecuteScalarAsync(CommandType.Text, "SELECT COUNT(1) FROM (" + strSql + ") T", dbParameter);
                 int total = tempTotal.ParseToInt();
                 if (total > 0)
                 {
                     var reader = await DbScalarExtension.ExecuteReadeAsync(CommandType.Text, sb.ToString(), dbParameter);
-                    return (total, DatabasesExtension.IDataReaderToList<T>(reader));
+                    return (total, DbExtension.IDataReaderToList<T>(reader));
                 }
                 else
                 {
@@ -360,7 +357,7 @@ namespace YiSha.Data.EF
         }
         private async Task<(int total, IEnumerable<T> list)> FindList<T>(IQueryable<T> tempData, string sort, bool isAsc, int pageSize, int pageIndex)
         {
-            tempData = DatabasesExtension.AppendSort<T>(tempData, sort, isAsc);
+            tempData = DbExtension.AppendSort<T>(tempData, sort, isAsc);
             var total = tempData.Count();
             if (total > 0)
             {
@@ -385,7 +382,7 @@ namespace YiSha.Data.EF
             using (var dbConnection = dbContext.Database.GetDbConnection())
             {
                 var reader = await new DbScalarExtension(dbContext, dbConnection).ExecuteReadeAsync(CommandType.Text, strSql, dbParameter);
-                return DatabasesExtension.IDataReaderToDataTable(reader);
+                return DbExtension.IDataReaderToDataTable(reader);
             }
         }
         public async Task<(int total, DataTable)> FindTable(string strSql, string sort, bool isAsc, int pageSize, int pageIndex)
@@ -398,13 +395,13 @@ namespace YiSha.Data.EF
             {
                 DbScalarExtension DbScalarExtension = new DbScalarExtension(dbContext, dbConnection);
                 StringBuilder sb = new StringBuilder();
-                sb.Append(DatabasePageExtension.SqlServerPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
+                sb.Append(DbPageExtension.SqlServerPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
                 object tempTotal = await DbScalarExtension.ExecuteScalarAsync(CommandType.Text, "SELECT COUNT(1) FROM (" + strSql + ") T", dbParameter);
                 int total = tempTotal.ParseToInt();
                 if (total > 0)
                 {
                     var reader = await DbScalarExtension.ExecuteReadeAsync(CommandType.Text, sb.ToString(), dbParameter);
-                    DataTable resultTable = DatabasesExtension.IDataReaderToDataTable(reader);
+                    DataTable resultTable = DbExtension.IDataReaderToDataTable(reader);
                     return (total, resultTable);
                 }
                 else
@@ -430,7 +427,7 @@ namespace YiSha.Data.EF
             var dbConnection = dbContext.Database.GetDbConnection();
             var dbScalar = new DbScalarExtension(dbContext, dbConnection);
             var dataReader = dbScalar.ExecuteReade(CommandType.Text, strSql);
-            var dataList = DatabasesExtension.IDataReaderToList<T>(dataReader);
+            var dataList = DbExtension.IDataReaderToList<T>(dataReader);
             return dataList.FirstOrDefault();
         }
         #endregion

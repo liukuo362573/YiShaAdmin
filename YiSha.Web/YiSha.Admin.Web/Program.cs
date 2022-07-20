@@ -82,7 +82,7 @@ namespace YiSha.Admin.Web
             //添加过滤器控制器
             services.AddControllers(options =>
             {
-                options.Filters.Add<GlobalExceptionFilter>();
+                //options.Filters.Add<GlobalExceptionFilter>();
                 options.ModelMetadataDetailsProviders.Add(new ModelBindingMetadataProvider());
             });
             //返回数据首字母

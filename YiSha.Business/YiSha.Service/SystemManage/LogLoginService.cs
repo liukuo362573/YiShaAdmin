@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using YiSha.Data;
 using YiSha.Data.Repository;
+using YiSha.DataBase.Extension;
 using YiSha.Entity.SystemManage;
 using YiSha.Model;
 using YiSha.Model.Param.SystemManage;

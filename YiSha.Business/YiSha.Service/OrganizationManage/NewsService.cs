@@ -12,6 +12,7 @@ using YiSha.Data;
 using YiSha.Data.Repository;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Model.Param.OrganizationManage;
+using YiSha.DataBase.Extension;
 
 namespace YiSha.Service.OrganizationManage
 {

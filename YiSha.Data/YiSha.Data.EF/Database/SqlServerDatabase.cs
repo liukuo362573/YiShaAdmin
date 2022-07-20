@@ -320,7 +320,7 @@ namespace YiSha.Data.EF
         {
             using (var dbConnection = dbContext.Database.GetDbConnection())
             {
-                var reader = await new DbHelper(dbContext, dbConnection).ExecuteReadeAsync(CommandType.Text, strSql, dbParameter);
+                var reader = await new DbScalarExtension(dbContext, dbConnection).ExecuteReadeAsync(CommandType.Text, strSql, dbParameter);
                 return DatabasesExtension.IDataReaderToList<T>(reader);
             }
         }
@@ -342,14 +342,14 @@ namespace YiSha.Data.EF
         {
             using (var dbConnection = dbContext.Database.GetDbConnection())
             {
-                DbHelper dbHelper = new DbHelper(dbContext, dbConnection);
+                DbScalarExtension DbScalarExtension = new DbScalarExtension(dbContext, dbConnection);
                 StringBuilder sb = new StringBuilder();
                 sb.Append(DatabasePageExtension.SqlServerPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
-                object tempTotal = await dbHelper.ExecuteScalarAsync(CommandType.Text, "SELECT COUNT(1) FROM (" + strSql + ") T", dbParameter);
+                object tempTotal = await DbScalarExtension.ExecuteScalarAsync(CommandType.Text, "SELECT COUNT(1) FROM (" + strSql + ") T", dbParameter);
                 int total = tempTotal.ParseToInt();
                 if (total > 0)
                 {
-                    var reader = await dbHelper.ExecuteReadeAsync(CommandType.Text, sb.ToString(), dbParameter);
+                    var reader = await DbScalarExtension.ExecuteReadeAsync(CommandType.Text, sb.ToString(), dbParameter);
                     return (total, DatabasesExtension.IDataReaderToList<T>(reader));
                 }
                 else
@@ -384,7 +384,7 @@ namespace YiSha.Data.EF
         {
             using (var dbConnection = dbContext.Database.GetDbConnection())
             {
-                var reader = await new DbHelper(dbContext, dbConnection).ExecuteReadeAsync(CommandType.Text, strSql, dbParameter);
+                var reader = await new DbScalarExtension(dbContext, dbConnection).ExecuteReadeAsync(CommandType.Text, strSql, dbParameter);
                 return DatabasesExtension.IDataReaderToDataTable(reader);
             }
         }
@@ -396,14 +396,14 @@ namespace YiSha.Data.EF
         {
             using (var dbConnection = dbContext.Database.GetDbConnection())
             {
-                DbHelper dbHelper = new DbHelper(dbContext, dbConnection);
+                DbScalarExtension DbScalarExtension = new DbScalarExtension(dbContext, dbConnection);
                 StringBuilder sb = new StringBuilder();
                 sb.Append(DatabasePageExtension.SqlServerPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
-                object tempTotal = await dbHelper.ExecuteScalarAsync(CommandType.Text, "SELECT COUNT(1) FROM (" + strSql + ") T", dbParameter);
+                object tempTotal = await DbScalarExtension.ExecuteScalarAsync(CommandType.Text, "SELECT COUNT(1) FROM (" + strSql + ") T", dbParameter);
                 int total = tempTotal.ParseToInt();
                 if (total > 0)
                 {
-                    var reader = await dbHelper.ExecuteReadeAsync(CommandType.Text, sb.ToString(), dbParameter);
+                    var reader = await DbScalarExtension.ExecuteReadeAsync(CommandType.Text, sb.ToString(), dbParameter);
                     DataTable resultTable = DatabasesExtension.IDataReaderToDataTable(reader);
                     return (total, resultTable);
                 }
@@ -422,13 +422,16 @@ namespace YiSha.Data.EF
         {
             using (var dbConnection = dbContext.Database.GetDbConnection())
             {
-                return await new DbHelper(dbContext, dbConnection).ExecuteScalarAsync(CommandType.Text, strSql, dbParameter);
+                return await new DbScalarExtension(dbContext, dbConnection).ExecuteScalarAsync(CommandType.Text, strSql, dbParameter);
             }
         }
         public async Task<T> FindObject<T>(string strSql) where T : class
         {
-            var list = await dbContext.SqlQuery<T>(strSql);
-            return list.FirstOrDefault();
+            var dbConnection = dbContext.Database.GetDbConnection();
+            var dbScalar = new DbScalarExtension(dbContext, dbConnection);
+            var dataReader = dbScalar.ExecuteReade(CommandType.Text, strSql);
+            var dataList = DatabasesExtension.IDataReaderToList<T>(dataReader);
+            return dataList.FirstOrDefault();
         }
         #endregion
     }

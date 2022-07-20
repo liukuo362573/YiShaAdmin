@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using YiSha.Data;
 using YiSha.Data.Repository;
+using YiSha.DataBase.Extension;
 using YiSha.Model.Result.SystemManage;
 using YiSha.Util;
 using YiSha.Util.Extension;

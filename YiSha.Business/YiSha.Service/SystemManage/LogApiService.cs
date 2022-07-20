@@ -12,6 +12,7 @@ using YiSha.Model.Param.SystemManage;
 using System.Text;
 using System.Data.Common;
 using YiSha.Data;
+using YiSha.DataBase.Extension;
 
 namespace YiSha.Service.SystemManage
 {

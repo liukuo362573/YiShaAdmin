@@ -7,9 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\YiSha.Util\YiSha.Util\YiSha.Util.csproj" />
-		<ProjectReference Include="..\YiSha.Data.EF\YiSha.Data.EF.csproj" />
-		<ProjectReference Include="..\YiSha.Data\YiSha.Data.csproj" />
+	  <ProjectReference Include="..\..\YiSha.DataBase\YiSha.DataBase.csproj" />
 	</ItemGroup>
 
 </Project>

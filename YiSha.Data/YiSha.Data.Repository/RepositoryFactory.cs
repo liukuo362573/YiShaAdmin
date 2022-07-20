@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using YiSha.Data.EF;
+using YiSha.DataBase;
+using YiSha.DataBase.Interface;
 using YiSha.Util;
 
 namespace YiSha.Data.Repository
@@ -12,21 +13,13 @@ namespace YiSha.Data.Repository
     {
         public Repository BaseRepository()
         {
-            IDatabase database = null;
-            switch (DbFactory.Type)
+            IDataBase database = DbFactory.Type switch
             {
-                case DbType.SqlServer:
-                    database = new SqlServerDatabase();
-                    break;
-                case DbType.MySql:
-                    database = new MySqlDatabase();
-                    break;
-                case DbType.Oracle:
-                    database = new OracleDatabase();
-                    break;
-                default:
-                    throw new Exception("未找到数据库配置");
-            }
+                DbType.SqlServer => new SqlServerDatabase(),
+                DbType.MySql => new MySqlDatabase(),
+                DbType.Oracle => new OracleDatabase(),
+                _ => throw new Exception("未找到数据库配置"),
+            };
             return new Repository(database);
         }
     }

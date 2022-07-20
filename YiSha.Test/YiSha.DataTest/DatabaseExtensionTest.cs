@@ -9,6 +9,7 @@ using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Service.SystemManage;
 using YiSha.Util.Model;
+using YiSha.DataBase.Extension;
 
 namespace YiSha.DataTest
 {
@@ -61,9 +62,9 @@ namespace YiSha.DataTest
             int pageIndex = 1;
             RepositoryFactory repositoryFactory = new RepositoryFactory();
             var tempData = repositoryFactory.BaseRepository().db.dbContext.Set<RoleEntity>().AsQueryable();
-            tempData = DatabasesExtension.AppendSort<RoleEntity>(tempData, sort, isAsc);
+            tempData = DbExtension.AppendSort<RoleEntity>(tempData, sort, isAsc);
             tempData = tempData.Skip<RoleEntity>(pageSize * (pageIndex - 1)).Take<RoleEntity>(pageSize).AsQueryable();
-            string strSql = DatabasesExtension.GetSql<RoleEntity>(tempData);
+            string strSql = DbExtension.GetSql<RoleEntity>(tempData);
             Assert.IsTrue(strSql.ToUpper().Contains("SELECT"));
         }
     }
