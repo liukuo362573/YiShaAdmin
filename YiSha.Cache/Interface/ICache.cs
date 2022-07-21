@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-
-namespace YiSha.Cache.Interface
+﻿namespace YiSha.Cache.Interface
 {
     /// <summary>
     /// ICache

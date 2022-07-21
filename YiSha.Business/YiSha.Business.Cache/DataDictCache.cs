@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YiSha.Cache.Factory;
+﻿using YiSha.Cache.Factory;
 using YiSha.Entity.SystemManage;
 using YiSha.Service.SystemManage;
 

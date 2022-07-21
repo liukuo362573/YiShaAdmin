@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json.Linq;
 using System.Data;
+using System.Text;
 using System.Web;
-using Newtonsoft.Json.Linq;
-using YiSha.Data.Repository;
+using YiSha.Business.Cache;
 using YiSha.CodeGenerator.Model;
+using YiSha.DataBase;
+using YiSha.Entity;
+using YiSha.Entity.SystemManage;
+using YiSha.Enum.SystemManage;
 using YiSha.Util;
 using YiSha.Util.Extension;
 using YiSha.Util.Model;
-using YiSha.Entity.SystemManage;
-using YiSha.Enum.SystemManage;
-using YiSha.Business.Cache;
-using YiSha.Entity;
 
 namespace YiSha.CodeGenerator.Template
 {
@@ -189,7 +184,7 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("using YiSha.Util.Extension;");
             sb.AppendLine("using YiSha.Util.Model;");
             sb.AppendLine("using YiSha.Data;");
-            sb.AppendLine("using YiSha.Data.Repository;");
+            sb.AppendLine("using  YiSha.DataBase;");
             sb.AppendLine("using YiSha.Entity." + baseConfigModel.OutputConfig.OutputModule + ";");
             sb.AppendLine("using YiSha.Model.Param." + baseConfigModel.OutputConfig.OutputModule + ";");
 

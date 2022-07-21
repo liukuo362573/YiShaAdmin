@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YiSha.Util.Extension;
-
-namespace YiSha.Util
+﻿namespace YiSha.Util
 {
     /// <summary>
     /// 全局常数

@@ -1,5 +1,5 @@
-﻿using YiSha.Util;
-using YiSha.Cache.Interface;
+﻿using YiSha.Cache.Interface;
+using YiSha.Util;
 
 namespace YiSha.Cache.Factory
 {

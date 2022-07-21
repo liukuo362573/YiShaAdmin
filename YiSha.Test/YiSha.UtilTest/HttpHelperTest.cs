@@ -1,6 +1,5 @@
-﻿using System;
+﻿using NUnit.Framework;
 using System.Text;
-using NUnit.Framework;
 using YiSha.Util;
 
 namespace YiSha.UtilTest
@@ -16,7 +15,7 @@ namespace YiSha.UtilTest
             {
                 URL = "http://whois.pconline.com.cn/ip.jsp?ip=117.64.156.76",
                 ContentType = "text/html; charset=gb2312"
-            });           
+            });
         }
     }
 }

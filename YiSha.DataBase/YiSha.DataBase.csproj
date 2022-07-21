@@ -6,6 +6,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Database\**" />
+    <Compile Remove="Interface\**" />
+    <EmbeddedResource Remove="Database\**" />
+    <EmbeddedResource Remove="Interface\**" />
+    <None Remove="Database\**" />
+    <None Remove="Interface\**" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.7" />
 		<PackageReference Include="Oracle.EntityFrameworkCore" Version="6.21.61" />

@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YiSha.Business.Cache;
-using YiSha.Business.OrganizationManage;
-using YiSha.Entity.OrganizationManage;
+﻿using YiSha.Business.Cache;
 using YiSha.Entity.SystemManage;
 using YiSha.Enum;
 using YiSha.Enum.SystemManage;
 using YiSha.Model.Result;
-using YiSha.Service.SystemManage;
 using YiSha.Util.Extension;
 using YiSha.Util.Model;
 using YiSha.Web.Code;

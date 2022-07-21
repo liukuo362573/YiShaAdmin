@@ -1,11 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Storage;
-using System;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
-using System.Threading.Tasks;
 
 namespace YiSha.DataBase.Extension
 {

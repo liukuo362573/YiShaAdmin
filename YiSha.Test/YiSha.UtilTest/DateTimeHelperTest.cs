@@ -1,4 +1,3 @@
-using System;
 using NUnit.Framework;
 using YiSha.Util;
 using YiSha.Util.Extension;

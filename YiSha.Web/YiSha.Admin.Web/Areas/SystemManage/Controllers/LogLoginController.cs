@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using YiSha.Admin.Web.Controllers;
 using YiSha.Business.SystemManage;
 using YiSha.Entity.SystemManage;
-using YiSha.Util.Model;
 using YiSha.Model.Param.SystemManage;
+using YiSha.Util.Model;
 
 namespace YiSha.Admin.Web.Areas.SystemManage.Controllers
 {

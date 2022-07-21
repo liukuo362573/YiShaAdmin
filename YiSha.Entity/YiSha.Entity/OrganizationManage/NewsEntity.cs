@@ -1,8 +1,7 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations.Schema;
-using YiSha.Util;
 using YiSha.Entity.SystemManage;
+using YiSha.Util;
 
 namespace YiSha.Entity.OrganizationManage
 {

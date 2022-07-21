@@ -7,7 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\YiSha.Data\YiSha.Data.Repository\YiSha.Data.Repository.csproj" />
 		<ProjectReference Include="..\..\YiSha.Entity\YiSha.Entity\YiSha.Entity.csproj" />
 		<ProjectReference Include="..\..\YiSha.Entity\YiSha.Enum\YiSha.Enum.csproj" />
 		<ProjectReference Include="..\..\YiSha.Entity\YiSha.Model\YiSha.Model.csproj" />

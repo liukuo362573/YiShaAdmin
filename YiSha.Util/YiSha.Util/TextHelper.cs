@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using YiSha.Util.Extension;
+﻿using YiSha.Util.Extension;
 
 namespace YiSha.Util
 {

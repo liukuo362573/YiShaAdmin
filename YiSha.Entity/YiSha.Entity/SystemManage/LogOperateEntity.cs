@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace YiSha.Entity.SystemManage
 {
@@ -25,6 +20,6 @@ namespace YiSha.Entity.SystemManage
         public string UserName { get; set; }
         [NotMapped]
         public string DepartmentName { get; set; }
-      
+
     }
 }

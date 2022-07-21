@@ -1,14 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+﻿using NUnit.Framework;
 using System.Diagnostics;
-using NUnit.Framework;
+using YiSha.Business.SystemManage;
 using YiSha.Cache.Factory;
+using YiSha.Entity.SystemManage;
 using YiSha.Util;
 using YiSha.Util.Model;
-using YiSha.Business;
-using YiSha.Business.SystemManage;
-using YiSha.Entity.SystemManage;
 
 namespace YiSha.CacheTest
 {

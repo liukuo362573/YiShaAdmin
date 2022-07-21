@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace YiSha.Model.Param.SystemManage
+﻿namespace YiSha.Model.Param.SystemManage
 {
     public class DataDictDetailListParam
     {

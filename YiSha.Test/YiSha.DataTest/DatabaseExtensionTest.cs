@@ -1,15 +1,10 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using NUnit.Framework;
-using YiSha.Data;
-using YiSha.Data.Repository;
+﻿using NUnit.Framework;
+using YiSha.DataBase;
+using YiSha.DataBase.Extension;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Service.SystemManage;
 using YiSha.Util.Model;
-using YiSha.DataBase.Extension;
 
 namespace YiSha.DataTest
 {

@@ -1,9 +1,7 @@
-﻿using System.Data.Common;
-using System.Threading;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using System.Threading.Tasks;
-using YiSha.Util;
+﻿using Microsoft.EntityFrameworkCore.Diagnostics;
+using System.Data.Common;
 using YiSha.DataBase.Extension;
+using YiSha.Util;
 
 namespace YiSha.DataBase.Interceptor
 {

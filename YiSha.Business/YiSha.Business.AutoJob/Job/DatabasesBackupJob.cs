@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YiSha.Business.SystemManage;
+﻿using YiSha.Business.SystemManage;
 using YiSha.Util;
 using YiSha.Util.Model;
 

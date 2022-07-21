@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using YiSha.Admin.Web.Controllers;
 using YiSha.Business.SystemManage;
 using YiSha.Entity.SystemManage;

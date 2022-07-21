@@ -1,6 +1,5 @@
-﻿using System;
+﻿using System.Data.Common;
 using System.Text;
-using System.Data.Common;
 using YiSha.Util;
 
 namespace YiSha.DataBase.Extension

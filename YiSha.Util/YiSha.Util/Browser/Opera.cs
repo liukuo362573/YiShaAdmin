@@ -12,7 +12,7 @@ namespace YiSha.Util.Browser
             _agent = agent.ToLower();
             var opera12 = BrowserType.Opera.ToString().ToLower();
 
-            if(_agent.Contains(opera12))
+            if (_agent.Contains(opera12))
             {
                 var first = _agent.IndexOf("version");
                 var version = _agent.Substring(first + "version".Length + 1);

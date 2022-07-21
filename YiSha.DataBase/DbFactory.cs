@@ -1,4 +1,4 @@
-﻿using System;
+﻿using YiSha.DataBase.Enum;
 using YiSha.Util;
 
 namespace YiSha.DataBase

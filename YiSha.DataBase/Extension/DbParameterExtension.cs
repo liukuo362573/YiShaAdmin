@@ -1,8 +1,8 @@
 ﻿using Microsoft.Data.SqlClient;
 using MySqlConnector;
 using Oracle.ManagedDataAccess.Client;
-using System;
 using System.Data.Common;
+using YiSha.DataBase.Enum;
 
 namespace YiSha.DataBase.Extension
 {

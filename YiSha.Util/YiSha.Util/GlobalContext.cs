@@ -1,13 +1,11 @@
-﻿using System;
-using System.Reflection;
-using System.Text;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Hosting;
+using System.Reflection;
+using System.Text;
 using YiSha.Util.Model;
-using Microsoft.AspNetCore.Http;
 
 namespace YiSha.Util
 {

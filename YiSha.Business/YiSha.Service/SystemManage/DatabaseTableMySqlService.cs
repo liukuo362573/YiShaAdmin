@@ -1,6 +1,5 @@
 ﻿using System.Data.Common;
 using System.Text;
-using YiSha.Data.Repository;
 using YiSha.DataBase;
 using YiSha.DataBase.Extension;
 using YiSha.Entity.OrganizationManage;

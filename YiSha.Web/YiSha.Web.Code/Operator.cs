@@ -1,14 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using YiSha.Util;
-using YiSha.Util.Extension;
 using YiSha.Cache.Factory;
+using YiSha.Util;
 
 namespace YiSha.Web.Code
 {

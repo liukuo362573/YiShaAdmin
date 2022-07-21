@@ -7,51 +7,48 @@ using System.Data.Common;
 using System.Linq.Expressions;
 using System.Text;
 using YiSha.DataBase.Extension;
-using YiSha.DataBase.Interface;
 using YiSha.Util.Extension;
 
 namespace YiSha.DataBase
 {
-    public class OracleDatabase : IDataBase
+    /// <summary>
+    /// 存储库
+    /// </summary>
+    public class Repository
     {
         #region 构造函数
 
         /// <summary>
-        /// 构造方法
+        /// 实例时
         /// </summary>
-        public OracleDatabase()
+        public Repository()
         {
-            dbContext = new DbCommon(DbFactory.Connect);
-        }
-
-        /// <summary>
-        /// 构造方法
-        /// </summary>
-        /// <param name="connect">连接字符串</param>
-        public OracleDatabase(string connect)
-        {
-            dbContext = new DbCommon(connect);
+            this.dbContext = new DbCommon(DbFactory.Connect);
         }
 
         #endregion
 
         #region 属性
+
         /// <summary>
         /// 获取 当前使用的数据访问上下文对象
         /// </summary>
         public DbContext dbContext { get; set; }
+
         /// <summary>
         /// 事务对象
         /// </summary>
         public IDbContextTransaction dbContextTransaction { get; set; }
+
         #endregion
 
         #region 事务提交
+
         /// <summary>
         /// 事务开始
         /// </summary>
         /// <returns></returns>
-        public async Task<IDataBase> BeginTrans()
+        public async Task<Repository> BeginTrans()
         {
             DbConnection dbConnection = dbContext.Database.GetDbConnection();
             if (dbConnection.State == ConnectionState.Closed)
@@ -61,6 +58,7 @@ namespace YiSha.DataBase
             dbContextTransaction = await dbContext.Database.BeginTransactionAsync();
             return this;
         }
+
         /// <summary>
         /// 提交当前操作的结果
         /// </summary>
@@ -94,6 +92,7 @@ namespace YiSha.DataBase
                 }
             }
         }
+
         /// <summary>
         /// 把当前操作回滚成未提交状态
         /// </summary>
@@ -103,6 +102,7 @@ namespace YiSha.DataBase
             await this.dbContextTransaction.DisposeAsync();
             await this.Close();
         }
+
         /// <summary>
         /// 关闭连接 内存回收
         /// </summary>
@@ -110,9 +110,11 @@ namespace YiSha.DataBase
         {
             await dbContext.DisposeAsync();
         }
+
         #endregion
 
         #region 执行 SQL 语句
+
         public async Task<int> ExecuteBySql(string strSql)
         {
             if (dbContextTransaction == null)
@@ -125,6 +127,7 @@ namespace YiSha.DataBase
                 return dbContextTransaction == null ? await this.CommitTrans() : 0;
             }
         }
+
         public async Task<int> ExecuteBySql(string strSql, params DbParameter[] dbParameter)
         {
             if (dbContextTransaction == null)
@@ -137,6 +140,7 @@ namespace YiSha.DataBase
                 return dbContextTransaction == null ? await this.CommitTrans() : 0;
             }
         }
+
         public async Task<int> ExecuteByProc(string procName)
         {
             if (dbContextTransaction == null)
@@ -149,6 +153,7 @@ namespace YiSha.DataBase
                 return dbContextTransaction == null ? await this.CommitTrans() : 0;
             }
         }
+
         public async Task<int> ExecuteByProc(string procName, params DbParameter[] dbParameter)
         {
             if (dbContextTransaction == null)
@@ -161,14 +166,17 @@ namespace YiSha.DataBase
                 return dbContextTransaction == null ? await this.CommitTrans() : 0;
             }
         }
+
         #endregion
 
         #region 对象实体 添加、修改、删除
+
         public async Task<int> Insert<T>(T entity) where T : class
         {
             dbContext.Entry<T>(entity).State = EntityState.Added;
             return dbContextTransaction == null ? await this.CommitTrans() : 0;
         }
+
         public async Task<int> Insert<T>(IEnumerable<T> entities) where T : class
         {
             foreach (var entity in entities)
@@ -188,12 +196,14 @@ namespace YiSha.DataBase
             }
             return -1;
         }
+
         public async Task<int> Delete<T>(T entity) where T : class
         {
             dbContext.Set<T>().Attach(entity);
             dbContext.Set<T>().Remove(entity);
             return dbContextTransaction == null ? await this.CommitTrans() : 0;
         }
+
         public async Task<int> Delete<T>(IEnumerable<T> entities) where T : class
         {
             foreach (var entity in entities)
@@ -203,11 +213,13 @@ namespace YiSha.DataBase
             }
             return dbContextTransaction == null ? await this.CommitTrans() : 0;
         }
+
         public async Task<int> Delete<T>(Expression<Func<T, bool>> condition) where T : class, new()
         {
             IEnumerable<T> entities = await dbContext.Set<T>().Where(condition).ToListAsync();
             return entities.Count() > 0 ? await Delete(entities) : 0;
         }
+
         public async Task<int> Delete<T>(long keyValue) where T : class
         {
             IEntityType entityType = DbContextExtension.GetEntityType<T>(dbContext);
@@ -219,6 +231,7 @@ namespace YiSha.DataBase
             }
             return -1;
         }
+
         public async Task<int> Delete<T>(long[] keyValue) where T : class
         {
             IEntityType entityType = DbContextExtension.GetEntityType<T>(dbContext);
@@ -230,6 +243,7 @@ namespace YiSha.DataBase
             }
             return -1;
         }
+
         public async Task<int> Delete<T>(string propertyName, long propertyValue) where T : class
         {
             IEntityType entityType = DbContextExtension.GetEntityType<T>(dbContext);
@@ -252,6 +266,7 @@ namespace YiSha.DataBase
                     continue;
                 }
                 object value = dbContext.Entry(entity).Property(item).CurrentValue;
+
                 if (value != null)
                 {
                     dbContext.Entry(entity).Property(item).IsModified = true;
@@ -259,6 +274,7 @@ namespace YiSha.DataBase
             }
             return dbContextTransaction == null ? await this.CommitTrans() : 0;
         }
+
         public async Task<int> Update<T>(IEnumerable<T> entities) where T : class
         {
             foreach (var entity in entities)
@@ -267,12 +283,14 @@ namespace YiSha.DataBase
             }
             return dbContextTransaction == null ? await this.CommitTrans() : 0;
         }
+
         public async Task<int> UpdateAllField<T>(T entity) where T : class
         {
             dbContext.Set<T>().Attach(entity);
             dbContext.Entry(entity).State = EntityState.Modified;
             return dbContextTransaction == null ? await this.CommitTrans() : 0;
         }
+
         public async Task<int> Update<T>(Expression<Func<T, bool>> condition) where T : class, new()
         {
             IEnumerable<T> entities = await dbContext.Set<T>().Where(condition).ToListAsync();
@@ -283,13 +301,16 @@ namespace YiSha.DataBase
         {
             return dbContext.Set<T>().Where(condition);
         }
+
         #endregion
 
         #region 对象实体 查询
+
         public async Task<T> FindEntity<T>(object keyValue) where T : class
         {
             return await dbContext.Set<T>().FindAsync(keyValue);
         }
+
         public async Task<T> FindEntity<T>(Expression<Func<T, bool>> condition) where T : class, new()
         {
             return await dbContext.Set<T>().Where(condition).FirstOrDefaultAsync();
@@ -299,20 +320,24 @@ namespace YiSha.DataBase
         {
             return await dbContext.Set<T>().ToListAsync();
         }
+
         public async Task<IEnumerable<T>> FindList<T>(Func<T, object> orderby) where T : class, new()
         {
             var list = await dbContext.Set<T>().ToListAsync();
             list = list.OrderBy(orderby).ToList();
             return list;
         }
+
         public async Task<IEnumerable<T>> FindList<T>(Expression<Func<T, bool>> condition) where T : class, new()
         {
             return await dbContext.Set<T>().Where(condition).ToListAsync();
         }
+
         public async Task<IEnumerable<T>> FindList<T>(string strSql) where T : class
         {
             return await FindList<T>(strSql, null);
         }
+
         public async Task<IEnumerable<T>> FindList<T>(string strSql, DbParameter[] dbParameter) where T : class
         {
             using (var dbConnection = dbContext.Database.GetDbConnection())
@@ -321,28 +346,32 @@ namespace YiSha.DataBase
                 return DbExtension.IDataReaderToList<T>(reader);
             }
         }
+
         public async Task<(int total, IEnumerable<T> list)> FindList<T>(string sort, bool isAsc, int pageSize, int pageIndex) where T : class, new()
         {
             var tempData = dbContext.Set<T>().AsQueryable();
             return await FindList<T>(tempData, sort, isAsc, pageSize, pageIndex);
         }
+
         public async Task<(int total, IEnumerable<T> list)> FindList<T>(Expression<Func<T, bool>> condition, string sort, bool isAsc, int pageSize, int pageIndex) where T : class, new()
         {
             var tempData = dbContext.Set<T>().Where(condition);
             return await FindList<T>(tempData, sort, isAsc, pageSize, pageIndex);
         }
+
         public async Task<(int total, IEnumerable<T>)> FindList<T>(string strSql, string sort, bool isAsc, int pageSize, int pageIndex) where T : class
         {
             return await FindList<T>(strSql, null, sort, isAsc, pageSize, pageIndex);
         }
+
         public async Task<(int total, IEnumerable<T>)> FindList<T>(string strSql, DbParameter[] dbParameter, string sort, bool isAsc, int pageSize, int pageIndex) where T : class
         {
             using (var dbConnection = dbContext.Database.GetDbConnection())
             {
                 DbScalarExtension DbScalarExtension = new DbScalarExtension(dbContext, dbConnection);
                 StringBuilder sb = new StringBuilder();
-                sb.Append(DbPageExtension.SqlServerPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
-                object tempTotal = await DbScalarExtension.ExecuteScalarAsync(CommandType.Text, "SELECT COUNT(1) FROM (" + strSql + ") T", dbParameter);
+                sb.Append(DbPageExtension.MySqlPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
+                object tempTotal = await DbScalarExtension.ExecuteScalarAsync(CommandType.Text, DbPageExtension.GetCountSql(strSql), dbParameter);
                 int total = tempTotal.ParseToInt();
                 if (total > 0)
                 {
@@ -355,6 +384,7 @@ namespace YiSha.DataBase
                 }
             }
         }
+
         private async Task<(int total, IEnumerable<T> list)> FindList<T>(IQueryable<T> tempData, string sort, bool isAsc, int pageSize, int pageIndex)
         {
             tempData = DbExtension.AppendSort<T>(tempData, sort, isAsc);
@@ -370,13 +400,16 @@ namespace YiSha.DataBase
                 return (total, new List<T>());
             }
         }
+
         #endregion
 
         #region 数据源查询
+
         public async Task<DataTable> FindTable(string strSql)
         {
             return await FindTable(strSql, null);
         }
+
         public async Task<DataTable> FindTable(string strSql, DbParameter[] dbParameter)
         {
             using (var dbConnection = dbContext.Database.GetDbConnection())
@@ -385,17 +418,19 @@ namespace YiSha.DataBase
                 return DbExtension.IDataReaderToDataTable(reader);
             }
         }
+
         public async Task<(int total, DataTable)> FindTable(string strSql, string sort, bool isAsc, int pageSize, int pageIndex)
         {
             return await FindTable(strSql, null, sort, isAsc, pageSize, pageIndex);
         }
+
         public async Task<(int total, DataTable)> FindTable(string strSql, DbParameter[] dbParameter, string sort, bool isAsc, int pageSize, int pageIndex)
         {
             using (var dbConnection = dbContext.Database.GetDbConnection())
             {
                 DbScalarExtension DbScalarExtension = new DbScalarExtension(dbContext, dbConnection);
                 StringBuilder sb = new StringBuilder();
-                sb.Append(DbPageExtension.SqlServerPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
+                sb.Append(DbPageExtension.MySqlPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
                 object tempTotal = await DbScalarExtension.ExecuteScalarAsync(CommandType.Text, "SELECT COUNT(1) FROM (" + strSql + ") T", dbParameter);
                 int total = tempTotal.ParseToInt();
                 if (total > 0)
@@ -415,6 +450,7 @@ namespace YiSha.DataBase
         {
             return await FindObject(strSql, null);
         }
+
         public async Task<object> FindObject(string strSql, DbParameter[] dbParameter)
         {
             using (var dbConnection = dbContext.Database.GetDbConnection())
@@ -422,6 +458,7 @@ namespace YiSha.DataBase
                 return await new DbScalarExtension(dbContext, dbConnection).ExecuteScalarAsync(CommandType.Text, strSql, dbParameter);
             }
         }
+
         public async Task<T> FindObject<T>(string strSql) where T : class
         {
             var dbConnection = dbContext.Database.GetDbConnection();
@@ -430,6 +467,7 @@ namespace YiSha.DataBase
             var dataList = DbExtension.IDataReaderToList<T>(dataReader);
             return dataList.FirstOrDefault();
         }
+
         #endregion
     }
 }

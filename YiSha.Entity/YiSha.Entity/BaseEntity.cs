@@ -1,11 +1,9 @@
-﻿using System;
-using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Newtonsoft.Json;
 using System.ComponentModel;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
+using YiSha.IdGenerator;
 using YiSha.Util;
 using YiSha.Web.Code;
-using YiSha.IdGenerator;
 
 namespace YiSha.Entity
 {
@@ -128,7 +126,7 @@ namespace YiSha.Entity
         public new async Task Create()
         {
             this.BaseIsDelete = 0;
-         
+
             await base.Create();
 
             await base.Modify();

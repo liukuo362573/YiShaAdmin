@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using YiSha.Entity.OrganizationManage;
-
-namespace YiSha.Model.Param.OrganizationManage
+﻿namespace YiSha.Model.Param.OrganizationManage
 {
     public class UserListParam : DateTimeParam
     {

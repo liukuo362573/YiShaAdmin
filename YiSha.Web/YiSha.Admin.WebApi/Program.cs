@@ -1,27 +1,15 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Logging;
-using NLog.Web;
-using System.Text;
-using System.IO;
-using Newtonsoft.Json.Serialization;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using System;
+using NLog.Web;
 using System.Reflection;
-using YiSha.Util;
-using YiSha.Util.Model;
-using YiSha.Business.AutoJob;
-using YiSha.Admin.WebApi.Controllers;
+using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using System.Text.Json;
+using YiSha.Admin.WebApi.Controllers;
+using YiSha.Business.AutoJob;
+using YiSha.Util;
+using YiSha.Util.Model;
 
 namespace YiSha.Admin.WebApi
 {
@@ -192,8 +180,8 @@ namespace YiSha.Admin.WebApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name:"default",
-                    pattern:"{controller=ApiHome}/{action=Index}/{id?}");
+                    name: "default",
+                    pattern: "{controller=ApiHome}/{action=Index}/{id?}");
             });
         }
 

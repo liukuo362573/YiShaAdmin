@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using YiSha.Model.Param.SystemManage;
+﻿using YiSha.Model.Param.SystemManage;
 
 namespace YiSha.Model.Param.OrganizationManage
 {
