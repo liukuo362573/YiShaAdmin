@@ -98,8 +98,8 @@ namespace YiSha.Service.SystemManage
             string sqlServerConnectionString = "Server=localhost;Database=YiShaAdmin;User Id=sa;Password=123456;";
             IEnumerable<T> list = await this.BaseRepository().FindList<T>();
 
-            await new SqlServerDatabase(sqlServerConnectionString).Delete<T>(p => true);
-            await new SqlServerDatabase(sqlServerConnectionString).Insert<T>(list);
+            //await new Repository(sqlServerConnectionString).Delete<T>(p => true);
+            //await new Repository(sqlServerConnectionString).Insert<T>(list);
         }
         #endregion
 

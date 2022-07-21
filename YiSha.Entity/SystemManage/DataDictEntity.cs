@@ -2,23 +2,25 @@
 
 namespace YiSha.Entity.SystemManage
 {
+    /// <summary>
+    /// 字典类型表
+    /// </summary>
     [Table("SysDataDict")]
     public class DataDictEntity : BaseExtensionEntity
     {
         /// <summary>
-        /// 
+        /// 字典类型
         /// </summary>
-        /// <returns></returns>
-        public string DictType { get; set; }
+        public string? DictType { get; set; }
+
         /// <summary>
-        /// 
+        /// 字典排序
         /// </summary>
-        /// <returns></returns>
         public int? DictSort { get; set; }
+
         /// <summary>
-        /// 
+        /// 备注
         /// </summary>
-        /// <returns></returns>
-        public string Remark { get; set; }
+        public string? Remark { get; set; }
     }
 }

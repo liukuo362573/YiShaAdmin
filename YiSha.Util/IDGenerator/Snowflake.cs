@@ -1,6 +1,4 @@
-﻿using YiSha.Util;
-
-namespace YiSha.IdGenerator
+﻿namespace YiSha.Util.IDGenerator
 {
     public class Snowflake
     {

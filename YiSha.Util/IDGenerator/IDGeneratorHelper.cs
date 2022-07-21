@@ -1,23 +1,21 @@
-﻿using YiSha.Util;
-
-namespace YiSha.IdGenerator
+﻿namespace YiSha.Util.IDGenerator
 {
     /// <summary>
     /// 生成数据库主键Id
     /// </summary>
-    public class IdGeneratorHelper
+    public class IDGeneratorHelper
     {
         private int SnowFlakeWorkerId = GlobalContext.SystemConfig.SnowFlakeWorkerId;
 
         private Snowflake snowflake;
 
-        private static readonly IdGeneratorHelper instance = new IdGeneratorHelper();
+        private static readonly IDGeneratorHelper instance = new IDGeneratorHelper();
 
-        private IdGeneratorHelper()
+        private IDGeneratorHelper()
         {
             snowflake = new Snowflake(SnowFlakeWorkerId, 0, 0);
         }
-        public static IdGeneratorHelper Instance
+        public static IDGeneratorHelper Instance
         {
             get
             {

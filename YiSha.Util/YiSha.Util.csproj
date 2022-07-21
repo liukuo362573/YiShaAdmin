@@ -19,7 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\YiSha.Entity\YiSha.Enum\YiSha.Enum.csproj" />
+	  <ProjectReference Include="..\YiSha.Enum\YiSha.Enum.csproj" />
 	</ItemGroup>
 
 </Project>

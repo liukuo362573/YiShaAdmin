@@ -12,7 +12,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\YiSha.Util\YiSha.Util\YiSha.Util.csproj" />
+	  <ProjectReference Include="..\YiSha.Util\YiSha.Util.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -56,7 +56,7 @@ namespace YiSha.DataTest
             int pageSize = 10;
             int pageIndex = 1;
             RepositoryFactory repositoryFactory = new RepositoryFactory();
-            var tempData = repositoryFactory.BaseRepository().db.dbContext.Set<RoleEntity>().AsQueryable();
+            var tempData = repositoryFactory.BaseRepository().dbContext.Set<RoleEntity>().AsQueryable();
             tempData = DbExtension.AppendSort<RoleEntity>(tempData, sort, isAsc);
             tempData = tempData.Skip<RoleEntity>(pageSize * (pageIndex - 1)).Take<RoleEntity>(pageSize).AsQueryable();
             string strSql = DbExtension.GetSql<RoleEntity>(tempData);

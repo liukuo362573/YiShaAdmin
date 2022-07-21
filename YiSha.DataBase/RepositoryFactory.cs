@@ -1,6 +1,4 @@
-﻿using YiSha.DataBase.Enum;
-
-namespace YiSha.DataBase
+﻿namespace YiSha.DataBase
 {
     public class RepositoryFactory
     {

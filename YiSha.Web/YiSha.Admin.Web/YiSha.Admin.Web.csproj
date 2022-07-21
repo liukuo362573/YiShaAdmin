@@ -4,8 +4,8 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<AssemblyVersion>3.1.0.0</AssemblyVersion>
-		<FileVersion>3.1.0.0</FileVersion>
+		<AssemblyVersion>6.0.0.0</AssemblyVersion>
+		<FileVersion>6.0.0.0</FileVersion>
 		<Company>YiSha.Admin.Web</Company>
 		<Authors>YiSha.Admin.Web</Authors>
 		<Product>YiShaAdmin</Product>
@@ -28,11 +28,8 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\YiSha.Business\YiSha.Business.AutoJob\YiSha.Business.AutoJob.csproj" />
 		<ProjectReference Include="..\..\YiSha.Business\YiSha.Business\YiSha.Business.csproj" />
-		<ProjectReference Include="..\..\YiSha.Entity\YiSha.Entity\YiSha.Entity.csproj" />
-		<ProjectReference Include="..\..\YiSha.Entity\YiSha.Model\YiSha.Model.csproj" />
-		<ProjectReference Include="..\..\YiSha.Util\YiSha.CodeGenerator\YiSha.CodeGenerator.csproj" />
-		<ProjectReference Include="..\..\YiSha.Util\YiSha.Util\YiSha.Util.csproj" />
-		<ProjectReference Include="..\YiSha.Web.Code\YiSha.Web.Code.csproj" />
+		<ProjectReference Include="..\..\YiSha.Common\YiSha.Common.csproj" />
+		<ProjectReference Include="..\..\YiSha.CodeGenerator\YiSha.CodeGenerator.csproj" />
 	</ItemGroup>
 
 	<ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

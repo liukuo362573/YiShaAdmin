@@ -7,9 +7,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\YiSha.Entity\YiSha.Entity\YiSha.Entity.csproj" />
-		<ProjectReference Include="..\..\YiSha.Entity\YiSha.Enum\YiSha.Enum.csproj" />
-		<ProjectReference Include="..\..\YiSha.Util\YiSha.CodeGenerator\YiSha.CodeGenerator.csproj" />
+		<ProjectReference Include="..\..\YiSha.Common\YiSha.Common.csproj" />
+		<ProjectReference Include="..\..\YiSha.CodeGenerator\YiSha.CodeGenerator.csproj" />
 		<ProjectReference Include="..\YiSha.Business.Cache\YiSha.Business.Cache.csproj" />
 		<ProjectReference Include="..\YiSha.Service\YiSha.Service.csproj" />
 	</ItemGroup>

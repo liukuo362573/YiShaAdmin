@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 using System.Text;
 using YiSha.DataBase.Extension;
 using YiSha.Util.Extension;
+using YiSha.Util.Model;
 
 namespace YiSha.DataBase
 {
@@ -306,6 +307,11 @@ namespace YiSha.DataBase
 
         #region 对象实体 查询
 
+        public async Task<T> FindEntity<T>(long id) where T : class
+        {
+            return await FindEntity<T>(id);
+        }
+
         public async Task<T> FindEntity<T>(object keyValue) where T : class
         {
             return await dbContext.Set<T>().FindAsync(keyValue);
@@ -335,7 +341,7 @@ namespace YiSha.DataBase
 
         public async Task<IEnumerable<T>> FindList<T>(string strSql) where T : class
         {
-            return await FindList<T>(strSql, null);
+            return await FindList<T>(strSql, dbParameter: null);
         }
 
         public async Task<IEnumerable<T>> FindList<T>(string strSql, DbParameter[] dbParameter) where T : class
@@ -401,6 +407,32 @@ namespace YiSha.DataBase
             }
         }
 
+        public async Task<(int total, IEnumerable<T> list)> FindList<T>(Pagination pagination) where T : class, new()
+        {
+            int total = pagination.TotalCount;
+            var data = await FindList<T>(pagination.Sort, pagination.SortType.ToLower() == "asc" ? true : false, pagination.PageSize, pagination.PageIndex);
+            pagination.TotalCount = total;
+            return data;
+        }
+        public async Task<IEnumerable<T>> FindList<T>(Expression<Func<T, bool>> condition, Pagination pagination) where T : class, new()
+        {
+            var data = await FindList<T>(condition, pagination.Sort, pagination.SortType.ToLower() == "asc" ? true : false, pagination.PageSize, pagination.PageIndex);
+            pagination.TotalCount = data.total;
+            return data.list;
+        }
+        public async Task<(int total, IEnumerable<T> list)> FindList<T>(string strSql, Pagination pagination) where T : class
+        {
+            int total = pagination.TotalCount;
+            var data = await FindList<T>(strSql, pagination.Sort, pagination.SortType.ToLower() == "asc" ? true : false, pagination.PageSize, pagination.PageIndex);
+            pagination.TotalCount = total;
+            return data;
+        }
+        public async Task<IEnumerable<T>> FindList<T>(string strSql, DbParameter[] dbParameter, Pagination pagination) where T : class
+        {
+            var data = await FindList<T>(strSql, dbParameter, pagination.Sort, pagination.SortType.ToLower() == "asc" ? true : false, pagination.PageSize, pagination.PageIndex);
+            pagination.TotalCount = data.total;
+            return data.Item2;
+        }
         #endregion
 
         #region 数据源查询
