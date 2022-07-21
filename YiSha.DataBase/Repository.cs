@@ -81,7 +81,7 @@ namespace YiSha.DataBase
                 }
                 return returnValue;
             }
-            catch
+            catch(Exception ex)
             {
                 throw;
             }
@@ -309,7 +309,7 @@ namespace YiSha.DataBase
 
         public async Task<T> FindEntity<T>(long id) where T : class
         {
-            return await FindEntity<T>(id);
+            return await FindEntity<T>(keyValue: id);
         }
 
         public async Task<T> FindEntity<T>(object keyValue) where T : class
