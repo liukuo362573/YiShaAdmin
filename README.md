@@ -5,10 +5,15 @@
  
 | YiShaAdmin 版本 | .NET Core 版本 | 是否支持 |
 |:-----|:-----|:-----|
-| 6.0（未来） | 6.0 | 支持 |
+| 6.0（进行中） | 6.0 | 支持 |
 | 3.1（当前） | 3.1 | 支持 |
 | 2.2 | 2.2 | 支持(Released) |
 
+# 克隆（下载）
+
+```
+git clone -b YiShaAdmin-Net6 https://github.com/zgcwkj/YiShaAdmin.git
+```
 
 ## 内置功能
 
