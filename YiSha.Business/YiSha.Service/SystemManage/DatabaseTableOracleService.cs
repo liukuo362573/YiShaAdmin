@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YiSha.Model.Result.SystemManage;
+﻿using YiSha.Model.Result.SystemManage;
 using YiSha.Util.Model;
 
 namespace YiSha.Service.SystemManage

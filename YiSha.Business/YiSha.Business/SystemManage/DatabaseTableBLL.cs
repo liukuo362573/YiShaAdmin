@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YiSha.Entity;
+﻿using YiSha.Entity;
 using YiSha.Model.Result;
 using YiSha.Model.Result.SystemManage;
 using YiSha.Service.SystemManage;

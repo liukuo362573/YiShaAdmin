@@ -4,8 +4,8 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<AssemblyVersion>3.1.0.0</AssemblyVersion>
-		<FileVersion>3.1.0.0</FileVersion>
+		<AssemblyVersion>6.0.0.0</AssemblyVersion>
+		<FileVersion>6.0.0.0</FileVersion>
 		<Copyright>YiShaAdmin</Copyright>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
@@ -27,7 +27,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\YiSha.Business\YiSha.Business.AutoJob\YiSha.Business.AutoJob.csproj" />
 		<ProjectReference Include="..\..\YiSha.Business\YiSha.Business\YiSha.Business.csproj" />
-		<ProjectReference Include="..\..\YiSha.Util\YiSha.Util\YiSha.Util.csproj" />
+		<ProjectReference Include="..\..\YiSha.Common\YiSha.Common.csproj" />
 	</ItemGroup>
 
 </Project>

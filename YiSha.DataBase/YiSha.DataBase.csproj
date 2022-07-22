@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Database\**" />
+    <Compile Remove="Interface\**" />
+    <EmbeddedResource Remove="Database\**" />
+    <EmbeddedResource Remove="Interface\**" />
+    <None Remove="Database\**" />
+    <None Remove="Interface\**" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.7" />
+		<PackageReference Include="Oracle.EntityFrameworkCore" Version="6.21.61" />
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\YiSha.Util\YiSha.Util.csproj" />
+	</ItemGroup>
+
+</Project>

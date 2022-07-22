@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Quartz;
+﻿using Quartz;
 using Quartz.Impl.Triggers;
 using YiSha.Entity.SystemManage;
 using YiSha.Enum;

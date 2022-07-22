@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YiSha.Data.Repository;
+﻿using System.Text;
+using YiSha.DataBase;
 using YiSha.Enum.OrganizationManage;
 using YiSha.Util;
 using YiSha.Util.Extension;

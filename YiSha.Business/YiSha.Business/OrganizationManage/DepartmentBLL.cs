@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YiSha.Entity.OrganizationManage;
-using YiSha.Enum.OrganizationManage;
-using YiSha.Model;
-using YiSha.Model.Result;
+﻿using YiSha.Entity.OrganizationManage;
 using YiSha.Model.Param.OrganizationManage;
+using YiSha.Model.Result;
 using YiSha.Service.OrganizationManage;
 using YiSha.Util;
-using YiSha.Util.Model;
 using YiSha.Util.Extension;
+using YiSha.Util.Model;
 using YiSha.Web.Code;
 
 namespace YiSha.Business.OrganizationManage

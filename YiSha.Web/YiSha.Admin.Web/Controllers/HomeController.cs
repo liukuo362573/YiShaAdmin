@@ -1,22 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using YiSha.Business.OrganizationManage;
 using YiSha.Business.SystemManage;
+using YiSha.Entity.OrganizationManage;
 using YiSha.Entity.SystemManage;
 using YiSha.Enum;
-using YiSha.IdGenerator;
 using YiSha.Model.Result;
-using YiSha.Util.Extension;
-using YiSha.Web.Code;
-using YiSha.Util.Model;
 using YiSha.Util;
-using YiSha.Entity.OrganizationManage;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
+using YiSha.Util.Extension;
+using YiSha.Util.Model;
+using YiSha.Web.Code;
 
 namespace YiSha.Admin.Web.Controllers
 {

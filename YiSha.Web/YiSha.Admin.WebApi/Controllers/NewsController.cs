@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using YiSha.Business.OrganizationManage;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Model.Param;
@@ -40,7 +35,7 @@ namespace YiSha.Admin.WebApi.Controllers
         /// <param name="pagination"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<TData<List<NewsEntity>>> GetPageContentList([FromQuery]NewsListParam param, [FromQuery]Pagination pagination)
+        public async Task<TData<List<NewsEntity>>> GetPageContentList([FromQuery] NewsListParam param, [FromQuery] Pagination pagination)
         {
             TData<List<NewsEntity>> obj = await newsBLL.GetPageContentList(param, pagination);
             return obj;
@@ -52,7 +47,7 @@ namespace YiSha.Admin.WebApi.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<TData<NewsEntity>> GetForm([FromQuery]long id)
+        public async Task<TData<NewsEntity>> GetForm([FromQuery] long id)
         {
             TData<NewsEntity> obj = await newsBLL.GetEntity(id);
             return obj;
@@ -66,14 +61,14 @@ namespace YiSha.Admin.WebApi.Controllers
         /// <param name="entity"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<TData<string>> SaveForm([FromBody]NewsEntity entity)
+        public async Task<TData<string>> SaveForm([FromBody] NewsEntity entity)
         {
             TData<string> obj = await newsBLL.SaveForm(entity);
             return obj;
         }
 
         [HttpPost]
-        public async Task<TData<string>> SaveViewTimes([FromBody]IdParam param)
+        public async Task<TData<string>> SaveViewTimes([FromBody] IdParam param)
         {
             TData<string> obj = null;
             TData<NewsEntity> objNews = await newsBLL.GetEntity(param.Id.Value);

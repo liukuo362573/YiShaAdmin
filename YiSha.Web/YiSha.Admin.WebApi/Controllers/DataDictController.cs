@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using YiSha.Business.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Model.Result.SystemManage;
@@ -25,7 +20,7 @@ namespace YiSha.Admin.WebApi.Controllers
         /// <param name="param"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<TData<List<DataDictInfo>>> GetList([FromQuery]DataDictListParam param)
+        public async Task<TData<List<DataDictInfo>>> GetList([FromQuery] DataDictListParam param)
         {
             TData<List<DataDictInfo>> obj = await dataDictBLL.GetDataDictList();
             obj.Tag = 1;

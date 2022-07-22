@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\YiSha.Cache\YiSha.Cache.csproj" />
+    <ProjectReference Include="..\YiSha.DataBase\YiSha.DataBase.csproj" />
+    <ProjectReference Include="..\YiSha.Entity\YiSha.Entity.csproj" />
+    <ProjectReference Include="..\YiSha.Enum\YiSha.Enum.csproj" />
+    <ProjectReference Include="..\YiSha.Model\YiSha.Model.csproj" />
+    <ProjectReference Include="..\YiSha.Util\YiSha.Util.csproj" />
+  </ItemGroup>
+
+</Project>

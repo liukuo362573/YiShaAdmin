@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
-using System.Web;
-using YiSha.Util;
-using YiSha.Util.Model;
-using YiSha.Entity;
-using YiSha.Model;
+﻿using Microsoft.AspNetCore.Mvc;
 using YiSha.Admin.Web.Controllers;
-using YiSha.Entity.OrganizationManage;
 using YiSha.Business.OrganizationManage;
+using YiSha.Entity.OrganizationManage;
 using YiSha.Model.Param.OrganizationManage;
-using Microsoft.AspNetCore.Mvc;
+using YiSha.Util.Model;
 using YiSha.Web.Code;
 
 namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers

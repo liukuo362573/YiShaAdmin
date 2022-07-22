@@ -3,9 +3,7 @@ using Microsoft.Extensions.FileProviders;
 using NLog.Web;
 using System.Text;
 using System.Text.Encodings.Web;
-using System.Text.Json;
 using System.Text.Unicode;
-using YiSha.Admin.Web.Controllers;
 using YiSha.Util;
 using YiSha.Util.Model;
 
@@ -82,7 +80,7 @@ namespace YiSha.Admin.Web
             //添加过滤器控制器
             services.AddControllers(options =>
             {
-                options.Filters.Add<GlobalExceptionFilter>();
+                //options.Filters.Add<GlobalExceptionFilter>();
                 options.ModelMetadataDetailsProviders.Add(new ModelBindingMetadataProvider());
             });
             //返回数据首字母

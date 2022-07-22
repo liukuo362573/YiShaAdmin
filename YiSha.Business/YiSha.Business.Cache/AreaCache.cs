@@ -1,9 +1,6 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-using YiSha.Cache.Factory;
+﻿using YiSha.Cache.Factory;
 using YiSha.Entity.SystemManage;
 using YiSha.Service.SystemManage;
-using System.Threading.Tasks;
 
 namespace YiSha.Business.Cache
 {

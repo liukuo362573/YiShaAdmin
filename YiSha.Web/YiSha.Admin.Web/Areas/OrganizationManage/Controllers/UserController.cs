@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using YiSha.Admin.Web.Controllers;
 using YiSha.Business.OrganizationManage;
 using YiSha.Business.SystemManage;

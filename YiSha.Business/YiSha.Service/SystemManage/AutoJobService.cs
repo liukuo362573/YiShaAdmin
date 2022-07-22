@@ -1,14 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
+using YiSha.DataBase;
+using YiSha.Entity.SystemManage;
+using YiSha.Model.Param.SystemManage;
 using YiSha.Util;
 using YiSha.Util.Extension;
 using YiSha.Util.Model;
-using YiSha.Data.Repository;
-using YiSha.Entity.SystemManage;
-using YiSha.Model.Param.SystemManage;
 
 namespace YiSha.Service.SystemManage
 {

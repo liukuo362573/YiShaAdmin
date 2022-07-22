@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using YiSha.Data.Repository;
+﻿using System.Linq.Expressions;
+using YiSha.DataBase;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Util;

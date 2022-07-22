@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
+﻿using System.Data.Common;
 using System.Text;
-using System.Threading.Tasks;
-using YiSha.Data;
-using YiSha.Data.EF;
-using YiSha.Data.Repository;
-using YiSha.Entity;
+using YiSha.DataBase;
+using YiSha.DataBase.Extension;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Result.SystemManage;
@@ -104,8 +98,8 @@ namespace YiSha.Service.SystemManage
             string sqlServerConnectionString = "Server=localhost;Database=YiShaAdmin;User Id=sa;Password=123456;";
             IEnumerable<T> list = await this.BaseRepository().FindList<T>();
 
-            await new SqlServerDatabase(sqlServerConnectionString).Delete<T>(p => true);
-            await new SqlServerDatabase(sqlServerConnectionString).Insert<T>(list);
+            //await new Repository(sqlServerConnectionString).Delete<T>(p => true);
+            //await new Repository(sqlServerConnectionString).Insert<T>(list);
         }
         #endregion
 

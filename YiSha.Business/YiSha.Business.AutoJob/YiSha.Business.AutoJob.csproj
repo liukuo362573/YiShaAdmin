@@ -11,8 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\YiSha.Entity\YiSha.Entity\YiSha.Entity.csproj" />
-		<ProjectReference Include="..\..\YiSha.Util\YiSha.Util\YiSha.Util.csproj" />
+		<ProjectReference Include="..\..\YiSha.Common\YiSha.Common.csproj" />
 		<ProjectReference Include="..\YiSha.Business\YiSha.Business.csproj" />
 		<ProjectReference Include="..\YiSha.Service\YiSha.Service.csproj" />
 	</ItemGroup>

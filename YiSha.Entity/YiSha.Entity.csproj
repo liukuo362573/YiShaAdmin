@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Folder Include="ToolManage\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\YiSha.Web\YiSha.Web.Code\YiSha.Web.Code.csproj" />
+	</ItemGroup>
+
+</Project>

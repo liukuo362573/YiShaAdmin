@@ -1,15 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using YiSha.Business.Cache;
+using YiSha.Entity.SystemManage;
+using YiSha.Model.Param.SystemManage;
+using YiSha.Model.Result.SystemManage;
+using YiSha.Service.SystemManage;
 using YiSha.Util;
 using YiSha.Util.Extension;
 using YiSha.Util.Model;
-using YiSha.Entity.SystemManage;
-using YiSha.Model.Param.SystemManage;
-using YiSha.Service.SystemManage;
-using YiSha.Model.Result.SystemManage;
-using YiSha.Business.Cache;
 
 namespace YiSha.Business.SystemManage
 {

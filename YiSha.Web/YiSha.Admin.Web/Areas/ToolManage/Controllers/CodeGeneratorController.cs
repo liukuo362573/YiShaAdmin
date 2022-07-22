@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Data;
-using Microsoft.AspNetCore.Mvc;
+using System.Web;
 using YiSha.Admin.Web.Controllers;
 using YiSha.Business.SystemManage;
 using YiSha.CodeGenerator.Model;
@@ -15,7 +11,6 @@ using YiSha.Model.Result.SystemManage;
 using YiSha.Util;
 using YiSha.Util.Model;
 using YiSha.Web.Code;
-using YiSha.CodeGenerator;
 
 namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
 {
@@ -71,7 +66,7 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
             if (obj.Data != null)
             {
                 // 基础字段不显示出来
-                obj.Data.RemoveAll(p => BaseField.BaseFieldList.Contains(p.name));                
+                obj.Data.RemoveAll(p => BaseField.BaseFieldList.Contains(p.name));
             }
             return Json(obj);
         }

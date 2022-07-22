@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Quartz;
+﻿using Quartz;
+using YiSha.Business.SystemManage;
 using YiSha.Entity.SystemManage;
-using YiSha.Service.SystemManage;
 using YiSha.Util;
 using YiSha.Util.Model;
-using YiSha.Util.Extension;
-using YiSha.Enum;
-using YiSha.Business.SystemManage;
 
 namespace YiSha.Business.AutoJob
 {
