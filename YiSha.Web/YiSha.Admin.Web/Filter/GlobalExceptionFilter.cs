@@ -5,7 +5,7 @@ using YiSha.Util;
 using YiSha.Util.Extension;
 using YiSha.Util.Model;
 
-namespace YiSha.Admin.Web.Controllers
+namespace YiSha.Admin.Web.Filter
 {
     /// <summary>
     /// 全局异常过滤器

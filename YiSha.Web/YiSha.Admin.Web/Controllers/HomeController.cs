@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using YiSha.Admin.Web.Filter;
 using YiSha.Business.OrganizationManage;
 using YiSha.Business.SystemManage;
 using YiSha.Entity.OrganizationManage;
@@ -86,7 +87,7 @@ namespace YiSha.Admin.Web.Controllers
                 });
 
                 Operator.Instance.RemoveCurrent();
-                new CookieHelper().RemoveCookie("RememberMe");
+                CookieHelper.Remove("RememberMe");
 
                 return Json(new TData { Tag = 1 });
                 #endregion
@@ -124,7 +125,7 @@ namespace YiSha.Admin.Web.Controllers
 
             Tuple<string, int> captchaCode = CaptchaHelper.GetCaptchaCode();
             byte[] bytes = CaptchaHelper.CreateCaptchaImage(captchaCode.Item1);
-            new SessionHelper().WriteSession("CaptchaCode", captchaCode.Item2);
+            SessionHelper.Set("CaptchaCode", captchaCode.Item2);
             return File(bytes, @"image/jpeg");
         }
         #endregion
@@ -139,7 +140,7 @@ namespace YiSha.Admin.Web.Controllers
                 obj.Message = "验证码不能为空";
                 return Json(obj);
             }
-            if (captchaCode != new SessionHelper().GetSession("CaptchaCode").ParseToString())
+            if (captchaCode != SessionHelper.Get("CaptchaCode").ParseToString())
             {
                 obj.Message = "验证码错误，请重新输入";
                 return Json(obj);

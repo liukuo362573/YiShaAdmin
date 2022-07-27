@@ -7,7 +7,9 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using YiSha.Admin.WebApi.Controllers;
+using YiSha.Admin.WebApi.Filter;
 using YiSha.Business.AutoJob;
+using YiSha.Entity;
 using YiSha.Util;
 using YiSha.Util.Model;
 
@@ -61,7 +63,7 @@ namespace YiSha.Admin.WebApi
                 options.Cookie.Name = ".AspNetCore.Session";
                 options.IdleTimeout = TimeSpan.FromDays(7);//设置Session的过期时间
                 options.Cookie.HttpOnly = true;//设置在浏览器不能通过js获得该Cookie的值
-                options.Cookie.IsEssential = true;
+                options.Cookie.IsEssential = true;//启用Cookie
             });
             //
             services.Configure<CookiePolicyOptions>(options =>
@@ -138,17 +140,17 @@ namespace YiSha.Admin.WebApi
             }
             //全局异常中间件
             app.UseMiddleware(typeof(GlobalExceptionMiddleware));
-            //
+            //跨域
             app.UseCors(builder =>
             {
                 builder.WithOrigins(GlobalContext.SystemConfig.AllowCorsSite.Split(',')).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
             });
-            //
+            //Swagger
             app.UseSwagger(c =>
             {
                 c.RouteTemplate = "api-doc/{documentName}/swagger.json";
             });
-            //
+            //SwaggerUI
             app.UseSwaggerUI(c =>
             {
                 c.RoutePrefix = "api-doc";
@@ -191,7 +193,8 @@ namespace YiSha.Admin.WebApi
         /// <param name="services">服务</param>
         public static void AddInjection(this IServiceCollection services)
         {
-
+            //数据库上下文
+            services.AddDbContext<MyDbContext>();
         }
     }
 }

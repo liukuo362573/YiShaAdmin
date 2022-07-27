@@ -3,9 +3,11 @@ using System.Drawing.Imaging;
 
 namespace YiSha.Util
 {
-    public class CaptchaHelper
+    /// <summary>
+    /// 验证码工具
+    /// </summary>
+    public static class CaptchaHelper
     {
-        #region 得到验证码
         /// <summary>
         /// Tuple第一个值是表达式，第二个值是表达式结果
         /// </summary>
@@ -44,9 +46,6 @@ namespace YiSha.Util
             randomCode += "=?";
             return new Tuple<string, int>(randomCode, value);
         }
-        #endregion
-
-        #region 生成验证码图片
         /// <summary>
         /// 生成验证码图片
         /// </summary>
@@ -140,6 +139,5 @@ namespace YiSha.Util
                 return ms.GetBuffer();
             }
         }
-        #endregion
     }
 }

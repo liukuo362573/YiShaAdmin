@@ -21,6 +21,9 @@
         public string Description { get; set; }
     }
 
+    /// <summary>
+    /// 数据传输对象
+    /// </summary>
     public class TData<T> : TData
     {
         /// <summary>

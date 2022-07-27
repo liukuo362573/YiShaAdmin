@@ -2,6 +2,7 @@
 using System.Data;
 using System.Web;
 using YiSha.Admin.Web.Controllers;
+using YiSha.Admin.Web.Filter;
 using YiSha.Business.SystemManage;
 using YiSha.CodeGenerator.Model;
 using YiSha.CodeGenerator.Template;
@@ -20,6 +21,7 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
         private DatabaseTableBLL databaseTableBLL = new DatabaseTableBLL();
 
         #region 视图功能
+
         [AuthorizeFilter("tool:codegenerator:view")]
         public IActionResult CodeGeneratorIndex()
         {
@@ -50,6 +52,7 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
         #endregion
 
         #region 获取数据
+
         [HttpGet]
         [AuthorizeFilter("tool:codegenerator:search")]
         public async Task<IActionResult> GetTableFieldTreeListJson(string tableName)
@@ -87,9 +90,11 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
             obj.Tag = 1;
             return Json(obj);
         }
+
         #endregion
 
         #region 提交数据
+
         [HttpPost]
         [AuthorizeFilter("tool:codegenerator:add")]
         public async Task<IActionResult> CodePreviewJson(BaseConfigModel baseConfig)
@@ -148,6 +153,7 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
             }
             return Json(obj);
         }
+
         #endregion
     }
 }

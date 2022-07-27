@@ -1,5 +1,8 @@
 ﻿namespace YiSha.Util
 {
+    /// <summary>
+    /// 时间工具
+    /// </summary>
     public class DateTimeHelper
     {
         #region 毫秒转天时分秒

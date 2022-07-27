@@ -1,5 +1,8 @@
 ﻿namespace YiSha.Util
 {
+    /// <summary>
+    /// Html 工具
+    /// </summary>
     public class HtmlHelper
     {
         /// <summary>

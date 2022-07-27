@@ -1,8 +1,17 @@
 ﻿namespace YiSha.Util
 {
+    /// <summary>
+    /// IP 位置工具
+    /// </summary>
     public class IpLocationHelper
     {
         #region IP位置查询
+
+        /// <summary>
+        /// 获取 IP 位置
+        /// </summary>
+        /// <param name="ipAddress"></param>
+        /// <returns></returns>
         public static string GetIpLocation(string ipAddress)
         {
             string ipLocation = string.Empty;
@@ -60,9 +69,16 @@
             }
             return ipLocation;
         }
+
         #endregion
 
         #region 判断是否是外网IP
+
+        /// <summary>
+        /// 是否内网 IP
+        /// </summary>
+        /// <param name="ipAddress"></param>
+        /// <returns></returns>
         public static bool IsInnerIP(string ipAddress)
         {
             bool isInnerIp = false;
@@ -100,10 +116,18 @@
             return ipNum;
         }
 
+        /// <summary>
+        /// 是否内网
+        /// </summary>
+        /// <param name="userIp"></param>
+        /// <param name="begin"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
         private static bool IsInner(long userIp, long begin, long end)
         {
             return (userIp >= begin) && (userIp <= end);
         }
+
         #endregion
     }
 }

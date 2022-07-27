@@ -20,11 +20,11 @@ namespace YiSha.Web.Code
             switch (LoginProvider)
             {
                 case "Cookie":
-                    new CookieHelper().WriteCookie(TokenName, token);
+                    CookieHelper.Set(TokenName, token);
                     break;
 
                 case "Session":
-                    new SessionHelper().WriteSession(TokenName, token);
+                    SessionHelper.Set(TokenName, token);
                     break;
 
                 case "WebApi":
@@ -49,11 +49,11 @@ namespace YiSha.Web.Code
             switch (LoginProvider)
             {
                 case "Cookie":
-                    new CookieHelper().RemoveCookie(TokenName);
+                    CookieHelper.Remove(TokenName);
                     break;
 
                 case "Session":
-                    new SessionHelper().RemoveSession(TokenName);
+                    SessionHelper.Remove(TokenName);
                     break;
 
                 case "WebApi":
@@ -80,14 +80,14 @@ namespace YiSha.Web.Code
                 case "Cookie":
                     if (hca.HttpContext != null)
                     {
-                        token = new CookieHelper().GetCookie(TokenName);
+                        token = CookieHelper.Get(TokenName);
                     }
                     break;
 
                 case "Session":
                     if (hca.HttpContext != null)
                     {
-                        token = new SessionHelper().GetSession(TokenName);
+                        token = SessionHelper.Get(TokenName);
                     }
                     break;
 

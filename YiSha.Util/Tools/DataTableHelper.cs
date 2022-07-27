@@ -3,6 +3,9 @@ using System.Reflection;
 
 namespace YiSha.Util
 {
+    /// <summary>
+    /// 表格工具
+    /// </summary>
     public static class DataTableHelper
     {
         public static DataTable ListToDataTable<T>(List<T> entitys)

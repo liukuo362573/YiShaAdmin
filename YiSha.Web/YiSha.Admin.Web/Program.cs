@@ -4,6 +4,8 @@ using NLog.Web;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using YiSha.Admin.Web.Filter;
+using YiSha.Entity;
 using YiSha.Util;
 using YiSha.Util.Model;
 
@@ -59,7 +61,7 @@ namespace YiSha.Admin.Web
                 options.Cookie.Name = ".AspNetCore.Session";
                 options.IdleTimeout = TimeSpan.FromDays(7);//设置Session的过期时间
                 options.Cookie.HttpOnly = true;//设置在浏览器不能通过js获得该Cookie的值
-                options.Cookie.IsEssential = true;
+                options.Cookie.IsEssential = true;//启用Cookie
             });
             //
             services.Configure<CookiePolicyOptions>(options =>
@@ -191,7 +193,8 @@ namespace YiSha.Admin.Web
         /// <param name="services">服务</param>
         public static void AddInjection(this IServiceCollection services)
         {
-
+            //数据库上下文
+            services.AddDbContext<MyDbContext>();
         }
     }
 }

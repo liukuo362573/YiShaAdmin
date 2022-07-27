@@ -11,7 +11,7 @@ using YiSha.Util;
 using YiSha.Util.Extension;
 using YiSha.Web.Code;
 
-namespace YiSha.Admin.WebApi.Controllers
+namespace YiSha.Admin.WebApi.Filter
 {
     /// <summary>
     /// 验证token和记录日志

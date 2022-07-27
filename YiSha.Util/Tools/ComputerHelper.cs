@@ -3,6 +3,9 @@ using YiSha.Util.Extension;
 
 namespace YiSha.Util
 {
+    /// <summary>
+    /// 电脑信息工具
+    /// </summary>
     public class ComputerHelper
     {
         public static ComputerInfo GetComputerInfo()
@@ -131,14 +134,17 @@ namespace YiSha.Util
         /// CPU使用率
         /// </summary>
         public string CPURate { get; set; }
+
         /// <summary>
         /// 总内存
         /// </summary>
         public string TotalRAM { get; set; }
+
         /// <summary>
         /// 内存使用率
         /// </summary>
         public string RAMRate { get; set; }
+
         /// <summary>
         /// 系统运行时间
         /// </summary>
