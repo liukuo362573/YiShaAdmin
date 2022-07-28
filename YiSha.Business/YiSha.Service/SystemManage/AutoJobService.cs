@@ -8,26 +8,26 @@ using YiSha.Util.Model;
 
 namespace YiSha.Service.SystemManage
 {
-    public class AutoJobService : RepositoryFactory
+    public class AutoJobService : Repository
     {
         #region 获取数据
         public async Task<List<AutoJobEntity>> GetList(AutoJobListParam param)
         {
             var expression = ListFilter(param);
-            var list = await this.BaseRepository().FindList(expression);
+            var list = await this.FindList(expression);
             return list.ToList();
         }
 
         public async Task<List<AutoJobEntity>> GetPageList(AutoJobListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
-            var list = await this.BaseRepository().FindList(expression, pagination);
+            var list = await this.FindList(expression, pagination);
             return list.ToList();
         }
 
         public async Task<AutoJobEntity> GetEntity(long id)
         {
-            return await this.BaseRepository().FindEntity<AutoJobEntity>(id);
+            return await this.FindEntity<AutoJobEntity>(id);
         }
 
         public bool ExistJob(AutoJobEntity entity)
@@ -42,7 +42,7 @@ namespace YiSha.Service.SystemManage
             {
                 expression = expression.And(t => t.JobGroupName == entity.JobGroupName && t.JobName == entity.JobName && t.Id != entity.Id);
             }
-            return this.BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
+            return this.IQueryable(expression).Count() > 0 ? true : false;
         }
         #endregion
 
@@ -52,19 +52,19 @@ namespace YiSha.Service.SystemManage
             if (entity.Id.IsNullOrZero())
             {
                 await entity.Create();
-                await this.BaseRepository().Insert<AutoJobEntity>(entity);
+                await this.Insert<AutoJobEntity>(entity);
             }
             else
             {
                 await entity.Modify();
-                await this.BaseRepository().Update<AutoJobEntity>(entity);
+                await this.Update<AutoJobEntity>(entity);
             }
         }
 
         public async Task DeleteForm(string ids)
         {
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
-            await this.BaseRepository().Delete<AutoJobEntity>(idArr);
+            await this.Delete<AutoJobEntity>(idArr);
         }
         #endregion
 

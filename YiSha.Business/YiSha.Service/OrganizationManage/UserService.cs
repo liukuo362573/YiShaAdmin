@@ -9,31 +9,31 @@ using YiSha.Util.Model;
 
 namespace YiSha.Service.OrganizationManage
 {
-    public class UserService : RepositoryFactory
+    public class UserService : Repository
     {
         #region 获取数据
         public async Task<List<UserEntity>> GetList(UserListParam param)
         {
             var expression = ListFilter(param);
-            var list = await this.BaseRepository().FindList(expression);
+            var list = await this.FindList(expression);
             return list.ToList();
         }
 
         public async Task<List<UserEntity>> GetPageList(UserListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
-            var list = await this.BaseRepository().FindList(expression, pagination);
+            var list = await this.FindList(expression, pagination);
             return list.ToList();
         }
 
         public async Task<UserEntity> GetEntity(long id)
         {
-            return await this.BaseRepository().FindEntity<UserEntity>(id);
+            return await this.FindEntity<UserEntity>(id);
         }
 
         public async Task<UserEntity> GetEntity(string userName)
         {
-            return await this.BaseRepository().FindEntity<UserEntity>(p => p.UserName == userName);
+            return await this.FindEntity<UserEntity>(p => p.UserName == userName);
         }
 
         public async Task<UserEntity> CheckLogin(string userName)
@@ -42,7 +42,7 @@ namespace YiSha.Service.OrganizationManage
             expression = expression.And(t => t.UserName == userName);
             expression = expression.Or(t => t.Mobile == userName);
             expression = expression.Or(t => t.Email == userName);
-            return await this.BaseRepository().FindEntity(expression);
+            return await this.FindEntity(expression);
         }
 
         public bool ExistUserName(UserEntity entity)
@@ -57,19 +57,19 @@ namespace YiSha.Service.OrganizationManage
             {
                 expression = expression.And(t => t.UserName == entity.UserName && t.Id != entity.Id);
             }
-            return this.BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
+            return this.IQueryable(expression).Count() > 0 ? true : false;
         }
         #endregion
 
         #region 提交数据
         public async Task UpdateUser(UserEntity entity)
         {
-            await this.BaseRepository().Update(entity);
+            await this.Update(entity);
         }
 
         public async Task SaveForm(UserEntity entity)
         {
-            var db = await this.BaseRepository().BeginTrans();
+            var db = await this.BeginTrans();
             try
             {
                 if (entity.Id.IsNullOrZero())
@@ -123,7 +123,7 @@ namespace YiSha.Service.OrganizationManage
 
         public async Task DeleteForm(string ids)
         {
-            var db = await this.BaseRepository().BeginTrans();
+            var db = await this.BeginTrans();
             try
             {
                 long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
@@ -141,13 +141,13 @@ namespace YiSha.Service.OrganizationManage
         public async Task ResetPassword(UserEntity entity)
         {
             await entity.Modify();
-            await this.BaseRepository().Update(entity);
+            await this.Update(entity);
         }
 
         public async Task ChangeUser(UserEntity entity)
         {
             await entity.Modify();
-            await this.BaseRepository().Update(entity);
+            await this.Update(entity);
         }
         #endregion
 

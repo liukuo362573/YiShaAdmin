@@ -1,13 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YiSha.DataBase;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Entity.SystemManage;
 
+#pragma warning disable CS8618
 namespace YiSha.Entity
 {
     /// <summary>
@@ -117,3 +113,4 @@ namespace YiSha.Entity
         public DbSet<RoleEntity> RoleEntity { get; set; }
     }
 }
+#pragma warning restore CS8618

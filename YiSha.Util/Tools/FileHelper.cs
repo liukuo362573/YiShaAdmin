@@ -19,14 +19,12 @@ namespace YiSha.Util
         /// <param name="content"></param>
         public static void CreateFile(string path, string content)
         {
-            if (!Directory.Exists(Path.GetDirectoryName(path)))
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(path));
-            }
-            using (StreamWriter sw = new StreamWriter(path, false, Encoding.UTF8))
-            {
-                sw.Write(content);
-            }
+            var filePath = Path.GetDirectoryName(path);
+            if (filePath == null) throw new Exception("Error path is null");
+            if (!Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
+
+            using var sw = new StreamWriter(path, false, Encoding.UTF8);
+            sw.Write(content);
         }
 
         /// <summary>
@@ -37,8 +35,8 @@ namespace YiSha.Util
         /// <returns></returns>
         public async static Task<TData<string>> UploadFile(int fileModule, IFormFileCollection files)
         {
-            string dirModule = string.Empty;
-            TData<string> obj = new TData<string>();
+            var dirModule = string.Empty;
+            var obj = new TData<string>();
             if (files == null || files.Count == 0)
             {
                 obj.Message = "请先选择文件！";
@@ -49,8 +47,8 @@ namespace YiSha.Util
                 obj.Message = "一次只能上传一个文件！";
                 return obj;
             }
-            TData objCheck = null;
-            IFormFile file = files[0];
+            var objCheck = new TData();
+            var file = files[0];
             switch (fileModule)
             {
                 case (int)UploadFileType.Portrait:
@@ -92,13 +90,13 @@ namespace YiSha.Util
                     obj.Message = "请指定上传到的模块";
                     return obj;
             }
-            string fileExtension = TextHelper.GetCustomValue(Path.GetExtension(file.FileName), ".png");
 
-            string newFileName = SecurityHelper.GetGuid(true) + fileExtension;
-            string dir = "Resource" + Path.DirectorySeparatorChar + dirModule + Path.DirectorySeparatorChar + DateTime.Now.ToString("yyyy-MM-dd").Replace('-', Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
+            var fileExtension = TextHelper.GetCustomValue(Path.GetExtension(file.FileName), ".png");
+            var newFileName = SecurityHelper.GetGuid(true) + fileExtension;
+            var dir = "Resource" + Path.DirectorySeparatorChar + dirModule + Path.DirectorySeparatorChar + DateTime.Now.ToString("yyyy-MM-dd").Replace('-', Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
 
-            string absoluteDir = Path.Combine(GlobalContext.HostingEnvironment.ContentRootPath, dir);
-            string absoluteFileName = string.Empty;
+            var absoluteDir = Path.Combine(GlobalContext.HostingEnvironment.ContentRootPath, dir);
+            var absoluteFileName = string.Empty;
             if (!Directory.Exists(absoluteDir))
             {
                 Directory.CreateDirectory(absoluteDir);
@@ -106,7 +104,7 @@ namespace YiSha.Util
             absoluteFileName = absoluteDir + newFileName;
             try
             {
-                using (FileStream fs = File.Create(absoluteFileName))
+                using (var fs = File.Create(absoluteFileName))
                 {
                     await file.CopyToAsync(fs);
                     fs.Flush();
@@ -131,8 +129,8 @@ namespace YiSha.Util
         /// <returns></returns>
         public static TData<string> DeleteFile(int fileModule, string filePath)
         {
-            TData<string> obj = new TData<string>();
-            string dirModule = fileModule.GetDescriptionByEnum<UploadFileType>();
+            var obj = new TData<string>();
+            var dirModule = fileModule.GetDescriptionByEnum<UploadFileType>();
 
             if (string.IsNullOrEmpty(filePath))
             {
@@ -142,7 +140,7 @@ namespace YiSha.Util
 
             filePath = FilterFilePath(filePath);
             filePath = "Resource" + Path.DirectorySeparatorChar + dirModule + Path.DirectorySeparatorChar + filePath;
-            string absoluteDir = Path.Combine(GlobalContext.HostingEnvironment.ContentRootPath, filePath);
+            var absoluteDir = Path.Combine(GlobalContext.HostingEnvironment.ContentRootPath, filePath);
             try
             {
                 if (File.Exists(absoluteDir))
@@ -175,22 +173,22 @@ namespace YiSha.Util
             {
                 throw new Exception("非法访问");
             }
-            TData<FileContentResult> obj = new TData<FileContentResult>();
-            string absoluteFilePath = GlobalContext.HostingEnvironment.ContentRootPath + Path.DirectorySeparatorChar + filePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-            byte[] fileBytes = File.ReadAllBytes(absoluteFilePath);
+            var obj = new TData<FileContentResult>();
+            var absoluteFilePath = GlobalContext.HostingEnvironment.ContentRootPath + Path.DirectorySeparatorChar + filePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+            var fileBytes = File.ReadAllBytes(absoluteFilePath);
             if (delete == 1)
             {
                 File.Delete(absoluteFilePath);
             }
             // md5 值
-            string fileNamePrefix = DateTime.Now.ToString("yyyyMMddHHmmss");
-            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
-            string title = fileNameWithoutExtension;
+            var fileNamePrefix = DateTime.Now.ToString("yyyyMMddHHmmss");
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
+            var title = fileNameWithoutExtension;
             if (fileNameWithoutExtension.Contains("_"))
             {
                 title = fileNameWithoutExtension.Split('_')[1].Trim();
             }
-            string fileExtensionName = Path.GetExtension(filePath);
+            var fileExtensionName = Path.GetExtension(filePath);
             obj.Data = new FileContentResult(fileBytes, "application/octet-stream")
             {
                 FileDownloadName = string.Format("{0}_{1}{2}", fileNamePrefix, title, fileExtensionName)
@@ -303,8 +301,8 @@ namespace YiSha.Util
         /// <returns></returns>
         public static TData CheckFileExtension(string fileExtension, string allowExtension)
         {
-            TData obj = new TData();
-            string[] allowArr = TextHelper.SplitToArray<string>(allowExtension.ToLower(), '|');
+            var obj = new TData();
+            var allowArr = TextHelper.SplitToArray<string>(allowExtension.ToLower(), '|');
             if (allowArr.Where(p => p.Trim() == fileExtension.ParseToString().ToLower()).Any())
             {
                 obj.Tag = 1;

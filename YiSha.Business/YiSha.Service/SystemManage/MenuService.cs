@@ -7,19 +7,19 @@ using YiSha.Util.Extension;
 
 namespace YiSha.Service.SystemManage
 {
-    public class MenuService : RepositoryFactory
+    public class MenuService : Repository
     {
         #region 获取数据
         public async Task<List<MenuEntity>> GetList(MenuListParam param)
         {
             var expression = ListFilter(param);
-            var list = await this.BaseRepository().FindList<MenuEntity>(expression);
+            var list = await this.FindList<MenuEntity>(expression);
             return list.OrderBy(p => p.MenuSort).ToList();
         }
 
         public async Task<MenuEntity> GetEntity(long id)
         {
-            return await this.BaseRepository().FindEntity<MenuEntity>(id);
+            return await this.FindEntity<MenuEntity>(id);
         }
 
         public async Task<int> GetMaxSort(long parentId)
@@ -29,7 +29,7 @@ namespace YiSha.Service.SystemManage
             {
                 where += " AND ParentId = " + parentId;
             }
-            object result = await this.BaseRepository().FindObject("SELECT MAX(MenuSort) FROM SysMenu where BaseIsDelete = 0 " + where);
+            object result = await this.FindObject("SELECT MAX(MenuSort) FROM SysMenu where BaseIsDelete = 0 " + where);
             int sort = result.ParseToInt();
             sort++;
             return sort;
@@ -47,7 +47,7 @@ namespace YiSha.Service.SystemManage
             {
                 expression = expression.And(t => t.MenuName == entity.MenuName && t.MenuType == entity.MenuType && t.Id != entity.Id);
             }
-            return this.BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
+            return this.IQueryable(expression).Count() > 0 ? true : false;
         }
         #endregion
 
@@ -57,18 +57,18 @@ namespace YiSha.Service.SystemManage
             if (entity.Id.IsNullOrZero())
             {
                 await entity.Create();
-                await this.BaseRepository().Insert(entity);
+                await this.Insert(entity);
             }
             else
             {
                 await entity.Modify();
-                await this.BaseRepository().Update(entity);
+                await this.Update(entity);
             }
         }
 
         public async Task DeleteForm(string ids)
         {
-            var db = await this.BaseRepository().BeginTrans();
+            var db = await this.BeginTrans();
             try
             {
                 long[] idArr = TextHelper.SplitToArray<long>(ids, ',');

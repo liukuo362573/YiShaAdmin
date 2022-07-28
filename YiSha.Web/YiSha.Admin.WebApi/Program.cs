@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using YiSha.Admin.WebApi.Controllers;
 using YiSha.Admin.WebApi.Filter;
 using YiSha.Business.AutoJob;
 using YiSha.Entity;

@@ -17,13 +17,13 @@ namespace YiSha.DataTest
         [Test]
         public async Task SortTest()
         {
-            RoleService roleService = new RoleService();
-            RoleListParam roleListParam = new RoleListParam { };
-            Pagination pagination = new Pagination
+            var roleService = new RoleService();
+            var roleListParam = new RoleListParam { };
+            var pagination = new Pagination
             {
                 Sort = "RoleSort asc"
             };
-            List<RoleEntity> list = await roleService.GetPageList(roleListParam, pagination);
+            var list = await roleService.GetPageList(roleListParam, pagination);
             Assert.IsTrue(list[0].RoleSort < list[1].RoleSort);
         }
 
@@ -34,13 +34,13 @@ namespace YiSha.DataTest
         [Test]
         public async Task MultiSortTest()
         {
-            RoleService roleService = new RoleService();
-            RoleListParam roleListParam = new RoleListParam { };
-            Pagination pagination = new Pagination
+            var roleService = new RoleService();
+            var roleListParam = new RoleListParam { };
+            var pagination = new Pagination
             {
                 Sort = "Id desc,RoleSort asc"
             };
-            List<RoleEntity> list = await roleService.GetPageList(roleListParam, pagination);
+            var list = await roleService.GetPageList(roleListParam, pagination);
             Assert.IsTrue(list[0].Id > list[1].Id);
         }
 
@@ -51,15 +51,15 @@ namespace YiSha.DataTest
         [Test]
         public async Task LinqGetSqlTest()
         {
-            string sort = "RoleSort";
-            bool isAsc = false;
-            int pageSize = 10;
-            int pageIndex = 1;
-            RepositoryFactory repositoryFactory = new RepositoryFactory();
-            var tempData = repositoryFactory.BaseRepository().dbContext.Set<RoleEntity>().AsQueryable();
+            var sort = "RoleSort";
+            var isAsc = false;
+            var pageSize = 10;
+            var pageIndex = 1;
+            var repository = new Repository();
+            var tempData = repository.dbContext.Set<RoleEntity>().AsQueryable();
             tempData = DbExtension.AppendSort<RoleEntity>(tempData, sort, isAsc);
             tempData = tempData.Skip<RoleEntity>(pageSize * (pageIndex - 1)).Take<RoleEntity>(pageSize).AsQueryable();
-            string strSql = DbExtension.GetSql<RoleEntity>(tempData);
+            var strSql = DbExtension.GetSql<RoleEntity>(tempData);
             Assert.IsTrue(strSql.ToUpper().Contains("SELECT"));
         }
     }

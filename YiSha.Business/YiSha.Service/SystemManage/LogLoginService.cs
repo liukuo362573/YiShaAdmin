@@ -10,14 +10,14 @@ using YiSha.Util.Model;
 
 namespace YiSha.Service.SystemManage
 {
-    public class LogLoginService : RepositoryFactory
+    public class LogLoginService : Repository
     {
         #region 获取数据
         public async Task<List<LogLoginEntity>> GetList(LogLoginListParam param)
         {
             var strSql = new StringBuilder();
             List<DbParameter> filter = ListFilter(param, strSql);
-            var list = await this.BaseRepository().FindList<LogLoginEntity>(strSql.ToString(), filter.ToArray());
+            var list = await this.FindList<LogLoginEntity>(strSql.ToString(), filter.ToArray());
             return list.ToList();
         }
 
@@ -25,13 +25,13 @@ namespace YiSha.Service.SystemManage
         {
             var strSql = new StringBuilder();
             List<DbParameter> filter = ListFilter(param, strSql);
-            var list = await this.BaseRepository().FindList<LogLoginEntity>(strSql.ToString(), filter.ToArray(), pagination);
+            var list = await this.FindList<LogLoginEntity>(strSql.ToString(), filter.ToArray(), pagination);
             return list.ToList();
         }
 
         public async Task<LogLoginEntity> GetEntity(long id)
         {
-            return await this.BaseRepository().FindEntity<LogLoginEntity>(id);
+            return await this.FindEntity<LogLoginEntity>(id);
         }
         #endregion
 
@@ -41,23 +41,23 @@ namespace YiSha.Service.SystemManage
             if (entity.Id.IsNullOrZero())
             {
                 await entity.Create();
-                await this.BaseRepository().Insert(entity);
+                await this.Insert(entity);
             }
             else
             {
-                await this.BaseRepository().Update(entity);
+                await this.Update(entity);
             }
         }
 
         public async Task DeleteForm(string ids)
         {
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
-            await this.BaseRepository().Delete<LogLoginEntity>(idArr);
+            await this.Delete<LogLoginEntity>(idArr);
         }
 
         public async Task RemoveAllForm()
         {
-            await this.BaseRepository().ExecuteBySql("truncate table SysLogLogin");
+            await this.ExecuteBySql("truncate table SysLogLogin");
         }
         #endregion
 

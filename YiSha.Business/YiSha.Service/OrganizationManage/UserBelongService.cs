@@ -4,7 +4,7 @@ using YiSha.Util.Extension;
 
 namespace YiSha.Service.OrganizationManage
 {
-    public class UserBelongService : RepositoryFactory
+    public class UserBelongService : Repository
     {
         #region 获取数据
         public async Task<List<UserBelongEntity>> GetList(UserBelongEntity entity)
@@ -21,13 +21,13 @@ namespace YiSha.Service.OrganizationManage
                     expression = expression.And(t => t.UserId == entity.UserId);
                 }
             }
-            var list = await this.BaseRepository().FindList(expression);
+            var list = await this.FindList(expression);
             return list.ToList();
         }
 
         public async Task<UserBelongEntity> GetEntity(long id)
         {
-            return await this.BaseRepository().FindEntity<UserBelongEntity>(id);
+            return await this.FindEntity<UserBelongEntity>(id);
         }
         #endregion
 
@@ -37,17 +37,17 @@ namespace YiSha.Service.OrganizationManage
             if (entity.Id.IsNullOrZero())
             {
                 await entity.Create();
-                await this.BaseRepository().Insert(entity);
+                await this.Insert(entity);
             }
             else
             {
-                await this.BaseRepository().Update(entity);
+                await this.Update(entity);
             }
         }
 
         public async Task DeleteForm(long id)
         {
-            await this.BaseRepository().Delete<UserBelongEntity>(id);
+            await this.Delete<UserBelongEntity>(id);
         }
         #endregion
     }
