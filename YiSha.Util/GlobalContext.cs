@@ -45,8 +45,8 @@ namespace YiSha.Util
         /// <returns></returns>
         public static string GetVersion()
         {
-            Version version = Assembly.GetEntryAssembly().GetName().Version;
-            return version.Major + "." + version.Minor;
+            var version = Assembly.GetEntryAssembly().GetName().Version;
+            return $"{version?.Major}.{version?.Minor}";
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace YiSha.Util
         /// <param name="env"></param>
         public static void LogWhenStart(IWebHostEnvironment env)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append("程序启动");
             sb.Append(" |ContentRootPath:" + env.ContentRootPath);
             sb.Append(" |WebRootPath:" + env.WebRootPath);
@@ -64,11 +64,12 @@ namespace YiSha.Util
         }
 
         /// <summary>
-        /// 设置cache control
+        /// 设置 CacheControl
         /// </summary>
         /// <param name="context"></param>
         public static void SetCacheControl(StaticFileResponseContext context)
         {
+            if (context == null) return;
             int second = 365 * 24 * 60 * 60;
             context.Context.Response.Headers.Add("Cache-Control", new[] { "public,max-age=" + second });
             context.Context.Response.Headers.Add("Expires", new[] { DateTime.UtcNow.AddYears(1).ToString("R") }); // Format RFC1123

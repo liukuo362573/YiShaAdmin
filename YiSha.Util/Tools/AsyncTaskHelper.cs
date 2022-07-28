@@ -1,5 +1,8 @@
 ﻿namespace YiSha.Util
 {
+    /// <summary>
+    /// 异步线程工具
+    /// </summary>
     public class AsyncTaskHelper
     {
         /// <summary>

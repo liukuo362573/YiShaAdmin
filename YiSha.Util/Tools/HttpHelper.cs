@@ -14,6 +14,12 @@ namespace YiSha.Util
     public class HttpHelper
     {
         #region 是否是网址
+
+        /// <summary>
+        /// 是否是网址
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
         public static bool IsUrl(string url)
         {
             url = url.ParseToString().ToLower();
@@ -26,9 +32,11 @@ namespace YiSha.Util
                 return false;
             }
         }
+
         #endregion
 
         #region 模拟GET
+
         /// <summary>
         /// GET请求
         /// </summary>
@@ -51,9 +59,11 @@ namespace YiSha.Util
 
             return retString;
         }
+
         #endregion
 
         #region 模拟POST
+
         /// <summary>
         /// POST请求
         /// </summary>
@@ -134,15 +144,26 @@ namespace YiSha.Util
             html.AppendLine("</html>");
             return html.ToString();
         }
+
         #endregion
 
         #region 预定义方法或者变更
-        //默认的编码
+
+        /// <summary>
+        /// 默认的编码
+        /// </summary>
         private Encoding encoding = Encoding.Default;
-        //HttpWebRequest对象用来发起请求
+
+        /// <summary>
+        /// HttpWebRequest对象用来发起请求
+        /// </summary>
         private HttpWebRequest request = null;
-        //获取影响流的数据对象
+
+        /// <summary>
+        /// 获取影响流的数据对象
+        /// </summary>
         private HttpWebResponse response = null;
+
         /// <summary>
         /// 根据相传入的数据，得到相应页面数据
         /// </summary>
@@ -433,6 +454,7 @@ namespace YiSha.Util
         #endregion
 
         #region 普通类型
+
         /// <summary>    
         /// 传入一个正确或不正确的URl，返回正确的URL
         /// </summary>    
@@ -447,6 +469,7 @@ namespace YiSha.Util
             }
             return URL;
         }
+
         ///<summary>
         ///采用https协议访问网络,根据传入的URl地址，得到响应的数据字符串。
         ///</summary>
@@ -459,6 +482,7 @@ namespace YiSha.Util
             //调用专门读取数据的类
             return GetHttpRequestData(httpItem);
         }
+
         #endregion
     }
 
@@ -468,6 +492,7 @@ namespace YiSha.Util
     public class HttpItem
     {
         string _URL;
+
         /// <summary>
         /// 请求URL必须填写
         /// </summary>
@@ -476,7 +501,9 @@ namespace YiSha.Util
             get { return _URL; }
             set { _URL = value; }
         }
+
         string _Method = "GET";
+
         /// <summary>
         /// 请求方式默认为GET方式
         /// </summary>
@@ -485,7 +512,9 @@ namespace YiSha.Util
             get { return _Method; }
             set { _Method = value; }
         }
+
         int _Timeout = 100000;
+
         /// <summary>
         /// 默认请求超时时间
         /// </summary>
@@ -494,7 +523,9 @@ namespace YiSha.Util
             get { return _Timeout; }
             set { _Timeout = value; }
         }
+
         int _ReadWriteTimeout = 30000;
+
         /// <summary>
         /// 默认写入Post数据超时间
         /// </summary>
@@ -503,7 +534,9 @@ namespace YiSha.Util
             get { return _ReadWriteTimeout; }
             set { _ReadWriteTimeout = value; }
         }
+
         string _Accept = "text/html, application/xhtml+xml, */*";
+
         /// <summary>
         /// 请求标头值 默认为text/html, application/xhtml+xml, */*
         /// </summary>
@@ -513,6 +546,7 @@ namespace YiSha.Util
             set { _Accept = value; }
         }
         string _ContentType = "text/html";
+
         /// <summary>
         /// 请求返回类型默认 text/html
         /// </summary>
@@ -521,7 +555,9 @@ namespace YiSha.Util
             get { return _ContentType; }
             set { _ContentType = value; }
         }
+
         string _UserAgent = "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)";
+
         /// <summary>
         /// 客户端访问信息默认Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)
         /// </summary>
@@ -530,7 +566,9 @@ namespace YiSha.Util
             get { return _UserAgent; }
             set { _UserAgent = value; }
         }
+
         string _Encoding = string.Empty;
+
         /// <summary>
         /// 返回数据编码默认为NUll,可以自动识别
         /// </summary>
@@ -540,6 +578,7 @@ namespace YiSha.Util
             set { _Encoding = value; }
         }
         private PostDataType _PostDataType = PostDataType.String;
+
         /// <summary>
         /// Post的数据类型
         /// </summary>
@@ -549,6 +588,7 @@ namespace YiSha.Util
             set { _PostDataType = value; }
         }
         string _Postdata;
+
         /// <summary>
         /// Post请求时要发送的字符串Post数据
         /// </summary>
@@ -557,7 +597,9 @@ namespace YiSha.Util
             get { return _Postdata; }
             set { _Postdata = value; }
         }
+
         private byte[] _PostdataByte = null;
+
         /// <summary>
         /// Post请求时要发送的Byte类型的Post数据
         /// </summary>
@@ -566,7 +608,9 @@ namespace YiSha.Util
             get { return _PostdataByte; }
             set { _PostdataByte = value; }
         }
+
         CookieCollection cookiecollection = null;
+
         /// <summary>
         /// Cookie对象集合
         /// </summary>
@@ -575,7 +619,9 @@ namespace YiSha.Util
             get { return cookiecollection; }
             set { cookiecollection = value; }
         }
+
         string _Cookie = string.Empty;
+
         /// <summary>
         /// 请求时的Cookie
         /// </summary>
@@ -584,7 +630,9 @@ namespace YiSha.Util
             get { return _Cookie; }
             set { _Cookie = value; }
         }
+
         string _Referer = string.Empty;
+
         /// <summary>
         /// 来源地址，上次访问地址
         /// </summary>
@@ -593,7 +641,9 @@ namespace YiSha.Util
             get { return _Referer; }
             set { _Referer = value; }
         }
+
         string _CerPath = string.Empty;
+
         /// <summary>
         /// 证书绝对路径
         /// </summary>
@@ -602,7 +652,9 @@ namespace YiSha.Util
             get { return _CerPath; }
             set { _CerPath = value; }
         }
+
         private Boolean isToLower = true;
+
         /// <summary>
         /// 是否设置为全文小写
         /// </summary>
@@ -611,7 +663,9 @@ namespace YiSha.Util
             get { return isToLower; }
             set { isToLower = value; }
         }
+
         private Boolean allowautoredirect = true;
+
         /// <summary>
         /// 支持跳转页面，查询结果将是跳转后的页面
         /// </summary>
@@ -620,7 +674,9 @@ namespace YiSha.Util
             get { return allowautoredirect; }
             set { allowautoredirect = value; }
         }
+
         private int connectionlimit = 1024;
+
         /// <summary>
         /// 最大连接数
         /// </summary>
@@ -630,6 +686,7 @@ namespace YiSha.Util
             set { connectionlimit = value; }
         }
         private string proxyusername = string.Empty;
+
         /// <summary>
         /// 代理Proxy 服务器用户名
         /// </summary>
@@ -638,7 +695,9 @@ namespace YiSha.Util
             get { return proxyusername; }
             set { proxyusername = value; }
         }
+
         private string proxypwd = string.Empty;
+
         /// <summary>
         /// 代理 服务器密码
         /// </summary>
@@ -647,7 +706,9 @@ namespace YiSha.Util
             get { return proxypwd; }
             set { proxypwd = value; }
         }
+
         private string proxyip = string.Empty;
+
         /// <summary>
         /// 代理 服务IP
         /// </summary>
@@ -656,7 +717,9 @@ namespace YiSha.Util
             get { return proxyip; }
             set { proxyip = value; }
         }
+
         private ResultType resulttype = ResultType.String;
+
         /// <summary>
         /// 设置返回类型String和Byte
         /// </summary>
@@ -673,6 +736,7 @@ namespace YiSha.Util
     public class HttpResult
     {
         string _Cookie = string.Empty;
+
         /// <summary>
         /// Http请求返回的Cookie
         /// </summary>
@@ -681,7 +745,9 @@ namespace YiSha.Util
             get { return _Cookie; }
             set { _Cookie = value; }
         }
+
         CookieCollection cookiecollection = null;
+
         /// <summary>
         /// Cookie对象集合
         /// </summary>
@@ -690,7 +756,9 @@ namespace YiSha.Util
             get { return cookiecollection; }
             set { cookiecollection = value; }
         }
+
         private string html = string.Empty;
+
         /// <summary>
         /// 返回的String类型数据 只有ResultType.String时才返回数据，其它情况为空
         /// </summary>
@@ -699,7 +767,9 @@ namespace YiSha.Util
             get { return html; }
             set { html = value; }
         }
+
         private byte[] resultbyte = null;
+
         /// <summary>
         /// 返回的Byte数组 只有ResultType.Byte时才返回数据，其它情况为空
         /// </summary>
@@ -708,8 +778,12 @@ namespace YiSha.Util
             get { return resultbyte; }
             set { resultbyte = value; }
         }
+
         private WebHeaderCollection header = new WebHeaderCollection();
-        //header对象
+
+        /// <summary>
+        /// header对象
+        /// </summary>
         public WebHeaderCollection Header
         {
             get { return header; }
@@ -722,8 +796,15 @@ namespace YiSha.Util
     /// </summary>
     public enum ResultType
     {
-        String, //表示只返回字符串
-        Byte //表示返回字符串和字节流
+        /// <summary>
+        /// 表示只返回字符串
+        /// </summary>
+        String,
+
+        /// <summary>
+        /// 表示返回字符串和字节流
+        /// </summary>
+        Byte,
     }
 
     /// <summary>
@@ -731,8 +812,18 @@ namespace YiSha.Util
     /// </summary>
     public enum PostDataType
     {
-        String, //字符串
-        Byte, //字符串和字节流
-        FilePath //表示传入的是文件
+        /// <summary>
+        /// 字符串
+        /// </summary>
+        String,
+        /// <summary>
+        /// 字符串和字节流
+        /// </summary>
+        Byte,
+
+        /// <summary>
+        /// 表示传入的是文件
+        /// </summary>
+        FilePath,
     }
 }

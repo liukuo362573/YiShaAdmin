@@ -2,6 +2,9 @@
 
 namespace YiSha.Util
 {
+    /// <summary>
+    /// 编码工具
+    /// </summary>
     public class EncodingHelper
     {
         private static string HexStr = "0123456789abcdef";

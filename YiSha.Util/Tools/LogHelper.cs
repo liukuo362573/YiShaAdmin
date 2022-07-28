@@ -3,6 +3,9 @@ using YiSha.Util.Extension;
 
 namespace YiSha.Util
 {
+    /// <summary>
+    /// 日志工具
+    /// </summary>
     public class LogHelper
     {
         private static readonly Logger log = LogManager.GetLogger(string.Empty);

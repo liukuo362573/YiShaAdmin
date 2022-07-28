@@ -2,7 +2,7 @@
 using System.Net;
 using YiSha.Util.Model;
 
-namespace YiSha.Admin.WebApi.Controllers
+namespace YiSha.Admin.WebApi.Filter
 {
     public class GlobalExceptionMiddleware
     {

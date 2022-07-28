@@ -5,6 +5,10 @@ using YiSha.Util.Extension;
 namespace YiSha.Util
 {
     #region JsonHelper
+
+    /// <summary>
+    /// Json 工具
+    /// </summary>
     public static class JsonHelper
     {
         public static T ToObject<T>(this string Json)
@@ -18,9 +22,11 @@ namespace YiSha.Util
             return Json == null ? JObject.Parse("{}") : JObject.Parse(Json.Replace("&nbsp;", ""));
         }
     }
+
     #endregion
 
     #region JsonConverter
+
     /// <summary>
     /// Json数据返回到前端js的时候，把数值很大的long类型转成字符串
     /// </summary>
@@ -83,5 +89,6 @@ namespace YiSha.Util
             writer.WriteValue(dt.Value.ToString("yyyy-MM-dd HH:mm:ss"));
         }
     }
+
     #endregion
 }

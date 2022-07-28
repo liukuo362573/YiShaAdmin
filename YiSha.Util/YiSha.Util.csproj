@@ -7,6 +7,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Tools\ConcurrentList.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.6" />
 		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.2">
