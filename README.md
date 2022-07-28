@@ -43,10 +43,10 @@ git clone -b YiShaAdmin-Net6 https://github.com/zgcwkj/YiShaAdmin.git
 
 ## 演示图
 
-![登录页面](/Picture_Preview/demo_1.jpg)
-![登录进去首页](/Picture_Preview/demo_2.png)
-![用户列表](/Picture_Preview/demo_3.png)
-![用户列表修改](/Picture_Preview/demo_4.png)
+![登录页面](/Document/demo_1.jpg)
+![登录进去首页](/Document/demo_2.png)
+![用户列表](/Document/demo_3.png)
+![用户列表修改](/Document/demo_4.png)
 
 ## 如何参与开源项目
 
