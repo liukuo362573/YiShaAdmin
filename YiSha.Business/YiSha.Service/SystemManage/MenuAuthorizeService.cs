@@ -5,7 +5,7 @@ using YiSha.Util.Extension;
 
 namespace YiSha.Service.SystemManage
 {
-    public class MenuAuthorizeService : RepositoryFactory
+    public class MenuAuthorizeService : Repository
     {
         #region 获取数据
         public async Task<List<MenuAuthorizeEntity>> GetList(MenuAuthorizeEntity param)
@@ -27,13 +27,13 @@ namespace YiSha.Service.SystemManage
                     expression = expression.And(t => authorizeIdArr.Contains(t.AuthorizeId.Value));
                 }
             }
-            var list = await this.BaseRepository().FindList<MenuAuthorizeEntity>(expression);
+            var list = await this.FindList<MenuAuthorizeEntity>(expression);
             return list.ToList();
         }
 
         public async Task<MenuAuthorizeEntity> GetEntity(long id)
         {
-            return await this.BaseRepository().FindEntity<MenuAuthorizeEntity>(id);
+            return await this.FindEntity<MenuAuthorizeEntity>(id);
         }
         #endregion
 
@@ -43,17 +43,17 @@ namespace YiSha.Service.SystemManage
             if (entity.Id.IsNullOrZero())
             {
                 await entity.Create();
-                await this.BaseRepository().Insert(entity);
+                await this.Insert(entity);
             }
             else
             {
-                await this.BaseRepository().Update(entity);
+                await this.Update(entity);
             }
         }
 
         public async Task DeleteForm(long id)
         {
-            await this.BaseRepository().Delete<MenuAuthorizeEntity>(id);
+            await this.Delete<MenuAuthorizeEntity>(id);
         }
         #endregion
     }

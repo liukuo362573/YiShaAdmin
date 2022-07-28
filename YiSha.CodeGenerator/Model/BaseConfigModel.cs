@@ -36,7 +36,7 @@
         public string CreateName { get; set; }
 
         public string CreateDate { get; set; }
-        
+
         public string EntityName { get; set; }
 
         public string EntityMapName { get; set; }

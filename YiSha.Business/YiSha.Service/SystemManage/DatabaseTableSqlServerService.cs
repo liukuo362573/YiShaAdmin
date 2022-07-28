@@ -9,14 +9,14 @@ using YiSha.Util.Model;
 
 namespace YiSha.Service.SystemManage
 {
-    public class DatabaseTableSqlServerService : RepositoryFactory, IDatabaseTableService
+    public class DatabaseTableSqlServerService : Repository, IDatabaseTableService
     {
         #region 获取数据
         public async Task<List<TableInfo>> GetTableList(string tableName)
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"SELECT id Id,name TableName FROM sysobjects WHERE xtype = 'u' order by name");
-            IEnumerable<TableInfo> list = await this.BaseRepository().FindList<TableInfo>(strSql.ToString());
+            IEnumerable<TableInfo> list = await this.FindList<TableInfo>(strSql.ToString());
             if (!tableName.IsEmpty())
             {
                 list = list.Where(p => p.TableName.Contains(tableName));
@@ -37,7 +37,7 @@ namespace YiSha.Service.SystemManage
                 parameter.Add(DbParameterExtension.CreateDbParameter("@TableName", '%' + tableName + '%'));
             }
 
-            IEnumerable<TableInfo> list = await this.BaseRepository().FindList<TableInfo>(strSql.ToString(), parameter.ToArray(), pagination);
+            IEnumerable<TableInfo> list = await this.FindList<TableInfo>(strSql.ToString(), parameter.ToArray(), pagination);
             await SetTableDetail(list);
             return list.ToList();
         }
@@ -61,7 +61,7 @@ namespace YiSha.Service.SystemManage
                                   ORDER BY b.colid");
             var parameter = new List<DbParameter>();
             parameter.Add(DbParameterExtension.CreateDbParameter("@TableName", tableName));
-            var list = await this.BaseRepository().FindList<TableFieldInfo>(strSql.ToString(), parameter.ToArray());
+            var list = await this.FindList<TableFieldInfo>(strSql.ToString(), parameter.ToArray());
             return list.ToList();
         }
         #endregion
@@ -71,7 +71,7 @@ namespace YiSha.Service.SystemManage
         {
             string backupFile = string.Format("{0}\\{1}_{2}.bak", backupPath, database, DateTime.Now.ToString("yyyyMMddHHmmss"));
             string strSql = string.Format(" backup database [{0}] to disk = '{1}'", database, backupFile);
-            var result = await this.BaseRepository().ExecuteBySql(strSql);
+            var result = await this.ExecuteBySql(strSql);
             return result > 0 ? true : false;
         }
         #endregion
@@ -93,7 +93,7 @@ namespace YiSha.Service.SystemManage
                                            AND sysindexkeys.indid = sysindexes.indid 
                                            AND sc.colid = sysindexkeys.colid;";
 
-            IEnumerable<TableInfo> list = await this.BaseRepository().FindList<TableInfo>(strSql.ToString());
+            IEnumerable<TableInfo> list = await this.FindList<TableInfo>(strSql.ToString());
             return list.ToList();
         }
 

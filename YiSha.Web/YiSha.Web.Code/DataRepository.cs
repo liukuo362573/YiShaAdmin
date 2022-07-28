@@ -6,7 +6,7 @@ using YiSha.Util.Extension;
 
 namespace YiSha.Web.Code
 {
-    public class DataRepository : RepositoryFactory
+    public class DataRepository : Repository
     {
         public async Task<OperatorInfo> GetUserByToken(string token)
         {
@@ -29,7 +29,7 @@ namespace YiSha.Web.Code
                                     a.IsSystem
                             FROM    SysUser a
                             WHERE   WebToken = '" + token + "' or ApiToken = '" + token + "'  ");
-            var operatorInfo = await BaseRepository().FindObject<OperatorInfo>(strSql.ToString());
+            var operatorInfo = await this.FindObject<OperatorInfo>(strSql.ToString());
             if (operatorInfo != null)
             {
                 #region 角色
@@ -38,7 +38,7 @@ namespace YiSha.Web.Code
                                 FROM    SysUserBelong a
                                 WHERE   a.UserId = " + operatorInfo.UserId + " AND ");
                 strSql.Append("         a.BelongType = " + UserBelongTypeEnum.Role.ParseToInt());
-                IEnumerable<RoleInfo> roleList = await BaseRepository().FindList<RoleInfo>(strSql.ToString());
+                IEnumerable<RoleInfo> roleList = await this.FindList<RoleInfo>(strSql.ToString());
                 operatorInfo.RoleIds = string.Join(",", roleList.Select(p => p.RoleId).ToArray());
                 #endregion
 
@@ -47,7 +47,7 @@ namespace YiSha.Web.Code
                 strSql.Append(@"SELECT  a.DepartmentName
                                 FROM    SysDepartment a
                                 WHERE   a.Id = " + operatorInfo.DepartmentId);
-                object departmentName = await BaseRepository().FindObject(strSql.ToString());
+                object departmentName = await this.FindObject(strSql.ToString());
                 operatorInfo.DepartmentName = departmentName.ParseToString();
                 #endregion
             }

@@ -10,14 +10,14 @@ using YiSha.Util.Model;
 
 namespace YiSha.Service.SystemManage
 {
-    public class LogApiService : RepositoryFactory
+    public class LogApiService : Repository
     {
         #region 获取数据
         public async Task<List<LogApiEntity>> GetList(LogApiListParam param)
         {
             var strSql = new StringBuilder();
             List<DbParameter> filter = ListFilter(param, strSql);
-            var list = await this.BaseRepository().FindList<LogApiEntity>(strSql.ToString(), filter.ToArray());
+            var list = await this.FindList<LogApiEntity>(strSql.ToString(), filter.ToArray());
             return list.ToList();
         }
 
@@ -25,13 +25,13 @@ namespace YiSha.Service.SystemManage
         {
             var strSql = new StringBuilder();
             List<DbParameter> filter = ListFilter(param, strSql);
-            var list = await this.BaseRepository().FindList<LogApiEntity>(strSql.ToString(), filter.ToArray(), pagination);
+            var list = await this.FindList<LogApiEntity>(strSql.ToString(), filter.ToArray(), pagination);
             return list.ToList();
         }
 
         public async Task<LogApiEntity> GetEntity(long id)
         {
-            return await this.BaseRepository().FindEntity<LogApiEntity>(id);
+            return await this.FindEntity<LogApiEntity>(id);
         }
         #endregion
 
@@ -41,23 +41,23 @@ namespace YiSha.Service.SystemManage
             if (entity.Id.IsNullOrZero())
             {
                 await entity.Create();
-                await this.BaseRepository().Insert<LogApiEntity>(entity);
+                await this.Insert<LogApiEntity>(entity);
             }
             else
             {
-                await this.BaseRepository().Update<LogApiEntity>(entity);
+                await this.Update<LogApiEntity>(entity);
             }
         }
 
         public async Task DeleteForm(string ids)
         {
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
-            await this.BaseRepository().Delete<LogApiEntity>(idArr);
+            await this.Delete<LogApiEntity>(idArr);
         }
 
         public async Task RemoveAllForm()
         {
-            await this.BaseRepository().ExecuteBySql("truncate table SysLogApi");
+            await this.ExecuteBySql("truncate table SysLogApi");
         }
         #endregion
 

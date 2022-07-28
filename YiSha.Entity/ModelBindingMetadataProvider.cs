@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
-namespace YiSha.Util
+namespace YiSha.Entity
 {
     /// <summary>
     /// Controller Model Binding 处理

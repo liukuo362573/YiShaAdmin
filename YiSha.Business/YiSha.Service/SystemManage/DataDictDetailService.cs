@@ -8,31 +8,31 @@ using YiSha.Util.Model;
 
 namespace YiSha.Service.SystemManage
 {
-    public class DataDictDetailService : RepositoryFactory
+    public class DataDictDetailService : Repository
     {
         #region 获取数据
         public async Task<List<DataDictDetailEntity>> GetList(DataDictDetailListParam param)
         {
             var expression = ListFilter(param);
-            var list = await this.BaseRepository().FindList(expression);
+            var list = await this.FindList(expression);
             return list.OrderBy(p => p.DictSort).ToList();
         }
 
         public async Task<List<DataDictDetailEntity>> GetPageList(DataDictDetailListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
-            var list = await this.BaseRepository().FindList(expression, pagination);
+            var list = await this.FindList(expression, pagination);
             return list.ToList();
         }
 
         public async Task<DataDictDetailEntity> GetEntity(long id)
         {
-            return await this.BaseRepository().FindEntity<DataDictDetailEntity>(id);
+            return await this.FindEntity<DataDictDetailEntity>(id);
         }
 
         public async Task<int> GetMaxSort()
         {
-            object result = await this.BaseRepository().FindObject("SELECT MAX(DictSort) FROM SysDataDictDetail");
+            object result = await this.FindObject("SELECT MAX(DictSort) FROM SysDataDictDetail");
             int sort = result.ParseToInt();
             sort++;
             return sort;
@@ -50,7 +50,7 @@ namespace YiSha.Service.SystemManage
             {
                 expression = expression.And(t => t.DictType == entity.DictType && (t.DictKey == entity.DictKey || t.DictValue == entity.DictValue) && t.Id != entity.Id);
             }
-            return this.BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
+            return this.IQueryable(expression).Count() > 0 ? true : false;
         }
         #endregion
 
@@ -60,19 +60,19 @@ namespace YiSha.Service.SystemManage
             if (entity.Id.IsNullOrZero())
             {
                 await entity.Create();
-                await this.BaseRepository().Insert<DataDictDetailEntity>(entity);
+                await this.Insert<DataDictDetailEntity>(entity);
             }
             else
             {
                 await entity.Modify();
-                await this.BaseRepository().Update<DataDictDetailEntity>(entity);
+                await this.Update<DataDictDetailEntity>(entity);
             }
         }
 
         public async Task DeleteForm(string ids)
         {
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
-            await this.BaseRepository().Delete<DataDictDetailEntity>(idArr);
+            await this.Delete<DataDictDetailEntity>(idArr);
         }
         #endregion
 

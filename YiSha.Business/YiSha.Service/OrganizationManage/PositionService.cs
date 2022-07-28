@@ -8,31 +8,31 @@ using YiSha.Util.Model;
 
 namespace YiSha.Service.OrganizationManage
 {
-    public class PositionService : RepositoryFactory
+    public class PositionService : Repository
     {
         #region 获取数据
         public async Task<List<PositionEntity>> GetList(PositionListParam param)
         {
             var expression = ListFilter(param);
-            var list = await this.BaseRepository().FindList(expression);
+            var list = await this.FindList(expression);
             return list.ToList();
         }
 
         public async Task<List<PositionEntity>> GetPageList(PositionListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
-            var list = await this.BaseRepository().FindList(expression, pagination);
+            var list = await this.FindList(expression, pagination);
             return list.ToList();
         }
 
         public async Task<PositionEntity> GetEntity(long id)
         {
-            return await this.BaseRepository().FindEntity<PositionEntity>(id);
+            return await this.FindEntity<PositionEntity>(id);
         }
 
         public async Task<int> GetMaxSort()
         {
-            object result = await this.BaseRepository().FindObject("SELECT MAX(PositionSort) FROM SysPosition");
+            object result = await this.FindObject("SELECT MAX(PositionSort) FROM SysPosition");
             int sort = result.ParseToInt();
             sort++;
             return sort;
@@ -50,7 +50,7 @@ namespace YiSha.Service.OrganizationManage
             {
                 expression = expression.And(t => t.PositionName == entity.PositionName && t.Id != entity.Id);
             }
-            return this.BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
+            return this.IQueryable(expression).Count() > 0 ? true : false;
         }
         #endregion
 
@@ -60,19 +60,19 @@ namespace YiSha.Service.OrganizationManage
             if (entity.Id.IsNullOrZero())
             {
                 await entity.Create();
-                await this.BaseRepository().Insert<PositionEntity>(entity);
+                await this.Insert<PositionEntity>(entity);
             }
             else
             {
                 await entity.Modify();
-                await this.BaseRepository().Update(entity);
+                await this.Update(entity);
             }
         }
 
         public async Task DeleteForm(string ids)
         {
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
-            await this.BaseRepository().Delete<PositionEntity>(idArr);
+            await this.Delete<PositionEntity>(idArr);
         }
         #endregion
 

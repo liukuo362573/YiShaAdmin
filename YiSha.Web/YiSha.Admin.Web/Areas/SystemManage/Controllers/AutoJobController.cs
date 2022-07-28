@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using YiSha.Admin.Web.Controllers;
 using YiSha.Admin.Web.Filter;
-using YiSha.Admin.Web.Filter;
 using YiSha.Business.SystemManage;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;

@@ -7,24 +7,24 @@ using YiSha.Util.Extension;
 
 namespace YiSha.Service.OrganizationManage
 {
-    public class DepartmentService : RepositoryFactory
+    public class DepartmentService : Repository
     {
         #region 获取数据
         public async Task<List<DepartmentEntity>> GetList(DepartmentListParam param)
         {
             var expression = ListFilter(param);
-            var list = await this.BaseRepository().FindList(expression);
+            var list = await this.FindList(expression);
             return list.OrderBy(p => p.DepartmentSort).ToList();
         }
 
         public async Task<DepartmentEntity> GetEntity(long id)
         {
-            return await this.BaseRepository().FindEntity<DepartmentEntity>(id);
+            return await this.FindEntity<DepartmentEntity>(id);
         }
 
         public async Task<int> GetMaxSort()
         {
-            object result = await this.BaseRepository().FindObject("SELECT MAX(DepartmentSort) FROM SysDepartment");
+            object result = await this.FindObject("SELECT MAX(DepartmentSort) FROM SysDepartment");
             int sort = result.ParseToInt();
             sort++;
             return sort;
@@ -47,7 +47,7 @@ namespace YiSha.Service.OrganizationManage
             {
                 expression = expression.And(t => t.DepartmentName == entity.DepartmentName && t.ParentId == entity.ParentId && t.Id != entity.Id);
             }
-            return this.BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
+            return this.IQueryable(expression).Count() > 0 ? true : false;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace YiSha.Service.OrganizationManage
         {
             var expression = LinqExtensions.True<DepartmentEntity>();
             expression = expression.And(t => t.ParentId == id);
-            return this.BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
+            return this.IQueryable(expression).Count() > 0 ? true : false;
         }
         #endregion
 
@@ -69,18 +69,18 @@ namespace YiSha.Service.OrganizationManage
             if (entity.Id.IsNullOrZero())
             {
                 await entity.Create();
-                await this.BaseRepository().Insert(entity);
+                await this.Insert(entity);
             }
             else
             {
                 await entity.Modify();
-                await this.BaseRepository().Update(entity);
+                await this.Update(entity);
             }
         }
 
         public async Task DeleteForm(string ids)
         {
-            var db = await this.BaseRepository().BeginTrans();
+            var db = await this.BeginTrans();
             try
             {
                 long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
