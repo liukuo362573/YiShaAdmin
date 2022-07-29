@@ -8,26 +8,26 @@ using YiSha.Util.Model;
 
 namespace YiSha.Service.SystemManage
 {
-    public class AutoJobLogService : RepositoryFactory
+    public class AutoJobLogService : Repository
     {
         #region 获取数据
         public async Task<List<AutoJobLogEntity>> GetList(AutoJobLogListParam param)
         {
             var expression = ListFilter(param);
-            var list = await this.BaseRepository().FindList(expression);
+            var list = await this.FindList(expression);
             return list.ToList();
         }
 
         public async Task<List<AutoJobLogEntity>> GetPageList(AutoJobLogListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
-            var list = await this.BaseRepository().FindList(expression, pagination);
+            var list = await this.FindList(expression, pagination);
             return list.ToList();
         }
 
         public async Task<AutoJobLogEntity> GetEntity(long id)
         {
-            return await this.BaseRepository().FindEntity<AutoJobLogEntity>(id);
+            return await this.FindEntity<AutoJobLogEntity>(id);
         }
         #endregion
 
@@ -37,18 +37,18 @@ namespace YiSha.Service.SystemManage
             if (entity.Id.IsNullOrZero())
             {
                 await entity.Create();
-                await this.BaseRepository().Insert<AutoJobLogEntity>(entity);
+                await this.Insert<AutoJobLogEntity>(entity);
             }
             else
             {
-                await this.BaseRepository().Update<AutoJobLogEntity>(entity);
+                await this.Update<AutoJobLogEntity>(entity);
             }
         }
 
         public async Task DeleteForm(string ids)
         {
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
-            await this.BaseRepository().Delete<AutoJobLogEntity>(idArr);
+            await this.Delete<AutoJobLogEntity>(idArr);
         }
         #endregion
 

@@ -10,14 +10,14 @@ using YiSha.Util.Model;
 
 namespace YiSha.Service.SystemManage
 {
-    public class LogOperateService : RepositoryFactory
+    public class LogOperateService : Repository
     {
         #region 获取数据
         public async Task<List<LogOperateEntity>> GetList(LogOperateListParam param)
         {
             var strSql = new StringBuilder();
             List<DbParameter> filter = ListFilter(param, strSql);
-            var list = await this.BaseRepository().FindList<LogOperateEntity>(strSql.ToString(), filter.ToArray());
+            var list = await this.FindList<LogOperateEntity>(strSql.ToString(), filter.ToArray());
             return list.ToList();
         }
 
@@ -25,13 +25,13 @@ namespace YiSha.Service.SystemManage
         {
             var strSql = new StringBuilder();
             List<DbParameter> filter = ListFilter(param, strSql);
-            var list = await this.BaseRepository().FindList<LogOperateEntity>(strSql.ToString(), filter.ToArray(), pagination);
+            var list = await this.FindList<LogOperateEntity>(strSql.ToString(), filter.ToArray(), pagination);
             return list.ToList();
         }
 
         public async Task<LogOperateEntity> GetEntity(long id)
         {
-            return await this.BaseRepository().FindEntity<LogOperateEntity>(id);
+            return await this.FindEntity<LogOperateEntity>(id);
         }
         #endregion
 
@@ -41,23 +41,23 @@ namespace YiSha.Service.SystemManage
             if (entity.Id.IsNullOrZero())
             {
                 await entity.Create();
-                await this.BaseRepository().Insert(entity);
+                await this.Insert(entity);
             }
             else
             {
-                await this.BaseRepository().Update(entity);
+                await this.Update(entity);
             }
         }
 
         public async Task DeleteForm(string ids)
         {
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
-            await this.BaseRepository().Delete<LogOperateEntity>(idArr);
+            await this.Delete<LogOperateEntity>(idArr);
         }
 
         public async Task RemoveAllForm()
         {
-            await this.BaseRepository().ExecuteBySql("truncate table SysLogOperate");
+            await this.ExecuteBySql("truncate table SysLogOperate");
         }
         #endregion
 

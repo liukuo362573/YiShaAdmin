@@ -4,7 +4,6 @@ using NLog.Web;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using YiSha.Admin.Web.Filter;
 using YiSha.Entity;
 using YiSha.Util;
 using YiSha.Util.Model;

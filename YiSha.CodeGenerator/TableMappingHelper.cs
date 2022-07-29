@@ -3,6 +3,9 @@ using YiSha.Util.Extension;
 
 namespace YiSha.CodeGenerator
 {
+    /// <summary>
+    /// 表映射工具
+    /// </summary>
     public class TableMappingHelper
     {
         /// <summary>
@@ -39,6 +42,11 @@ namespace YiSha.CodeGenerator
             return sb.ToString();
         }
 
+        /// <summary>
+        /// 获取属性数据类型
+        /// </summary>
+        /// <param name="sDatatype"></param>
+        /// <returns></returns>
         public static string GetPropertyDatatype(string sDatatype)
         {
             string sTempDatatype = string.Empty;

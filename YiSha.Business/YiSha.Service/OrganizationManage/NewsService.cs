@@ -10,14 +10,14 @@ using YiSha.Util.Model;
 
 namespace YiSha.Service.OrganizationManage
 {
-    public class NewsService : RepositoryFactory
+    public class NewsService : Repository
     {
         #region 获取数据
         public async Task<List<NewsEntity>> GetList(NewsListParam param)
         {
             var strSql = new StringBuilder();
             List<DbParameter> filter = ListFilter(param, strSql);
-            var list = await this.BaseRepository().FindList<NewsEntity>(strSql.ToString(), filter.ToArray());
+            var list = await this.FindList<NewsEntity>(strSql.ToString(), filter.ToArray());
             return list.ToList();
         }
 
@@ -25,7 +25,7 @@ namespace YiSha.Service.OrganizationManage
         {
             var strSql = new StringBuilder();
             List<DbParameter> filter = ListFilter(param, strSql);
-            var list = await this.BaseRepository().FindList<NewsEntity>(strSql.ToString(), filter.ToArray(), pagination);
+            var list = await this.FindList<NewsEntity>(strSql.ToString(), filter.ToArray(), pagination);
             return list.ToList();
         }
 
@@ -33,18 +33,18 @@ namespace YiSha.Service.OrganizationManage
         {
             var strSql = new StringBuilder();
             List<DbParameter> filter = ListFilter(param, strSql, true);
-            var list = await this.BaseRepository().FindList<NewsEntity>(strSql.ToString(), filter.ToArray(), pagination);
+            var list = await this.FindList<NewsEntity>(strSql.ToString(), filter.ToArray(), pagination);
             return list.ToList();
         }
 
         public async Task<NewsEntity> GetEntity(long id)
         {
-            return await this.BaseRepository().FindEntity<NewsEntity>(id);
+            return await this.FindEntity<NewsEntity>(id);
         }
 
         public async Task<int> GetMaxSort()
         {
-            object result = await this.BaseRepository().FindObject("SELECT MAX(NewsSort) FROM SysNews");
+            object result = await this.FindObject("SELECT MAX(NewsSort) FROM SysNews");
             int sort = result.ParseToInt();
             sort++;
             return sort;
@@ -57,19 +57,19 @@ namespace YiSha.Service.OrganizationManage
             if (entity.Id.IsNullOrZero())
             {
                 await entity.Create();
-                await this.BaseRepository().Insert<NewsEntity>(entity);
+                await this.Insert<NewsEntity>(entity);
             }
             else
             {
                 await entity.Modify();
-                await this.BaseRepository().Update<NewsEntity>(entity);
+                await this.Update<NewsEntity>(entity);
             }
         }
 
         public async Task DeleteForm(string ids)
         {
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
-            await this.BaseRepository().Delete<NewsEntity>(idArr);
+            await this.Delete<NewsEntity>(idArr);
         }
         #endregion
 

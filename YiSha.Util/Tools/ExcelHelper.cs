@@ -17,6 +17,7 @@ namespace YiSha.Util
     public class ExcelHelper<T> where T : new()
     {
         #region List导出到Excel文件
+
         /// <summary>
         /// List导出到Excel文件
         /// </summary>
@@ -26,19 +27,17 @@ namespace YiSha.Util
         public string ExportToExcel(string sFileName, string sHeaderText, List<T> list, string[] columns)
         {
             sFileName = string.Format("{0}_{1}", SecurityHelper.GetGuid(true), sFileName);
-            string sRoot = GlobalContext.HostingEnvironment.ContentRootPath;
-            string partDirectory = string.Format("Resource{0}Export{0}Excel", Path.DirectorySeparatorChar);
-            string sDirectory = Path.Combine(sRoot, partDirectory);
-            string sFilePath = Path.Combine(sDirectory, sFileName);
-            if (!Directory.Exists(sDirectory))
+            var sRoot = GlobalContext.HostingEnvironment.ContentRootPath;
+            var partDirectory = string.Format("Resource{0}Export{0}Excel", Path.DirectorySeparatorChar);
+            var sDirectory = Path.Combine(sRoot, partDirectory);
+            var sFilePath = Path.Combine(sDirectory, sFileName);
+            if (!Directory.Exists(sDirectory)) Directory.CreateDirectory(sDirectory);
+
+            using (var ms = CreateExportMemoryStream(list, sHeaderText, columns))
             {
-                Directory.CreateDirectory(sDirectory);
-            }
-            using (MemoryStream ms = CreateExportMemoryStream(list, sHeaderText, columns))
-            {
-                using (FileStream fs = new FileStream(sFilePath, FileMode.Create, FileAccess.Write))
+                using (var fs = new FileStream(sFilePath, FileMode.Create, FileAccess.Write))
                 {
-                    byte[] data = ms.ToArray();
+                    var data = ms.ToArray();
                     fs.Write(data, 0, data.Length);
                     fs.Flush();
                 }
@@ -54,29 +53,34 @@ namespace YiSha.Util
         /// <param name="columns">需要导出的属性</param>  
         private MemoryStream CreateExportMemoryStream(List<T> list, string sHeaderText, string[] columns)
         {
-            HSSFWorkbook workbook = new HSSFWorkbook();
-            ISheet sheet = workbook.CreateSheet();
+            var workbook = new HSSFWorkbook();
+            var sheet = workbook.CreateSheet();
 
-            Type type = typeof(T);
-            PropertyInfo[] properties = ReflectionHelper.GetProperties(type, columns);
+            var type = typeof(T);
+            var properties = ReflectionHelper.GetProperties(type, columns);
 
-            ICellStyle dateStyle = workbook.CreateCellStyle();
-            IDataFormat format = workbook.CreateDataFormat();
+            var dateStyle = workbook.CreateCellStyle();
+            var format = workbook.CreateDataFormat();
             dateStyle.DataFormat = format.GetFormat("yyyy-MM-dd");
             //单元格填充循环外设定单元格格式，避免4000行异常
-            ICellStyle contentStyle = workbook.CreateCellStyle();
+            var contentStyle = workbook.CreateCellStyle();
             contentStyle.Alignment = HorizontalAlignment.Left;
+
             #region 取得每列的列宽（最大宽度）
-            int[] arrColWidth = new int[properties.Length];
-            for (int columnIndex = 0; columnIndex < properties.Length; columnIndex++)
+
+            var arrColWidth = new int[properties.Length];
+            for (var columnIndex = 0; columnIndex < properties.Length; columnIndex++)
             {
                 //GBK对应的code page是CP936
                 arrColWidth[columnIndex] = properties[columnIndex].Name.Length;
             }
+
             #endregion
-            for (int rowIndex = 0; rowIndex < list.Count; rowIndex++)
+
+            for (var rowIndex = 0; rowIndex < list.Count; rowIndex++)
             {
                 #region 新建表，填充表头，填充列头，样式
+
                 if (rowIndex == 65535 || rowIndex == 0)
                 {
                     if (rowIndex != 0)
@@ -85,14 +89,15 @@ namespace YiSha.Util
                     }
 
                     #region 表头及样式
+
                     {
-                        IRow headerRow = sheet.CreateRow(0);
+                        var headerRow = sheet.CreateRow(0);
                         headerRow.HeightInPoints = 25;
                         headerRow.CreateCell(0).SetCellValue(sHeaderText);
 
-                        ICellStyle headStyle = workbook.CreateCellStyle();
+                        var headStyle = workbook.CreateCellStyle();
                         headStyle.Alignment = HorizontalAlignment.Center;
-                        IFont font = workbook.CreateFont();
+                        var font = workbook.CreateFont();
                         font.FontHeightInPoints = 20;
                         font.Boldweight = 700;
                         headStyle.SetFont(font);
@@ -101,14 +106,16 @@ namespace YiSha.Util
 
                         sheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, properties.Length - 1));
                     }
+
                     #endregion
 
                     #region 列头及样式
+
                     {
-                        IRow headerRow = sheet.CreateRow(1);
-                        ICellStyle headStyle = workbook.CreateCellStyle();
+                        var headerRow = sheet.CreateRow(1);
+                        var headStyle = workbook.CreateCellStyle();
                         headStyle.Alignment = HorizontalAlignment.Center;
-                        IFont font = workbook.CreateFont();
+                        var font = workbook.CreateFont();
                         font.FontHeightInPoints = 10;
                         font.Boldweight = 700;
                         headStyle.SetFont(font);
@@ -116,8 +123,8 @@ namespace YiSha.Util
                         for (int columnIndex = 0; columnIndex < properties.Length; columnIndex++)
                         {
                             // 类属性如果有Description就用Description当做列名
-                            DescriptionAttribute customAttribute = (DescriptionAttribute)Attribute.GetCustomAttribute(properties[columnIndex], typeof(DescriptionAttribute));
-                            string description = properties[columnIndex].Name;
+                            var customAttribute = (DescriptionAttribute)Attribute.GetCustomAttribute(properties[columnIndex], typeof(DescriptionAttribute));
+                            var description = properties[columnIndex].Name;
                             if (customAttribute != null)
                             {
                                 description = customAttribute.Description;
@@ -128,19 +135,22 @@ namespace YiSha.Util
                             sheet.SetColumnWidth(columnIndex, (arrColWidth[columnIndex] + 1) * 256);
                         }
                     }
+
                     #endregion
                 }
+
                 #endregion
 
                 #region 填充内容
-                IRow dataRow = sheet.CreateRow(rowIndex + 2); // 前面2行已被占用
+
+                var dataRow = sheet.CreateRow(rowIndex + 2); // 前面2行已被占用
                 for (int columnIndex = 0; columnIndex < properties.Length; columnIndex++)
                 {
-                    ICell newCell = dataRow.CreateCell(columnIndex);
+                    var newCell = dataRow.CreateCell(columnIndex);
                     newCell.CellStyle = contentStyle;
-                    string drValue = properties[columnIndex].GetValue(list[rowIndex], null).ParseToString();
+                    var drValue = properties[columnIndex].GetValue(list[rowIndex], null).ParseToString();
                     //根据单元格内容设定列宽
-                    int length = Math.Min(253, Encoding.UTF8.GetBytes(drValue).Length + 1) * 256;
+                    var length = Math.Min(253, Encoding.UTF8.GetBytes(drValue).Length + 1) * 256;
                     if (sheet.GetColumnWidth(columnIndex) < length && !drValue.IsEmpty())
                     {
                         sheet.SetColumnWidth(columnIndex, length);
@@ -201,10 +211,11 @@ namespace YiSha.Util
                             break;
                     }
                 }
+
                 #endregion
             }
 
-            using (MemoryStream ms = new MemoryStream())
+            using (var ms = new MemoryStream())
             {
                 workbook.Write(ms);
                 workbook.Close();
@@ -213,9 +224,11 @@ namespace YiSha.Util
                 return ms;
             }
         }
+
         #endregion
 
         #region Excel导入
+
         /// <summary>
         /// Excel导入
         /// </summary>
@@ -223,12 +236,12 @@ namespace YiSha.Util
         /// <returns></returns>
         public List<T> ImportFromExcel(string filePath)
         {
-            string absoluteFilePath = GlobalContext.HostingEnvironment.ContentRootPath + filePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-            List<T> list = new List<T>();
+            var absoluteFilePath = GlobalContext.HostingEnvironment.ContentRootPath + filePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+            var list = new List<T>();
             HSSFWorkbook hssfWorkbook = null;
             XSSFWorkbook xssWorkbook = null;
             ISheet sheet = null;
-            using (FileStream file = new FileStream(absoluteFilePath, FileMode.Open, FileAccess.Read))
+            using (var file = new FileStream(absoluteFilePath, FileMode.Open, FileAccess.Read))
             {
                 switch (Path.GetExtension(filePath))
                 {
@@ -246,29 +259,29 @@ namespace YiSha.Util
                         throw new Exception("不支持的文件格式");
                 }
             }
-            IRow columnRow = sheet.GetRow(1); // 第二行为字段名
-            Dictionary<int, PropertyInfo> mapPropertyInfoDict = new Dictionary<int, PropertyInfo>();
-            for (int j = 0; j < columnRow.LastCellNum; j++)
+            var columnRow = sheet.GetRow(1); // 第二行为字段名
+            var mapPropertyInfoDict = new Dictionary<int, PropertyInfo>();
+            for (var j = 0; j < columnRow.LastCellNum; j++)
             {
-                ICell cell = columnRow.GetCell(j);
-                PropertyInfo propertyInfo = MapPropertyInfo(cell.ParseToString());
+                var cell = columnRow.GetCell(j);
+                var propertyInfo = MapPropertyInfo(cell.ParseToString());
                 if (propertyInfo != null)
                 {
                     mapPropertyInfoDict.Add(j, propertyInfo);
                 }
             }
 
-            for (int i = (sheet.FirstRowNum + 2); i <= sheet.LastRowNum; i++)
+            for (var i = (sheet.FirstRowNum + 2); i <= sheet.LastRowNum; i++)
             {
-                IRow row = sheet.GetRow(i);
-                T entity = new T();
-                for (int j = row.FirstCellNum; j < columnRow.LastCellNum; j++)
+                var row = sheet.GetRow(i);
+                var entity = new T();
+                for (var j = row.FirstCellNum; j < columnRow.LastCellNum; j++)
                 {
                     if (mapPropertyInfoDict.ContainsKey(j))
                     {
                         if (row.GetCell(j) != null)
                         {
-                            PropertyInfo propertyInfo = mapPropertyInfoDict[j];
+                            var propertyInfo = mapPropertyInfoDict[j];
                             switch (propertyInfo.PropertyType.ToString())
                             {
                                 case "System.DateTime":
@@ -336,17 +349,17 @@ namespace YiSha.Util
         /// <returns></returns>
         private PropertyInfo MapPropertyInfo(string columnName)
         {
-            PropertyInfo[] propertyList = ReflectionHelper.GetProperties(typeof(T));
-            PropertyInfo propertyInfo = propertyList.Where(p => p.Name == columnName).FirstOrDefault();
+            var propertyList = ReflectionHelper.GetProperties(typeof(T));
+            var propertyInfo = propertyList.Where(p => p.Name == columnName).FirstOrDefault();
             if (propertyInfo != null)
             {
                 return propertyInfo;
             }
             else
             {
-                foreach (PropertyInfo tempPropertyInfo in propertyList)
+                foreach (var tempPropertyInfo in propertyList)
                 {
-                    DescriptionAttribute[] attributes = (DescriptionAttribute[])tempPropertyInfo.GetCustomAttributes(typeof(DescriptionAttribute), false);
+                    var attributes = (DescriptionAttribute[])tempPropertyInfo.GetCustomAttributes(typeof(DescriptionAttribute), false);
                     if (attributes.Length > 0)
                     {
                         if (attributes[0].Description == columnName)
@@ -358,6 +371,7 @@ namespace YiSha.Util
             }
             return null;
         }
+
         #endregion
     }
 }

@@ -17,22 +17,16 @@ namespace YiSha.DataBase
     /// </summary>
     public class Repository
     {
-        #region 构造函数
-
         /// <summary>
-        /// 实例时
+        /// 构造方法
         /// </summary>
         public Repository()
         {
             this.dbContext = new DbCommon(DbFactory.Connect);
         }
 
-        #endregion
-
-        #region 属性
-
         /// <summary>
-        /// 获取 当前使用的数据访问上下文对象
+        /// 数据访问对象
         /// </summary>
         public DbContext dbContext { get; set; }
 
@@ -41,17 +35,13 @@ namespace YiSha.DataBase
         /// </summary>
         public IDbContextTransaction dbContextTransaction { get; set; }
 
-        #endregion
-
-        #region 事务提交
-
         /// <summary>
         /// 事务开始
         /// </summary>
         /// <returns></returns>
         public async Task<Repository> BeginTrans()
         {
-            DbConnection dbConnection = dbContext.Database.GetDbConnection();
+            var dbConnection = dbContext.Database.GetDbConnection();
             if (dbConnection.State == ConnectionState.Closed)
             {
                 await dbConnection.OpenAsync();
@@ -61,7 +51,7 @@ namespace YiSha.DataBase
         }
 
         /// <summary>
-        /// 提交当前操作的结果
+        /// 提交事务
         /// </summary>
         public async Task<int> CommitTrans()
         {
@@ -69,7 +59,7 @@ namespace YiSha.DataBase
             {
                 DbContextExtension.SetEntityDefaultValue(dbContext);
 
-                int returnValue = await dbContext.SaveChangesAsync();
+                var returnValue = await dbContext.SaveChangesAsync();
                 if (dbContextTransaction != null)
                 {
                     await dbContextTransaction.CommitAsync();
@@ -81,8 +71,9 @@ namespace YiSha.DataBase
                 }
                 return returnValue;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
+                var msg = ex.Message;
                 throw;
             }
             finally
@@ -105,17 +96,20 @@ namespace YiSha.DataBase
         }
 
         /// <summary>
-        /// 关闭连接 内存回收
+        /// 关闭连接，内存回收
         /// </summary>
         public async Task Close()
         {
             await dbContext.DisposeAsync();
         }
 
-        #endregion
-
         #region 执行 SQL 语句
 
+        /// <summary>
+        /// 执行 SQL 语句
+        /// </summary>
+        /// <param name="strSql">SQL</param>
+        /// <returns>影响数量</returns>
         public async Task<int> ExecuteBySql(string strSql)
         {
             if (dbContextTransaction == null)
@@ -129,6 +123,12 @@ namespace YiSha.DataBase
             }
         }
 
+        /// <summary>
+        /// 执行 SQL 语句
+        /// </summary>
+        /// <param name="strSql">SQL</param>
+        /// <param name="dbParameter">参数</param>
+        /// <returns>影响数量</returns>
         public async Task<int> ExecuteBySql(string strSql, params DbParameter[] dbParameter)
         {
             if (dbContextTransaction == null)
@@ -142,6 +142,12 @@ namespace YiSha.DataBase
             }
         }
 
+        /// <summary>
+        /// 执行 存储过程
+        /// </summary>
+        /// <param name="procName">过程名称</param>
+        /// <param name="dbParameter">参数</param>
+        /// <returns>影响数量</returns>
         public async Task<int> ExecuteByProc(string procName)
         {
             if (dbContextTransaction == null)
@@ -155,6 +161,12 @@ namespace YiSha.DataBase
             }
         }
 
+        /// <summary>
+        /// 执行 存储过程
+        /// </summary>
+        /// <param name="procName">过程名称</param>
+        /// <param name="dbParameter">参数</param>
+        /// <returns>影响数量</returns>
         public async Task<int> ExecuteByProc(string procName, params DbParameter[] dbParameter)
         {
             if (dbContextTransaction == null)
@@ -172,12 +184,24 @@ namespace YiSha.DataBase
 
         #region 对象实体 添加、修改、删除
 
+        /// <summary>
+        /// 新增数据
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="entity">实体对象</param>
+        /// <returns>影响行数</returns>
         public async Task<int> Insert<T>(T entity) where T : class
         {
             dbContext.Entry<T>(entity).State = EntityState.Added;
             return dbContextTransaction == null ? await this.CommitTrans() : 0;
         }
 
+        /// <summary>
+        /// 新增数据
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="entities">多个实体对象</param>
+        /// <returns>影响行数</returns>
         public async Task<int> Insert<T>(IEnumerable<T> entities) where T : class
         {
             foreach (var entity in entities)
@@ -187,17 +211,28 @@ namespace YiSha.DataBase
             return dbContextTransaction == null ? await this.CommitTrans() : 0;
         }
 
+        /// <summary>
+        /// 删除表数据
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <returns>删除数量</returns>
         public async Task<int> Delete<T>() where T : class
         {
-            IEntityType entityType = DbContextExtension.GetEntityType<T>(dbContext);
+            var entityType = DbContextExtension.GetEntityType<T>(dbContext);
             if (entityType != null)
             {
-                string tableName = entityType.GetTableName();
+                var tableName = entityType.GetTableName();
                 return await this.ExecuteBySql(DbContextExtension.DeleteSql(tableName));
             }
             return -1;
         }
 
+        /// <summary>
+        /// 删除表数据
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="entity">实体对象</param>
+        /// <returns>删除数量</returns>
         public async Task<int> Delete<T>(T entity) where T : class
         {
             dbContext.Set<T>().Attach(entity);
@@ -205,6 +240,12 @@ namespace YiSha.DataBase
             return dbContextTransaction == null ? await this.CommitTrans() : 0;
         }
 
+        /// <summary>
+        /// 删除表数据
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="entities">多个实体对象</param>
+        /// <returns>删除数量</returns>
         public async Task<int> Delete<T>(IEnumerable<T> entities) where T : class
         {
             foreach (var entity in entities)
@@ -215,58 +256,87 @@ namespace YiSha.DataBase
             return dbContextTransaction == null ? await this.CommitTrans() : 0;
         }
 
+        /// <summary>
+        /// 删除表数据
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="condition">Linq</param>
+        /// <returns>删除数量</returns>
         public async Task<int> Delete<T>(Expression<Func<T, bool>> condition) where T : class, new()
         {
-            IEnumerable<T> entities = await dbContext.Set<T>().Where(condition).ToListAsync();
+            var entities = await dbContext.Set<T>().Where(condition).ToListAsync();
             return entities.Count() > 0 ? await Delete(entities) : 0;
         }
 
+        /// <summary>
+        /// 删除表数据
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="keyValue">ID</param>
+        /// <returns>删除数量</returns>
         public async Task<int> Delete<T>(long keyValue) where T : class
         {
-            IEntityType entityType = DbContextExtension.GetEntityType<T>(dbContext);
+            var entityType = DbContextExtension.GetEntityType<T>(dbContext);
             if (entityType != null)
             {
-                string tableName = entityType.GetTableName();
-                string keyField = "Id";
+                var tableName = entityType.GetTableName();
+                var keyField = "Id";
                 return await this.ExecuteBySql(DbContextExtension.DeleteSql(tableName, keyField, keyValue));
             }
             return -1;
         }
 
+        /// <summary>
+        /// 删除表数据
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="keyValue">ID集合</param>
+        /// <returns>删除数量</returns>
         public async Task<int> Delete<T>(long[] keyValue) where T : class
         {
-            IEntityType entityType = DbContextExtension.GetEntityType<T>(dbContext);
+            var entityType = DbContextExtension.GetEntityType<T>(dbContext);
             if (entityType != null)
             {
-                string tableName = entityType.GetTableName();
-                string keyField = "Id";
+                var tableName = entityType.GetTableName();
+                var keyField = "Id";
                 return await this.ExecuteBySql(DbContextExtension.DeleteSql(tableName, keyField, keyValue));
             }
             return -1;
         }
 
+        /// <summary>
+        /// 删除表数据
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="propertyName">属性名</param>
+        /// <param name="propertyValue">属性值</param>
+        /// <returns>删除数量</returns>
         public async Task<int> Delete<T>(string propertyName, long propertyValue) where T : class
         {
-            IEntityType entityType = DbContextExtension.GetEntityType<T>(dbContext);
+            var entityType = DbContextExtension.GetEntityType<T>(dbContext);
             if (entityType != null)
             {
-                string tableName = entityType.GetTableName();
+                var tableName = entityType.GetTableName();
                 return await this.ExecuteBySql(DbContextExtension.DeleteSql(tableName, propertyName, propertyValue));
             }
             return -1;
         }
 
+        /// <summary>
+        /// 修改表数据
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="entity">实体对象</param>
+        /// <returns>修改数量</returns>
         public async Task<int> Update<T>(T entity) where T : class
         {
             dbContext.Set<T>().Attach(entity);
-            Hashtable props = DbExtension.GetPropertyInfo<T>(entity);
+            var props = DbExtension.GetPropertyInfo<T>(entity);
             foreach (string item in props.Keys)
             {
-                if (item == "Id")
-                {
-                    continue;
-                }
-                object value = dbContext.Entry(entity).Property(item).CurrentValue;
+                if (item == "Id") continue;
+
+                var value = dbContext.Entry(entity).Property(item).CurrentValue;
 
                 if (value != null)
                 {
@@ -276,6 +346,12 @@ namespace YiSha.DataBase
             return dbContextTransaction == null ? await this.CommitTrans() : 0;
         }
 
+        /// <summary>
+        /// 修改表数据
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="entities">多个实体对象</param>
+        /// <returns>修改数量</returns>
         public async Task<int> Update<T>(IEnumerable<T> entities) where T : class
         {
             foreach (var entity in entities)
@@ -285,6 +361,12 @@ namespace YiSha.DataBase
             return dbContextTransaction == null ? await this.CommitTrans() : 0;
         }
 
+        /// <summary>
+        /// 修改表所有字段
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="entity">实体对象</param>
+        /// <returns></returns>
         public async Task<int> UpdateAllField<T>(T entity) where T : class
         {
             dbContext.Set<T>().Attach(entity);
@@ -292,12 +374,24 @@ namespace YiSha.DataBase
             return dbContextTransaction == null ? await this.CommitTrans() : 0;
         }
 
+        /// <summary>
+        /// 修改表数据
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="condition">Linq</param>
+        /// <returns>修改数量</returns>
         public async Task<int> Update<T>(Expression<Func<T, bool>> condition) where T : class, new()
         {
-            IEnumerable<T> entities = await dbContext.Set<T>().Where(condition).ToListAsync();
+            var entities = await dbContext.Set<T>().Where(condition).ToListAsync();
             return entities.Count() > 0 ? await Update(entities) : 0;
         }
 
+        /// <summary>
+        /// 查询数据
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="condition">Linq</param>
+        /// <returns>实体数据</returns>
         public IQueryable<T> IQueryable<T>(Expression<Func<T, bool>> condition) where T : class, new()
         {
             return dbContext.Set<T>().Where(condition);
@@ -346,11 +440,9 @@ namespace YiSha.DataBase
 
         public async Task<IEnumerable<T>> FindList<T>(string strSql, DbParameter[] dbParameter) where T : class
         {
-            using (var dbConnection = dbContext.Database.GetDbConnection())
-            {
-                var reader = await new DbScalarExtension(dbContext, dbConnection).ExecuteReadeAsync(CommandType.Text, strSql, dbParameter);
-                return DbExtension.IDataReaderToList<T>(reader);
-            }
+            var dbConnection = dbContext.Database.GetDbConnection();
+            var reader = await new DbScalarExtension(dbContext, dbConnection).ExecuteReadeAsync(CommandType.Text, strSql, dbParameter);
+            return DbExtension.IDataReaderToList<T>(reader);
         }
 
         public async Task<(int total, IEnumerable<T> list)> FindList<T>(string sort, bool isAsc, int pageSize, int pageIndex) where T : class, new()
@@ -372,22 +464,20 @@ namespace YiSha.DataBase
 
         public async Task<(int total, IEnumerable<T>)> FindList<T>(string strSql, DbParameter[] dbParameter, string sort, bool isAsc, int pageSize, int pageIndex) where T : class
         {
-            using (var dbConnection = dbContext.Database.GetDbConnection())
+            var dbConnection = dbContext.Database.GetDbConnection();
+            var DbScalarExtension = new DbScalarExtension(dbContext, dbConnection);
+            var sb = new StringBuilder();
+            sb.Append(DbPageExtension.MySqlPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
+            var tempTotal = await DbScalarExtension.ExecuteScalarAsync(CommandType.Text, DbPageExtension.GetCountSql(strSql), dbParameter);
+            var total = tempTotal.ParseToInt();
+            if (total > 0)
             {
-                DbScalarExtension DbScalarExtension = new DbScalarExtension(dbContext, dbConnection);
-                StringBuilder sb = new StringBuilder();
-                sb.Append(DbPageExtension.MySqlPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
-                object tempTotal = await DbScalarExtension.ExecuteScalarAsync(CommandType.Text, DbPageExtension.GetCountSql(strSql), dbParameter);
-                int total = tempTotal.ParseToInt();
-                if (total > 0)
-                {
-                    var reader = await DbScalarExtension.ExecuteReadeAsync(CommandType.Text, sb.ToString(), dbParameter);
-                    return (total, DbExtension.IDataReaderToList<T>(reader));
-                }
-                else
-                {
-                    return (total, new List<T>());
-                }
+                var reader = await DbScalarExtension.ExecuteReadeAsync(CommandType.Text, sb.ToString(), dbParameter);
+                return (total, DbExtension.IDataReaderToList<T>(reader));
+            }
+            else
+            {
+                return (total, new List<T>());
             }
         }
 
@@ -409,7 +499,7 @@ namespace YiSha.DataBase
 
         public async Task<(int total, IEnumerable<T> list)> FindList<T>(Pagination pagination) where T : class, new()
         {
-            int total = pagination.TotalCount;
+            var total = pagination.TotalCount;
             var data = await FindList<T>(pagination.Sort, pagination.SortType.ToLower() == "asc" ? true : false, pagination.PageSize, pagination.PageIndex);
             pagination.TotalCount = total;
             return data;
@@ -422,7 +512,7 @@ namespace YiSha.DataBase
         }
         public async Task<(int total, IEnumerable<T> list)> FindList<T>(string strSql, Pagination pagination) where T : class
         {
-            int total = pagination.TotalCount;
+            var total = pagination.TotalCount;
             var data = await FindList<T>(strSql, pagination.Sort, pagination.SortType.ToLower() == "asc" ? true : false, pagination.PageSize, pagination.PageIndex);
             pagination.TotalCount = total;
             return data;
@@ -433,69 +523,111 @@ namespace YiSha.DataBase
             pagination.TotalCount = data.total;
             return data.Item2;
         }
+
         #endregion
 
         #region 数据源查询
 
+        /// <summary>
+        /// 查询表
+        /// </summary>
+        /// <param name="strSql">语句</param>
+        /// <returns>表数据</returns>
         public async Task<DataTable> FindTable(string strSql)
         {
             return await FindTable(strSql, null);
         }
 
+        /// <summary>
+        /// 查询表
+        /// </summary>
+        /// <param name="strSql">语句</param>
+        /// <param name="dbParameter">参数</param>
+        /// <returns>表数据</returns>
         public async Task<DataTable> FindTable(string strSql, DbParameter[] dbParameter)
         {
-            using (var dbConnection = dbContext.Database.GetDbConnection())
-            {
-                var reader = await new DbScalarExtension(dbContext, dbConnection).ExecuteReadeAsync(CommandType.Text, strSql, dbParameter);
-                return DbExtension.IDataReaderToDataTable(reader);
-            }
+            var dbConnection = dbContext.Database.GetDbConnection();
+            var reader = await new DbScalarExtension(dbContext, dbConnection).ExecuteReadeAsync(CommandType.Text, strSql, dbParameter);
+            return DbExtension.IDataReaderToDataTable(reader);
         }
 
+        /// <summary>
+        /// 查询表（分页）
+        /// </summary>
+        /// <param name="strSql">语句</param>
+        /// <param name="sort">排序</param>
+        /// <param name="isAsc">Asc 排序</param>
+        /// <param name="pageSize">页大小</param>
+        /// <param name="pageIndex">页索引</param>
+        /// <returns>总行数，表数据</returns>
         public async Task<(int total, DataTable)> FindTable(string strSql, string sort, bool isAsc, int pageSize, int pageIndex)
         {
             return await FindTable(strSql, null, sort, isAsc, pageSize, pageIndex);
         }
 
+        /// <summary>
+        /// 查询表（分页）
+        /// </summary>
+        /// <param name="strSql">语句</param>
+        /// <param name="dbParameter">参数</param>
+        /// <param name="sort">排序</param>
+        /// <param name="isAsc">Asc 排序</param>
+        /// <param name="pageSize">页大小</param>
+        /// <param name="pageIndex">页索引</param>
+        /// <returns>总行数，表数据</returns>
         public async Task<(int total, DataTable)> FindTable(string strSql, DbParameter[] dbParameter, string sort, bool isAsc, int pageSize, int pageIndex)
         {
-            using (var dbConnection = dbContext.Database.GetDbConnection())
+            var dbConnection = dbContext.Database.GetDbConnection();
+            var DbScalarExtension = new DbScalarExtension(dbContext, dbConnection);
+            var sb = new StringBuilder();
+            sb.Append(DbPageExtension.MySqlPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
+            var tempTotal = await DbScalarExtension.ExecuteScalarAsync(CommandType.Text, "SELECT COUNT(1) FROM (" + strSql + ") T", dbParameter);
+            var total = tempTotal.ParseToInt();
+            if (total > 0)
             {
-                DbScalarExtension DbScalarExtension = new DbScalarExtension(dbContext, dbConnection);
-                StringBuilder sb = new StringBuilder();
-                sb.Append(DbPageExtension.MySqlPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
-                object tempTotal = await DbScalarExtension.ExecuteScalarAsync(CommandType.Text, "SELECT COUNT(1) FROM (" + strSql + ") T", dbParameter);
-                int total = tempTotal.ParseToInt();
-                if (total > 0)
-                {
-                    var reader = await DbScalarExtension.ExecuteReadeAsync(CommandType.Text, sb.ToString(), dbParameter);
-                    DataTable resultTable = DbExtension.IDataReaderToDataTable(reader);
-                    return (total, resultTable);
-                }
-                else
-                {
-                    return (total, new DataTable());
-                }
+                var reader = await DbScalarExtension.ExecuteReadeAsync(CommandType.Text, sb.ToString(), dbParameter);
+                var resultTable = DbExtension.IDataReaderToDataTable(reader);
+                return (total, resultTable);
+            }
+            else
+            {
+                return (total, new DataTable());
             }
         }
 
+        /// <summary>
+        /// 查询首行首列
+        /// </summary>
+        /// <param name="strSql">语句</param>
+        /// <returns>首行首列</returns>
         public async Task<object> FindObject(string strSql)
         {
             return await FindObject(strSql, null);
         }
 
+        /// <summary>
+        /// 查询首行首列
+        /// </summary>
+        /// <param name="strSql">语句</param>
+        /// <param name="dbParameter">参数</param>
+        /// <returns>首行首列</returns>
         public async Task<object> FindObject(string strSql, DbParameter[] dbParameter)
         {
-            using (var dbConnection = dbContext.Database.GetDbConnection())
-            {
-                return await new DbScalarExtension(dbContext, dbConnection).ExecuteScalarAsync(CommandType.Text, strSql, dbParameter);
-            }
+            var dbConnection = dbContext.Database.GetDbConnection();
+            return await new DbScalarExtension(dbContext, dbConnection).ExecuteScalarAsync(CommandType.Text, strSql, dbParameter);
         }
 
+        /// <summary>
+        /// 查询首行数据，并转对象
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="strSql">语句</param>
+        /// <returns>对象</returns>
         public async Task<T> FindObject<T>(string strSql) where T : class
         {
             var dbConnection = dbContext.Database.GetDbConnection();
             var dbScalar = new DbScalarExtension(dbContext, dbConnection);
-            var dataReader = dbScalar.ExecuteReade(CommandType.Text, strSql);
+            var dataReader = await dbScalar.ExecuteReadeAsync(CommandType.Text, strSql);
             var dataList = DbExtension.IDataReaderToList<T>(dataReader);
             return dataList.FirstOrDefault();
         }
