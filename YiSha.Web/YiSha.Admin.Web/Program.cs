@@ -4,6 +4,7 @@ using NLog.Web;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using YiSha.Admin.Web.Filter;
 using YiSha.Entity;
 using YiSha.Util;
 using YiSha.Util.Model;
@@ -49,7 +50,7 @@ namespace YiSha.Admin.Web
             //添加 Razor 运行时编译
             services.AddRazorPages().AddRazorRuntimeCompilation();
             //添加编码单例
-            services.AddSingleton(HtmlEncoder.Create(UnicodeRanges.All));
+            //services.AddSingleton(HtmlEncoder.Create(UnicodeRanges.All));
             //注册编码
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             //添加 Memory 缓存功能
@@ -81,7 +82,7 @@ namespace YiSha.Admin.Web
             //添加过滤器控制器
             services.AddControllers(options =>
             {
-                //options.Filters.Add<GlobalExceptionFilter>();
+                options.Filters.Add<GlobalExceptionFilter>();
                 options.ModelMetadataDetailsProviders.Add(new ModelBindingMetadataProvider());
             });
             //返回数据首字母
@@ -92,6 +93,18 @@ namespace YiSha.Admin.Web
                 //https://docs.microsoft.com/zh-cn/dotnet/api/system.text.json.jsonserializeroptions.propertynamingpolicy?view=net-6.0
                 //返回数据首字不变
                 options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                //格式化时间
+                options.JsonSerializerOptions.Converters.Add(new DateTimeJsonConverter());
+                //Long 转为字符串
+                options.JsonSerializerOptions.Converters.Add(new LongJsonConverter());
+                //取消 Unicode 编码
+                options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+                //空值不反回前端
+                //options.JsonSerializerOptions.IgnoreNullValues = true;
+                //允许额外符号
+                //options.JsonSerializerOptions.AllowTrailingCommas = true;
+                //反序列化过程中属性名称是否使用不区分大小写的比较
+                //options.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
             });
             //
             GlobalContext.Services = services;

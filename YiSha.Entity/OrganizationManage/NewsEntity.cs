@@ -1,7 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using YiSha.Entity.SystemManage;
-using YiSha.Util;
 
 namespace YiSha.Entity.OrganizationManage
 {
@@ -50,7 +48,6 @@ namespace YiSha.Entity.OrganizationManage
         /// 发布时间
         /// </summary>
         /// <returns></returns>
-        [JsonConverter(typeof(DateTimeJsonConverter))]
         public DateTime? NewsDate { get; set; }
 
         /// <summary>

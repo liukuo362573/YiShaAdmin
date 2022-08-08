@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations.Schema;
-using YiSha.Util;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace YiSha.Entity.OrganizationManage
 {
@@ -13,13 +11,11 @@ namespace YiSha.Entity.OrganizationManage
         /// <summary>
         /// 用户Id
         /// </summary>
-        [JsonConverter(typeof(StringJsonConverter))]
         public long? UserId { get; set; }
 
         /// <summary>
         /// 职位Id或者角色Id
         /// </summary>
-        [JsonConverter(typeof(StringJsonConverter))]
         public long? BelongId { get; set; }
 
         /// <summary>

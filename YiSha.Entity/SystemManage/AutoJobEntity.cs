@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations.Schema;
-using YiSha.Util;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace YiSha.Entity.SystemManage
 {
@@ -38,21 +36,18 @@ namespace YiSha.Entity.SystemManage
         /// 运行开始时间
         /// </summary>
         /// <returns></returns>
-        [JsonConverter(typeof(DateTimeJsonConverter))]
         public DateTime? StartTime { get; set; }
 
         /// <summary>
         /// 运行结束时间
         /// </summary>
         /// <returns></returns>
-        [JsonConverter(typeof(DateTimeJsonConverter))]
         public DateTime? EndTime { get; set; }
 
         /// <summary>
         /// 下次执行时间
         /// </summary>
         /// <returns></returns>
-        [JsonConverter(typeof(DateTimeJsonConverter))]
         public DateTime? NextStartTime { get; set; }
 
         /// <summary>

@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage;
-using System.Collections;
 using System.Data;
 using System.Data.Common;
 using System.Linq.Expressions;

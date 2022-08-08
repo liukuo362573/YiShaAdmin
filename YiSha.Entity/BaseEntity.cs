@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
-using YiSha.Util;
 using YiSha.Util.IDGenerator;
 using YiSha.Web.Code;
 
@@ -17,7 +16,6 @@ namespace YiSha.Entity
         /// 所有表的主键
         /// long返回到前端js的时候，会丢失精度，所以转成字符串
         /// </summary>
-        [JsonConverter(typeof(StringJsonConverter))]
         public long? Id { get; set; }
 
         /// <summary>
@@ -43,7 +41,6 @@ namespace YiSha.Entity
         /// <summary>
         /// 创建时间
         /// </summary>
-        [JsonConverter(typeof(DateTimeJsonConverter))]
         [Description("创建时间")]
         public DateTime? BaseCreateTime { get; set; }
 
@@ -95,7 +92,6 @@ namespace YiSha.Entity
         /// <summary>
         /// 修改时间
         /// </summary>
-        [JsonConverter(typeof(DateTimeJsonConverter))]
         [Description("修改时间")]
         public DateTime? BaseModifyTime { get; set; }
 

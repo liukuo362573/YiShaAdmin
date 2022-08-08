@@ -95,6 +95,18 @@ namespace YiSha.Admin.WebApi
                 //https://docs.microsoft.com/zh-cn/dotnet/api/system.text.json.jsonserializeroptions.propertynamingpolicy?view=net-6.0
                 //返回数据首字不变
                 options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                //格式化时间
+                options.JsonSerializerOptions.Converters.Add(new DateTimeJsonConverter());
+                //Long 转为字符串
+                options.JsonSerializerOptions.Converters.Add(new LongJsonConverter());
+                //取消 Unicode 编码
+                options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+                //空值不反回前端
+                //options.JsonSerializerOptions.IgnoreNullValues = true;
+                //允许额外符号
+                //options.JsonSerializerOptions.AllowTrailingCommas = true;
+                //反序列化过程中属性名称是否使用不区分大小写的比较
+                //options.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
             });
             //添加 Swagger
             services.AddSwaggerGen(options =>

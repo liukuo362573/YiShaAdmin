@@ -135,17 +135,6 @@ namespace YiSha.CodeGenerator.Template
                 sb.AppendLine("        /// " + remark);
                 sb.AppendLine("        /// </summary>");
                 sb.AppendLine("        /// <returns></returns>");
-
-                switch (datatype)
-                {
-                    case "long?":
-                        sb.AppendLine("        [JsonConverter(typeof(StringJsonConverter))]");
-                        break;
-
-                    case "DateTime?":
-                        sb.AppendLine("        [JsonConverter(typeof(DateTimeJsonConverter))]");
-                        break;
-                }
                 sb.AppendLine("        public " + datatype + " " + column + " { get; set; }");
             }
             sb.AppendLine("    }");
