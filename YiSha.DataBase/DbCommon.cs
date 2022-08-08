@@ -162,6 +162,13 @@ namespace YiSha.DataBase
                 }
                 catch { }
             }
+            //设置主键为ID
+            foreach (var entity in modelBuilder.Model.GetEntityTypes())
+            {
+                PrimaryKeyConvention.SetPrimaryKey(modelBuilder, entity.Name);
+                var currentTableName = modelBuilder.Entity(entity.Name).Metadata.GetTableName();
+                modelBuilder.Entity(entity.Name).ToTable(currentTableName);
+            }
             base.OnModelCreating(modelBuilder);
         }
     }

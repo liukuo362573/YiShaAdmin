@@ -15,20 +15,13 @@ namespace YiSha.DataBase.Extension
         /// <returns></returns>
         public static DbParameter CreateDbParameter()
         {
-            switch (DbFactory.Type)
+            return DbFactory.Type switch
             {
-                case DbType.SqlServer:
-                    return new SqlParameter();
-
-                case DbType.MySql:
-                    return new MySqlParameter();
-
-                case DbType.Oracle:
-                    return new OracleParameter();
-
-                default:
-                    throw new Exception("数据库类型目前不支持！");
-            }
+                DbType.SqlServer => new SqlParameter(),
+                DbType.MySql => new MySqlParameter(),
+                DbType.Oracle => new OracleParameter(),
+                _ => throw new Exception("数据库类型目前不支持！"),
+            };
         }
 
         /// <summary>
