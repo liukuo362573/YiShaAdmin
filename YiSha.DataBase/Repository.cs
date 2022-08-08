@@ -467,7 +467,7 @@ namespace YiSha.DataBase
             var dbConnection = dbContext.Database.GetDbConnection();
             var DbScalarExtension = new DbScalarExtension(dbContext, dbConnection);
             var sb = new StringBuilder();
-            sb.Append(DbPageExtension.MySqlPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
+            sb.Append(DbPageExtension.GetPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
             var tempTotal = await DbScalarExtension.ExecuteScalarAsync(CommandType.Text, DbPageExtension.GetCountSql(strSql), dbParameter);
             var total = tempTotal.ParseToInt();
             if (total > 0)
@@ -580,7 +580,7 @@ namespace YiSha.DataBase
             var dbConnection = dbContext.Database.GetDbConnection();
             var DbScalarExtension = new DbScalarExtension(dbContext, dbConnection);
             var sb = new StringBuilder();
-            sb.Append(DbPageExtension.MySqlPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
+            sb.Append(DbPageExtension.GetPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
             var tempTotal = await DbScalarExtension.ExecuteScalarAsync(CommandType.Text, "SELECT COUNT(1) FROM (" + strSql + ") T", dbParameter);
             var total = tempTotal.ParseToInt();
             if (total > 0)
