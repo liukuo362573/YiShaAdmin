@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace YiSha.Web.Code
+namespace YiSha.Entity
 {
     /// <summary>
     /// 操作员信息

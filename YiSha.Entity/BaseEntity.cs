@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using YiSha.Util.IDGenerator;
-using YiSha.Web.Code;
 
 namespace YiSha.Entity
 {
@@ -138,7 +137,7 @@ namespace YiSha.Entity
         public int? BaseIsDelete { get; set; }
 
         /// <summary>
-        /// 
+        /// 创建
         /// </summary>
         public new async Task Create()
         {

@@ -20,13 +20,21 @@ namespace YiSha.DataBase
         /// </summary>
         public Repository()
         {
-            this.dbContext = new DbCommon(DbFactory.Connect);
+            this.dbContext = new DbCommon();
+        }
+
+        /// <summary>
+        /// 构造方法
+        /// </summary>
+        public Repository(DbContext dbContext)
+        {
+            this.dbContext = dbContext;
         }
 
         /// <summary>
         /// 数据访问对象
         /// </summary>
-        public DbContext dbContext { get; set; }
+        public DbContext dbContext { get; }
 
         /// <summary>
         /// 事务对象
@@ -210,117 +218,6 @@ namespace YiSha.DataBase
         }
 
         /// <summary>
-        /// 删除表数据
-        /// </summary>
-        /// <typeparam name="T">实体类型</typeparam>
-        /// <returns>删除数量</returns>
-        public async Task<int> Delete<T>() where T : class
-        {
-            var entityType = DbContextExtension.GetEntityType<T>(dbContext);
-            if (entityType != null)
-            {
-                var tableName = entityType.GetTableName();
-                return await this.ExecuteBySql(DbContextExtension.DeleteSql(tableName));
-            }
-            return -1;
-        }
-
-        /// <summary>
-        /// 删除表数据
-        /// </summary>
-        /// <typeparam name="T">实体类型</typeparam>
-        /// <param name="entity">实体对象</param>
-        /// <returns>删除数量</returns>
-        public async Task<int> Delete<T>(T entity) where T : class
-        {
-            dbContext.Set<T>().Attach(entity);
-            dbContext.Set<T>().Remove(entity);
-            return dbContextTransaction == null ? await this.CommitTrans() : 0;
-        }
-
-        /// <summary>
-        /// 删除表数据
-        /// </summary>
-        /// <typeparam name="T">实体类型</typeparam>
-        /// <param name="entities">多个实体对象</param>
-        /// <returns>删除数量</returns>
-        public async Task<int> Delete<T>(IEnumerable<T> entities) where T : class
-        {
-            foreach (var entity in entities)
-            {
-                dbContext.Set<T>().Attach(entity);
-                dbContext.Set<T>().Remove(entity);
-            }
-            return dbContextTransaction == null ? await this.CommitTrans() : 0;
-        }
-
-        /// <summary>
-        /// 删除表数据
-        /// </summary>
-        /// <typeparam name="T">实体类型</typeparam>
-        /// <param name="condition">Linq</param>
-        /// <returns>删除数量</returns>
-        public async Task<int> Delete<T>(Expression<Func<T, bool>> condition) where T : class, new()
-        {
-            var entities = await dbContext.Set<T>().Where(condition).ToListAsync();
-            return entities.Count() > 0 ? await Delete(entities) : 0;
-        }
-
-        /// <summary>
-        /// 删除表数据
-        /// </summary>
-        /// <typeparam name="T">实体类型</typeparam>
-        /// <param name="keyValue">ID</param>
-        /// <returns>删除数量</returns>
-        public async Task<int> Delete<T>(long keyValue) where T : class
-        {
-            var entityType = DbContextExtension.GetEntityType<T>(dbContext);
-            if (entityType != null)
-            {
-                var tableName = entityType.GetTableName();
-                var keyField = "Id";
-                return await this.ExecuteBySql(DbContextExtension.DeleteSql(tableName, keyField, keyValue));
-            }
-            return -1;
-        }
-
-        /// <summary>
-        /// 删除表数据
-        /// </summary>
-        /// <typeparam name="T">实体类型</typeparam>
-        /// <param name="keyValue">ID集合</param>
-        /// <returns>删除数量</returns>
-        public async Task<int> Delete<T>(long[] keyValue) where T : class
-        {
-            var entityType = DbContextExtension.GetEntityType<T>(dbContext);
-            if (entityType != null)
-            {
-                var tableName = entityType.GetTableName();
-                var keyField = "Id";
-                return await this.ExecuteBySql(DbContextExtension.DeleteSql(tableName, keyField, keyValue));
-            }
-            return -1;
-        }
-
-        /// <summary>
-        /// 删除表数据
-        /// </summary>
-        /// <typeparam name="T">实体类型</typeparam>
-        /// <param name="propertyName">属性名</param>
-        /// <param name="propertyValue">属性值</param>
-        /// <returns>删除数量</returns>
-        public async Task<int> Delete<T>(string propertyName, long propertyValue) where T : class
-        {
-            var entityType = DbContextExtension.GetEntityType<T>(dbContext);
-            if (entityType != null)
-            {
-                var tableName = entityType.GetTableName();
-                return await this.ExecuteBySql(DbContextExtension.DeleteSql(tableName, propertyName, propertyValue));
-            }
-            return -1;
-        }
-
-        /// <summary>
         /// 修改表数据
         /// </summary>
         /// <typeparam name="T">实体类型</typeparam>
@@ -382,6 +279,117 @@ namespace YiSha.DataBase
         {
             var entities = await dbContext.Set<T>().Where(condition).ToListAsync();
             return entities.Count() > 0 ? await Update(entities) : 0;
+        }
+
+        /// <summary>
+        /// 删除表数据
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <returns>删除数量</returns>
+        public async Task<int> Delete<T>() where T : class
+        {
+            var entityType = DbContextExtension.GetEntityType<T>(dbContext);
+            if (entityType != null)
+            {
+                var tableName = entityType.GetTableName();
+                return await this.ExecuteBySql(DbContextExtension.DeleteSql(tableName));
+            }
+            return -1;
+        }
+
+        /// <summary>
+        /// 删除表数据
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="entity">实体对象</param>
+        /// <returns>删除数量</returns>
+        public async Task<int> Delete<T>(T entity) where T : class
+        {
+            dbContext.Set<T>().Attach(entity);
+            dbContext.Set<T>().Remove(entity);
+            return dbContextTransaction == null ? await this.CommitTrans() : 0;
+        }
+
+        /// <summary>
+        /// 删除表数据
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="entities">多个实体对象</param>
+        /// <returns>删除数量</returns>
+        public async Task<int> Delete<T>(IEnumerable<T> entities) where T : class
+        {
+            foreach (var entity in entities)
+            {
+                dbContext.Set<T>().Attach(entity);
+                dbContext.Set<T>().Remove(entity);
+            }
+            return dbContextTransaction == null ? await this.CommitTrans() : 0;
+        }
+
+        /// <summary>
+        /// 删除表数据
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="condition">Linq</param>
+        /// <returns>删除数量</returns>
+        public async Task<int> Delete<T>(Expression<Func<T, bool>> condition) where T : class, new()
+        {
+            var entities = dbContext.Set<T>().Where(condition);
+            return entities.Count() > 0 ? await Delete(entities: entities) : 0;
+        }
+
+        /// <summary>
+        /// 删除表数据
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="keyValue">ID</param>
+        /// <returns>删除数量</returns>
+        public async Task<int> Delete<T>(long keyValue) where T : class
+        {
+            var entityType = DbContextExtension.GetEntityType<T>(dbContext);
+            if (entityType != null)
+            {
+                var tableName = entityType.GetTableName();
+                var keyField = "Id";
+                return await this.ExecuteBySql(DbContextExtension.DeleteSql(tableName, keyField, keyValue));
+            }
+            return -1;
+        }
+
+        /// <summary>
+        /// 删除表数据
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="keyValue">ID集合</param>
+        /// <returns>删除数量</returns>
+        public async Task<int> Delete<T>(long[] keyValue) where T : class
+        {
+            var entityType = DbContextExtension.GetEntityType<T>(dbContext);
+            if (entityType != null)
+            {
+                var tableName = entityType.GetTableName();
+                var keyField = "Id";
+                return await this.ExecuteBySql(DbContextExtension.DeleteSql(tableName, keyField, keyValue));
+            }
+            return -1;
+        }
+
+        /// <summary>
+        /// 删除表数据
+        /// </summary>
+        /// <typeparam name="T">实体类型</typeparam>
+        /// <param name="propertyName">属性名</param>
+        /// <param name="propertyValue">属性值</param>
+        /// <returns>删除数量</returns>
+        public async Task<int> Delete<T>(string propertyName, long propertyValue) where T : class
+        {
+            var entityType = DbContextExtension.GetEntityType<T>(dbContext);
+            if (entityType != null)
+            {
+                var tableName = entityType.GetTableName();
+                return await this.ExecuteBySql(DbContextExtension.DeleteSql(tableName, propertyName, propertyValue));
+            }
+            return -1;
         }
 
         /// <summary>

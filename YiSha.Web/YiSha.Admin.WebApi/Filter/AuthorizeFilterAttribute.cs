@@ -5,11 +5,11 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using YiSha.Business.SystemManage;
+using YiSha.Entity;
 using YiSha.Entity.SystemManage;
 using YiSha.Enum;
 using YiSha.Util;
 using YiSha.Util.Extension;
-using YiSha.Web.Code;
 
 namespace YiSha.Admin.WebApi.Filter
 {

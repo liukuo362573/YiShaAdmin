@@ -15,12 +15,24 @@
         /// </summary>
         public string TableNameUpper { get; set; }
 
+        /// <summary>
+        /// 文件配置
+        /// </summary>
         public FileConfigModel FileConfig { get; set; }
 
+        /// <summary>
+        /// 输出配置
+        /// </summary>
         public OutputConfigModel OutputConfig { get; set; }
 
+        /// <summary>
+        /// 分页配置
+        /// </summary>
         public PageIndexModel PageIndex { get; set; }
 
+        /// <summary>
+        /// 分页表单
+        /// </summary>
         public PageFormModel PageForm { get; set; }
     }
 
@@ -29,28 +41,64 @@
     /// </summary>
     public class FileConfigModel
     {
+        /// <summary>
+        /// 类前缀
+        /// </summary>
         public string ClassPrefix { get; set; }
 
+        /// <summary>
+        /// 类描述
+        /// </summary>
         public string ClassDescription { get; set; }
 
+        /// <summary>
+        /// 创建名称
+        /// </summary>
         public string CreateName { get; set; }
 
+        /// <summary>
+        /// 创建日期
+        /// </summary>
         public string CreateDate { get; set; }
 
+        /// <summary>
+        /// 实体名称
+        /// </summary>
         public string EntityName { get; set; }
 
+        /// <summary>
+        /// 实体映射名
+        /// </summary>
         public string EntityMapName { get; set; }
 
+        /// <summary>
+        /// 实体参数名称
+        /// </summary>
         public string EntityParamName { get; set; }
 
+        /// <summary>
+        /// 业务名称
+        /// </summary>
         public string BusinessName { get; set; }
 
+        /// <summary>
+        /// 服务名称
+        /// </summary>
         public string ServiceName { get; set; }
 
+        /// <summary>
+        /// 控制器名称
+        /// </summary>
         public string ControllerName { get; set; }
 
+        /// <summary>
+        /// 页面索引名称
+        /// </summary>
         public string PageIndexName { get; set; }
 
+        /// <summary>
+        /// 页面表单名称
+        /// </summary>
         public string PageFormName { get; set; }
     }
 
@@ -110,6 +158,9 @@
         /// </summary>
         public int IsPagination { get; set; }
 
+        /// <summary>
+        /// 列列表
+        /// </summary>
         public List<string> ColumnList { get; set; }
     }
 
@@ -123,6 +174,9 @@
         /// </summary>
         public int ShowMode { get; set; }
 
+        /// <summary>
+        /// 字段列表
+        /// </summary>
         public List<string> FieldList { get; set; }
     }
 }

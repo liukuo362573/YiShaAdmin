@@ -1,4 +1,4 @@
-﻿using YiSha.Cache.Factory;
+﻿using YiSha.Cache;
 using YiSha.Entity.SystemManage;
 using YiSha.Service.SystemManage;
 

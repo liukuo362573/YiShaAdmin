@@ -24,14 +24,14 @@ namespace YiSha.DataBase
         private DbType dbType { get; }
 
         /// <summary>
-        /// 连接命令超时
-        /// </summary>
-        private int dbTimeout { get; }
-
-        /// <summary>
         /// 连接字符
         /// </summary>
         private string dbConnect { get; }
+
+        /// <summary>
+        /// 连接超时
+        /// </summary>
+        private int dbTimeout { get; }
 
         /// <summary>
         /// 数据库版本
@@ -45,8 +45,8 @@ namespace YiSha.DataBase
         public DbCommon()
         {
             this.dbType = DbFactory.Type;
-            this.dbTimeout = DbFactory.Timeout;
             this.dbConnect = DbFactory.Connect;
+            this.dbTimeout = DbFactory.Timeout;
             if (!string.IsNullOrEmpty(Regex.Match(DbFactory.Connect, "version=.+?;").Value))
             {
                 this.dbConnect = DbFactory.Connect.Replace(Regex.Match(DbFactory.Connect, "version=.+?;").Value, "");
@@ -65,8 +65,8 @@ namespace YiSha.DataBase
         public DbCommon(DbType dbType, string dbConnect, int dbTimeout = 10)
         {
             this.dbType = dbType;
-            this.dbTimeout = dbTimeout == 10 ? dbTimeout : DbFactory.Timeout;
             this.dbConnect = dbConnect;
+            this.dbTimeout = dbTimeout == 10 ? dbTimeout : DbFactory.Timeout;
             if (!string.IsNullOrEmpty(Regex.Match(dbConnect, "version=.+?;").Value))
             {
                 this.dbConnect = dbConnect.Replace(Regex.Match(dbConnect, "version=.+?;").Value, "");
@@ -84,8 +84,8 @@ namespace YiSha.DataBase
         public DbCommon(string dbConnect, int dbTimeout = 10)
         {
             this.dbType = DbFactory.Type;
-            this.dbTimeout = dbTimeout == 10 ? dbTimeout : DbFactory.Timeout;
             this.dbConnect = dbConnect;
+            this.dbTimeout = dbTimeout == 10 ? dbTimeout : DbFactory.Timeout;
             if (!string.IsNullOrEmpty(Regex.Match(dbConnect, "version=.+?;").Value))
             {
                 this.dbConnect = dbConnect.Replace(Regex.Match(dbConnect, "version=.+?;").Value, "");
@@ -156,7 +156,7 @@ namespace YiSha.DataBase
                         .Where(p => !string.IsNullOrEmpty(p.GetCustomAttribute<TableAttribute>()?.Name));
                     foreach (var type in typesToRegister)
                     {
-                        dynamic? createInstance = Activator.CreateInstance(type);
+                        var createInstance = Activator.CreateInstance(type);
                         modelBuilder.Model.AddEntityType(type);
                     }
                 }

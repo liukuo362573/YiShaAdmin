@@ -897,62 +897,73 @@ namespace YiSha.CodeGenerator.Template
 
                 // 生成菜单
                 var repository = new Repository();
-                var buttonAuthorizeList = GetButtonAuthorizeList();
-                var menuUrl = baseConfigModel.OutputConfig.OutputModule + "/" + baseConfigModel.FileConfig.ClassPrefix + "/" + baseConfigModel.FileConfig.PageIndexName;
-                var modulePrefix = GetModulePrefix(baseConfigModel);
-                var classPrefix = baseConfigModel.FileConfig.ClassPrefix.ToLower();
-                var classDescription = baseConfigModel.FileConfig.ClassDescription == "" ? baseConfigModel.FileConfig.ClassPrefix : baseConfigModel.FileConfig.ClassDescription;
-                var menuEntity = new MenuEntity
+                var beginTrans = await repository.BeginTrans();
+                try
                 {
-                    MenuName = classDescription,
-                    MenuUrl = menuUrl,
-                    MenuType = (int)MenuTypeEnum.Menu,
-                    Authorize = string.Format("{0}:{1}:{2}", modulePrefix, classPrefix, "view")
-                };
-                var obj = await AddMenu(repository, menuEntity);
-                if (obj.Tag == 1)
+                    var buttonAuthorizeList = GetButtonAuthorizeList();
+                    var menuUrl = baseConfigModel.OutputConfig.OutputModule + "/" + baseConfigModel.FileConfig.ClassPrefix + "/" + baseConfigModel.FileConfig.PageIndexName;
+                    var modulePrefix = GetModulePrefix(baseConfigModel);
+                    var classPrefix = baseConfigModel.FileConfig.ClassPrefix.ToLower();
+                    var classDescription = baseConfigModel.FileConfig.ClassDescription == "" ? baseConfigModel.FileConfig.ClassPrefix : baseConfigModel.FileConfig.ClassDescription;
+                    var menuEntity = new MenuEntity
+                    {
+                        MenuName = classDescription,
+                        MenuUrl = menuUrl,
+                        MenuType = (int)MenuTypeEnum.Menu,
+                        Authorize = string.Format("{0}:{1}:{2}", modulePrefix, classPrefix, "view")
+                    };
+                    var obj = await AddMenu(beginTrans, menuEntity);
+                    if (obj.Tag == 1)
+                    {
+                        // 列表搜索权限
+                        {
+                            var button = buttonAuthorizeList.Where(p => p.Key == "btnList").FirstOrDefault();
+                            var buttonEntity = new MenuEntity
+                            {
+                                ParentId = menuEntity.Id,
+                                MenuUrl = menuUrl,
+                                MenuName = classDescription + button.Description,
+                                MenuType = (int)MenuTypeEnum.Button,
+                                Authorize = string.Format("{0}:{1}:{2}", modulePrefix, classPrefix, button.Value)
+                            };
+                            await AddMenu(beginTrans, buttonEntity);
+                        }
+                        // 按钮搜索权限
+                        if (baseConfigModel.PageIndex.IsSearch == 1)
+                        {
+                            var button = buttonAuthorizeList.Where(p => p.Key == "btnSearch").FirstOrDefault();
+                            var buttonEntity = new MenuEntity
+                            {
+                                ParentId = menuEntity.Id,
+                                MenuUrl = menuUrl,
+                                MenuName = classDescription + button.Description,
+                                MenuType = (int)MenuTypeEnum.Button,
+                                Authorize = string.Format("{0}:{1}:{2}", modulePrefix, classPrefix, button.Value)
+                            };
+                            await AddMenu(beginTrans, buttonEntity);
+                        }
+                        foreach (string btn in baseConfigModel.PageIndex.ButtonList)
+                        {
+                            var button = buttonAuthorizeList.Where(p => p.Key == btn).FirstOrDefault();
+                            var buttonEntity = new MenuEntity
+                            {
+                                ParentId = menuEntity.Id,
+                                MenuName = classDescription + button.Description,
+                                MenuType = (int)MenuTypeEnum.Button,
+                                Authorize = string.Format("{0}:{1}:{2}", modulePrefix, classPrefix, button.Value)
+                            };
+                            await AddMenu(beginTrans, buttonEntity);
+                        }
+                        new MenuCache().Remove();
+                        result.Add(new KeyValue { Key = "菜单路径", Value = menuUrl });
+                    }
+                    //提交事务保存数据
+                    await beginTrans.CommitTrans();
+                }
+                catch (Exception ex)
                 {
-                    // 列表搜索权限
-                    {
-                        var button = buttonAuthorizeList.Where(p => p.Key == "btnList").FirstOrDefault();
-                        var buttonEntity = new MenuEntity
-                        {
-                            ParentId = menuEntity.Id,
-                            MenuUrl = menuUrl,
-                            MenuName = classDescription + button.Description,
-                            MenuType = (int)MenuTypeEnum.Button,
-                            Authorize = string.Format("{0}:{1}:{2}", modulePrefix, classPrefix, button.Value)
-                        };
-                        await AddMenu(repository, buttonEntity);
-                    }
-                    // 按钮搜索权限
-                    if (baseConfigModel.PageIndex.IsSearch == 1)
-                    {
-                        var button = buttonAuthorizeList.Where(p => p.Key == "btnSearch").FirstOrDefault();
-                        var buttonEntity = new MenuEntity
-                        {
-                            ParentId = menuEntity.Id,
-                            MenuUrl = menuUrl,
-                            MenuName = classDescription + button.Description,
-                            MenuType = (int)MenuTypeEnum.Button,
-                            Authorize = string.Format("{0}:{1}:{2}", modulePrefix, classPrefix, button.Value)
-                        };
-                        await AddMenu(repository, buttonEntity);
-                    }
-                    foreach (string btn in baseConfigModel.PageIndex.ButtonList)
-                    {
-                        var button = buttonAuthorizeList.Where(p => p.Key == btn).FirstOrDefault();
-                        var buttonEntity = new MenuEntity
-                        {
-                            ParentId = menuEntity.Id,
-                            MenuName = classDescription + button.Description,
-                            MenuType = (int)MenuTypeEnum.Button,
-                            Authorize = string.Format("{0}:{1}:{2}", modulePrefix, classPrefix, button.Value)
-                        };
-                        await AddMenu(repository, buttonEntity);
-                    }
-                    new MenuCache().Remove();
-                    result.Add(new KeyValue { Key = "菜单路径", Value = menuUrl });
+                    var msg = ex.Message;
+                    await beginTrans.RollbackTrans();
                 }
             }
 
@@ -963,6 +974,12 @@ namespace YiSha.CodeGenerator.Template
             return result;
         }
 
+        /// <summary>
+        /// 添加菜单
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="menuEntity"></param>
+        /// <returns></returns>
         private async Task<TData> AddMenu(Repository repository, MenuEntity menuEntity)
         {
             var obj = new TData();

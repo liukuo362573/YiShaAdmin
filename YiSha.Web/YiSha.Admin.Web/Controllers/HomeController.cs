@@ -2,6 +2,7 @@
 using YiSha.Admin.Web.Filter;
 using YiSha.Business.OrganizationManage;
 using YiSha.Business.SystemManage;
+using YiSha.Entity;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Entity.SystemManage;
 using YiSha.Enum;
@@ -9,7 +10,6 @@ using YiSha.Model.Result;
 using YiSha.Util;
 using YiSha.Util.Extension;
 using YiSha.Util.Model;
-using YiSha.Web.Code;
 
 namespace YiSha.Admin.Web.Controllers
 {

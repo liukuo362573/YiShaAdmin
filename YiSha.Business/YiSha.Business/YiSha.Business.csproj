@@ -7,14 +7,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Folder Include="ToolManage\" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\..\YiSha.Common\YiSha.Common.csproj" />
 		<ProjectReference Include="..\..\YiSha.CodeGenerator\YiSha.CodeGenerator.csproj" />
 		<ProjectReference Include="..\YiSha.Business.Cache\YiSha.Business.Cache.csproj" />
 		<ProjectReference Include="..\YiSha.Service\YiSha.Service.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="ToolManage\" />
 	</ItemGroup>
 
 </Project>

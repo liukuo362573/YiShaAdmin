@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
-namespace YiSha.Entity
+namespace YiSha.Common
 {
     /// <summary>
-    /// Controller Model Binding 处理
+    /// 控制器模型绑定
     /// </summary>
     public class ModelBindingMetadataProvider : IMetadataDetailsProvider, IDisplayMetadataProvider
     {

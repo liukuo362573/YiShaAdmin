@@ -4,7 +4,7 @@ using YiSha.Enum.OrganizationManage;
 using YiSha.Util;
 using YiSha.Util.Extension;
 
-namespace YiSha.Web.Code
+namespace YiSha.Entity
 {
     public class DataRepository : Repository
     {

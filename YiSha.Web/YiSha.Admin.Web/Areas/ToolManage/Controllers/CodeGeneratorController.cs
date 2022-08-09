@@ -11,7 +11,6 @@ using YiSha.Model.Result;
 using YiSha.Model.Result.SystemManage;
 using YiSha.Util;
 using YiSha.Util.Model;
-using YiSha.Web.Code;
 
 namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
 {

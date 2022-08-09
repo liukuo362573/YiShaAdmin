@@ -2,10 +2,10 @@
 using YiSha.Admin.Web.Controllers;
 using YiSha.Admin.Web.Filter;
 using YiSha.Business.OrganizationManage;
+using YiSha.Entity;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Model.Param.OrganizationManage;
 using YiSha.Util.Model;
-using YiSha.Web.Code;
 
 namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
 {
