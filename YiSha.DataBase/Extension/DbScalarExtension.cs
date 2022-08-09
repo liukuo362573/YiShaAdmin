@@ -126,12 +126,9 @@ namespace YiSha.DataBase.Extension
             }
             catch (Exception ex)
             {
+                Close();
                 var message = ex.Message;
                 throw;
-            }
-            finally
-            {
-                Close();
             }
         }
 
@@ -197,12 +194,9 @@ namespace YiSha.DataBase.Extension
             }
             catch (Exception ex)
             {
+                Close();
                 var message = ex.Message;
                 throw;
-            }
-            finally
-            {
-                Close();
             }
         }
 
@@ -269,12 +263,9 @@ namespace YiSha.DataBase.Extension
             }
             catch (Exception ex)
             {
+                Close();
                 var message = ex.Message;
                 throw;
-            }
-            finally
-            {
-                Close();
             }
         }
 
@@ -341,12 +332,9 @@ namespace YiSha.DataBase.Extension
             }
             catch (Exception ex)
             {
+                Close();
                 var message = ex.Message;
                 throw;
-            }
-            finally
-            {
-                Close();
             }
         }
 
