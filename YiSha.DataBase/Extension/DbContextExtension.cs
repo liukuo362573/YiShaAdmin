@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Data;
 using System.Data.Common;
-using System.Reflection;
 using System.Text;
 using YiSha.Util;
 
@@ -21,7 +19,7 @@ namespace YiSha.DataBase.Extension
         /// <returns></returns>
         public static string DeleteSql(string tableName)
         {
-            StringBuilder strSql = new StringBuilder("DELETE FROM " + tableName + "");
+            var strSql = new StringBuilder("DELETE FROM " + tableName + "");
             return strSql.ToString();
         }
 
@@ -34,7 +32,7 @@ namespace YiSha.DataBase.Extension
         /// <returns></returns>
         public static string DeleteSql(string tableName, string propertyName, long propertyValue)
         {
-            StringBuilder strSql = new StringBuilder("DELETE FROM " + tableName + " WHERE " + propertyName + " = " + propertyValue + "");
+            var strSql = new StringBuilder("DELETE FROM " + tableName + " WHERE " + propertyName + " = " + propertyValue + "");
             return strSql.ToString();
         }
 
@@ -47,7 +45,7 @@ namespace YiSha.DataBase.Extension
         /// <returns></returns>
         public static string DeleteSql(string tableName, string propertyName, long[] propertyValue)
         {
-            string strSql = "DELETE FROM " + tableName + " WHERE " + propertyName + " IN (" + string.Join(",", propertyValue) + ")";
+            var strSql = "DELETE FROM " + tableName + " WHERE " + propertyName + " IN (" + string.Join(",", propertyValue) + ")";
             return strSql.ToString();
         }
 
@@ -70,7 +68,7 @@ namespace YiSha.DataBase.Extension
         /// <returns></returns>
         public static string BuilderProc(string procName, params DbParameter[] dbParameter)
         {
-            StringBuilder strSql = new StringBuilder("exec " + procName);
+            var strSql = new StringBuilder("exec " + procName);
             if (dbParameter != null)
             {
                 foreach (var item in dbParameter)
@@ -82,27 +80,25 @@ namespace YiSha.DataBase.Extension
             return strSql.ToString();
         }
 
+        /// <summary>
+        /// 把 null 设置成对应属性类型的默认值
+        /// </summary>
+        /// <param name="dbcontext"></param>
         public static void SetEntityDefaultValue(DbContext dbcontext)
         {
-            foreach (EntityEntry entry in dbcontext.ChangeTracker.Entries().Where(p => p.State == EntityState.Added))
+            var entityEntries = dbcontext.ChangeTracker.Entries().Where(p => p.State == EntityState.Added);
+            foreach (var entry in entityEntries)
             {
-                #region 把null设置成对应属性类型的默认值
-                Type type = entry.Entity.GetType();
-                PropertyInfo[] props = ReflectionHelper.GetProperties(type);
-                foreach (PropertyInfo prop in props)
+                var type = entry.Entity.GetType();
+                var props = ReflectionHelper.GetProperties(type);
+                foreach (var prop in props)
                 {
-                    object value = prop.GetValue(entry.Entity, null);
+                    var value = prop.GetValue(entry.Entity, null);
                     if (value == null)
                     {
-                        string sType = string.Empty;
-                        if (prop.PropertyType.GenericTypeArguments.Length > 0)
-                        {
-                            sType = prop.PropertyType.GenericTypeArguments[0].Name;
-                        }
-                        else
-                        {
-                            sType = prop.PropertyType.Name;
-                        }
+                        var sType = prop.PropertyType.GenericTypeArguments.Length > 0 ?
+                            prop.PropertyType.GenericTypeArguments[0].Name :
+                            prop.PropertyType.Name;
                         switch (sType)
                         {
                             case "Boolean":
@@ -155,11 +151,10 @@ namespace YiSha.DataBase.Extension
                     }
                     else if (value.ToString() == DateTime.MinValue.ToString())
                     {
-                        // sql server datetime类型的的范围不到0001-01-01，所以转成1970-01-01
+                        //SqlServer datetime 类型的的范围不到 0001-01-01，所以转成 1970-01-01
                         prop.SetValue(entry.Entity, GlobalConstant.DefaultTime);
                     }
                 }
-                #endregion
             }
         }
     }

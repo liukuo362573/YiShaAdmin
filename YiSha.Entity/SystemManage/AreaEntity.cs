@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations.Schema;
-using YiSha.Util;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace YiSha.Entity.SystemManage
 {
@@ -50,21 +48,18 @@ namespace YiSha.Entity.SystemManage
         /// 省份ID
         /// </summary>
         /// <returns></returns>
-        [JsonConverter(typeof(StringJsonConverter))]
         public long? ProvinceId { get; set; }
 
         /// <summary>
         /// 城市ID
         /// </summary>
         /// <returns></returns>
-        [JsonConverter(typeof(StringJsonConverter))]
         public long? CityId { get; set; }
 
         /// <summary>
         /// 区域ID
         /// </summary>
         /// <returns></returns>
-        [JsonConverter(typeof(StringJsonConverter))]
         public long? CountyId { get; set; }
 
         /// <summary>

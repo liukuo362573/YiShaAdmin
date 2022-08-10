@@ -3,8 +3,7 @@ using YiSha.DataBase;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Entity.SystemManage;
 
-#pragma warning disable CS8618
-namespace YiSha.Entity
+namespace YiSha.Common
 {
     /// <summary>
     /// 数据库上下文
@@ -113,4 +112,3 @@ namespace YiSha.Entity
         public DbSet<RoleEntity> RoleEntity { get; set; }
     }
 }
-#pragma warning restore CS8618

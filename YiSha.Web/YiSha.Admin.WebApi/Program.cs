@@ -3,12 +3,11 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
 using NLog.Web;
 using System.Reflection;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using YiSha.Admin.WebApi.Filter;
 using YiSha.Business.AutoJob;
-using YiSha.Entity;
+using YiSha.Common;
 using YiSha.Util;
 using YiSha.Util.Model;
 
@@ -26,12 +25,6 @@ namespace YiSha.Admin.WebApi
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            //WebHost
-            builder.WebHost.ConfigureLogging(logging =>
-            {
-                logging?.ClearProviders();
-                logging?.SetMinimumLevel(LogLevel.Trace);
-            }).UseNLog();
             //Service
             builder.Services.ConfigureServices();
             //Injection
@@ -50,10 +43,11 @@ namespace YiSha.Admin.WebApi
         /// <param name="services">服务</param>
         public static void ConfigureServices(this IServiceCollection services)
         {
-            //添加编码单例
-            services.AddSingleton(HtmlEncoder.Create(UnicodeRanges.All));
-            //注册编码
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            //日志组件
+            services.AddLogging(loging =>
+            {
+                loging.AddNLog("nlog.config");
+            });
             //添加 Memory 缓存功能
             services.AddMemoryCache();
             //启动 Session
@@ -95,6 +89,18 @@ namespace YiSha.Admin.WebApi
                 //https://docs.microsoft.com/zh-cn/dotnet/api/system.text.json.jsonserializeroptions.propertynamingpolicy?view=net-6.0
                 //返回数据首字不变
                 options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                //格式化时间
+                options.JsonSerializerOptions.Converters.Add(new DateTimeJsonConverter());
+                //Long 转为字符串
+                options.JsonSerializerOptions.Converters.Add(new LongJsonConverter());
+                //取消 Unicode 编码
+                options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+                //空值不反回前端
+                //options.JsonSerializerOptions.IgnoreNullValues = true;
+                //允许额外符号
+                //options.JsonSerializerOptions.AllowTrailingCommas = true;
+                //反序列化过程中属性名称是否使用不区分大小写的比较
+                //options.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
             });
             //添加 Swagger
             services.AddSwaggerGen(options =>

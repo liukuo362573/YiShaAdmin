@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using YiSha.Cache.Factory;
+using YiSha.Cache;
 using YiSha.Util;
 
-namespace YiSha.Web.Code
+namespace YiSha.Entity
 {
     public class Operator
     {

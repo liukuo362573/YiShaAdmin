@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations.Schema;
-using YiSha.Util;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace YiSha.Entity.SystemManage
 {
@@ -13,13 +11,11 @@ namespace YiSha.Entity.SystemManage
         /// <summary>
         /// 菜单Id
         /// </summary>
-        [JsonConverter(typeof(StringJsonConverter))]
         public long? MenuId { get; set; }
 
         /// <summary>
         /// 授权Id(角色Id或者用户Id)
         /// </summary>
-        [JsonConverter(typeof(StringJsonConverter))]
         public long? AuthorizeId { get; set; }
 
         /// <summary>

@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using YiSha.Business.SystemManage;
+using YiSha.Entity;
 using YiSha.Model.Result;
 using YiSha.Util;
 using YiSha.Util.Extension;
 using YiSha.Util.Model;
-using YiSha.Web.Code;
 
 namespace YiSha.Admin.Web.Filter
 {

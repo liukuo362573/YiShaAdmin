@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations.Schema;
-using YiSha.Util;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace YiSha.Entity.SystemManage
 {
@@ -13,7 +11,6 @@ namespace YiSha.Entity.SystemManage
         /// <summary>
         /// 父菜单Id(0表示是根菜单)
         /// </summary>
-        [JsonConverter(typeof(StringJsonConverter))]
         public long? ParentId { get; set; }
 
         /// <summary>

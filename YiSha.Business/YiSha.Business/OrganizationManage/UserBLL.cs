@@ -1,4 +1,5 @@
-﻿using YiSha.Cache.Factory;
+﻿using YiSha.Cache;
+using YiSha.Entity;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Enum;
 using YiSha.Enum.OrganizationManage;
@@ -8,7 +9,6 @@ using YiSha.Service.OrganizationManage;
 using YiSha.Util;
 using YiSha.Util.Extension;
 using YiSha.Util.Model;
-using YiSha.Web.Code;
 
 namespace YiSha.Business.OrganizationManage
 {

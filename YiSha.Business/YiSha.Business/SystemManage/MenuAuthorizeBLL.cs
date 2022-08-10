@@ -1,11 +1,11 @@
 ﻿using YiSha.Business.Cache;
+using YiSha.Entity;
 using YiSha.Entity.SystemManage;
 using YiSha.Enum;
 using YiSha.Enum.SystemManage;
 using YiSha.Model.Result;
 using YiSha.Util.Extension;
 using YiSha.Util.Model;
-using YiSha.Web.Code;
 
 namespace YiSha.Business.SystemManage
 {

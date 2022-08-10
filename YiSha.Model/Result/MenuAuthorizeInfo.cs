@@ -1,21 +1,22 @@
-﻿using Newtonsoft.Json;
-using YiSha.Util;
-
-namespace YiSha.Model.Result
+﻿namespace YiSha.Model.Result
 {
     public class MenuAuthorizeInfo
     {
-        [JsonConverter(typeof(StringJsonConverter))]
+        /// <summary>
+        ///  菜单Id
+        /// </summary>
         public long? MenuId { get; set; }
+
         /// <summary>
         /// 用户Id或者角色Id
         /// </summary>
-        [JsonConverter(typeof(StringJsonConverter))]
         public long? AuthorizeId { get; set; }
+
         /// <summary>
         ///  用户或者角色
         /// </summary>
         public int? AuthorizeType { get; set; }
+
         /// <summary>
         /// 权限标识
         /// </summary>

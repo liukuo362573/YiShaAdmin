@@ -2,7 +2,6 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 
@@ -11,7 +10,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\YiSha.Web\YiSha.Web.Code\YiSha.Web.Code.csproj" />
+	  <ProjectReference Include="..\YiSha.Cache\YiSha.Cache.csproj" />
+	  <ProjectReference Include="..\YiSha.DataBase\YiSha.DataBase.csproj" />
+	  <ProjectReference Include="..\YiSha.Util\YiSha.Util.csproj" />
 	</ItemGroup>
 
 </Project>

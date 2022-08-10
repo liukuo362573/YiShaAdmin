@@ -327,7 +327,8 @@ namespace YiSha.DataBase.Extension
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    var message = ex.Message;
+                    throw;
                 }
             }
             return sql;

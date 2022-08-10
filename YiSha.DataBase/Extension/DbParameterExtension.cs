@@ -31,7 +31,7 @@ namespace YiSha.DataBase.Extension
         /// <returns></returns>
         public static DbParameter CreateDbParameter(string paramName, object value)
         {
-            DbParameter param = CreateDbParameter();
+            var param = CreateDbParameter();
             param.ParameterName = paramName;
             param.Value = value;
             return param;
@@ -44,9 +44,9 @@ namespace YiSha.DataBase.Extension
         /// <returns></returns>
         public static DbParameter[] ToDbParameter(DbParameter[] dbParameter)
         {
-            int i = 0;
-            int size = dbParameter.Length;
-            DbParameter[] _dbParameter = null;
+            var i = 0;
+            var size = dbParameter.Length;
+            DbParameter[] _dbParameter;
             switch (DbFactory.Type)
             {
                 case DbType.SqlServer:

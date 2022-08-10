@@ -3,6 +3,7 @@ using YiSha.Admin.Web.Controllers;
 using YiSha.Admin.Web.Filter;
 using YiSha.Business.OrganizationManage;
 using YiSha.Business.SystemManage;
+using YiSha.Entity;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Model.Param;
 using YiSha.Model.Param.OrganizationManage;
@@ -10,7 +11,6 @@ using YiSha.Model.Result;
 using YiSha.Model.Result.SystemManage;
 using YiSha.Util;
 using YiSha.Util.Model;
-using YiSha.Web.Code;
 
 namespace YiSha.Admin.Web.Areas.OrganizationManage.Controllers
 {

@@ -1,94 +1,88 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using YiSha.Util.Extension;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace YiSha.Util
 {
-    #region JsonHelper
-
     /// <summary>
     /// Json 工具
     /// </summary>
     public static class JsonHelper
     {
-        public static T ToObject<T>(this string Json)
+        public static T? ToObject<T>(this string Json)
         {
             Json = Json.Replace("&nbsp;", "");
-            return Json == null ? default(T) : JsonConvert.DeserializeObject<T>(Json);
+            return Json == null ? default : Newtonsoft.Json.JsonConvert.DeserializeObject<T>(Json);
         }
 
-        public static JObject ToJObject(this string Json)
+        public static Newtonsoft.Json.Linq.JObject ToJObject(this string Json)
         {
-            return Json == null ? JObject.Parse("{}") : JObject.Parse(Json.Replace("&nbsp;", ""));
-        }
-    }
-
-    #endregion
-
-    #region JsonConverter
-
-    /// <summary>
-    /// Json数据返回到前端js的时候，把数值很大的long类型转成字符串
-    /// </summary>
-    public class StringJsonConverter : JsonConverter
-    {
-        public StringJsonConverter() { }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            return reader.Value.ParseToLong();
-        }
-
-        public override bool CanConvert(Type objectType)
-        {
-            return true;
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            if (value == null)
-            {
-                writer.WriteNull();
-                return;
-            }
-            string sValue = value.ToString();
-            writer.WriteValue(sValue);
+            return Json == null ? Newtonsoft.Json.Linq.JObject.Parse("{}") : Newtonsoft.Json.Linq.JObject.Parse(Json.Replace("&nbsp;", ""));
         }
     }
 
     /// <summary>
-    /// DateTime类型序列化的时候，转成指定的格式
+    /// Long Json 格式化
     /// </summary>
-    public class DateTimeJsonConverter : JsonConverter
+    public class LongJsonConverter : JsonConverter<long>
     {
-        public DateTimeJsonConverter() { }
-
-        public override bool CanConvert(Type objectType)
+        /// <summary>
+        /// 读取
+        /// </summary>
+        /// <param name="reader">读</param>
+        /// <param name="typeToConvert">类型</param>
+        /// <param name="options">选项</param>
+        /// <returns></returns>
+        public override long Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            return true;
+            if (reader.TokenType == JsonTokenType.String)
+            {
+                if (long.TryParse(reader.GetString(), out long data)) return data;
+            }
+            return reader.GetInt64();
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        /// <summary>
+        /// 写入
+        /// </summary>
+        /// <param name="writer">写</param>
+        /// <param name="value">值</param>
+        /// <param name="options">选项</param>
+        public override void Write(Utf8JsonWriter writer, long value, JsonSerializerOptions options)
         {
-            return reader.Value.ParseToString().ParseToDateTime();
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            if (value == null)
-            {
-                writer.WriteNull();
-                return;
-            }
-            DateTime? dt = value as DateTime?;
-            if (dt == null)
-            {
-                writer.WriteNull();
-                return;
-            }
-            writer.WriteValue(dt.Value.ToString("yyyy-MM-dd HH:mm:ss"));
+            writer.WriteStringValue(value.ToString());
         }
     }
 
-    #endregion
+    /// <summary>
+    /// 时间 Json 格式化
+    /// </summary>
+    public class DateTimeJsonConverter : JsonConverter<DateTime>
+    {
+        /// <summary>
+        /// 读取
+        /// </summary>
+        /// <param name="reader">读</param>
+        /// <param name="typeToConvert">类型</param>
+        /// <param name="options">选项</param>
+        /// <returns></returns>
+        public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            if (reader.TokenType == JsonTokenType.String)
+            {
+                if (DateTime.TryParse(reader.GetString(), out DateTime data)) return data;
+            }
+            return reader.GetDateTime();
+        }
+
+        /// <summary>
+        /// 写入
+        /// </summary>
+        /// <param name="writer">写</param>
+        /// <param name="value">值</param>
+        /// <param name="options">选项</param>
+        public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
+        {
+            writer.WriteStringValue(value.ToString("yyyy-MM-dd HH:mm:ss"));
+        }
+    }
 }

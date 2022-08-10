@@ -1,4 +1,4 @@
-﻿using YiSha.Cache.Factory;
+﻿using YiSha.Cache;
 
 namespace YiSha.Business.Cache
 {

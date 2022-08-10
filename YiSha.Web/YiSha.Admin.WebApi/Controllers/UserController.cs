@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using YiSha.Admin.WebApi.Filter;
 using YiSha.Business.OrganizationManage;
+using YiSha.Entity;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Enum;
 using YiSha.Util.Model;
-using YiSha.Web.Code;
 
 namespace YiSha.Admin.WebApi.Controllers
 {

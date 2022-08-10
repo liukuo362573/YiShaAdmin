@@ -1,11 +1,11 @@
-﻿using YiSha.Entity.OrganizationManage;
+﻿using YiSha.Entity;
+using YiSha.Entity.OrganizationManage;
 using YiSha.Model.Param.OrganizationManage;
 using YiSha.Model.Result;
 using YiSha.Service.OrganizationManage;
 using YiSha.Util;
 using YiSha.Util.Extension;
 using YiSha.Util.Model;
-using YiSha.Web.Code;
 
 namespace YiSha.Business.OrganizationManage
 {
