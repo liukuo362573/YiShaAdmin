@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using YiSha.Util.Extension;
+using YiSha.Util;
 
 namespace YiSha.CodeGenerator
 {
@@ -15,8 +15,8 @@ namespace YiSha.CodeGenerator
         /// <returns></returns>
         public static string FirstLetterLowercase(string instanceName)
         {
-            instanceName = instanceName.ParseToString();
-            if (!instanceName.IsEmpty())
+            instanceName = instanceName.ToStr();
+            if (!instanceName.IsNull())
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append(instanceName[0].ToString().ToLower() + instanceName.Substring(1));

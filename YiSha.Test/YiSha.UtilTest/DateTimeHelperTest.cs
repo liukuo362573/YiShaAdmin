@@ -1,6 +1,5 @@
 using NUnit.Framework;
 using YiSha.Util;
-using YiSha.Util.Extension;
 
 namespace YiSha.UtilTest
 {
@@ -18,7 +17,7 @@ namespace YiSha.UtilTest
         [Test]
         public void TestGetUnixTimeStamp()
         {
-            DateTime dt = "2019-09-01 17:37:40".ParseToDateTime();
+            DateTime dt = "2019-09-01 17:37:40".ToDate();
             long result = DateTimeHelper.GetUnixTimeStamp(dt);
 
             Assert.AreEqual(1567330660000, result);

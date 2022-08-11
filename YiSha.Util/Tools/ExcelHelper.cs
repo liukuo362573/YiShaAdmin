@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Reflection;
 using System.Text;
-using YiSha.Util.Extension;
 
 namespace YiSha.Util
 {
@@ -148,10 +147,10 @@ namespace YiSha.Util
                 {
                     var newCell = dataRow.CreateCell(columnIndex);
                     newCell.CellStyle = contentStyle;
-                    var drValue = properties[columnIndex].GetValue(list[rowIndex], null).ParseToString();
+                    var drValue = properties[columnIndex].GetValue(list[rowIndex], null).ToStr();
                     //根据单元格内容设定列宽
                     var length = Math.Min(253, Encoding.UTF8.GetBytes(drValue).Length + 1) * 256;
-                    if (sheet.GetColumnWidth(columnIndex) < length && !drValue.IsEmpty())
+                    if (sheet.GetColumnWidth(columnIndex) < length && !drValue.IsNull())
                     {
                         sheet.SetColumnWidth(columnIndex, length);
                     }
@@ -164,13 +163,13 @@ namespace YiSha.Util
 
                         case "System.DateTime":
                         case "System.Nullable`1[System.DateTime]":
-                            newCell.SetCellValue(drValue.ParseToDateTime());
+                            newCell.SetCellValue(drValue.ToDate());
                             newCell.CellStyle = dateStyle; //格式化显示  
                             break;
 
                         case "System.Boolean":
                         case "System.Nullable`1[System.Boolean]":
-                            newCell.SetCellValue(drValue.ParseToBool());
+                            newCell.SetCellValue(drValue.ToStr());
                             break;
 
                         case "System.Byte":
@@ -179,27 +178,27 @@ namespace YiSha.Util
                         case "System.Nullable`1[System.Int16]":
                         case "System.Int32":
                         case "System.Nullable`1[System.Int32]":
-                            newCell.SetCellValue(drValue.ParseToInt());
+                            newCell.SetCellValue(drValue.ToInt());
                             break;
 
                         case "System.Int64":
                         case "System.Nullable`1[System.Int64]":
-                            newCell.SetCellValue(drValue.ParseToString());
+                            newCell.SetCellValue(drValue.ToStr());
                             break;
 
                         case "System.Double":
                         case "System.Nullable`1[System.Double]":
-                            newCell.SetCellValue(drValue.ParseToDouble());
+                            newCell.SetCellValue(drValue.ToDouble());
                             break;
 
                         case "System.Single":
                         case "System.Nullable`1[System.Single]":
-                            newCell.SetCellValue(drValue.ParseToDouble());
+                            newCell.SetCellValue(drValue.ToDouble());
                             break;
 
                         case "System.Decimal":
                         case "System.Nullable`1[System.Decimal]":
-                            newCell.SetCellValue(drValue.ParseToDouble());
+                            newCell.SetCellValue(drValue.ToDouble());
                             break;
 
                         case "System.DBNull":
@@ -264,7 +263,7 @@ namespace YiSha.Util
             for (var j = 0; j < columnRow.LastCellNum; j++)
             {
                 var cell = columnRow.GetCell(j);
-                var propertyInfo = MapPropertyInfo(cell.ParseToString());
+                var propertyInfo = MapPropertyInfo(cell.ToStr());
                 if (propertyInfo != null)
                 {
                     mapPropertyInfoDict.Add(j, propertyInfo);
@@ -286,50 +285,50 @@ namespace YiSha.Util
                             {
                                 case "System.DateTime":
                                 case "System.Nullable`1[System.DateTime]":
-                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ParseToString().ParseToDateTime());
+                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ToStr().ToDate());
                                     break;
 
                                 case "System.Boolean":
                                 case "System.Nullable`1[System.Boolean]":
-                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ParseToString().ParseToBool());
+                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ToStr().ToStr());
                                     break;
 
                                 case "System.Byte":
                                 case "System.Nullable`1[System.Byte]":
-                                    mapPropertyInfoDict[j].SetValue(entity, Byte.Parse(row.GetCell(j).ParseToString()));
+                                    mapPropertyInfoDict[j].SetValue(entity, Byte.Parse(row.GetCell(j).ToStr()));
                                     break;
                                 case "System.Int16":
                                 case "System.Nullable`1[System.Int16]":
-                                    mapPropertyInfoDict[j].SetValue(entity, Int16.Parse(row.GetCell(j).ParseToString()));
+                                    mapPropertyInfoDict[j].SetValue(entity, Int16.Parse(row.GetCell(j).ToStr()));
                                     break;
                                 case "System.Int32":
                                 case "System.Nullable`1[System.Int32]":
-                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ParseToString().ParseToInt());
+                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ToStr().ToInt());
                                     break;
 
                                 case "System.Int64":
                                 case "System.Nullable`1[System.Int64]":
-                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ParseToString().ParseToLong());
+                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ToStr().ToLong());
                                     break;
 
                                 case "System.Double":
                                 case "System.Nullable`1[System.Double]":
-                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ParseToString().ParseToDouble());
+                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ToStr().ToDouble());
                                     break;
 
                                 case "System.Single":
                                 case "System.Nullable`1[System.Single]":
-                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ParseToString().ParseToDouble());
+                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ToStr().ToDouble());
                                     break;
 
                                 case "System.Decimal":
                                 case "System.Nullable`1[System.Decimal]":
-                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ParseToString().ParseToDecimal());
+                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ToStr().ToDecimal());
                                     break;
 
                                 default:
                                 case "System.String":
-                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ParseToString());
+                                    mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ToStr());
                                     break;
                             }
                         }

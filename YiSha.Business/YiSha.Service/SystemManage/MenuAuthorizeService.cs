@@ -1,7 +1,7 @@
-﻿using YiSha.DataBase;
+﻿using YiSha.Common;
+using YiSha.DataBase;
 using YiSha.Entity.SystemManage;
 using YiSha.Util;
-using YiSha.Util.Extension;
 
 namespace YiSha.Service.SystemManage
 {
@@ -10,21 +10,21 @@ namespace YiSha.Service.SystemManage
         #region 获取数据
         public async Task<List<MenuAuthorizeEntity>> GetList(MenuAuthorizeEntity param)
         {
-            var expression = LinqExtensions.True<MenuAuthorizeEntity>();
+            var expression = ExtensionLinq.True<MenuAuthorizeEntity>();
             if (param != null)
             {
-                if (param.AuthorizeId.ParseToLong() > 0)
+                if (param.AuthorizeId.ToLong() > 0)
                 {
                     expression = expression.And(t => t.AuthorizeId == param.AuthorizeId);
                 }
-                if (param.AuthorizeType.ParseToInt() > 0)
+                if (param.AuthorizeType.ToInt() > 0)
                 {
                     expression = expression.And(t => t.AuthorizeType == param.AuthorizeType);
                 }
-                if (!param.AuthorizeIds.IsEmpty())
+                if (!param.AuthorizeIds.IsNull())
                 {
                     long[] authorizeIdArr = TextHelper.SplitToArray<long>(param.AuthorizeIds, ',');
-                    expression = expression.And(t => authorizeIdArr.Contains(t.AuthorizeId.Value));
+                    expression = expression.And(t => authorizeIdArr.Contains(t.AuthorizeId));
                 }
             }
             var list = await this.FindList<MenuAuthorizeEntity>(expression);

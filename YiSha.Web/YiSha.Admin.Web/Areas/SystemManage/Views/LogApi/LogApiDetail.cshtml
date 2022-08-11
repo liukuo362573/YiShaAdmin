@@ -47,7 +47,7 @@
                         var result = obj.Data;
                         result.UserName = (ys.isNullOrEmpty(result.UserName) ? "" : result.UserName) + " / ";
                         result.UserName += (ys.isNullOrEmpty(result.DepartmentName) ? "" : result.DepartmentName) + " / ";
-                        if (result.LogStatus == "@OperateStatusEnum.Success.ParseToInt()") {
+                        if (result.LogStatus == "@OperateStatusEnum.Success.ToInt()") {
                             result.LogStatus = '<span class="label label-primary">' + "@OperateStatusEnum.Success.GetDescription()" + '</span>';
                         } else {
                             result.LogStatus = '<span class="label label-warning">' + "@OperateStatusEnum.Fail.GetDescription()" + '</span>';

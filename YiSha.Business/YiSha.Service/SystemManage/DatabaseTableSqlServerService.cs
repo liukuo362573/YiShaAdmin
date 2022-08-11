@@ -4,7 +4,7 @@ using System.Text;
 using YiSha.DataBase;
 using YiSha.DataBase.Extension;
 using YiSha.Model.Result.SystemManage;
-using YiSha.Util.Extension;
+using YiSha.Util;
 using YiSha.Util.Model;
 
 namespace YiSha.Service.SystemManage
@@ -17,7 +17,7 @@ namespace YiSha.Service.SystemManage
             StringBuilder strSql = new StringBuilder();
             strSql.Append(@"SELECT id Id,name TableName FROM sysobjects WHERE xtype = 'u' order by name");
             IEnumerable<TableInfo> list = await this.FindList<TableInfo>(strSql.ToString());
-            if (!tableName.IsEmpty())
+            if (!tableName.IsNull())
             {
                 list = list.Where(p => p.TableName.Contains(tableName));
             }
@@ -31,7 +31,7 @@ namespace YiSha.Service.SystemManage
             var parameter = new List<DbParameter>();
             strSql.Append(@"SELECT id Id,name TableName FROM sysobjects WHERE xtype = 'u'");
 
-            if (!tableName.IsEmpty())
+            if (!tableName.IsNull())
             {
                 strSql.Append(" AND name like @TableName ");
                 parameter.Add(DbParameterExtension.CreateDbParameter("@TableName", '%' + tableName + '%'));

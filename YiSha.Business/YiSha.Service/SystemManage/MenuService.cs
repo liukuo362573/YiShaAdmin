@@ -1,9 +1,9 @@
 ﻿using System.Linq.Expressions;
+using YiSha.Common;
 using YiSha.DataBase;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Util;
-using YiSha.Util.Extension;
 
 namespace YiSha.Service.SystemManage
 {
@@ -30,14 +30,14 @@ namespace YiSha.Service.SystemManage
                 where += " AND ParentId = " + parentId;
             }
             object result = await this.FindObject("SELECT MAX(MenuSort) FROM SysMenu where BaseIsDelete = 0 " + where);
-            int sort = result.ParseToInt();
+            int sort = result.ToInt();
             sort++;
             return sort;
         }
 
         public bool ExistMenuName(MenuEntity entity)
         {
-            var expression = LinqExtensions.True<MenuEntity>();
+            var expression = ExtensionLinq.True<MenuEntity>();
             expression = expression.And(t => t.BaseIsDelete == 0);
             if (entity.Id.IsNullOrZero())
             {
@@ -72,8 +72,8 @@ namespace YiSha.Service.SystemManage
             try
             {
                 long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
-                await db.Delete<MenuEntity>(p => idArr.Contains(p.Id.Value) || idArr.Contains(p.ParentId.Value));
-                await db.Delete<MenuAuthorizeEntity>(p => idArr.Contains(p.MenuId.Value));
+                await db.Delete<MenuEntity>(p => idArr.Contains(p.Id) || idArr.Contains(p.ParentId));
+                await db.Delete<MenuAuthorizeEntity>(p => idArr.Contains(p.MenuId));
                 await db.CommitTrans();
             }
             catch
@@ -87,7 +87,7 @@ namespace YiSha.Service.SystemManage
         #region 私有方法
         private Expression<Func<MenuEntity, bool>> ListFilter(MenuListParam param)
         {
-            var expression = LinqExtensions.True<MenuEntity>();
+            var expression = ExtensionLinq.True<MenuEntity>();
             if (param != null)
             {
                 if (!string.IsNullOrEmpty(param.MenuName))

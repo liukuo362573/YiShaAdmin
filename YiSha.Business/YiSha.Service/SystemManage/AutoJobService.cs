@@ -1,9 +1,9 @@
 ﻿using System.Linq.Expressions;
+using YiSha.Common;
 using YiSha.DataBase;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Util;
-using YiSha.Util.Extension;
 using YiSha.Util.Model;
 
 namespace YiSha.Service.SystemManage
@@ -32,7 +32,7 @@ namespace YiSha.Service.SystemManage
 
         public bool ExistJob(AutoJobEntity entity)
         {
-            var expression = LinqExtensions.True<AutoJobEntity>();
+            var expression = ExtensionLinq.True<AutoJobEntity>();
             expression = expression.And(t => t.BaseIsDelete == 0);
             if (entity.Id.IsNullOrZero())
             {
@@ -71,7 +71,7 @@ namespace YiSha.Service.SystemManage
         #region 私有方法
         private Expression<Func<AutoJobEntity, bool>> ListFilter(AutoJobListParam param)
         {
-            var expression = LinqExtensions.True<AutoJobEntity>();
+            var expression = ExtensionLinq.True<AutoJobEntity>();
             if (param != null)
             {
                 if (!string.IsNullOrEmpty(param.JobName))

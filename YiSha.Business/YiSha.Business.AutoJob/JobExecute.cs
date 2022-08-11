@@ -4,7 +4,6 @@ using YiSha.Entity.SystemManage;
 using YiSha.Enum;
 using YiSha.Service.SystemManage;
 using YiSha.Util;
-using YiSha.Util.Extension;
 using YiSha.Util.Model;
 
 namespace YiSha.Business.AutoJob
@@ -25,12 +24,12 @@ namespace YiSha.Business.AutoJob
                 try
                 {
                     jobData = context.JobDetail.JobDataMap;
-                    jobId = jobData["Id"].ParseToLong();
+                    jobId = jobData["Id"].ToLong();
                     // 获取数据库中的任务
                     dbJobEntity = await autoJobService.GetEntity(jobId);
                     if (dbJobEntity != null)
                     {
-                        if (dbJobEntity.JobStatus == StatusEnum.Yes.ParseToInt())
+                        if (dbJobEntity.JobStatus == StatusEnum.Yes.ToInt())
                         {
                             CronTriggerImpl trigger = context.Trigger as CronTriggerImpl;
                             if (trigger != null)
@@ -64,7 +63,7 @@ namespace YiSha.Business.AutoJob
                 {
                     if (dbJobEntity != null)
                     {
-                        if (dbJobEntity.JobStatus == StatusEnum.Yes.ParseToInt())
+                        if (dbJobEntity.JobStatus == StatusEnum.Yes.ToInt())
                         {
                             #region 更新下次运行时间
                             await autoJobService.SaveForm(new AutoJobEntity

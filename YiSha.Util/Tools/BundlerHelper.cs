@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Newtonsoft.Json;
-using YiSha.Util.Extension;
 
 namespace YiSha.Util
 {
@@ -27,9 +26,9 @@ namespace YiSha.Util
 
             // Clean up the bundle to remove the virtual folder that aspnetcore provides.
             List<string> inputFiles = bundle.InputFiles;
-            if (GlobalContext.SystemConfig.Debug)
+            if (GlobalConstant.IsDevelopment)
             {
-                inputFiles = inputFiles.Select(file => file.Replace("wwwroot", GlobalContext.SystemConfig.VirtualDirectory.ParseToString())).ToList();
+                inputFiles = inputFiles.Select(file => file.Replace("wwwroot", GlobalContext.SystemConfig.VirtualDirectory.ToStr())).ToList();
             }
             List<string> outputString = bundlePath.EndsWith(".js") ?
                 inputFiles.Select(inputFile => $"<script src='{inputFile}?v=" + version + "' type='text/javascript' ></script>").ToList() :
@@ -40,7 +39,7 @@ namespace YiSha.Util
 
         private static Bundle GetBundle(string configFile, string bundlePath)
         {
-            if (GlobalContext.SystemConfig.Debug)
+            if (GlobalConstant.IsDevelopment)
             {
                 if (!string.IsNullOrEmpty(GlobalContext.SystemConfig.VirtualDirectory))
                 {

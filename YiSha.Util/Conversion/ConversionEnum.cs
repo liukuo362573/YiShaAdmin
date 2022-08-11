@@ -2,11 +2,13 @@
 using System.ComponentModel;
 using System.Reflection;
 
-namespace YiSha.Util.Extension
+namespace YiSha.Util
 {
-    public static partial class Extensions
+    /// <summary>
+    /// 数据转换拓展包
+    /// </summary>
+    public static partial class ConversionEnum
     {
-        #region 枚举成员转成dictionary类型
         /// <summary>
         /// 转成dictionary类型
         /// </summary>
@@ -39,6 +41,7 @@ namespace YiSha.Util.Extension
             }
             return dictionary;
         }
+
         /// <summary>
         /// 枚举成员转成键值对Json字符串
         /// </summary>
@@ -50,9 +53,7 @@ namespace YiSha.Util.Extension
             var sJson = JsonConvert.SerializeObject(dictionaryList);
             return sJson;
         }
-        #endregion
 
-        #region 获取枚举的描述
         /// <summary>
         /// 获取枚举值对应的描述
         /// </summary>
@@ -71,15 +72,18 @@ namespace YiSha.Util.Extension
             }
             return enumType.ToString();
         }
-        #endregion
 
-        #region 根据值获取枚举的描述
+        /// <summary>
+        /// 根据值获取枚举的描述
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static string GetDescriptionByEnum<T>(this object obj)
         {
-            var tEnum = System.Enum.Parse(typeof(T), obj.ParseToString()) as System.Enum;
+            var tEnum = System.Enum.Parse(typeof(T), obj.ToStr()) as System.Enum;
             var description = tEnum.GetDescription();
             return description;
         }
-        #endregion
     }
 }

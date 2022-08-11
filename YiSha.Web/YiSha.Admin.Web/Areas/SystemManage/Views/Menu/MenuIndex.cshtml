@@ -71,13 +71,13 @@
                 {
                     field: 'MenuType', title: '类型', width: '10%', align: "left",
                     formatter: function (value, item, index) {
-                        if (item.MenuType == "@MenuTypeEnum.Directory.ParseToInt()") {
+                        if (item.MenuType == "@MenuTypeEnum.Directory.ToInt()") {
                             return '<span class="label label-success">@MenuTypeEnum.Directory.GetDescription()</span>';
                         }
-                        else if (item.MenuType == "@MenuTypeEnum.Menu.ParseToInt()") {
+                        else if (item.MenuType == "@MenuTypeEnum.Menu.ToInt()") {
                             return '<span class="label label-primary">@MenuTypeEnum.Menu.GetDescription()</span>';
                         }
-                        else if (item.MenuType == "@MenuTypeEnum.Button.ParseToInt()") {
+                        else if (item.MenuType == "@MenuTypeEnum.Button.ToInt()") {
                             return '<span class="label label-warning">@MenuTypeEnum.Button.GetDescription()</span>';
                         }
                     }
@@ -88,7 +88,7 @@
                 {
                     field: 'MenuStatus', title: '状态', width: '10%', align: "left",
                     formatter: function (value, row, index) {
-                        if (row.MenuStatus == "@StatusEnum.Yes.ParseToInt()") {
+                        if (row.MenuStatus == "@StatusEnum.Yes.ToInt()") {
                             return '<span class="badge badge-primary">' + "@StatusEnum.Yes.GetDescription()" + '</span>';
                         } else {
                             return '<span class="badge badge-warning">' + "@StatusEnum.No.GetDescription()" + '</span>';

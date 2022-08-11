@@ -8,7 +8,6 @@ using YiSha.Entity.SystemManage;
 using YiSha.Enum;
 using YiSha.Model.Result;
 using YiSha.Util;
-using YiSha.Util.Extension;
 using YiSha.Util.Model;
 
 namespace YiSha.Admin.Web.Controllers
@@ -29,7 +28,7 @@ namespace YiSha.Admin.Web.Controllers
 
             TData<List<MenuEntity>> objMenu = await menuBLL.GetList(null);
             List<MenuEntity> menuList = objMenu.Data;
-            menuList = menuList.Where(p => p.MenuStatus == StatusEnum.Yes.ParseToInt()).ToList();
+            menuList = menuList.Where(p => p.MenuStatus == StatusEnum.Yes.ToInt()).ToList();
 
             if (operatorInfo.IsSystem != 1)
             {
@@ -52,7 +51,7 @@ namespace YiSha.Admin.Web.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            if (GlobalContext.SystemConfig.Demo)
+            if (GlobalConstant.IsDevelopment)
             {
                 ViewBag.UserName = "admin";
                 ViewBag.Password = "123456";
@@ -76,7 +75,7 @@ namespace YiSha.Admin.Web.Controllers
                 // 登出日志
                 await logLoginBLL.SaveForm(new LogLoginEntity
                 {
-                    LogStatus = OperateStatusEnum.Success.ParseToInt(),
+                    LogStatus = OperateStatusEnum.Success.ToInt(),
                     Remark = "退出系统",
                     IpAddress = NetHelper.Ip,
                     IpLocation = string.Empty,
@@ -138,7 +137,7 @@ namespace YiSha.Admin.Web.Controllers
                 obj.Message = "验证码不能为空";
                 return Json(obj);
             }
-            if (captchaCode != SessionHelper.Get("CaptchaCode").ParseToString())
+            if (captchaCode != SessionHelper.Get("CaptchaCode").ToStr())
             {
                 obj.Message = "验证码错误，请重新输入";
                 return Json(obj);
@@ -159,18 +158,18 @@ namespace YiSha.Admin.Web.Controllers
             {
                 LogLoginEntity logLoginEntity = new LogLoginEntity
                 {
-                    LogStatus = userObj.Tag == 1 ? OperateStatusEnum.Success.ParseToInt() : OperateStatusEnum.Fail.ParseToInt(),
+                    LogStatus = userObj.Tag == 1 ? OperateStatusEnum.Success.ToInt() : OperateStatusEnum.Fail.ToInt(),
                     Remark = userObj.Message,
                     IpAddress = ip,
                     IpLocation = IpLocationHelper.GetIpLocation(ip),
                     Browser = browser,
                     OS = os,
                     ExtraRemark = userAgent,
-                    BaseCreatorId = userObj.Data?.Id
+                    BaseCreatorId = userObj.Data.Id
                 };
 
                 // 让底层不用获取HttpContext
-                logLoginEntity.BaseCreatorId = logLoginEntity.BaseCreatorId ?? 0;
+                logLoginEntity.BaseCreatorId = logLoginEntity.BaseCreatorId;
 
                 await logLoginBLL.SaveForm(logLoginEntity);
             };

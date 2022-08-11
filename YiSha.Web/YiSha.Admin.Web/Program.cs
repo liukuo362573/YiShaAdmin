@@ -119,11 +119,9 @@ namespace YiSha.Admin.Web
             GlobalContext.ServiceProvider = app.Services;
             //主机环境
             GlobalContext.HostingEnvironment = app.Environment;
-            GlobalContext.LogWhenStart(app.Environment);
             //判断运行模式
             if (app.Environment.IsDevelopment())
             {
-                GlobalContext.SystemConfig.Debug = true;
                 //开发环境展示错误堆栈页
                 app.UseDeveloperExceptionPage();
             }

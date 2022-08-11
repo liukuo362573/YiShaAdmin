@@ -2,7 +2,7 @@
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Service.SystemManage;
-using YiSha.Util.Extension;
+using YiSha.Util;
 using YiSha.Util.Model;
 
 namespace YiSha.Business.SystemManage
@@ -65,7 +65,7 @@ namespace YiSha.Business.SystemManage
             }
             await dataDictDetailService.SaveForm(entity);
             dataDictDetailCache.Remove();
-            obj.Data = entity.Id.ParseToString();
+            obj.Data = entity.Id.ToStr();
             obj.Tag = 1;
             return obj;
         }

@@ -112,7 +112,7 @@
                         else {
                             defaultData.ParentName = "主目录";
                         }
-                        defaultData.MenuStatus = "@StatusEnum.Yes.ParseToInt()";
+                        defaultData.MenuStatus = "@StatusEnum.Yes.ToInt()";
 
                         defaultData.MenuSort = obj.Data;
                         $("#form").setWebControls(defaultData);
@@ -123,15 +123,15 @@
     }
 
     function menuVisible(menuType) {
-        if (menuType == "@MenuTypeEnum.Directory.ParseToInt()") {
+        if (menuType == "@MenuTypeEnum.Directory.ToInt()") {
             $("#menuUrl").parents(".form-group").hide();
             $("#authorize").parents(".form-group").hide();
             $("#menuIcon").parents(".form-group").show();
-        } else if (menuType == "@MenuTypeEnum.Menu.ParseToInt()") {
+        } else if (menuType == "@MenuTypeEnum.Menu.ToInt()") {
             $("#menuUrl").parents(".form-group").show();
             $("#authorize").parents(".form-group").show();
             $("#menuIcon").parents(".form-group").hide();
-        } else if (menuType == "@MenuTypeEnum.Button.ParseToInt()") {
+        } else if (menuType == "@MenuTypeEnum.Button.ToInt()") {
             $("#menuUrl").parents(".form-group").hide();
             $("#authorize").parents(".form-group").show();
             $("#menuIcon").parents(".form-group").hide();

@@ -139,7 +139,7 @@ namespace YiSha.Admin.Web.Areas.ToolManage.Controllers
         public async Task<IActionResult> CodeGenerateJson(BaseConfigModel baseConfig, string Code)
         {
             TData<List<KeyValue>> obj = new TData<List<KeyValue>>();
-            if (!GlobalContext.SystemConfig.Debug)
+            if (!GlobalConstant.IsDevelopment)
             {
                 obj.Message = "请在本地开发模式时使用代码生成";
             }

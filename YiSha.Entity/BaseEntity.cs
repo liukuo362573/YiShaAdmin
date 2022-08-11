@@ -1,7 +1,8 @@
-﻿using Newtonsoft.Json;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using YiSha.Util.IDGenerator;
+using System.Text.Json.Serialization;
+using YiSha.Entity.IDGenerator;
 
 namespace YiSha.Entity
 {
@@ -15,13 +16,14 @@ namespace YiSha.Entity
         /// 所有表的主键
         /// long返回到前端js的时候，会丢失精度，所以转成字符串
         /// </summary>
-        public long? Id { get; set; }
+        [Key, Column("Id"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long Id { get; set; }
 
         /// <summary>
         /// WebApi没有Cookie和Session，所以需要传入Token来标识用户身份
         /// </summary>
         [NotMapped]
-        public string? Token { get; set; }
+        public string Token { get; set; }
 
         /// <summary>
         /// 创建
@@ -41,12 +43,13 @@ namespace YiSha.Entity
         /// 创建时间
         /// </summary>
         [Description("创建时间")]
-        public DateTime? BaseCreateTime { get; set; }
+        public DateTime BaseCreateTime { get; set; }
 
         /// <summary>
         /// 创建人ID
         /// </summary>
-        public long? BaseCreatorId { get; set; }
+        [Column("BaseCreatorId")]
+        public long BaseCreatorId { get; set; }
 
         /// <summary>
         /// 创建
@@ -55,25 +58,15 @@ namespace YiSha.Entity
         {
             base.Create();
 
-            if (this.BaseCreateTime == null)
+            if (this.BaseCreateTime == default)
             {
                 this.BaseCreateTime = DateTime.Now;
             }
 
-            if (this.BaseCreatorId == null)
+            if (this.BaseCreatorId == default)
             {
-                OperatorInfo user = await Operator.Instance.Current(Token);
-                if (user != null)
-                {
-                    this.BaseCreatorId = user.UserId;
-                }
-                else
-                {
-                    if (this.BaseCreatorId == null)
-                    {
-                        this.BaseCreatorId = 0;
-                    }
-                }
+                var user = await Operator.Instance.Current(Token);
+                this.BaseCreatorId = user != null ? user.UserId : 0;
             }
         }
     }
@@ -86,18 +79,20 @@ namespace YiSha.Entity
         /// <summary>
         /// 数据更新版本，控制并发
         /// </summary>
-        public int? BaseVersion { get; set; }
+        [Column("BaseVersion")]
+        public int BaseVersion { get; set; }
 
         /// <summary>
         /// 修改时间
         /// </summary>
-        [Description("修改时间")]
-        public DateTime? BaseModifyTime { get; set; }
+        [Column("BaseModifyTime"), Description("修改时间")]
+        public DateTime BaseModifyTime { get; set; }
 
         /// <summary>
         /// 修改人ID
         /// </summary>
-        public long? BaseModifierId { get; set; }
+        [Column("BaseModifierId")]
+        public long BaseModifierId { get; set; }
 
         /// <summary>
         /// 调整
@@ -107,20 +102,10 @@ namespace YiSha.Entity
             this.BaseVersion = 0;
             this.BaseModifyTime = DateTime.Now;
 
-            if (this.BaseModifierId == null)
+            if (this.BaseModifierId == default)
             {
-                OperatorInfo user = await Operator.Instance.Current();
-                if (user != null)
-                {
-                    this.BaseModifierId = user.UserId;
-                }
-                else
-                {
-                    if (this.BaseModifierId == null)
-                    {
-                        this.BaseModifierId = 0;
-                    }
-                }
+                var user = await Operator.Instance.Current();
+                this.BaseModifierId = user != null ? user.UserId : 0;
             }
         }
     }
@@ -133,8 +118,8 @@ namespace YiSha.Entity
         /// <summary>
         /// 是否删除 1是，0否
         /// </summary>
-        [JsonIgnore]
-        public int? BaseIsDelete { get; set; }
+        [Column("BaseIsDelete"), JsonIgnore]
+        public int BaseIsDelete { get; set; }
 
         /// <summary>
         /// 创建
@@ -165,7 +150,7 @@ namespace YiSha.Entity
         /// <summary>
         /// 基础字段List
         /// </summary>
-        public static string?[] BaseFieldList = new string?[]
+        public static string[] BaseFieldList { get; } = new string[]
         {
             "Id",
             "BaseIsDelete",
@@ -173,7 +158,7 @@ namespace YiSha.Entity
             "BaseModifyTime",
             "BaseCreatorId",
             "BaseModifierId",
-            "BaseVersion"
+            "BaseVersion",
         };
     }
 }

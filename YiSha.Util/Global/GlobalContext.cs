@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using System.Reflection;
-using System.Text;
 using YiSha.Util.Model;
 
 namespace YiSha.Util
@@ -47,20 +45,6 @@ namespace YiSha.Util
         {
             var version = Assembly.GetEntryAssembly().GetName().Version;
             return $"{version?.Major}.{version?.Minor}";
-        }
-
-        /// <summary>
-        /// 程序启动时，记录目录
-        /// </summary>
-        /// <param name="env"></param>
-        public static void LogWhenStart(IWebHostEnvironment env)
-        {
-            var sb = new StringBuilder();
-            sb.Append("程序启动");
-            sb.Append(" |ContentRootPath:" + env.ContentRootPath);
-            sb.Append(" |WebRootPath:" + env.WebRootPath);
-            sb.Append(" |IsDevelopment:" + env.IsDevelopment());
-            LogHelper.Debug(sb.ToString());
         }
 
         /// <summary>

@@ -4,7 +4,6 @@ using YiSha.Model.Param.OrganizationManage;
 using YiSha.Model.Result;
 using YiSha.Service.OrganizationManage;
 using YiSha.Util;
-using YiSha.Util.Extension;
 using YiSha.Util.Model;
 
 namespace YiSha.Business.OrganizationManage
@@ -22,8 +21,8 @@ namespace YiSha.Business.OrganizationManage
             OperatorInfo operatorInfo = await Operator.Instance.Current();
             if (operatorInfo.IsSystem != 1)
             {
-                List<long> childrenDepartmentIdList = await GetChildrenDepartmentIdList(obj.Data, operatorInfo.DepartmentId.Value);
-                obj.Data = obj.Data.Where(p => childrenDepartmentIdList.Contains(p.Id.Value)).ToList();
+                List<long> childrenDepartmentIdList = await GetChildrenDepartmentIdList(obj.Data, operatorInfo.DepartmentId);
+                obj.Data = obj.Data.Where(p => childrenDepartmentIdList.Contains(p.Id)).ToList();
             }
             List<UserEntity> userList = await userService.GetList(new UserListParam { UserIds = string.Join(",", obj.Data.Select(p => p.PrincipalId).ToArray()) });
             foreach (DepartmentEntity entity in obj.Data)
@@ -49,8 +48,8 @@ namespace YiSha.Business.OrganizationManage
             OperatorInfo operatorInfo = await Operator.Instance.Current();
             if (operatorInfo.IsSystem != 1)
             {
-                List<long> childrenDepartmentIdList = await GetChildrenDepartmentIdList(departmentList, operatorInfo.DepartmentId.Value);
-                departmentList = departmentList.Where(p => childrenDepartmentIdList.Contains(p.Id.Value)).ToList();
+                List<long> childrenDepartmentIdList = await GetChildrenDepartmentIdList(departmentList, operatorInfo.DepartmentId);
+                departmentList = departmentList.Where(p => childrenDepartmentIdList.Contains(p.Id)).ToList();
             }
             foreach (DepartmentEntity department in departmentList)
             {
@@ -73,8 +72,8 @@ namespace YiSha.Business.OrganizationManage
             OperatorInfo operatorInfo = await Operator.Instance.Current();
             if (operatorInfo.IsSystem != 1)
             {
-                List<long> childrenDepartmentIdList = await GetChildrenDepartmentIdList(departmentList, operatorInfo.DepartmentId.Value);
-                departmentList = departmentList.Where(p => childrenDepartmentIdList.Contains(p.Id.Value)).ToList();
+                List<long> childrenDepartmentIdList = await GetChildrenDepartmentIdList(departmentList, operatorInfo.DepartmentId);
+                departmentList = departmentList.Where(p => childrenDepartmentIdList.Contains(p.Id)).ToList();
             }
             List<UserEntity> userList = await userService.GetList(null);
             foreach (DepartmentEntity department in departmentList)
@@ -85,8 +84,8 @@ namespace YiSha.Business.OrganizationManage
                     pId = department.ParentId,
                     name = department.DepartmentName
                 });
-                List<long> userIdList = userList.Where(t => t.DepartmentId == department.Id).Select(t => t.Id.Value).ToList();
-                foreach (UserEntity user in userList.Where(t => userIdList.Contains(t.Id.Value)))
+                List<long> userIdList = userList.Where(t => t.DepartmentId == department.Id).Select(t => t.Id).ToList();
+                foreach (UserEntity user in userList.Where(t => userIdList.Contains(t.Id)))
                 {
                     obj.Data.Add(new ZtreeInfo
                     {
@@ -132,7 +131,7 @@ namespace YiSha.Business.OrganizationManage
                 return obj;
             }
             await departmentService.SaveForm(entity);
-            obj.Data = entity.Id.ParseToString();
+            obj.Data = entity.Id.ToStr();
             obj.Tag = 1;
             return obj;
         }
@@ -183,7 +182,7 @@ namespace YiSha.Business.OrganizationManage
         /// <param name="departmentIdList"></param>
         private void GetChildrenDepartmentIdList(List<DepartmentEntity> departmentList, long departmentId, List<long> departmentIdList)
         {
-            var children = departmentList.Where(p => p.ParentId == departmentId).Select(p => p.Id.Value).ToList();
+            var children = departmentList.Where(p => p.ParentId == departmentId).Select(p => p.Id).ToList();
             if (children.Count > 0)
             {
                 departmentIdList.AddRange(children);

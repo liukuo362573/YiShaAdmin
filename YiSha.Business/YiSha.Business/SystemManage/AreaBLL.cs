@@ -3,7 +3,7 @@ using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Model.Result;
 using YiSha.Service.SystemManage;
-using YiSha.Util.Extension;
+using YiSha.Util;
 using YiSha.Util.Model;
 
 namespace YiSha.Business.SystemManage
@@ -20,7 +20,7 @@ namespace YiSha.Business.SystemManage
             List<AreaEntity> areaList = await areaCache.GetList();
             if (param != null)
             {
-                if (!param.AreaName.IsEmpty())
+                if (!param.AreaName.IsNull())
                 {
                     areaList = areaList.Where(t => t.AreaName.Contains(param.AreaName)).ToList();
                 }
@@ -48,8 +48,8 @@ namespace YiSha.Business.SystemManage
             {
                 obj.Data.Add(new ZtreeInfo
                 {
-                    id = area.AreaCode.ParseToLong(),
-                    pId = area.ParentAreaCode.ParseToLong(),
+                    id = area.AreaCode.ToLong(),
+                    pId = area.ParentAreaCode.ToLong(),
                     name = area.AreaName
                 });
             }
@@ -85,7 +85,7 @@ namespace YiSha.Business.SystemManage
         {
             TData<string> obj = new TData<string>();
             await areaService.SaveForm(entity);
-            obj.Data = entity.Id.ParseToString();
+            obj.Data = entity.Id.ToStr();
             obj.Tag = 1;
             return obj;
         }
@@ -112,15 +112,15 @@ namespace YiSha.Business.SystemManage
                         string[] areaIdArr = param.AreaId.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
                         if (areaIdArr.Length >= 1)
                         {
-                            param.ProvinceId = areaIdArr[0].ParseToInt();
+                            param.ProvinceId = areaIdArr[0].ToInt();
                         }
                         if (areaIdArr.Length >= 2)
                         {
-                            param.CityId = areaIdArr[1].ParseToInt();
+                            param.CityId = areaIdArr[1].ToInt();
                         }
                         if (areaIdArr.Length >= 3)
                         {
-                            param.CountyId = areaIdArr[2].ParseToInt();
+                            param.CountyId = areaIdArr[2].ToInt();
                         }
                     }
                 }
@@ -139,7 +139,7 @@ namespace YiSha.Business.SystemManage
                         string[] areaIdArr = entity.AreaId.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
                         if (areaIdArr.Length >= 1)
                         {
-                            entity.ProvinceId = areaIdArr[0].ParseToInt();
+                            entity.ProvinceId = areaIdArr[0].ToInt();
                         }
                         else
                         {
@@ -147,7 +147,7 @@ namespace YiSha.Business.SystemManage
                         }
                         if (areaIdArr.Length >= 2)
                         {
-                            entity.CityId = areaIdArr[1].ParseToInt();
+                            entity.CityId = areaIdArr[1].ToInt();
                         }
                         else
                         {
@@ -155,7 +155,7 @@ namespace YiSha.Business.SystemManage
                         }
                         if (areaIdArr.Length >= 3)
                         {
-                            entity.CountyId = areaIdArr[2].ParseToInt();
+                            entity.CountyId = areaIdArr[2].ToInt();
                         }
                         else
                         {
@@ -176,13 +176,13 @@ namespace YiSha.Business.SystemManage
                     entity.AreaId = string.Empty;
                     if (!entity.ProvinceId.IsNullOrZero())
                     {
-                        entity.AreaId += entity.ProvinceId.ParseToString() + ",";
+                        entity.AreaId += entity.ProvinceId.ToStr() + ",";
                         if (!entity.CityId.IsNullOrZero())
                         {
-                            entity.AreaId += entity.CityId.ParseToString() + ",";
+                            entity.AreaId += entity.CityId.ToStr() + ",";
                             if (!entity.CountyId.IsNullOrZero())
                             {
-                                entity.AreaId += entity.CountyId.ParseToString() + ",";
+                                entity.AreaId += entity.CountyId.ToStr() + ",";
                             }
                         }
                     }

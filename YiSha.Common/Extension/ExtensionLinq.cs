@@ -1,8 +1,11 @@
 ﻿using System.Linq.Expressions;
 
-namespace YiSha.Util.Extension
+namespace YiSha.Common
 {
-    public static class LinqExtensions
+    /// <summary>
+    /// 数据转换拓展包
+    /// </summary>
+    public static class ExtensionLinq
     {
         public static Expression Property(this Expression expression, string propertyName)
         {

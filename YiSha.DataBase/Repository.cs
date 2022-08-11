@@ -5,7 +5,7 @@ using System.Data.Common;
 using System.Linq.Expressions;
 using System.Text;
 using YiSha.DataBase.Extension;
-using YiSha.Util.Extension;
+using YiSha.Util;
 using YiSha.Util.Model;
 
 namespace YiSha.DataBase
@@ -475,7 +475,7 @@ namespace YiSha.DataBase
             var sb = new StringBuilder();
             sb.Append(DbPageExtension.GetPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
             var tempTotal = await DbScalarExtension.ExecuteScalarAsync(CommandType.Text, DbPageExtension.GetCountSql(strSql), dbParameter);
-            var total = tempTotal.ParseToInt();
+            var total = tempTotal.ToInt();
             if (total > 0)
             {
                 var reader = await DbScalarExtension.ExecuteReadeAsync(CommandType.Text, sb.ToString(), dbParameter);
@@ -588,7 +588,7 @@ namespace YiSha.DataBase
             var sb = new StringBuilder();
             sb.Append(DbPageExtension.GetPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
             var tempTotal = await DbScalarExtension.ExecuteScalarAsync(CommandType.Text, "SELECT COUNT(1) FROM (" + strSql + ") T", dbParameter);
-            var total = tempTotal.ParseToInt();
+            var total = tempTotal.ToInt();
             if (total > 0)
             {
                 var reader = await DbScalarExtension.ExecuteReadeAsync(CommandType.Text, sb.ToString(), dbParameter);

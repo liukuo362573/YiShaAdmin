@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using YiSha.Enum;
-using YiSha.Util.Extension;
 using YiSha.Util.Model;
 
 namespace YiSha.Util
@@ -281,14 +280,14 @@ namespace YiSha.Util
         /// <returns></returns>
         public static string ConvertDirectoryToHttp(string directory)
         {
-            directory = directory.ParseToString();
+            directory = directory.ToStr();
             directory = directory.Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
             return directory;
         }
 
         public static string ConvertHttpToDirectory(string http)
         {
-            http = http.ParseToString();
+            http = http.ToStr();
             http = http.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
             return http;
         }
@@ -303,7 +302,7 @@ namespace YiSha.Util
         {
             var obj = new TData();
             var allowArr = TextHelper.SplitToArray<string>(allowExtension.ToLower(), '|');
-            if (allowArr.Where(p => p.Trim() == fileExtension.ParseToString().ToLower()).Any())
+            if (allowArr.Where(p => p.Trim() == fileExtension.ToStr().ToLower()).Any())
             {
                 obj.Tag = 1;
             }

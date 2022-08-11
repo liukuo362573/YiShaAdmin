@@ -8,7 +8,6 @@ using YiSha.Entity;
 using YiSha.Entity.SystemManage;
 using YiSha.Enum.SystemManage;
 using YiSha.Util;
-using YiSha.Util.Extension;
 using YiSha.Util.Model;
 
 namespace YiSha.CodeGenerator.Template
@@ -249,7 +248,7 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("        #region 私有方法");
             sb.AppendLine("        private Expression<Func<" + baseConfigModel.FileConfig.EntityName + ", bool>> ListFilter(" + baseConfigModel.FileConfig.EntityParamName.Replace("Param", "ListParam") + " param)");
             sb.AppendLine("        {");
-            sb.AppendLine("            var expression = LinqExtensions.True<" + baseConfigModel.FileConfig.EntityName + ">();");
+            sb.AppendLine("            var expression = ConversionLinq.True<" + baseConfigModel.FileConfig.EntityName + ">();");
             sb.AppendLine("            if (param != null)");
             sb.AppendLine("            {");
             sb.AppendLine("            }");
@@ -327,7 +326,7 @@ namespace YiSha.CodeGenerator.Template
             sb.AppendLine("        {");
             sb.AppendLine("            var obj = new TData<string>();");
             sb.AppendLine("            await " + TableMappingHelper.FirstLetterLowercase(baseConfigModel.FileConfig.ServiceName) + ".SaveForm(entity);");
-            sb.AppendLine("            obj.Data = entity.Id.ParseToString();");
+            sb.AppendLine("            obj.Data = entity.Id.ToStr();");
             sb.AppendLine("            obj.Tag = 1;");
             sb.AppendLine("            return obj;");
             sb.AppendLine("        }");
@@ -795,7 +794,7 @@ namespace YiSha.CodeGenerator.Template
 
             #region 实体类
 
-            if (!string.IsNullOrEmpty(param["CodeEntity"].ParseToString()))
+            if (!string.IsNullOrEmpty(param["CodeEntity"].ToStr()))
             {
                 var codeEntity = HttpUtility.HtmlDecode(param["CodeEntity"].ToString());
                 var codePath = Path.Combine(baseConfigModel.OutputConfig.OutputEntity, baseConfigModel.OutputConfig.OutputModule, baseConfigModel.FileConfig.EntityName + ".cs");
@@ -810,7 +809,7 @@ namespace YiSha.CodeGenerator.Template
 
             #region 实体查询类
 
-            if (!param["CodeEntityParam"].IsEmpty())
+            if (!param["CodeEntityParam"].IsNull())
             {
                 var codeListEntity = HttpUtility.HtmlDecode(param["CodeEntityParam"].ToString());
                 var codePath = Path.Combine(baseConfigModel.OutputConfig.OutputModel, "Param", baseConfigModel.OutputConfig.OutputModule, baseConfigModel.FileConfig.EntityParamName + ".cs");
@@ -825,7 +824,7 @@ namespace YiSha.CodeGenerator.Template
 
             #region 服务类
 
-            if (!param["CodeService"].IsEmpty())
+            if (!param["CodeService"].IsNull())
             {
                 var codeService = HttpUtility.HtmlDecode(param["CodeService"].ToString());
                 var codePath = Path.Combine(baseConfigModel.OutputConfig.OutputBusiness, "YiSha.Service", baseConfigModel.OutputConfig.OutputModule, baseConfigModel.FileConfig.ServiceName + ".cs");
@@ -840,7 +839,7 @@ namespace YiSha.CodeGenerator.Template
 
             #region 业务类
 
-            if (!param["CodeBusiness"].IsEmpty())
+            if (!param["CodeBusiness"].IsNull())
             {
                 var codeBusiness = HttpUtility.HtmlDecode(param["CodeBusiness"].ToString());
                 var codePath = Path.Combine(baseConfigModel.OutputConfig.OutputBusiness, "YiSha.Business", baseConfigModel.OutputConfig.OutputModule, baseConfigModel.FileConfig.BusinessName + ".cs");
@@ -855,7 +854,7 @@ namespace YiSha.CodeGenerator.Template
 
             #region 控制器
 
-            if (!param["CodeController"].IsEmpty())
+            if (!param["CodeController"].IsNull())
             {
                 var codeController = HttpUtility.HtmlDecode(param["CodeController"].ToString());
                 var codePath = Path.Combine(baseConfigModel.OutputConfig.OutputWeb, "Areas", baseConfigModel.OutputConfig.OutputModule, "Controllers", baseConfigModel.FileConfig.ControllerName + ".cs");
@@ -870,7 +869,7 @@ namespace YiSha.CodeGenerator.Template
 
             #region 表单页
 
-            if (!param["CodeForm"].IsEmpty())
+            if (!param["CodeForm"].IsNull())
             {
                 var codeSave = HttpUtility.HtmlDecode(param["CodeForm"].ToString());
                 var codePath = Path.Combine(baseConfigModel.OutputConfig.OutputWeb, "Areas", baseConfigModel.OutputConfig.OutputModule, "Views", baseConfigModel.FileConfig.ClassPrefix, baseConfigModel.FileConfig.PageFormName + ".cshtml");
@@ -885,7 +884,7 @@ namespace YiSha.CodeGenerator.Template
 
             #region 列表页
 
-            if (!param["CodeIndex"].IsEmpty())
+            if (!param["CodeIndex"].IsNull())
             {
                 var codeIndex = HttpUtility.HtmlDecode(param["CodeIndex"].ToString());
                 var codePath = Path.Combine(baseConfigModel.OutputConfig.OutputWeb, "Areas", baseConfigModel.OutputConfig.OutputModule, "Views", baseConfigModel.FileConfig.ClassPrefix, baseConfigModel.FileConfig.PageIndexName + ".cshtml");
@@ -1003,9 +1002,9 @@ namespace YiSha.CodeGenerator.Template
 
         private string GetProjectRootPath(string path)
         {
-            path = path.ParseToString();
+            path = path.ToStr();
             path = path.Trim('\\');
-            if (GlobalContext.SystemConfig.Debug)
+            if (GlobalConstant.IsDevelopment)
             {
                 // 向上找二级
                 path = Directory.GetParent(path).FullName;
@@ -1052,7 +1051,7 @@ namespace YiSha.CodeGenerator.Template
         private string GetBaseEntity(DataTable dt)
         {
             var entity = string.Empty;
-            var columnList = dt.AsEnumerable().Select(p => p["TableColumn"].ParseToString()).ToList();
+            var columnList = dt.AsEnumerable().Select(p => p["TableColumn"].ToStr()).ToList();
 
             var id = columnList.Where(p => p == "Id").Any();
             var baseIsDelete = columnList.Where(p => p == "BaseIsDelete").Any();

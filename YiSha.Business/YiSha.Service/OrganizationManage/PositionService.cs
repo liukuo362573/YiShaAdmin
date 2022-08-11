@@ -1,9 +1,9 @@
 ﻿using System.Linq.Expressions;
+using YiSha.Common;
 using YiSha.DataBase;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Model.Param.OrganizationManage;
 using YiSha.Util;
-using YiSha.Util.Extension;
 using YiSha.Util.Model;
 
 namespace YiSha.Service.OrganizationManage
@@ -33,14 +33,14 @@ namespace YiSha.Service.OrganizationManage
         public async Task<int> GetMaxSort()
         {
             object result = await this.FindObject("SELECT MAX(PositionSort) FROM SysPosition");
-            int sort = result.ParseToInt();
+            int sort = result.ToInt();
             sort++;
             return sort;
         }
 
         public bool ExistPositionName(PositionEntity entity)
         {
-            var expression = LinqExtensions.True<PositionEntity>();
+            var expression = ExtensionLinq.True<PositionEntity>();
             expression = expression.And(t => t.BaseIsDelete == 0);
             if (entity.Id.IsNullOrZero())
             {
@@ -79,7 +79,7 @@ namespace YiSha.Service.OrganizationManage
         #region 私有方法
         private Expression<Func<PositionEntity, bool>> ListFilter(PositionListParam param)
         {
-            var expression = LinqExtensions.True<PositionEntity>();
+            var expression = ExtensionLinq.True<PositionEntity>();
             if (param != null)
             {
                 if (!string.IsNullOrEmpty(param.PositionName))
@@ -89,7 +89,7 @@ namespace YiSha.Service.OrganizationManage
                 if (!string.IsNullOrEmpty(param.PositionIds))
                 {
                     long[] positionIdArr = TextHelper.SplitToArray<long>(param.PositionIds, ',');
-                    expression = expression.And(t => positionIdArr.Contains(t.Id.Value));
+                    expression = expression.And(t => positionIdArr.Contains(t.Id));
                 }
             }
             return expression;

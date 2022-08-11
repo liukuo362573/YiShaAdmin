@@ -1,10 +1,10 @@
 ﻿using System.Linq.Expressions;
+using YiSha.Common;
 using YiSha.DataBase;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Enum.OrganizationManage;
 using YiSha.Model.Param.OrganizationManage;
 using YiSha.Util;
-using YiSha.Util.Extension;
 using YiSha.Util.Model;
 
 namespace YiSha.Service.OrganizationManage
@@ -38,7 +38,7 @@ namespace YiSha.Service.OrganizationManage
 
         public async Task<UserEntity> CheckLogin(string userName)
         {
-            var expression = LinqExtensions.True<UserEntity>();
+            var expression = ExtensionLinq.True<UserEntity>();
             expression = expression.And(t => t.UserName == userName);
             expression = expression.Or(t => t.Mobile == userName);
             expression = expression.Or(t => t.Email == userName);
@@ -47,7 +47,7 @@ namespace YiSha.Service.OrganizationManage
 
         public bool ExistUserName(UserEntity entity)
         {
-            var expression = LinqExtensions.True<UserEntity>();
+            var expression = ExtensionLinq.True<UserEntity>();
             expression = expression.And(t => t.BaseIsDelete == 0);
             if (entity.Id.IsNullOrZero())
             {
@@ -94,7 +94,7 @@ namespace YiSha.Service.OrganizationManage
                         UserBelongEntity positionBelongEntity = new UserBelongEntity();
                         positionBelongEntity.UserId = entity.Id;
                         positionBelongEntity.BelongId = positionId;
-                        positionBelongEntity.BelongType = UserBelongTypeEnum.Position.ParseToInt();
+                        positionBelongEntity.BelongType = UserBelongTypeEnum.Position.ToInt();
                         await positionBelongEntity.Create();
                         await db.Insert(positionBelongEntity);
                     }
@@ -107,7 +107,7 @@ namespace YiSha.Service.OrganizationManage
                         UserBelongEntity departmentBelongEntity = new UserBelongEntity();
                         departmentBelongEntity.UserId = entity.Id;
                         departmentBelongEntity.BelongId = roleId;
-                        departmentBelongEntity.BelongType = UserBelongTypeEnum.Role.ParseToInt();
+                        departmentBelongEntity.BelongType = UserBelongTypeEnum.Role.ToInt();
                         await departmentBelongEntity.Create();
                         await db.Insert(departmentBelongEntity);
                     }
@@ -128,7 +128,7 @@ namespace YiSha.Service.OrganizationManage
             {
                 long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
                 await db.Delete<UserEntity>(idArr);
-                await db.Delete<UserBelongEntity>(t => idArr.Contains(t.UserId.Value));
+                await db.Delete<UserBelongEntity>(t => idArr.Contains(t.UserId));
                 await db.CommitTrans();
             }
             catch
@@ -154,7 +154,7 @@ namespace YiSha.Service.OrganizationManage
         #region 私有方法
         private Expression<Func<UserEntity, bool>> ListFilter(UserListParam param)
         {
-            var expression = LinqExtensions.True<UserEntity>();
+            var expression = ExtensionLinq.True<UserEntity>();
             if (param != null)
             {
                 if (!string.IsNullOrEmpty(param.UserName))
@@ -164,7 +164,7 @@ namespace YiSha.Service.OrganizationManage
                 if (!string.IsNullOrEmpty(param.UserIds))
                 {
                     long[] userIdList = TextHelper.SplitToArray<long>(param.UserIds, ',');
-                    expression = expression.And(t => userIdList.Contains(t.Id.Value));
+                    expression = expression.And(t => userIdList.Contains(t.Id));
                 }
                 if (!string.IsNullOrEmpty(param.Mobile))
                 {
@@ -174,18 +174,18 @@ namespace YiSha.Service.OrganizationManage
                 {
                     expression = expression.And(t => t.UserStatus == param.UserStatus);
                 }
-                if (!string.IsNullOrEmpty(param.StartTime.ParseToString()))
+                if (!string.IsNullOrEmpty(param.StartTime.ToStr()))
                 {
                     expression = expression.And(t => t.BaseModifyTime >= param.StartTime);
                 }
-                if (!string.IsNullOrEmpty(param.EndTime.ParseToString()))
+                if (!string.IsNullOrEmpty(param.EndTime.ToStr()))
                 {
                     param.EndTime = param.EndTime.Value.Date.Add(new TimeSpan(23, 59, 59));
                     expression = expression.And(t => t.BaseModifyTime <= param.EndTime);
                 }
                 if (param.ChildrenDepartmentIdList != null && param.ChildrenDepartmentIdList.Count > 0)
                 {
-                    expression = expression.And(t => param.ChildrenDepartmentIdList.Contains(t.DepartmentId.Value));
+                    expression = expression.And(t => param.ChildrenDepartmentIdList.Contains(t.DepartmentId));
                 }
             }
             return expression;

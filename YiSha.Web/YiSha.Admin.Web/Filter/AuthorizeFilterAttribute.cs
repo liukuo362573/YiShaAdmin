@@ -4,7 +4,6 @@ using YiSha.Business.SystemManage;
 using YiSha.Entity;
 using YiSha.Model.Result;
 using YiSha.Util;
-using YiSha.Util.Extension;
 using YiSha.Util.Model;
 
 namespace YiSha.Admin.Web.Filter
@@ -34,7 +33,7 @@ namespace YiSha.Admin.Web.Filter
             if (user == null || user.UserId == 0)
             {
                 // 防止用户选择记住我，页面一直在首页刷新
-                if (CookieHelper.Get("RememberMe").ParseToInt() == 1)
+                if (CookieHelper.Get("RememberMe").ToInt() == 1)
                 {
                     Operator.Instance.RemoveCurrent();
                 }
@@ -77,7 +76,7 @@ namespace YiSha.Admin.Web.Filter
                             if (context.RouteData.Values["Action"].ToString() == "SaveFormJson")
                             {
                                 var id = context.HttpContext.Request.Form["Id"];
-                                if (id.ParseToLong() > 0)
+                                if (id.ToLong() > 0)
                                 {
                                     if (!authorizeInfoList.Where(p => p.Authorize.Contains("edit")).Any())
                                     {

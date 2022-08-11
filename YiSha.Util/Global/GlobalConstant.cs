@@ -1,4 +1,6 @@
-﻿namespace YiSha.Util
+﻿using Microsoft.Extensions.Hosting;
+
+namespace YiSha.Util
 {
     /// <summary>
     /// 全局常数
@@ -35,6 +37,30 @@
                 {
                     return 0;
                 }
+            }
+        }
+
+        /// <summary>
+        /// 是否正式环境
+        /// </summary>
+        public static bool IsProduction
+        {
+            get
+            {
+                var isDevelopment = GlobalContext.HostingEnvironment?.IsProduction();
+                return isDevelopment.ToBool(false);
+            }
+        }
+
+        /// <summary>
+        /// 是否开发环境
+        /// </summary>
+        public static bool IsDevelopment
+        {
+            get
+            {
+                var isDevelopment = GlobalContext.HostingEnvironment?.IsDevelopment();
+                return isDevelopment.ToBool(true);
             }
         }
 

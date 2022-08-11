@@ -3,7 +3,7 @@ using YiSha.Entity.SystemManage;
 using YiSha.Enum.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Service.SystemManage;
-using YiSha.Util.Extension;
+using YiSha.Util;
 using YiSha.Util.Model;
 
 namespace YiSha.Business.SystemManage
@@ -41,7 +41,7 @@ namespace YiSha.Business.SystemManage
             List<MenuAuthorizeEntity> menuAuthorizeList = await menuAuthorizeService.GetList(new MenuAuthorizeEntity
             {
                 AuthorizeId = id,
-                AuthorizeType = AuthorizeTypeEnum.Role.ParseToInt()
+                AuthorizeType = AuthorizeTypeEnum.Role.ToInt()
             });
             // 获取角色对应的权限
             roleEntity.MenuIds = string.Join(",", menuAuthorizeList.Select(p => p.MenuId));
@@ -76,7 +76,7 @@ namespace YiSha.Business.SystemManage
             // 清除缓存里面的权限数据
             menuAuthorizeCache.Remove();
 
-            obj.Data = entity.Id.ParseToString();
+            obj.Data = entity.Id.ToStr();
             obj.Tag = 1;
 
             return obj;

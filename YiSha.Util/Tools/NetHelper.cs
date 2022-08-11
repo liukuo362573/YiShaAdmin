@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Net.Sockets;
 using YiSha.Util.Browser;
-using YiSha.Util.Extension;
 
 namespace YiSha.Util
 {
@@ -100,7 +99,7 @@ namespace YiSha.Util
         {
             try
             {
-                string ip = HttpContext?.Connection?.RemoteIpAddress.ParseToString();
+                string ip = HttpContext?.Connection?.RemoteIpAddress.ToStr();
                 if (HttpContext != null && HttpContext.Request != null)
                 {
                     if (HttpContext.Request.Headers.ContainsKey("X-Real-IP"))
@@ -129,7 +128,7 @@ namespace YiSha.Util
                 try
                 {
                     var browser = HttpContext.Request.Headers["User-Agent"];
-                    var agent = UserAgent.ParseToString();
+                    var agent = UserAgent.ToStr();
                     return BrowserHelper.GetBrwoserInfo(agent);
                 }
                 catch (Exception ex)

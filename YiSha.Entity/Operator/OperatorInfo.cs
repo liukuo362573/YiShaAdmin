@@ -10,17 +10,17 @@ namespace YiSha.Entity
         /// <summary>
         /// 用户ID
         /// </summary>
-        public long? UserId { get; set; }
+        public long UserId { get; set; }
 
         /// <summary>
         /// 用户状态
         /// </summary>
-        public int? UserStatus { get; set; }
+        public int UserStatus { get; set; }
 
         /// <summary>
         /// 是否在线
         /// </summary>
-        public int? IsOnline { get; set; }
+        public int IsOnline { get; set; }
 
         /// <summary>
         /// 用户名称
@@ -45,7 +45,7 @@ namespace YiSha.Entity
         /// <summary>
         /// 是否系统用户
         /// </summary>
-        public int? IsSystem { get; set; }
+        public int IsSystem { get; set; }
 
         /// <summary>
         /// 头像
@@ -55,7 +55,7 @@ namespace YiSha.Entity
         /// <summary>
         /// 部门ID
         /// </summary>
-        public long? DepartmentId { get; set; }
+        public long DepartmentId { get; set; }
 
         /// <summary>
         /// 部门名称

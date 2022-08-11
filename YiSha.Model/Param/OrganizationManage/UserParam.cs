@@ -6,9 +6,9 @@
 
         public string Mobile { get; set; }
 
-        public int? UserStatus { get; set; }
+        public int UserStatus { get; set; }
 
-        public long? DepartmentId { get; set; }
+        public long DepartmentId { get; set; }
 
         public List<long> ChildrenDepartmentIdList { get; set; }
 
@@ -17,7 +17,7 @@
 
     public class ChangePasswordParam
     {
-        public long? Id { get; set; }
+        public long Id { get; set; }
         public string Password { get; set; }
         public string NewPassword { get; set; }
     }

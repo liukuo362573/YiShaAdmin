@@ -1,10 +1,10 @@
 ﻿using System.Linq.Expressions;
+using YiSha.Common;
 using YiSha.DataBase;
 using YiSha.Entity.SystemManage;
 using YiSha.Enum.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Util;
-using YiSha.Util.Extension;
 using YiSha.Util.Model;
 
 namespace YiSha.Service.SystemManage
@@ -34,14 +34,14 @@ namespace YiSha.Service.SystemManage
         public async Task<int> GetMaxSort()
         {
             object result = await this.FindObject("SELECT MAX(RoleSort) FROM SysRole");
-            int sort = result.ParseToInt();
+            int sort = result.ToInt();
             sort++;
             return sort;
         }
 
         public bool ExistRoleName(RoleEntity entity)
         {
-            var expression = LinqExtensions.True<RoleEntity>();
+            var expression = ExtensionLinq.True<RoleEntity>();
             expression = expression.And(t => t.BaseIsDelete == 0);
             if (entity.Id.IsNullOrZero())
             {
@@ -80,7 +80,7 @@ namespace YiSha.Service.SystemManage
                         MenuAuthorizeEntity menuAuthorizeEntity = new MenuAuthorizeEntity();
                         menuAuthorizeEntity.AuthorizeId = entity.Id;
                         menuAuthorizeEntity.MenuId = menuId;
-                        menuAuthorizeEntity.AuthorizeType = AuthorizeTypeEnum.Role.ParseToInt();
+                        menuAuthorizeEntity.AuthorizeType = AuthorizeTypeEnum.Role.ToInt();
                         await menuAuthorizeEntity.Create();
                         await db.Insert(menuAuthorizeEntity);
                     }
@@ -104,7 +104,7 @@ namespace YiSha.Service.SystemManage
         #region 私有方法
         private Expression<Func<RoleEntity, bool>> ListFilter(RoleListParam param)
         {
-            var expression = LinqExtensions.True<RoleEntity>();
+            var expression = ExtensionLinq.True<RoleEntity>();
             if (param != null)
             {
                 if (!string.IsNullOrEmpty(param.RoleName))
@@ -114,7 +114,7 @@ namespace YiSha.Service.SystemManage
                 if (!string.IsNullOrEmpty(param.RoleIds))
                 {
                     long[] roleIdArr = TextHelper.SplitToArray<long>(param.RoleIds, ',');
-                    expression = expression.And(t => roleIdArr.Contains(t.Id.Value));
+                    expression = expression.And(t => roleIdArr.Contains(t.Id));
                 }
                 if (!string.IsNullOrEmpty(param.RoleName))
                 {
@@ -124,11 +124,11 @@ namespace YiSha.Service.SystemManage
                 {
                     expression = expression.And(t => t.RoleStatus == param.RoleStatus);
                 }
-                if (!string.IsNullOrEmpty(param.StartTime.ParseToString()))
+                if (!string.IsNullOrEmpty(param.StartTime.ToStr()))
                 {
                     expression = expression.And(t => t.BaseModifyTime >= param.StartTime);
                 }
-                if (!string.IsNullOrEmpty(param.EndTime.ParseToString()))
+                if (!string.IsNullOrEmpty(param.EndTime.ToStr()))
                 {
                     param.EndTime = param.EndTime.Value.Date.Add(new TimeSpan(23, 59, 59));
                     expression = expression.And(t => t.BaseModifyTime <= param.EndTime);

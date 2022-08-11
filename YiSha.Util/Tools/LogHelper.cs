@@ -1,5 +1,4 @@
 ﻿using NLog;
-using YiSha.Util.Extension;
 
 namespace YiSha.Util
 {
@@ -14,7 +13,7 @@ namespace YiSha.Util
         {
             if (ex == null)
             {
-                log.Trace(msg.ParseToString());
+                log.Trace(msg.ToStr());
             }
             else
             {
@@ -26,7 +25,7 @@ namespace YiSha.Util
         {
             if (ex == null)
             {
-                log.Debug(msg.ParseToString());
+                log.Debug(msg.ToStr());
             }
             else
             {
@@ -38,7 +37,7 @@ namespace YiSha.Util
         {
             if (ex == null)
             {
-                log.Info(msg.ParseToString());
+                log.Info(msg.ToStr());
             }
             else
             {
@@ -50,7 +49,7 @@ namespace YiSha.Util
         {
             if (ex == null)
             {
-                log.Warn(msg.ParseToString());
+                log.Warn(msg.ToStr());
             }
             else
             {
@@ -62,7 +61,7 @@ namespace YiSha.Util
         {
             if (ex == null)
             {
-                log.Error(msg.ParseToString());
+                log.Error(msg.ToStr());
             }
             else
             {
@@ -82,7 +81,7 @@ namespace YiSha.Util
         {
             if (ex == null)
             {
-                log.Fatal(msg.ParseToString());
+                log.Fatal(msg.ToStr());
             }
             else
             {
