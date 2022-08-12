@@ -8,6 +8,7 @@ using System.Text.Unicode;
 using YiSha.Admin.WebApi.Filter;
 using YiSha.Business.AutoJob;
 using YiSha.Common;
+using YiSha.Entity;
 using YiSha.Util;
 using YiSha.Util.Model;
 
@@ -122,8 +123,6 @@ namespace YiSha.Admin.WebApi
         {
             //配置对象
             GlobalContext.Configuration = app.Configuration;
-            //系统配置
-            GlobalContext.SystemConfig = app.Configuration.GetSection("SystemConfig").Get<SystemConfig>();
             //服务提供商
             GlobalContext.ServiceProvider = app.Services;
             //主机环境

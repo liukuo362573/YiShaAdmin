@@ -11,7 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\YiSha.Common\YiSha.Common.csproj" />
+	  <ProjectReference Include="..\..\YiSha.Model\YiSha.Model.csproj" />
 	</ItemGroup>
 
 </Project>

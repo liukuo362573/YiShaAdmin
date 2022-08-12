@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace YiSha.Common
+namespace YiSha.Service
 {
     /// <summary>
     /// 数据转换拓展包

@@ -5,6 +5,7 @@ using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using YiSha.Admin.Web.Filter;
 using YiSha.Common;
+using YiSha.Entity;
 using YiSha.Util;
 using YiSha.Util.Model;
 
@@ -113,8 +114,6 @@ namespace YiSha.Admin.Web
         {
             //配置对象
             GlobalContext.Configuration = app.Configuration;
-            //系统配置
-            GlobalContext.SystemConfig = app.Configuration.GetSection("SystemConfig").Get<SystemConfig>();
             //服务提供商
             GlobalContext.ServiceProvider = app.Services;
             //主机环境

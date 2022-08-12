@@ -3,7 +3,7 @@ using YiSha.DataBase;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Entity.SystemManage;
 
-namespace YiSha.Common
+namespace YiSha.Entity
 {
     /// <summary>
     /// 数据库上下文
