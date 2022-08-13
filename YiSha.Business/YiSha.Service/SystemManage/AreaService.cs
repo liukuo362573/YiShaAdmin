@@ -1,9 +1,9 @@
 ﻿using System.Linq.Expressions;
+using YiSha.Common;
 using YiSha.DataBase;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Util;
-using YiSha.Util.Extension;
 using YiSha.Util.Model;
 
 namespace YiSha.Service.SystemManage
@@ -62,10 +62,10 @@ namespace YiSha.Service.SystemManage
         #region 私有方法
         private Expression<Func<AreaEntity, bool>> ListFilter(AreaListParam param)
         {
-            var expression = LinqExtensions.True<AreaEntity>();
+            var expression = ExtensionLinq.True<AreaEntity>();
             if (param != null)
             {
-                if (!param.AreaName.IsEmpty())
+                if (!param.AreaName.IsNull())
                 {
                     expression = expression.And(t => t.AreaName.Contains(param.AreaName));
                 }

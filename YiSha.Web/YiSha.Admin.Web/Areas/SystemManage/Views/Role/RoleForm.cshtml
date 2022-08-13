@@ -82,7 +82,7 @@
                     if (obj.Tag == 1) {
                         var defaultData = {};
                         defaultData.RoleSort = obj.Data;
-                        defaultData.RoleStatus = "@StatusEnum.Yes.ParseToInt()";
+                        defaultData.RoleStatus = "@StatusEnum.Yes.ToInt()";
                         $("#form").setWebControls(defaultData);
                     }
                 }

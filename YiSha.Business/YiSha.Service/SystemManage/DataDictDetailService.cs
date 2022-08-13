@@ -1,9 +1,9 @@
 ﻿using System.Linq.Expressions;
+using YiSha.Common;
 using YiSha.DataBase;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Util;
-using YiSha.Util.Extension;
 using YiSha.Util.Model;
 
 namespace YiSha.Service.SystemManage
@@ -33,14 +33,14 @@ namespace YiSha.Service.SystemManage
         public async Task<int> GetMaxSort()
         {
             object result = await this.FindObject("SELECT MAX(DictSort) FROM SysDataDictDetail");
-            int sort = result.ParseToInt();
+            int sort = result.ToInt();
             sort++;
             return sort;
         }
 
         public bool ExistDictKeyValue(DataDictDetailEntity entity)
         {
-            var expression = LinqExtensions.True<DataDictDetailEntity>();
+            var expression = ExtensionLinq.True<DataDictDetailEntity>();
             expression = expression.And(t => t.BaseIsDelete == 0);
             if (entity.Id.IsNullOrZero())
             {
@@ -79,10 +79,10 @@ namespace YiSha.Service.SystemManage
         #region 私有方法
         private Expression<Func<DataDictDetailEntity, bool>> ListFilter(DataDictDetailListParam param)
         {
-            var expression = LinqExtensions.True<DataDictDetailEntity>();
+            var expression = ExtensionLinq.True<DataDictDetailEntity>();
             if (param != null)
             {
-                if (param.DictKey.ParseToInt() > 0)
+                if (param.DictKey.ToInt() > 0)
                 {
                     expression = expression.And(t => t.DictKey == param.DictKey);
                 }

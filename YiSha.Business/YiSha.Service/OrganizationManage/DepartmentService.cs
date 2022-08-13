@@ -1,9 +1,9 @@
 ﻿using System.Linq.Expressions;
+using YiSha.Common;
 using YiSha.DataBase;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Model.Param.OrganizationManage;
 using YiSha.Util;
-using YiSha.Util.Extension;
 
 namespace YiSha.Service.OrganizationManage
 {
@@ -25,7 +25,7 @@ namespace YiSha.Service.OrganizationManage
         public async Task<int> GetMaxSort()
         {
             object result = await this.FindObject("SELECT MAX(DepartmentSort) FROM SysDepartment");
-            int sort = result.ParseToInt();
+            int sort = result.ToInt();
             sort++;
             return sort;
         }
@@ -37,7 +37,7 @@ namespace YiSha.Service.OrganizationManage
         /// <returns></returns>
         public bool ExistDepartmentName(DepartmentEntity entity)
         {
-            var expression = LinqExtensions.True<DepartmentEntity>();
+            var expression = ExtensionLinq.True<DepartmentEntity>();
             expression = expression.And(t => t.BaseIsDelete == 0);
             if (entity.Id.IsNullOrZero())
             {
@@ -57,7 +57,7 @@ namespace YiSha.Service.OrganizationManage
         /// <returns></returns>
         public bool ExistChildrenDepartment(long id)
         {
-            var expression = LinqExtensions.True<DepartmentEntity>();
+            var expression = ExtensionLinq.True<DepartmentEntity>();
             expression = expression.And(t => t.ParentId == id);
             return this.IQueryable(expression).Count() > 0 ? true : false;
         }
@@ -98,10 +98,10 @@ namespace YiSha.Service.OrganizationManage
         #region 私有方法
         private Expression<Func<DepartmentEntity, bool>> ListFilter(DepartmentListParam param)
         {
-            var expression = LinqExtensions.True<DepartmentEntity>();
+            var expression = ExtensionLinq.True<DepartmentEntity>();
             if (param != null)
             {
-                if (!param.DepartmentName.IsEmpty())
+                if (!param.DepartmentName.IsNull())
                 {
                     expression = expression.And(t => t.DepartmentName.Contains(param.DepartmentName));
                 }

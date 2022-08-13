@@ -25,7 +25,7 @@ namespace YiSha.DataBase.Common
         public static void Add(DbContextOptionsBuilder optionsBuilder)
         {
             //开发模式
-            if (GlobalContext.SystemConfig.Debug)
+            if (GlobalConstant.IsDevelopment)
             {
                 //控制器
                 optionsBuilder.UseLoggerFactory(loggerFactoryConsole);

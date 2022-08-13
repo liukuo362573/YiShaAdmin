@@ -1,6 +1,4 @@
-﻿using YiSha.Util.Extension;
-
-namespace YiSha.Util
+﻿namespace YiSha.Util
 {
     public class TextHelper
     {

@@ -1,6 +1,7 @@
-﻿using YiSha.DataBase;
+﻿using YiSha.Common;
+using YiSha.DataBase;
 using YiSha.Entity.OrganizationManage;
-using YiSha.Util.Extension;
+using YiSha.Util;
 
 namespace YiSha.Service.OrganizationManage
 {
@@ -9,7 +10,7 @@ namespace YiSha.Service.OrganizationManage
         #region 获取数据
         public async Task<List<UserBelongEntity>> GetList(UserBelongEntity entity)
         {
-            var expression = LinqExtensions.True<UserBelongEntity>();
+            var expression = ExtensionLinq.True<UserBelongEntity>();
             if (entity != null)
             {
                 if (entity.BelongType != null)

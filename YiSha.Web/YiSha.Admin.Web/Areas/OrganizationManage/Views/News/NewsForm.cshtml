@@ -171,7 +171,7 @@
         var formdata = new FormData();
         formdata.append("fileList", file);
         ys.ajaxUploadFile({
-            url: '@GlobalContext.SystemConfig.ApiSite' + '/File/UploadFile?fileModule=@UploadFileType.News.ParseToInt()',
+            url: '@GlobalContext.SystemConfig.ApiSite' + '/File/UploadFile?fileModule=@UploadFileType.News.ToInt()',
             data: formdata,
             success: function (obj) {
                 if (obj.Tag == 1) {
@@ -188,7 +188,7 @@
         var formdata = new FormData();
         formdata.append("fileList", file);
         ys.ajaxUploadFile({
-            url: '@GlobalContext.SystemConfig.ApiSite' + '/File/UploadFile?fileModule=@UploadFileType.News.ParseToInt()',
+            url: '@GlobalContext.SystemConfig.ApiSite' + '/File/UploadFile?fileModule=@UploadFileType.News.ToInt()',
             data: formdata,
             success: function (obj) {
                 if (obj.Tag == 1) {

@@ -4,7 +4,7 @@ using YiSha.Enum;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Service.OrganizationManage;
 using YiSha.Service.SystemManage;
-using YiSha.Util.Extension;
+using YiSha.Util;
 using YiSha.Util.Model;
 
 namespace YiSha.Business.SystemManage
@@ -37,11 +37,11 @@ namespace YiSha.Business.SystemManage
             obj.Data = await logOperateService.GetEntity(id);
             if (obj.Data != null)
             {
-                UserEntity userEntity = await new UserService().GetEntity(obj.Data.BaseCreatorId.Value);
+                UserEntity userEntity = await new UserService().GetEntity(obj.Data.BaseCreatorId);
                 if (userEntity != null)
                 {
                     obj.Data.UserName = userEntity.UserName;
-                    DepartmentEntity departmentEntitty = await new DepartmentService().GetEntity(userEntity.DepartmentId.Value);
+                    DepartmentEntity departmentEntitty = await new DepartmentService().GetEntity(userEntity.DepartmentId);
                     if (departmentEntitty != null)
                     {
                         obj.Data.DepartmentName = departmentEntitty.DepartmentName;
@@ -58,7 +58,7 @@ namespace YiSha.Business.SystemManage
         {
             TData<string> obj = new TData<string>();
             await logOperateService.SaveForm(entity);
-            obj.Data = entity.Id.ParseToString();
+            obj.Data = entity.Id.ToStr();
             obj.Tag = 1;
             return obj;
         }
@@ -68,9 +68,9 @@ namespace YiSha.Business.SystemManage
             TData<string> obj = new TData<string>();
             LogOperateEntity entity = new LogOperateEntity();
             await logOperateService.SaveForm(entity);
-            entity.LogStatus = OperateStatusEnum.Success.ParseToInt();
+            entity.LogStatus = OperateStatusEnum.Success.ToInt();
             entity.ExecuteUrl = remark;
-            obj.Data = entity.Id.ParseToString();
+            obj.Data = entity.Id.ToStr();
             obj.Tag = 1;
             return obj;
         }

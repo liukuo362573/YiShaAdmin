@@ -3,7 +3,7 @@ using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Model.Result;
 using YiSha.Service.SystemManage;
-using YiSha.Util.Extension;
+using YiSha.Util;
 using YiSha.Util.Model;
 
 namespace YiSha.Business.SystemManage
@@ -55,7 +55,7 @@ namespace YiSha.Business.SystemManage
             obj.Data = await menuService.GetEntity(id);
             if (obj.Data != null)
             {
-                long parentId = obj.Data.ParentId.Value;
+                long parentId = obj.Data.ParentId;
                 if (parentId > 0)
                 {
                     MenuEntity parentMenu = await menuService.GetEntity(parentId);
@@ -100,7 +100,7 @@ namespace YiSha.Business.SystemManage
 
             menuCache.Remove();
 
-            obj.Data = entity.Id.ParseToString();
+            obj.Data = entity.Id.ToStr();
             obj.Tag = 1;
             return obj;
         }

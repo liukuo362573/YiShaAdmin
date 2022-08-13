@@ -14,14 +14,12 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\YiSha.Util\YiSha.Util.csproj" />
 		<ProjectReference Include="..\..\YiSha.Business\YiSha.Business.AutoJob\YiSha.Business.AutoJob.csproj" />
 		<ProjectReference Include="..\..\YiSha.Business\YiSha.Business\YiSha.Business.csproj" />
-		<ProjectReference Include="..\..\YiSha.Entity\YiSha.Entity.csproj" />
 		<ProjectReference Include="..\..\YiSha.Model\YiSha.Model.csproj" />
 	</ItemGroup>
 

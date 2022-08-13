@@ -60,7 +60,7 @@
                 {
                     field: 'RoleStatus', title: '状态', width: "15%",
                     formatter: function (value, row, index) {
-                        if (value == "@StatusEnum.Yes.ParseToInt()") {
+                        if (value == "@StatusEnum.Yes.ToInt()") {
                             return '<span class="badge badge-primary">' + "@StatusEnum.Yes.GetDescription()" + '</span>';
                         } else {
                             return '<span class="badge badge-warning">' + "@StatusEnum.No.GetDescription()" + '</span>';

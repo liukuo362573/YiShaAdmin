@@ -5,7 +5,6 @@ using YiSha.DataBase.Extension;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Util;
-using YiSha.Util.Extension;
 using YiSha.Util.Model;
 
 namespace YiSha.Service.SystemManage
@@ -99,12 +98,12 @@ namespace YiSha.Service.SystemManage
                     strSql.Append(" AND a.ExecuteUrl like @ExecuteUrl");
                     parameter.Add(DbParameterExtension.CreateDbParameter("@ExecuteUrl", '%' + param.ExecuteUrl + '%'));
                 }
-                if (!string.IsNullOrEmpty(param.StartTime.ParseToString()))
+                if (!string.IsNullOrEmpty(param.StartTime.ToStr()))
                 {
                     strSql.Append(" AND a.BaseCreateTime >= @StartTime");
                     parameter.Add(DbParameterExtension.CreateDbParameter("@StartTime", param.StartTime));
                 }
-                if (!string.IsNullOrEmpty(param.EndTime.ParseToString()))
+                if (!string.IsNullOrEmpty(param.EndTime.ToStr()))
                 {
                     param.EndTime = param.EndTime.Value.Date.Add(new TimeSpan(23, 59, 59));
                     strSql.Append(" AND a.BaseCreateTime <= @EndTime");

@@ -12,55 +12,56 @@ namespace YiSha.Entity.OrganizationManage
         /// <summary>
         /// 文章标题
         /// </summary>
-        /// <returns></returns>
-        public string? NewsTitle { get; set; }
+        [Column("NewsTitle")]
+        public string NewsTitle { get; set; }
 
         /// <summary>
         /// 文章内容
         /// </summary>
-        /// <returns></returns>
-        public string? NewsContent { get; set; }
+        [Column("NewsContent")]
+        public string NewsContent { get; set; }
 
         /// <summary>
         /// 文章标签
         /// </summary>
-        public string? NewsTag { get; set; }
+        [Column("NewsTag")]
+        public string NewsTag { get; set; }
 
         /// <summary>
         /// 缩略图
         /// </summary>
-        /// <returns></returns>
-        public string? ThumbImage { get; set; }
+        [Column("ThumbImage")]
+        public string ThumbImage { get; set; }
 
         /// <summary>
         /// 作者
         /// </summary>
-        /// <returns></returns>
-        public string? NewsAuthor { get; set; }
+        [Column("NewsAuthor")]
+        public string NewsAuthor { get; set; }
 
         /// <summary>
         /// 排序
         /// </summary>
-        /// <returns></returns>
-        public int? NewsSort { get; set; }
+        [Column("NewsSort")]
+        public int NewsSort { get; set; }
 
         /// <summary>
         /// 发布时间
         /// </summary>
-        /// <returns></returns>
+        [Column("NewsDate")]
         public DateTime? NewsDate { get; set; }
 
         /// <summary>
         /// 文章类别
         /// </summary>
-        /// <returns></returns>
-        public int? NewsType { get; set; }
+        [Column("NewsType")]
+        public int NewsType { get; set; }
 
         /// <summary>
         /// 阅读量
         /// </summary>
-        /// <returns></returns>
-        public int? ViewTimes { get; set; }
+        [Column("ViewTimes")]
+        public int ViewTimes { get; set; }
 
     }
 }

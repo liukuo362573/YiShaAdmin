@@ -6,12 +6,12 @@
     public class BaseConfigModel
     {
         /// <summary>
-        /// 数据库表名sys_menu
+        /// 数据库表名
         /// </summary>
         public string TableName { get; set; }
 
         /// <summary>
-        /// 表名首字母大写SysMenu
+        /// 表名首字母大写
         /// </summary>
         public string TableNameUpper { get; set; }
 

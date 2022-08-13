@@ -1,6 +1,9 @@
-﻿namespace YiSha.Util.Extension
+﻿namespace YiSha.Util
 {
-    public static partial class Extensions
+    /// <summary>
+    /// 数据转换拓展包
+    /// </summary>
+    public static partial class ConversionException
     {
         public static Exception GetOriginalException(this Exception ex)
         {

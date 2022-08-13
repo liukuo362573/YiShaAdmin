@@ -45,7 +45,7 @@
                 { field: 'CronExpression', title: 'Cron表达式' },
                 {
                     field: 'JobStatus', title: '状态', formatter: function (value, row, index) {
-                        if (row.JobStatus == "@StatusEnum.Yes.ParseToInt()") {
+                        if (row.JobStatus == "@StatusEnum.Yes.ToInt()") {
                             return '<span class="badge badge-primary">' + "运行中" + '</span>';
                         } else {
                             return '<span class="badge badge-danger">' + "停止" + '</span>';
@@ -61,10 +61,10 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        if (row.JobStatus == "@StatusEnum.Yes.ParseToInt()") {
-                            actions.push('<a class="btn btn-primary btn-xs" href="#" onclick="ChangeJobStatus(\'' + row.Id + '\',@StatusEnum.No.ParseToInt())"><i class="fa fa-pause-circle-o"></i>暂停</a> ');
+                        if (row.JobStatus == "@StatusEnum.Yes.ToInt()") {
+                            actions.push('<a class="btn btn-primary btn-xs" href="#" onclick="ChangeJobStatus(\'' + row.Id + '\',@StatusEnum.No.ToInt())"><i class="fa fa-pause-circle-o"></i>暂停</a> ');
                         } else {
-                            actions.push('<a class="btn btn-primary btn-xs" href="#" onclick="ChangeJobStatus(\'' + row.Id + '\',@StatusEnum.Yes.ParseToInt())"><i class="fa fa-play-circle-o"></i>执行</a> ');
+                            actions.push('<a class="btn btn-primary btn-xs" href="#" onclick="ChangeJobStatus(\'' + row.Id + '\',@StatusEnum.Yes.ToInt())"><i class="fa fa-play-circle-o"></i>执行</a> ');
                         }
                         return actions.join('');
                     }

@@ -15,14 +15,13 @@
 
 	<ItemGroup>
 		<PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.7" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.7" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.8" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.8" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\YiSha.Business\YiSha.Business.AutoJob\YiSha.Business.AutoJob.csproj" />
 		<ProjectReference Include="..\..\YiSha.Business\YiSha.Business\YiSha.Business.csproj" />
-		<ProjectReference Include="..\..\YiSha.Common\YiSha.Common.csproj" />
 		<ProjectReference Include="..\..\YiSha.CodeGenerator\YiSha.CodeGenerator.csproj" />
 	</ItemGroup>
 

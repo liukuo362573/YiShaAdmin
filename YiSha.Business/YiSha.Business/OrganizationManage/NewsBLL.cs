@@ -2,7 +2,7 @@
 using YiSha.Entity.OrganizationManage;
 using YiSha.Model.Param.OrganizationManage;
 using YiSha.Service.OrganizationManage;
-using YiSha.Util.Extension;
+using YiSha.Util;
 using YiSha.Util.Model;
 
 namespace YiSha.Business.OrganizationManage
@@ -66,7 +66,7 @@ namespace YiSha.Business.OrganizationManage
             TData<string> obj = new TData<string>();
             areaBLL.SetAreaEntity(entity);
             await newsService.SaveForm(entity);
-            obj.Data = entity.Id.ParseToString();
+            obj.Data = entity.Id.ToStr();
             obj.Tag = 1;
             return obj;
         }

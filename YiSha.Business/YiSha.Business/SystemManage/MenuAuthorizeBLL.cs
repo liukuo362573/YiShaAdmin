@@ -4,7 +4,7 @@ using YiSha.Entity.SystemManage;
 using YiSha.Enum;
 using YiSha.Enum.SystemManage;
 using YiSha.Model.Result;
-using YiSha.Util.Extension;
+using YiSha.Util;
 using YiSha.Util.Model;
 
 namespace YiSha.Business.SystemManage
@@ -31,13 +31,13 @@ namespace YiSha.Business.SystemManage
             menuAuthorizeCacheList = menuAuthorizeCacheList.Where(p => enableMenuIdList.Contains(p.MenuId)).ToList();
 
             // 用户
-            userAuthorizeList = menuAuthorizeCacheList.Where(p => p.AuthorizeId == user.UserId && p.AuthorizeType == AuthorizeTypeEnum.User.ParseToInt()).ToList();
+            userAuthorizeList = menuAuthorizeCacheList.Where(p => p.AuthorizeId == user.UserId && p.AuthorizeType == AuthorizeTypeEnum.User.ToInt()).ToList();
 
             // 角色
             if (!string.IsNullOrEmpty(user.RoleIds))
             {
                 List<long> roleIdList = user.RoleIds.Split(',').Select(p => long.Parse(p)).ToList();
-                roleAuthorizeList = menuAuthorizeCacheList.Where(p => roleIdList.Contains(p.AuthorizeId.Value) && p.AuthorizeType == AuthorizeTypeEnum.Role.ParseToInt()).ToList();
+                roleAuthorizeList = menuAuthorizeCacheList.Where(p => roleIdList.Contains(p.AuthorizeId) && p.AuthorizeType == AuthorizeTypeEnum.Role.ToInt()).ToList();
             }
 
             // 排除重复的记录

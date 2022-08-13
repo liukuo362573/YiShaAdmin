@@ -60,7 +60,7 @@
                 {
                     field: 'LogStatus', title: '执行状态', align: 'center',
                     formatter: function (value, row, index) {
-                        if (value == "@OperateStatusEnum.Success.ParseToInt()") {
+                        if (value == "@OperateStatusEnum.Success.ToInt()") {
                             return '<span class="badge badge-primary">' + "@OperateStatusEnum.Success.GetDescription()" + '</span>';
                         } else {
                             return '<span class="badge badge-warning">' + "@OperateStatusEnum.Fail.GetDescription()" + '</span>';

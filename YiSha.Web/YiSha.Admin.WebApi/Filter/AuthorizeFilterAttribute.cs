@@ -9,7 +9,6 @@ using YiSha.Entity;
 using YiSha.Entity.SystemManage;
 using YiSha.Enum;
 using YiSha.Util;
-using YiSha.Util.Extension;
 
 namespace YiSha.Admin.WebApi.Filter
 {
@@ -34,7 +33,7 @@ namespace YiSha.Admin.WebApi.Filter
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
-            string token = context.HttpContext.Request.Headers["ApiToken"].ParseToString();
+            string token = context.HttpContext.Request.Headers["ApiToken"].ToStr();
             OperatorInfo user = await Operator.Instance.Current(token);
             if (user != null)
             {
@@ -68,24 +67,24 @@ namespace YiSha.Admin.WebApi.Filter
             #region 保存日志
             LogApiEntity logApiEntity = new LogApiEntity();
             logApiEntity.ExecuteUrl = context.HttpContext.Request.Path;
-            logApiEntity.LogStatus = OperateStatusEnum.Success.ParseToInt();
+            logApiEntity.LogStatus = OperateStatusEnum.Success.ToInt();
 
             #region 获取Post参数
             switch (context.HttpContext.Request.Method.ToUpper())
             {
                 case "GET":
-                    logApiEntity.ExecuteParam = context.HttpContext.Request.QueryString.Value.ParseToString();
+                    logApiEntity.ExecuteParam = context.HttpContext.Request.QueryString.Value.ToStr();
                     break;
 
                 case "POST":
                     if (context.ActionArguments?.Count > 0)
                     {
-                        logApiEntity.ExecuteUrl += context.HttpContext.Request.QueryString.Value.ParseToString();
+                        logApiEntity.ExecuteUrl += context.HttpContext.Request.QueryString.Value.ToStr();
                         logApiEntity.ExecuteParam = TextHelper.GetSubString(JsonConvert.SerializeObject(context.ActionArguments), 4000);
                     }
                     else
                     {
-                        logApiEntity.ExecuteParam = context.HttpContext.Request.QueryString.Value.ParseToString();
+                        logApiEntity.ExecuteParam = context.HttpContext.Request.QueryString.Value.ToStr();
                     }
                     break;
             }
@@ -106,7 +105,7 @@ namespace YiSha.Admin.WebApi.Filter
                 #endregion
 
                 logApiEntity.ExecuteResult = sbException.ToString();
-                logApiEntity.LogStatus = OperateStatusEnum.Fail.ParseToInt();
+                logApiEntity.LogStatus = OperateStatusEnum.Fail.ToInt();
             }
             else
             {
@@ -114,7 +113,7 @@ namespace YiSha.Admin.WebApi.Filter
                 if (result != null)
                 {
                     logApiEntity.ExecuteResult = JsonConvert.SerializeObject(result.Value);
-                    logApiEntity.LogStatus = OperateStatusEnum.Success.ParseToInt();
+                    logApiEntity.LogStatus = OperateStatusEnum.Success.ToInt();
                 }
             }
             if (user != null)
@@ -123,12 +122,12 @@ namespace YiSha.Admin.WebApi.Filter
             }
             logApiEntity.ExecuteParam = TextHelper.GetSubString(logApiEntity.ExecuteParam, 4000);
             logApiEntity.ExecuteResult = TextHelper.GetSubString(logApiEntity.ExecuteResult, 4000);
-            logApiEntity.ExecuteTime = sw.ElapsedMilliseconds.ParseToInt();
+            logApiEntity.ExecuteTime = sw.ElapsedMilliseconds.ToInt();
 
             Action taskAction = async () =>
              {
                  // 让底层不用获取HttpContext
-                 logApiEntity.BaseCreatorId = logApiEntity.BaseCreatorId ?? 0;
+                 logApiEntity.BaseCreatorId = logApiEntity.BaseCreatorId;
 
                  await new LogApiBLL().SaveForm(logApiEntity);
              };

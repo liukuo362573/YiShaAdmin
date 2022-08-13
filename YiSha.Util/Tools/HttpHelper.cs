@@ -4,7 +4,6 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
-using YiSha.Util.Extension;
 
 namespace YiSha.Util
 {
@@ -22,7 +21,7 @@ namespace YiSha.Util
         /// <returns></returns>
         public static bool IsUrl(string url)
         {
-            url = url.ParseToString().ToLower();
+            url = url.ToStr().ToLower();
             if (url.StartsWith("http://") || url.StartsWith("https://"))
             {
                 return true;

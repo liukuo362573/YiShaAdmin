@@ -43,7 +43,7 @@
 
         $("#importFile").fileinput({
             language: 'zh',
-            'uploadUrl': '@Url.Content("~/File/UploadFile")' + '?fileModule=@UploadFileType.Import.ParseToInt()',
+            'uploadUrl': '@Url.Content("~/File/UploadFile")' + '?fileModule=@UploadFileType.Import.ToInt()',
             showPreview: false,
             allowedFileExtensions: ['xls', 'xlsx']
         }).on("fileuploaded", function (event, data) {

@@ -3,7 +3,6 @@ using YiSha.Enum;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Service.SystemManage;
 using YiSha.Util;
-using YiSha.Util.Extension;
 using YiSha.Util.Model;
 
 namespace YiSha.Business.SystemManage
@@ -50,7 +49,7 @@ namespace YiSha.Business.SystemManage
                 return obj;
             }
             await autoJobService.SaveForm(entity);
-            obj.Data = entity.Id.ParseToString();
+            obj.Data = entity.Id.ToStr();
             obj.Tag = 1;
             return obj;
         }
@@ -61,7 +60,7 @@ namespace YiSha.Business.SystemManage
             foreach (long id in TextHelper.SplitToArray<long>(ids, ','))
             {
                 AutoJobEntity dbEntity = await autoJobService.GetEntity(id);
-                if (dbEntity.JobStatus == StatusEnum.Yes.ParseToInt())
+                if (dbEntity.JobStatus == StatusEnum.Yes.ToInt())
                 {
                     obj.Message = "请先暂停 " + dbEntity.JobName + " 定时任务";
                     return obj;

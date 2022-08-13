@@ -11,28 +11,32 @@ namespace YiSha.Entity.SystemManage
         /// <summary>
         /// 角色名称
         /// </summary>
-        public string? RoleName { get; set; }
+        [Column("RoleName")]
+        public string RoleName { get; set; }
 
         /// <summary>
         /// 角色排序
         /// </summary>
-        public int? RoleSort { get; set; }
+        [Column("RoleSort")]
+        public int RoleSort { get; set; }
 
         /// <summary>
         /// 角色状态(0禁用 1启用)
         /// </summary>
-        public int? RoleStatus { get; set; }
+        [Column("RoleStatus")]
+        public int RoleStatus { get; set; }
 
         /// <summary>
         /// 备注
         /// </summary>
-        public string? Remark { get; set; }
+        [Column("Remark")]
+        public string Remark { get; set; }
 
         /// <summary>
         /// 角色对应的菜单，页面和按钮
         /// </summary>
         [NotMapped]
-        public string? MenuIds { get; set; }
+        public string MenuIds { get; set; }
 
     }
 }

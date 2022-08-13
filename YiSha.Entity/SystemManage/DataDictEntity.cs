@@ -11,16 +11,19 @@ namespace YiSha.Entity.SystemManage
         /// <summary>
         /// 字典类型
         /// </summary>
-        public string? DictType { get; set; }
+        [Column("DictType")]
+        public string DictType { get; set; }
 
         /// <summary>
         /// 字典排序
         /// </summary>
-        public int? DictSort { get; set; }
+        [Column("DictSort")]
+        public int DictSort { get; set; }
 
         /// <summary>
         /// 备注
         /// </summary>
-        public string? Remark { get; set; }
+        [Column("Remark")]
+        public string Remark { get; set; }
     }
 }

@@ -39,13 +39,13 @@
     $(document).ready(function () {
         $("#fileinput-demo-1").fileinput({
             language: 'zh',
-            'uploadUrl': '@GlobalContext.SystemConfig.ApiSite' + '/File/UploadFile?fileModule=@UploadFileType.News.ParseToInt()',
+            'uploadUrl': '@GlobalContext.SystemConfig.ApiSite' + '/File/UploadFile?fileModule=@UploadFileType.News.ToInt()',
             showPreview: false
         });
 
         $("#fileinput-demo-2").fileinput({
             language: 'zh',
-            'uploadUrl': '@GlobalContext.SystemConfig.ApiSite' + '/File/UploadFile?fileModule=@UploadFileType.News.ParseToInt()',
+            'uploadUrl': '@GlobalContext.SystemConfig.ApiSite' + '/File/UploadFile?fileModule=@UploadFileType.News.ToInt()',
             overwriteInitial: false,
             initialPreviewAsData: true,
             initialPreview: ['@Url.Content("~/image/portrait.png")']

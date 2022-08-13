@@ -33,7 +33,7 @@
         var divPagination = $("#divPagination", parent.document);
         $('input').on('ifChecked', function (event) {
             var val = $(this).val();
-            if (val == @NeedEnum.Need.ParseToInt()) {
+            if (val == @NeedEnum.Need.ToInt()) {
                 divPagination.show();
             }
             else {
@@ -43,10 +43,10 @@
 
         //默认设置
         if (divPagination.is(':hidden')) {
-            $("#paginationStatus").ysRadioBox('setValue',@NeedEnum.NotNeed.ParseToInt());
+            $("#paginationStatus").ysRadioBox('setValue',@NeedEnum.NotNeed.ToInt());
         }
         else {
-            $("#paginationStatus").ysRadioBox('setValue',@NeedEnum.Need.ParseToInt());
+            $("#paginationStatus").ysRadioBox('setValue',@NeedEnum.Need.ToInt());
         }
         var selectedColumn = '';
         $("#gridTable th", parent.document).each(function (i, ele) {

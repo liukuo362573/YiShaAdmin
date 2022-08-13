@@ -47,7 +47,7 @@ namespace YiSha.DataBase
             get
             {
                 var dbTimeoutStr = GlobalContext.SystemConfig.DBCommandTimeout;
-                return dbTimeoutStr <= 0 ? 10 : Convert.ToInt32(dbTimeoutStr);
+                return dbTimeoutStr <= 0 ? 10 : Convert.ToInt32(dbTimeoutStr * 1000);
             }
         }
     }

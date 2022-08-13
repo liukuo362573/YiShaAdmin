@@ -59,8 +59,8 @@
     var id = ys.request("id");
     var dictType = ys.request("dictType");
     $(function () {
-        $("#dictStatus").ysRadioBox({ data: ys.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())), default: '@StatusEnum.Yes.ParseToInt()' });
-        $("#isDefault").ysRadioBox({ data: ys.getJson(@Html.Raw(typeof(IsEnum).EnumToDictionaryString())) , default: '@IsEnum.No.ParseToInt()'  });
+        $("#dictStatus").ysRadioBox({ data: ys.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())), default: '@StatusEnum.Yes.ToInt()' });
+        $("#isDefault").ysRadioBox({ data: ys.getJson(@Html.Raw(typeof(IsEnum).EnumToDictionaryString())) , default: '@IsEnum.No.ToInt()'  });
         $("#listClass").ysComboBox({
             data: [{ Key: 'default', Value: '默认' }, { Key: 'primary', Value: '主要' }, { Key: 'success', Value: '成功' }, { Key: 'info', Value: '信息' }, { Key: 'warning', Value: '警告' }, { Key: 'danger', Value: '危险' }],
             class: "form-control"

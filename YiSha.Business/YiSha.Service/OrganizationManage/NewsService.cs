@@ -5,7 +5,6 @@ using YiSha.DataBase.Extension;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Model.Param.OrganizationManage;
 using YiSha.Util;
-using YiSha.Util.Extension;
 using YiSha.Util.Model;
 
 namespace YiSha.Service.OrganizationManage
@@ -45,7 +44,7 @@ namespace YiSha.Service.OrganizationManage
         public async Task<int> GetMaxSort()
         {
             object result = await this.FindObject("SELECT MAX(NewsSort) FROM SysNews");
-            int sort = result.ParseToInt();
+            int sort = result.ToInt();
             sort++;
             return sort;
         }

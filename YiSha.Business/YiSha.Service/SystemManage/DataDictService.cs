@@ -1,9 +1,9 @@
 ﻿using System.Linq.Expressions;
+using YiSha.Common;
 using YiSha.DataBase;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Util;
-using YiSha.Util.Extension;
 using YiSha.Util.Model;
 
 namespace YiSha.Service.SystemManage
@@ -33,14 +33,14 @@ namespace YiSha.Service.SystemManage
         public async Task<int> GetMaxSort()
         {
             object result = await this.FindObject("SELECT MAX(DictSort) FROM SysDataDict");
-            int sort = result.ParseToInt();
+            int sort = result.ToInt();
             sort++;
             return sort;
         }
 
         public bool ExistDictType(DataDictEntity entity)
         {
-            var expression = LinqExtensions.True<DataDictEntity>();
+            var expression = ExtensionLinq.True<DataDictEntity>();
             expression = expression.And(t => t.BaseIsDelete == 0);
             if (entity.Id.IsNullOrZero())
             {
@@ -60,7 +60,7 @@ namespace YiSha.Service.SystemManage
         /// <returns></returns>
         public bool ExistDictDetail(string dictType)
         {
-            var expression = LinqExtensions.True<DataDictDetailEntity>();
+            var expression = ExtensionLinq.True<DataDictDetailEntity>();
             expression = expression.And(t => t.DictType == dictType);
             return this.IQueryable(expression).Count() > 0 ? true : false;
         }
@@ -74,7 +74,7 @@ namespace YiSha.Service.SystemManage
             {
                 if (!entity.Id.IsNullOrZero())
                 {
-                    var dbEntity = await db.FindEntity<DataDictEntity>(entity.Id.Value);
+                    var dbEntity = await db.FindEntity<DataDictEntity>(entity.Id);
                     if (dbEntity.DictType != entity.DictType)
                     {
                         // 更新子表的DictType，因为2个表用DictType进行关联
@@ -115,14 +115,14 @@ namespace YiSha.Service.SystemManage
         #region 私有方法
         private Expression<Func<DataDictEntity, bool>> ListFilter(DataDictListParam param)
         {
-            var expression = LinqExtensions.True<DataDictEntity>();
+            var expression = ExtensionLinq.True<DataDictEntity>();
             if (param != null)
             {
-                if (!param.DictType.IsEmpty())
+                if (!param.DictType.IsNull())
                 {
                     expression = expression.And(t => t.DictType.Contains(param.DictType));
                 }
-                if (!param.Remark.IsEmpty())
+                if (!param.Remark.IsNull())
                 {
                     expression = expression.And(t => t.Remark.Contains(param.Remark));
                 }

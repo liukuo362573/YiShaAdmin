@@ -1,9 +1,9 @@
 ﻿using System.Linq.Expressions;
+using YiSha.Common;
 using YiSha.DataBase;
 using YiSha.Entity.SystemManage;
 using YiSha.Model.Param.SystemManage;
 using YiSha.Util;
-using YiSha.Util.Extension;
 using YiSha.Util.Model;
 
 namespace YiSha.Service.SystemManage
@@ -55,7 +55,7 @@ namespace YiSha.Service.SystemManage
         #region 私有方法
         private Expression<Func<AutoJobLogEntity, bool>> ListFilter(AutoJobLogListParam param)
         {
-            var expression = LinqExtensions.True<AutoJobLogEntity>();
+            var expression = ExtensionLinq.True<AutoJobLogEntity>();
             if (param != null)
             {
                 if (!string.IsNullOrEmpty(param.JobName))

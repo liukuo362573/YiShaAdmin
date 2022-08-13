@@ -1,4 +1,6 @@
-﻿namespace YiSha.Util.IDGenerator
+﻿using YiSha.Util;
+
+namespace YiSha.Entity.IDGenerator
 {
     /// <summary>
     /// 雪花生成

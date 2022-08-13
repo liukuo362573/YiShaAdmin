@@ -48,7 +48,7 @@
                         result.UserName = (ys.isNullOrEmpty(result.UserName) ? "" : result.UserName) + " / ";
                         result.UserName += (ys.isNullOrEmpty(result.DepartmentName) ? "" : result.DepartmentName) + " / ";
                         result.UserName += result.IpAddress + " / " + result.IpLocation;
-                        if (result.LogStatus == "@OperateStatusEnum.Success.ParseToInt()") {
+                        if (result.LogStatus == "@OperateStatusEnum.Success.ToInt()") {
                             $("#exception").hide();
                             result.LogStatus = '<span class="label label-primary">' + "@OperateStatusEnum.Success.GetDescription()" + '</span>';
                         } else {

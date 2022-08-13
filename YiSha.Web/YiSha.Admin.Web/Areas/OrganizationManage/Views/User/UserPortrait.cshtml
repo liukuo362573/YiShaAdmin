@@ -89,7 +89,7 @@
         var formdata = new FormData();
         formdata.append("fileList", img, imgFileName);
         ys.ajaxUploadFile({
-            url: '@GlobalContext.SystemConfig.ApiSite' + '/File/UploadFile?fileModule=@UploadFileType.Portrait.ParseToInt()',
+            url: '@GlobalContext.SystemConfig.ApiSite' + '/File/UploadFile?fileModule=@UploadFileType.Portrait.ToInt()',
             data: formdata,
             success: function (obj) {
                 if (obj.Tag == 1) {

@@ -6,13 +6,30 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="appsettings.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="appsettings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
 		<Folder Include="ToolManage\" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\YiSha.Cache\YiSha.Cache.csproj" />
-	  <ProjectReference Include="..\YiSha.DataBase\YiSha.DataBase.csproj" />
-	  <ProjectReference Include="..\YiSha.Util\YiSha.Util.csproj" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\YiSha.Common\YiSha.Common.csproj" />
 	</ItemGroup>
 
 </Project>

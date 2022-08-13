@@ -2,7 +2,6 @@
 using YiSha.DataBase;
 using YiSha.Enum.OrganizationManage;
 using YiSha.Util;
-using YiSha.Util.Extension;
 
 namespace YiSha.Entity
 {
@@ -14,7 +13,7 @@ namespace YiSha.Entity
             {
                 return null;
             }
-            token = token.ParseToString().Trim();
+            token = token.ToStr().Trim();
 
             var strSql = new StringBuilder();
             strSql.Append(@"SELECT  a.Id as UserId,
@@ -37,7 +36,7 @@ namespace YiSha.Entity
                 strSql.Append(@"SELECT  a.BelongId as RoleId
                                 FROM    SysUserBelong a
                                 WHERE   a.UserId = " + operatorInfo.UserId + " AND ");
-                strSql.Append("         a.BelongType = " + UserBelongTypeEnum.Role.ParseToInt());
+                strSql.Append("         a.BelongType = " + UserBelongTypeEnum.Role.ToInt());
                 IEnumerable<RoleInfo> roleList = await this.FindList<RoleInfo>(strSql.ToString());
                 operatorInfo.RoleIds = string.Join(",", roleList.Select(p => p.RoleId).ToArray());
                 #endregion
@@ -48,7 +47,7 @@ namespace YiSha.Entity
                                 FROM    SysDepartment a
                                 WHERE   a.Id = " + operatorInfo.DepartmentId);
                 object departmentName = await this.FindObject(strSql.ToString());
-                operatorInfo.DepartmentName = departmentName.ParseToString();
+                operatorInfo.DepartmentName = departmentName.ToStr();
                 #endregion
             }
             return operatorInfo;
