@@ -10,6 +10,7 @@ using YiSha.Util.Extension;
 using Microsoft.AspNetCore.Mvc;
 using System.Web;
 using YiSha.Util;
+using Microsoft.Extensions.Hosting;
 
 namespace YiSha.Admin.Web.Controllers
 {
@@ -42,7 +43,10 @@ namespace YiSha.Admin.Web.Controllers
 
         public Task OnExceptionAsync(ExceptionContext context)
         {
-            OnException(context);
+            if (GlobalContext.HostingEnvironment.IsProduction())
+            {
+                OnException(context);
+            }
             return Task.CompletedTask;
         }
     }
