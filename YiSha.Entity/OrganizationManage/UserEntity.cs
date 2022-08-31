@@ -25,7 +25,7 @@ namespace YiSha.Entity.OrganizationManage
         /// <summary>
         /// 密码盐值
         /// </summary>
-        [Column("Password"), JsonIgnore]
+        [Column("Salt"), JsonIgnore]
         public string Salt { get; set; }
 
         /// <summary>
