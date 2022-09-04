@@ -31,6 +31,10 @@
 
 文档地址：[https://www.toolhelper.cn/doc](http://www.toolhelper.cn/doc)  
 
+## QQ 交流群
+
+851661600
+
 ## 演示图
 
 ![登录页面](https://raw.githubusercontent.com/liukuo362573/YiShaAdmin/master/YiSha.Web/YiSha.Admin.Web/wwwroot/image/demo_1.jpg)
