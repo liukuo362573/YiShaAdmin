@@ -26,13 +26,10 @@
 - 代码生成：快速生成对单表的增删改查
 - 服务器信息：查看服务器的基本信息
 
-## 在线体验
-1. 项目地址：[https://www.toolhelper.cn/admin](http://106.14.124.170/admin)  
-2. 账号密码：admin 123456
 
 ## 开发文档
 
-文档地址：[https://www.toolhelper.cn/doc](http://106.14.124.170/doc)  
+文档地址：[https://www.toolhelper.cn/doc](http://www.toolhelper.cn/doc)  
 
 ## 演示图
 
