@@ -21,6 +21,5 @@
         /// 权限标识
         /// </summary>
         public string Authorize { get; set; }
-
     }
 }

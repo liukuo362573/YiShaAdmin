@@ -4,7 +4,6 @@ namespace YiSha.Enum.OrganizationManage
 {
     public enum UserBelongTypeEnum
     {
-
         [Description("职位")]
         Position = 1,
 

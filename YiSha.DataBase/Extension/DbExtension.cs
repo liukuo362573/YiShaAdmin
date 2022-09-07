@@ -267,58 +267,85 @@ namespace YiSha.DataBase.Extension
                         case System.Data.DbType.Date:
                             value = Convert.ToDateTime(parameter.Value).ToString("yyyy-MM-dd HH:mm:ss");
                             break;
+
                         case System.Data.DbType.AnsiString:
                             break;
+
                         case System.Data.DbType.Binary:
                             break;
+
                         case System.Data.DbType.Byte:
                             break;
+
                         case System.Data.DbType.Boolean:
                             break;
+
                         case System.Data.DbType.Currency:
                             break;
+
                         case System.Data.DbType.DateTime:
                             break;
+
                         case System.Data.DbType.Decimal:
                             break;
+
                         case System.Data.DbType.Double:
                             break;
+
                         case System.Data.DbType.Guid:
                             break;
+
                         case System.Data.DbType.Int16:
                             break;
+
                         case System.Data.DbType.Int32:
                             break;
+
                         case System.Data.DbType.Int64:
                             break;
+
                         case System.Data.DbType.Object:
                             break;
+
                         case System.Data.DbType.SByte:
                             break;
+
                         case System.Data.DbType.Single:
                             break;
+
                         case System.Data.DbType.String:
                             break;
+
                         case System.Data.DbType.Time:
                             break;
+
                         case System.Data.DbType.UInt16:
                             break;
+
                         case System.Data.DbType.UInt32:
                             break;
+
                         case System.Data.DbType.UInt64:
                             break;
+
                         case System.Data.DbType.VarNumeric:
                             break;
+
                         case System.Data.DbType.AnsiStringFixedLength:
                             break;
+
                         case System.Data.DbType.StringFixedLength:
                             break;
+
                         case System.Data.DbType.Xml:
                             break;
+
                         case System.Data.DbType.DateTime2:
                             break;
+
                         case System.Data.DbType.DateTimeOffset:
                             break;
+
                         default:
                             value = Convert.ToString(parameter.Value);
                             break;
@@ -354,7 +381,7 @@ namespace YiSha.DataBase.Extension
     /// <summary>
     /// 反射工具（私有）
     /// </summary>
-    partial class DbExtensionReflection
+    internal partial class DbExtensionReflection
     {
         /// <summary>
         /// 同步字典

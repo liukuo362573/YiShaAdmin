@@ -30,8 +30,6 @@
         /// <returns></returns>
         bool RemoveCache(string key);
 
-        #region Hash
-
         /// <summary>
         /// 读取缓存
         /// </summary>
@@ -100,7 +98,5 @@
         /// <param name="dict"></param>
         /// <returns></returns>
         Dictionary<string, bool> RemoveHashFieldCache(string key, Dictionary<string, bool> dict);
-
-        #endregion
     }
 }

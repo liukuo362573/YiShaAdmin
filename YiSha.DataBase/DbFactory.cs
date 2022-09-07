@@ -6,7 +6,7 @@ namespace YiSha.DataBase
     /// <summary>
     /// 数据库工厂
     /// </summary>
-    public class DbFactory
+    internal class DbFactory
     {
         /// <summary>
         /// 数据库类型

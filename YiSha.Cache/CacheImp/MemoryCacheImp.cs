@@ -69,8 +69,6 @@ namespace YiSha.Cache.CacheImp
             return true;
         }
 
-        #region Hash
-
         /// <summary>
         /// 读取缓存
         /// </summary>
@@ -158,12 +156,22 @@ namespace YiSha.Cache.CacheImp
         /// <returns></returns>
         public int SetHashFieldCache<T>(string key, Dictionary<string, T> dict)
         {
-            var count = 0;
-            foreach (string fieldKey in dict.Keys)
+            int count = 0;
+            var dictpre = GetHashCache<T>(key);
+            if (dictpre == null)
             {
-                count += cache.Set(key, dict) != null ? 1 : 0;
+                cache.Set(key, dict);
+                return dict.Count;
             }
-            return count;
+            else
+            {
+                foreach (string fieldKey in dict.Keys)
+                {
+                    count += dictpre.TryAdd(fieldKey, dict[fieldKey]) ? 1 : 0;
+                }
+                cache.Set(key, dict);
+                return count;
+            }
         }
 
         /// <summary>
@@ -194,7 +202,5 @@ namespace YiSha.Cache.CacheImp
             }
             return dict;
         }
-
-        #endregion
     }
 }

@@ -4,17 +4,18 @@ namespace YiSha.Model.Param.SystemManage
 {
     public class AreaListParam
     {
-        public string AreaName { get; set; }
+        public string AreaName { get; set; } = "";
     }
 
     public class BaseAreaParam : BaseApiToken
     {
-        public int? ProvinceId { get; set; }
-        public int? CityId { get; set; }
-        public int? CountyId { get; set; }
+        public int? ProvinceId { get; set; } = 0;
+        public int? CityId { get; set; } = 0;
+        public int? CountyId { get; set; } = 0;
+
         /// <summary>
         /// 逗号分隔的Id
         /// </summary>
-        public string AreaId { get; set; }
+        public string AreaId { get; set; } = "";
     }
 }

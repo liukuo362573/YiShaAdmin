@@ -24,6 +24,7 @@
             string s = html.Substring(inl, inl2 - inl);
             return s;
         }
+
         public static string ResoveReverse(string html, string subfix, string prefix)
         {
             int inl = html.IndexOf(subfix);
@@ -40,6 +41,7 @@
             string s = subString.Substring(inl2 + prefix.Length, subString.Length - inl2 - prefix.Length);
             return s;
         }
+
         public static List<string> ResoveList(string html, string prefix, string subfix)
         {
             List<string> list = new List<string>();

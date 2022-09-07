@@ -11,7 +11,7 @@ namespace YiSha.DataBase
 {
     /// <summary>
     /// <b>数据库连接对象</b>
-    /// 
+    ///
     /// <para>常规使用：using var dbComm = new DbContext()</para>
     /// <para>注入使用：services.AddDbContext&lt;DbContext&gt;()</para>
     /// <para>继承此对象可以实现原生操作！by zgcwkj</para>
@@ -94,7 +94,7 @@ namespace YiSha.DataBase
         }
 
         /// <summary>
-        /// 配置要使用的数据库 
+        /// 配置要使用的数据库
         /// </summary>
         /// <param name="optionsBuilder">上下文选项生成器</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -162,13 +162,7 @@ namespace YiSha.DataBase
                 }
                 catch { }
             }
-            //设置主键为ID
-            foreach (var entity in modelBuilder.Model.GetEntityTypes())
-            {
-                PrimaryKeyConvention.SetPrimaryKey(modelBuilder, entity.Name);
-                var currentTableName = modelBuilder.Entity(entity.Name).Metadata.GetTableName();
-                modelBuilder.Entity(entity.Name).ToTable(currentTableName);
-            }
+            //
             base.OnModelCreating(modelBuilder);
         }
     }

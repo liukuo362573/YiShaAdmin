@@ -328,7 +328,7 @@ namespace YiSha.Util
 
         /// <summary>
         /// 格式化日期时间
-        /// 
+        ///
         /// 0 > yyyy-MM-dd
         /// 1 > yyyy-MM-dd HH:mm:ss
         /// 2 > yyyy/MM/dd

@@ -7,10 +7,11 @@ namespace YiSha.Model.Param.SystemManage
         /// <summary>
         /// 字典类型
         /// </summary>
-        public string DictType { get; set; }
+        public string DictType { get; set; } = "";
+
         /// <summary>
         /// 备注
         /// </summary>
-        public string Remark { get; set; }
+        public string Remark { get; set; } = "";
     }
 }

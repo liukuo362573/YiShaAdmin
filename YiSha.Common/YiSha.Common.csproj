@@ -6,8 +6,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\YiSha.Cache\YiSha.Cache.csproj" />
-		<ProjectReference Include="..\YiSha.DataBase\YiSha.DataBase.csproj" />
+	  <ProjectReference Include="..\YiSha.Cache\YiSha.Cache.csproj" />
+	  <ProjectReference Include="..\YiSha.DataBase\YiSha.DataBase.csproj" />
 	</ItemGroup>
 
 </Project>

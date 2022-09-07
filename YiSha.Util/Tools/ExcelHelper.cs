@@ -44,12 +44,12 @@ namespace YiSha.Util
             return partDirectory + Path.DirectorySeparatorChar + sFileName;
         }
 
-        /// <summary>  
-        /// List导出到Excel的MemoryStream  
-        /// </summary>  
-        /// <param name="list">数据源</param>  
-        /// <param name="sHeaderText">表头文本</param>  
-        /// <param name="columns">需要导出的属性</param>  
+        /// <summary>
+        /// List导出到Excel的MemoryStream
+        /// </summary>
+        /// <param name="list">数据源</param>
+        /// <param name="sHeaderText">表头文本</param>
+        /// <param name="columns">需要导出的属性</param>
         private MemoryStream CreateExportMemoryStream(List<T> list, string sHeaderText, string[] columns)
         {
             var workbook = new HSSFWorkbook();
@@ -74,7 +74,7 @@ namespace YiSha.Util
                 arrColWidth[columnIndex] = properties[columnIndex].Name.Length;
             }
 
-            #endregion
+            #endregion 取得每列的列宽（最大宽度）
 
             for (var rowIndex = 0; rowIndex < list.Count; rowIndex++)
             {
@@ -106,7 +106,7 @@ namespace YiSha.Util
                         sheet.AddMergedRegion(new CellRangeAddress(0, 0, 0, properties.Length - 1));
                     }
 
-                    #endregion
+                    #endregion 表头及样式
 
                     #region 列头及样式
 
@@ -130,15 +130,15 @@ namespace YiSha.Util
                             }
                             headerRow.CreateCell(columnIndex).SetCellValue(description);
                             headerRow.GetCell(columnIndex).CellStyle = headStyle;
-                            //根据表头设置列宽  
+                            //根据表头设置列宽
                             sheet.SetColumnWidth(columnIndex, (arrColWidth[columnIndex] + 1) * 256);
                         }
                     }
 
-                    #endregion
+                    #endregion 列头及样式
                 }
 
-                #endregion
+                #endregion 新建表，填充表头，填充列头，样式
 
                 #region 填充内容
 
@@ -164,7 +164,7 @@ namespace YiSha.Util
                         case "System.DateTime":
                         case "System.Nullable`1[System.DateTime]":
                             newCell.SetCellValue(drValue.ToDate());
-                            newCell.CellStyle = dateStyle; //格式化显示  
+                            newCell.CellStyle = dateStyle; //格式化显示
                             break;
 
                         case "System.Boolean":
@@ -211,7 +211,7 @@ namespace YiSha.Util
                     }
                 }
 
-                #endregion
+                #endregion 填充内容
             }
 
             using (var ms = new MemoryStream())
@@ -224,7 +224,7 @@ namespace YiSha.Util
             }
         }
 
-        #endregion
+        #endregion List导出到Excel文件
 
         #region Excel导入
 
@@ -297,10 +297,12 @@ namespace YiSha.Util
                                 case "System.Nullable`1[System.Byte]":
                                     mapPropertyInfoDict[j].SetValue(entity, Byte.Parse(row.GetCell(j).ToStr()));
                                     break;
+
                                 case "System.Int16":
                                 case "System.Nullable`1[System.Int16]":
                                     mapPropertyInfoDict[j].SetValue(entity, Int16.Parse(row.GetCell(j).ToStr()));
                                     break;
+
                                 case "System.Int32":
                                 case "System.Nullable`1[System.Int32]":
                                     mapPropertyInfoDict[j].SetValue(entity, row.GetCell(j).ToStr().ToInt());
@@ -371,7 +373,6 @@ namespace YiSha.Util
             return null;
         }
 
-        #endregion
+        #endregion Excel导入
     }
 }
-

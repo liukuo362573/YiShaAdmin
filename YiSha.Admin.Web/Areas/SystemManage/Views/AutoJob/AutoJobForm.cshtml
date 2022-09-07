@@ -1,0 +1,109 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+<div class="wrapper animated fadeInRight">
+    <form id="form" class="form-horizontal m">
+        <div class="form-group">
+            <label class="col-sm-3 control-label ">任务组<font class="red"> *</font></label>
+            <div class="col-sm-8">
+                <input id="jobGroupName" col="JobGroupName" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label ">任务名称<font class="red"> *</font></label>
+            <div class="col-sm-8">
+                <input id="jobName" col="JobName" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label ">状态</label>
+            <div class="col-sm-8" id="jobStatus" col="JobStatus">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label ">Cron表达式<font class="red"> *</font></label>
+            <div class="col-sm-8">
+                <input id="cronExpression" col="CronExpression" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label ">开始时间<font class="red"> *</font></label>
+            <div class="col-sm-8">
+                <input id="startTime" col="StartTime" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label ">结束时间</label>
+            <div class="col-sm-8">
+                <input id="endTime" col="EndTime" type="text" class="form-control" />
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    var id = ys.request("id");
+    $(function () {
+        $("#jobStatus").ysRadioBox({ data: ys.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+
+        laydate.render({ elem: '#startTime', type: 'datetime', format: 'yyyy-MM-dd HH:mm:ss' });
+        laydate.render({ elem: '#endTime', type: 'datetime', format: 'yyyy-MM-dd HH:mm:ss' });
+
+        getForm();
+
+        $("#form").validate({
+            rules: {
+                jobGroupName: { required: true },
+                jobName: { required: true },
+                cronExpression: { required: true },
+                startTime: { required: true }
+            }
+        });
+    });
+
+    function getForm() {
+        if (id > 0) {
+            ys.ajax({
+                url: '@Url.Content("~/SystemManage/AutoJob/GetFormJson")' + '?id=' + id,
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        $("#form").setWebControls(obj.Data);
+                    }
+                }
+            });
+        }
+        else {
+            var defaultData = {};
+            defaultData.JobStatus = "@StatusEnum.Yes.ToInt()";
+            defaultData.EndTime = "2099-01-01 00:00:00";
+            $("#form").setWebControls(defaultData);
+        }
+    }
+
+    function saveForm(index) {
+        if ($("#form").validate().form()) {
+            var postData = $("#form").getWebControls({ Id: id });
+            if (ys.isNullOrEmpty(postData.EndTime)) {
+                postData.EndTime = "2099-01-01 00:00:00";
+            }
+            ys.ajax({
+                url: '@Url.Content("~/SystemManage/AutoJob/SaveFormJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        ys.msgSuccess(obj.Message);
+                        parent.searchGrid();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        ys.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    }
+</script>
+

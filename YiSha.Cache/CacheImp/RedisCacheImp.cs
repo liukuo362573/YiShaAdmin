@@ -94,8 +94,6 @@ namespace YiSha.Cache.CacheImp
             return cache.KeyDelete(key);
         }
 
-        #region Hash
-
         /// <summary>
         /// 读取缓存
         /// </summary>
@@ -211,6 +209,7 @@ namespace YiSha.Cache.CacheImp
             dict = RemoveHashFieldCache(key, dict);
             return dict[fieldKey];
         }
+
         /// <summary>
         /// 删除缓存
         /// </summary>
@@ -226,8 +225,6 @@ namespace YiSha.Cache.CacheImp
             }
             return dict;
         }
-
-        #endregion
 
         /// <summary>
         /// 释放对象

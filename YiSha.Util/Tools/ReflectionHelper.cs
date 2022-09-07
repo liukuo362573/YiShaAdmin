@@ -8,6 +8,7 @@ namespace YiSha.Util
         private static ConcurrentDictionary<string, object> dictCache = new ConcurrentDictionary<string, object>();
 
         #region 得到类里面的属性集合
+
         /// <summary>
         /// 得到类里面的属性集合
         /// </summary>
@@ -46,6 +47,7 @@ namespace YiSha.Util
                 return properties;
             }
         }
-        #endregion
+
+        #endregion 得到类里面的属性集合
     }
 }
