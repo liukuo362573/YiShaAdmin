@@ -30,7 +30,7 @@ namespace YiSha.Model.Operator
         /// <param name="token"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task AddCurrent(string token)
+        public void AddCurrent(string token)
         {
             switch (LoginProvider)
             {
@@ -86,7 +86,7 @@ namespace YiSha.Model.Operator
         /// </summary>
         /// <param name="apiToken"></param>
         /// <returns></returns>
-        public async Task<OperatorInfo> Current(string apiToken = "")
+        public OperatorInfo Current(string apiToken = "")
         {
             IHttpContextAccessor hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
             OperatorInfo user = null;

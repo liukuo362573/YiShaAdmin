@@ -151,9 +151,11 @@ namespace YiSha.DataBase
                     var fileName = file.Name.Replace(file.Extension, "");
                     var assemblyName = new AssemblyName(fileName);
                     var entityAssembly = Assembly.Load(assemblyName);
-                    var typesToRegister = entityAssembly.GetTypes()
-                        .Where(p => !string.IsNullOrEmpty(p.Namespace))
-                        .Where(p => !string.IsNullOrEmpty(p.GetCustomAttribute<TableAttribute>()?.Name));
+                    var entityAssemblyType = entityAssembly.GetTypes();
+                    var typesToRegister = entityAssemblyType
+                        .Where(p => p.Namespace != null)//排除没有 命名空间
+                        .Where(p => p.GetCustomAttribute<TableAttribute>()?.Name != null)//排除没有 TableName
+                        .Where(p => p.GetCustomAttribute<NotMappedAttribute>() == null);//排除标记 NotMapped
                     foreach (var type in typesToRegister)
                     {
                         var createInstance = Activator.CreateInstance(type);
