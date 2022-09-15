@@ -2,7 +2,7 @@
 
 namespace YiSha.Model.Param.SystemManage
 {
-    public class DataDictListParam : BaseApiToken
+    public class DataDictListParam
     {
         /// <summary>
         /// 字典类型

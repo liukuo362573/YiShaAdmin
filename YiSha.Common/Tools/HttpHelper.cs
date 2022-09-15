@@ -4,8 +4,9 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
+using YiSha.Util;
 
-namespace YiSha.Util
+namespace YiSha.Common
 {
     /// <summary>
     /// Http连接操作帮助类

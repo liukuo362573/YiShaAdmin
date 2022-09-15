@@ -10,6 +10,11 @@ namespace YiSha.DataBase.Interceptor
     /// </summary>
     public class DbInterceptor : DbCommandInterceptor
     {
+        /// <summary>
+        /// 慢查询记录Sql(秒),保存到文件以便分析
+        /// </summary>
+        public static int DBSlowSqlLogTime { get; set; } = 5;
+
         public override async ValueTask<InterceptionResult<int>> NonQueryExecutingAsync(DbCommand command, CommandEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
         {
             var obj = await base.NonQueryExecutingAsync(command, eventData, result, cancellationToken);
@@ -18,7 +23,7 @@ namespace YiSha.DataBase.Interceptor
 
         public override async ValueTask<int> NonQueryExecutedAsync(DbCommand command, CommandExecutedEventData eventData, int result, CancellationToken cancellationToken = default)
         {
-            if (eventData.Duration.TotalMilliseconds >= GlobalContext.SystemConfig.DBSlowSqlLogTime * 1000)
+            if (eventData.Duration.TotalMilliseconds >= DBSlowSqlLogTime * 1000)
             {
                 LogHelper.Warn("耗时的Sql：" + command.GetCommandText());
             }
@@ -34,7 +39,7 @@ namespace YiSha.DataBase.Interceptor
 
         public override async ValueTask<object> ScalarExecutedAsync(DbCommand command, CommandExecutedEventData eventData, object result, CancellationToken cancellationToken = default)
         {
-            if (eventData.Duration.TotalMilliseconds >= GlobalContext.SystemConfig.DBSlowSqlLogTime * 1000)
+            if (eventData.Duration.TotalMilliseconds >= DBSlowSqlLogTime * 1000)
             {
                 LogHelper.Warn("耗时的Sql：" + command.GetCommandText());
             }
@@ -50,7 +55,7 @@ namespace YiSha.DataBase.Interceptor
 
         public override async ValueTask<DbDataReader> ReaderExecutedAsync(DbCommand command, CommandExecutedEventData eventData, DbDataReader result, CancellationToken cancellationToken = default)
         {
-            if (eventData.Duration.TotalMilliseconds >= GlobalContext.SystemConfig.DBSlowSqlLogTime * 1000)
+            if (eventData.Duration.TotalMilliseconds >= DBSlowSqlLogTime * 1000)
             {
                 LogHelper.Warn("耗时的Sql：" + command.GetCommandText());
             }

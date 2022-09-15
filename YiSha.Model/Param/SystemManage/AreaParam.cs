@@ -7,7 +7,7 @@ namespace YiSha.Model.Param.SystemManage
         public string AreaName { get; set; } = "";
     }
 
-    public class BaseAreaParam : BaseApiToken
+    public class BaseAreaParam
     {
         public int? ProvinceId { get; set; } = 0;
         public int? CityId { get; set; } = 0;

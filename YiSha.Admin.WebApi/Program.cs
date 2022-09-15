@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNetCore.DataProtection;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.OpenApi.Models;
+﻿using Microsoft.Extensions.FileProviders;
 using NLog.Web;
-using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using YiSha.Admin.WebApi.Filter;
+using YiSha.Admin.WebApi.Comm;
 using YiSha.Common;
 using YiSha.Entity;
 using YiSha.Util;
@@ -42,6 +39,8 @@ namespace YiSha.Admin.WebApi
         /// <param name="services">服务</param>
         public static void ConfigureServices(this IServiceCollection services)
         {
+            //所有注册服务和类实例容器
+            GlobalContext.Services = services;
             //日志组件
             services.AddLogging(loging =>
             {
@@ -57,7 +56,7 @@ namespace YiSha.Admin.WebApi
                 options.Cookie.HttpOnly = true;//设置在浏览器不能通过js获得该Cookie的值
                 options.Cookie.IsEssential = true;//启用Cookie
             });
-            //
+            //配置 CookiePolicy
             services.Configure<CookiePolicyOptions>(options =>
             {
                 //此 lambda 确定给定请求是否需要用户对非必要 cookie 的同意
@@ -92,10 +91,6 @@ namespace YiSha.Admin.WebApi
                 //https://docs.microsoft.com/zh-cn/dotnet/api/system.text.json.jsonserializeroptions.propertynamingpolicy?view=net-6.0
                 //返回数据首字不变
                 options.JsonSerializerOptions.PropertyNamingPolicy = null;
-                //格式化时间
-                options.JsonSerializerOptions.Converters.Add(new DateTimeJsonConverter());
-                //Long 转为字符串
-                options.JsonSerializerOptions.Converters.Add(new LongJsonConverter());
                 //取消 Unicode 编码
                 options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
                 //空值不反回前端
@@ -104,16 +99,15 @@ namespace YiSha.Admin.WebApi
                 //options.JsonSerializerOptions.AllowTrailingCommas = true;
                 //反序列化过程中属性名称是否使用不区分大小写的比较
                 //options.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
+                //格式化时间
+                options.JsonSerializerOptions.Converters.Add(new DateTimeJsonConverter());
+                //Long 转为字符串
+                options.JsonSerializerOptions.Converters.Add(new LongJsonConverter());
             });
-            //添加 Swagger
-            services.AddSwaggerGen(options =>
-            {
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml");
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "YiSha Api", Version = "v1" });
-                options.IncludeXmlComments(xmlPath, true);
-            });
-            //
-            GlobalContext.Services = services;
+            //配置 Swagger
+            services.AddSwaggerJwt("YiSha Api");
+            //配置 Jwt
+            services.AddJwtConfig<JwtValidator>();
         }
 
         /// <summary>
@@ -139,26 +133,38 @@ namespace YiSha.Admin.WebApi
             {
                 //正式环境自定义错误页
                 app.UseExceptionHandler("/Help/Error");
+                //捕获全局的请求
+                app.Use(async (context, next) =>
+                {
+                    await next();
+                    //401 错误
+                    if (context.Response.StatusCode == 401)
+                    {
+                        context.Request.Path = "/Admin/Index";
+                        await next();
+                    }
+                    //404 错误
+                    if (context.Response.StatusCode == 404)
+                    {
+                        context.Request.Path = "/Help/Error";
+                        await next();
+                    }
+                    //500 错误
+                    if (context.Response.StatusCode == 500)
+                    {
+                        context.Request.Path = "/Help/Error";
+                        await next();
+                    }
+                });
                 //定时任务
                 //new JobCenter().Start();
             }
-            //跨域
+            //跨域配置
             app.UseCors(builder =>
             {
                 builder.WithOrigins(GlobalContext.SystemConfig.AllowCorsSite.Split(',')).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
             });
-            //Swagger
-            app.UseSwagger(c =>
-            {
-                c.RouteTemplate = "api-doc/{documentName}/swagger.json";
-            });
-            //SwaggerUI
-            app.UseSwaggerUI(c =>
-            {
-                c.RoutePrefix = "api-doc";
-                c.SwaggerEndpoint("v1/swagger.json", "YiSha Api v1");
-            });
-            //
+            //路径配置
             if (!string.IsNullOrEmpty(GlobalContext.SystemConfig.VirtualDirectory))
             {
                 //让 Pathbase 中间件成为第一个处理请求的中间件， 才能正确的模拟虚拟路径
@@ -180,12 +186,16 @@ namespace YiSha.Admin.WebApi
             });
             //用户路由
             app.UseRouting();
+            //用户 Swagger
+            app.AddSwagger();
+            //启用 Jwt
+            app.JwtAuthorize();
             //用户默认路由
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=ApiHome}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
 
@@ -197,6 +207,8 @@ namespace YiSha.Admin.WebApi
         {
             //数据库上下文
             services.AddDbContext<MyDbContext>();
+            //
+            services.AddScoped<JwtValidator>();
         }
     }
 }

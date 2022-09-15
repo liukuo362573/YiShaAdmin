@@ -1,20 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using YiSha.Admin.WebApi.Filter;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using YiSha.Entity;
-using YiSha.Model.Entity.OrganizationManage;
-using YiSha.Model.Param;
-using YiSha.Model.Param.OrganizationManage;
-using YiSha.Util;
 using YiSha.Model;
+using YiSha.Model.Entity.OrganizationManage;
+using YiSha.Util;
 
 namespace YiSha.Admin.WebApi.Controllers
 {
     /// <summary>
     /// 新闻数据控制器
     /// </summary>
+    [Authorize]
     [Route("[controller]/[action]")]
-    [ApiController]
-    [AuthorizeFilter]
     public class NewsController : Controller
     {
         /// <summary>
@@ -79,7 +76,6 @@ namespace YiSha.Admin.WebApi.Controllers
                                     BaseCreateTime = news.BaseCreateTime,
                                     BaseCreatorId = news.BaseCreatorId,
                                     Id = news.Id,
-                                    Token = news.Token,
                                 });
             var obj = new TData<List<NewsEntity>>();
             obj.Data = newsEntities.Skip(pageSize * (pageIndex - 1)).Take(pageSize).ToList();
@@ -130,7 +126,6 @@ namespace YiSha.Admin.WebApi.Controllers
                                   BaseCreateTime = news.BaseCreateTime,
                                   BaseCreatorId = news.BaseCreatorId,
                                   Id = news.Id,
-                                  Token = news.Token,
                               });
             var obj = new TData<List<NewsEntity>>();
             obj.Data = newSysNews.Skip(pageSize * (pageIndex - 1)).Take(pageSize).ToList();
@@ -174,7 +169,6 @@ namespace YiSha.Admin.WebApi.Controllers
                                   BaseCreateTime = news.BaseCreateTime,
                                   BaseCreatorId = news.BaseCreatorId,
                                   Id = news.Id,
-                                  Token = news.Token,
                               });
             var obj = new TData<NewsEntity>();
             obj.Data = newSysNews.FirstOrDefault();

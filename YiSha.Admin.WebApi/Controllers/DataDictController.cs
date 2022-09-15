@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using YiSha.Admin.WebApi.Filter;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using YiSha.Entity;
 using YiSha.Model;
-using YiSha.Model.Param.SystemManage;
 using YiSha.Model.Result.SystemManage;
 
 namespace YiSha.Admin.WebApi.Controllers
@@ -10,8 +9,7 @@ namespace YiSha.Admin.WebApi.Controllers
     /// <summary>
     /// 字典数据控制器
     /// </summary>
-    [ApiController]
-    [AuthorizeFilter]
+    [Authorize]
     [Route("[controller]/[action]")]
     public class DataDictController : Controller
     {

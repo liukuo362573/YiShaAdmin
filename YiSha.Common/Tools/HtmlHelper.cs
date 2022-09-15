@@ -1,4 +1,4 @@
-﻿namespace YiSha.Util
+﻿namespace YiSha.Common
 {
     /// <summary>
     /// Html 工具

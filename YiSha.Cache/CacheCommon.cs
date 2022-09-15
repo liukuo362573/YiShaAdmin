@@ -152,20 +152,20 @@ namespace YiSha.Cache
         public bool RemoveHashFieldCache(string key, string fieldKey)
         {
             var dict = new Dictionary<string, bool> { { fieldKey, false } };
-            dict = RemoveHashFieldCache(key, dict);
+            dict = Cache.RemoveHashFieldCache(key, dict);
             return dict[fieldKey];
         }
 
-        /// <summary>
-        /// 删除缓存
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="dict"></param>
-        /// <returns></returns>
-        public Dictionary<string, bool> RemoveHashFieldCache(string key, Dictionary<string, bool> dict)
-        {
-            var s = new MemoryCacheImp();
-            return Cache.RemoveHashFieldCache（key, dict);
-        }
+        ///// <summary>
+        ///// 删除缓存
+        ///// </summary>
+        ///// <param name="key"></param>
+        ///// <param name="dict"></param>
+        ///// <returns></returns>
+        //public Dictionary<string, bool> RemoveHashFieldCache(string key, Dictionary<string, bool> dict)
+        //{
+        //    if (dict == null) dict = new Dictionary<string, bool> { };
+        //    return Cache.RemoveHashFieldCache（key, dict);
+        //}
     }
 }
