@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
-using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text;
 using YiSha.Common;
 using YiSha.Util;
@@ -16,30 +14,32 @@ namespace YiSha.Admin.WebApi.Comm
     public static class JwtConfig
     {
         /// <summary>
-        /// 有效时间
+        /// 凭据有效时长
         /// </summary>
-        public static TimeSpan ClockSkew { get; set; } = TimeSpan.FromDays(3);
+        public static TimeSpan ClockSkew { get; set; } = TimeSpan.FromDays(60);
+
+        /// <summary>
+        /// 配置文件数据
+        /// </summary>
+        internal static JwtConfigData JwtConfigData { get; } = ConfigHelp.Get<JwtConfigData>("JwtConfig");
 
         /// <summary>
         /// 添加 Jwt 服务并配置
         /// </summary>
-        /// <typeparam name="T">Jwt 验证</typeparam>
         /// <param name="services">服务</param>
-        public static void AddJwtConfig<T>(this IServiceCollection services) where T : JwtValidator, new()
+        public static void AddJwtConfig(this IServiceCollection services)
         {
             ClockSkew = TimeSpan.FromDays(3);
-            services.AddJwtConfig<T>(ClockSkew);
+            services.AddJwtConfig(ClockSkew);
         }
 
         /// <summary>
         /// 添加 Jwt 服务并配置
         /// </summary>
-        /// <typeparam name="T">Jwt 验证</typeparam>
         /// <param name="services">服务</param>
         /// <param name="clockSkew">有效时间</param>
-        public static void AddJwtConfig<T>(this IServiceCollection services, TimeSpan clockSkew) where T : JwtValidator, new()
+        public static void AddJwtConfig(this IServiceCollection services, TimeSpan clockSkew)
         {
-            var tokenConfig = ConfigHelp.Get<JwtConfigData>("JwtConfig");
             services.AddAuthentication(options =>//添加JWT Scheme
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -56,82 +56,15 @@ namespace YiSha.Admin.WebApi.Comm
                     ClockSkew = clockSkew,//有效时间
 
                     ValidateIssuer = true,//是否验证Issuer
-                    ValidIssuer = tokenConfig.Issuer,
+                    ValidIssuer = JwtConfigData.Issuer,
 
                     ValidateAudience = true,//是否验证Audience
-                    //ValidAudience = tokenConfig.Audience,
-                    AudienceValidator = (m, n, z) => ValidatorUser<T>(m, n, z),
+                    //ValidAudience = JwtConfigData.Audience,
+                    AudienceValidator = (m, n, z) => ValidatorUser(m, n, z),
 
                     IssuerSigningKey = GetSymmetric()//拿到SecurityKey
                 };
             });
-        }
-
-        /// <summary>
-        /// 验证用户
-        /// </summary>
-        /// <typeparam name="T">Jwt 验证</typeparam>
-        /// <param name="audiences">audiences</param>
-        /// <param name="securityToken">securityToken</param>
-        /// <param name="validationParameters">validationParameters</param>
-        /// <returns></returns>
-        private static bool ValidatorUser<T>(IEnumerable<string> audiences, SecurityToken securityToken, TokenValidationParameters validationParameters) where T : JwtValidator, new()
-        {
-            var jwtSecurityToken = securityToken as JwtSecurityToken;
-            try
-            {
-                //账号
-                var aClaim = jwtSecurityToken?.Claims.Where(T => T.Type == "account");
-                var account = aClaim?.FirstOrDefault()?.Value;
-                if (account == null) return false;
-                //密码
-                var pClaim = jwtSecurityToken?.Claims.Where(T => T.Type == "password");
-                var password = pClaim?.FirstOrDefault()?.Value;
-                if (password == null) return false;
-                //调用实现方法
-                var jwtValidator = new T();
-                return jwtValidator.Validate(account, password);
-            }
-            catch (Exception ex)
-            {
-                string message = ex.Message;
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// 获取 Token
-        /// </summary>
-        /// <param name="jwtValidator">Jwt 验证</param>
-        /// <returns></returns>
-        public static JwtTokenResult GetToken(JwtValidator jwtValidator)
-        {
-            //准备返回的结构
-            var jwtToken = new JwtTokenResult();
-            //调用实现方法
-            if (!jwtValidator.Validate()) return jwtToken;
-            //
-            IdentityModelEventSource.ShowPII = true;
-            var tokenConfig = ConfigHelp.Get<JwtConfigData>("JwtConfig");
-            if (jwtValidator?.Account == null) return jwtToken;
-            if (jwtValidator?.Password == null) return jwtToken;
-            //Claim
-            var claims = new List<Claim>();
-            claims.Add(new Claim("account", jwtValidator.Account));
-            claims.Add(new Claim("password", jwtValidator.Password));
-            //签名秘钥
-            var authSigningKey = GetSigning();
-            //凭据
-            var token = new JwtSecurityToken(
-                         issuer: tokenConfig.Issuer,
-                         claims: claims,
-                         expires: DateTime.Now.Add(ClockSkew),
-                         signingCredentials: authSigningKey);
-            //结构数据
-            jwtToken.Status = true;
-            jwtToken.Token = new JwtSecurityTokenHandler().WriteToken(token);
-            jwtToken.ValidTo = token.ValidTo;
-            return jwtToken;
         }
 
         /// <summary>
@@ -147,13 +80,86 @@ namespace YiSha.Admin.WebApi.Comm
         }
 
         /// <summary>
+        /// 验证用户
+        /// </summary>
+        /// <param name="audiences">audiences</param>
+        /// <param name="securityToken">securityToken</param>
+        /// <param name="validationParameters">validationParameters</param>
+        /// <returns></returns>
+        private static bool ValidatorUser(IEnumerable<string> audiences, SecurityToken securityToken, TokenValidationParameters validationParameters)
+        {
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+            try
+            {
+                //安全密钥（外部）
+                var securityKeyA = jwtSecurityToken?.SigningKey as SymmetricSecurityKey;
+                if (securityKeyA == null) return false;
+                var securityKeyAStr = Encoding.Default.GetString(securityKeyA.Key);
+                //安全密钥（内部）
+                var securityKeyB = GetSymmetric();
+                if (securityKeyB == null) return false;
+                var securityKeyBStr = Encoding.Default.GetString(securityKeyB.Key);
+                //比较
+                if (securityKeyAStr != securityKeyBStr) return false;
+                //Claims
+                var claims = jwtSecurityToken?.Claims.ToList();
+                if (claims == null) return false;
+                //有效的时间内
+                var eClaim = claims.Where(T => T.Type == "exp");
+                var expires = eClaim?.FirstOrDefault()?.Value;
+                if (expires == null) return false;
+                if (expires.ToLong() > GlobalConstant.TimeStamp.ToLong()) return false;
+                //解析 Claim
+                var jwtValidator = JwtValidator.GetData(claims);
+                if (jwtValidator?.Token == null) return false;
+                //验证登录
+                var isOK = jwtValidator.Validate(jwtValidator.Token);
+                return isOK;
+            }
+            catch (Exception ex)
+            {
+                var message = ex.Message;
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 获取 Token
+        /// </summary>
+        /// <param name="jwtValidator">Jwt 验证</param>
+        /// <returns></returns>
+        public static JwtTokenResult GetToken(JwtValidator jwtValidator)
+        {
+            //准备返回的结构
+            var jwtToken = new JwtTokenResult();
+            //调用实现方法
+            if (!jwtValidator.Validate()) return jwtToken;
+            //生成 Claim
+            var claims = jwtValidator.SetData();
+            //ShowPII
+            IdentityModelEventSource.ShowPII = true;
+            //签名秘钥
+            var authSigningKey = GetSigning();
+            //凭据
+            var token = new JwtSecurityToken(
+                         issuer: JwtConfigData.Issuer,
+                         claims: claims,
+                         expires: DateTime.Now.Add(ClockSkew),
+                         signingCredentials: authSigningKey);
+            //结构数据
+            jwtToken.Status = true;
+            jwtToken.Token = new JwtSecurityTokenHandler().WriteToken(token);
+            jwtToken.ValidTo = token.ValidTo;
+            return jwtToken;
+        }
+
+        /// <summary>
         /// 获取 SymmetricSecurityKey
         /// </summary>
         /// <returns></returns>
-        public static SymmetricSecurityKey GetSymmetric()
+        internal static SymmetricSecurityKey GetSymmetric()
         {
-            var tokenConfig = ConfigHelp.Get<JwtConfigData>("JwtConfig");
-            var strResult = MD5Help.GetMd5(tokenConfig?.SecureKey);//Md5
+            var strResult = MD5Help.GetMd5(JwtConfigData?.SecureKey);//Md5
             var secureKey = strResult.Replace("-", "");
             var secureKeyByte = Encoding.UTF8.GetBytes(secureKey);
             var securityKey = new SymmetricSecurityKey(secureKeyByte);
@@ -164,7 +170,7 @@ namespace YiSha.Admin.WebApi.Comm
         /// 获取 SigningCredentials
         /// </summary>
         /// <returns></returns>
-        public static SigningCredentials GetSigning()
+        internal static SigningCredentials GetSigning()
         {
             var authSigningKey = GetSymmetric();
             var securityAlgorithms = SecurityAlgorithms.HmacSha256;

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using YiSha.Admin.WebApi.Comm;
+using YiSha.Common;
 using YiSha.Entity;
 using YiSha.Model;
-using YiSha.Model.Entity.OrganizationManage;
-using YiSha.Model.Operator;
 using YiSha.Util;
 
 namespace YiSha.Admin.WebApi.Controllers
@@ -38,120 +38,45 @@ namespace YiSha.Admin.WebApi.Controllers
         [HttpPost]
         public IActionResult Login(string? userName = default, string? password = default)
         {
-            var obj = new TData<OperatorInfo>();
-            if (userName.IsNull() || password.IsNull())
+            var tdata = new TData();
+            if (userName == default || password == default)
             {
-                obj.Message = "用户名或密码不能为空";
-                return Json(obj);
+                tdata.Message = "用户名或密码不能为空";
+                return Json(tdata);
             }
-
-            
-
-            var linqData = (from suser in DbCmd.SysUser
-                            where suser.UserName == userName || suser.Mobile == userName || suser.Email == userName
-                            select new UserEntity
-                            {
-                                Id = suser.Id,
-                                BaseIsDelete = suser.BaseIsDelete,
-                                BaseCreateTime = suser.BaseCreateTime,
-                                BaseModifyTime = suser.BaseModifyTime,
-                                BaseCreatorId = suser.BaseCreatorId,
-                                BaseModifierId = suser.BaseModifierId,
-                                BaseVersion = suser.BaseVersion,
-                                UserName = suser.UserName,
-                                Password = suser.Password,
-                                Salt = suser.Salt,
-                                RealName = suser.RealName,
-                                DepartmentId = suser.DepartmentId,
-                                Gender = suser.Gender,
-                                Birthday = suser.Birthday,
-                                Portrait = suser.Portrait,
-                                Email = suser.Email,
-                                Mobile = suser.Mobile,
-                                QQ = suser.QQ,
-                                WeChat = suser.WeChat,
-                                LoginCount = suser.LoginCount,
-                                UserStatus = suser.UserStatus,
-                                IsSystem = suser.IsSystem,
-                                IsOnline = suser.IsOnline,
-                                FirstVisit = suser.FirstVisit,
-                                PreviousVisit = suser.PreviousVisit,
-                                LastVisit = suser.LastVisit,
-                                Remark = suser.Remark,
-                                WebToken = suser.WebToken,
-                                ApiToken = suser.ApiToken,
-                            });
-            var userData = linqData.FirstOrDefault();
-            if (userData != null)
+            //Token
+            var token = MD5Help.GetMd5(password + GlobalConstant.TimeStamp);
+            //登录方法体
+            var myJwtv = new JwtValidator
             {
-                //if (userData.UserStatus == (int)StatusEnum.Yes)
-                //{
-                //    if (userData.Password == EncryptUserPassword(password, userData.Salt))
-                //    {
-                //        userData.LoginCount++;
-                //        userData.IsOnline = 1;
-
-                //        #region 设置日期
-
-                //        if (userData.FirstVisit == GlobalConstant.DefaultTime)
-                //        {
-                //            userData.FirstVisit = DateTime.Now;
-                //        }
-                //        if (userData.PreviousVisit == GlobalConstant.DefaultTime)
-                //        {
-                //            userData.PreviousVisit = DateTime.Now;
-                //        }
-                //        if (userData.LastVisit != GlobalConstant.DefaultTime)
-                //        {
-                //            userData.PreviousVisit = userData.LastVisit;
-                //        }
-                //        userData.LastVisit = DateTime.Now;
-
-                //        #endregion
-
-                //        userData.ApiToken = SecurityHelper.GetGuid(true);
-
-                //        GetUserBelong(userData);
-                //        //存储修改的内容
-                //        DbCmd.SysUser.Update(userData);
-                //        DbCmd.SaveChanges();
-
-                //        Operator.Instance.AddCurrent(userData.ApiToken);
-                //        obj.Data = Operator.Instance.Current(userData.ApiToken);
-                //        obj.Message = "登录成功";
-                //        obj.Tag = 1;
-                //    }
-                //    else
-                //    {
-                //        obj.Message = "密码不正确，请重新输入";
-                //    }
-                //}
-                //else
-                //{
-                //    obj.Message = "账号被禁用，请联系管理员";
-                //}
-            }
-            else
+                Account = userName,
+                Password = password,
+                Token = token,
+            };
+            var jwtToken = JwtConfig.GetToken(myJwtv);
+            //返回结果
+            var jsonResult = new
             {
-                obj.Message = "账号不存在，请重新输入";
-            }
-
-            return Json(obj);
+                status = jwtToken.Status,
+                token = jwtToken.Token,
+                validTo = jwtToken.ValidTo,
+            };
+            return Json(jsonResult);
         }
 
         /// <summary>
         /// 用户退出登录
         /// </summary>
-        /// <param name="token"></param>
         /// <returns></returns>
         [HttpPost]
-        [AllowAnonymous]
-        public IActionResult LoginOff(string token = default)
+        public IActionResult LoginOff()
         {
-            var obj = new TData();
-            Operator.Instance.RemoveCurrent(token);
-            obj.Message = "登出成功";
-            return Json(obj);
+            var tdata = new TData();
+            tdata.Message = "登出失败";
+            //退出登录
+            var isOk = JwtValidator.ExitLogin(User);
+            if (isOk) tdata.Message = "登出成功";
+            return Json(tdata);
         }
     }
 }

@@ -107,7 +107,7 @@ namespace YiSha.Admin.WebApi
             //配置 Swagger
             services.AddSwaggerJwt("YiSha Api");
             //配置 Jwt
-            services.AddJwtConfig<JwtValidator>();
+            services.AddJwtConfig();
         }
 
         /// <summary>
@@ -207,8 +207,6 @@ namespace YiSha.Admin.WebApi
         {
             //数据库上下文
             services.AddDbContext<MyDbContext>();
-            //
-            services.AddScoped<JwtValidator>();
         }
     }
 }
