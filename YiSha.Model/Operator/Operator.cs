@@ -46,7 +46,7 @@ namespace YiSha.Model.Operator
                     OperatorInfo user = GetUserByToken(token);
                     if (user != null)
                     {
-                        CacheFactory.Cache.SetCache(token, user);
+                        CacheFactory.Cache.Set(token, user);
                     }
                     break;
 
@@ -73,7 +73,7 @@ namespace YiSha.Model.Operator
                     break;
 
                 case "WebApi":
-                    CacheFactory.Cache.RemoveCache(apiToken);
+                    CacheFactory.Cache.Remove(apiToken);
                     break;
 
                 default:
@@ -116,13 +116,13 @@ namespace YiSha.Model.Operator
                 return user;
             }
             token = token.Trim('"');
-            user = CacheFactory.Cache.GetCache<OperatorInfo>(token);
+            user = CacheFactory.Cache.Get<OperatorInfo>(token);
             if (user == null)
             {
                 user = GetUserByToken(token);
                 if (user != null)
                 {
-                    CacheFactory.Cache.SetCache(token, user);
+                    CacheFactory.Cache.Set(token, user);
                 }
             }
             return user;

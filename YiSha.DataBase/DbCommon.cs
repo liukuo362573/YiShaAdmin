@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using YiSha.DataBase.Common;
 using YiSha.DataBase.Enum;
-using YiSha.DataBase.Interceptor;
 using YiSha.Util;
 
 namespace YiSha.DataBase
@@ -34,11 +33,6 @@ namespace YiSha.DataBase
         private int dbTimeout { get; }
 
         /// <summary>
-        /// 数据库版本
-        /// </summary>
-        private int dbVersion { get; }
-
-        /// <summary>
         /// <para>数据库连接对象</para>
         /// <para><b>使用配置文件中信息来连接</b></para>
         /// </summary>
@@ -47,11 +41,6 @@ namespace YiSha.DataBase
             this.dbType = DbFactory.Type;
             this.dbConnect = DbFactory.Connect;
             this.dbTimeout = DbFactory.Timeout;
-            if (!string.IsNullOrEmpty(Regex.Match(DbFactory.Connect, "version=.+?;").Value))
-            {
-                this.dbConnect = DbFactory.Connect.Replace(Regex.Match(DbFactory.Connect, "version=.+?;").Value, "");
-                this.dbVersion = Convert.ToInt32(Regex.Match(DbFactory.Connect, "(?<=version=).+?(?=;)").Value);
-            }
         }
 
         /// <summary>
@@ -67,11 +56,6 @@ namespace YiSha.DataBase
             this.dbType = dbType;
             this.dbConnect = dbConnect;
             this.dbTimeout = dbTimeout == 10 ? dbTimeout : DbFactory.Timeout;
-            if (!string.IsNullOrEmpty(Regex.Match(dbConnect, "version=.+?;").Value))
-            {
-                this.dbConnect = dbConnect.Replace(Regex.Match(dbConnect, "version=.+?;").Value, "");
-                this.dbVersion = Convert.ToInt32(Regex.Match(dbConnect, "(?<=version=).+?(?=;)").Value);
-            }
         }
 
         /// <summary>-
@@ -86,11 +70,6 @@ namespace YiSha.DataBase
             this.dbType = DbFactory.Type;
             this.dbConnect = dbConnect;
             this.dbTimeout = dbTimeout == 10 ? dbTimeout : DbFactory.Timeout;
-            if (!string.IsNullOrEmpty(Regex.Match(dbConnect, "version=.+?;").Value))
-            {
-                this.dbConnect = dbConnect.Replace(Regex.Match(dbConnect, "version=.+?;").Value, "");
-                this.dbVersion = Convert.ToInt32(Regex.Match(dbConnect, "(?<=version=).+?(?=;)").Value);
-            }
         }
 
         /// <summary>
@@ -120,12 +99,9 @@ namespace YiSha.DataBase
             {
                 optionsBuilder.UseOracle(dbConnect, p =>
                 {
-                    if (dbVersion != 0) p.UseOracleSQLCompatibility($"{dbVersion}");
                     p.CommandTimeout(dbTimeout);
                 });
             }
-            //数据库拦截器
-            optionsBuilder.AddInterceptors(new DbInterceptor());
             //输出日志
             EFLogger.Add(optionsBuilder);
             //

@@ -7,11 +7,11 @@
 
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.8" />
-		<PackageReference Include="NLog.Web.AspNetCore" Version="5.1.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.9" />
+		<PackageReference Include="NLog.Web.AspNetCore" Version="5.1.4" />
 		<PackageReference Include="NPOI" Version="2.5.6" />
-		<PackageReference Include="SkiaSharp" Version="2.88.1" />
-		<PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.1" />
+		<PackageReference Include="SkiaSharp" Version="2.88.3" />
+		<PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.3" />
 		<PackageReference Include="System.Drawing.Common" Version="6.0.0" />
 	</ItemGroup>
 

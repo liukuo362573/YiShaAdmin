@@ -3,6 +3,7 @@ using NLog.Web;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using YiSha.Admin.WebApi.Comm;
+using YiSha.Cache;
 using YiSha.Common;
 using YiSha.Entity;
 using YiSha.Util;
@@ -46,8 +47,6 @@ namespace YiSha.Admin.WebApi
             {
                 loging.AddNLog("nlog.config");
             });
-            //添加 Memory 缓存功能
-            services.AddMemoryCache();
             //启动 Session
             services.AddSession(options =>
             {
@@ -207,6 +206,8 @@ namespace YiSha.Admin.WebApi
         {
             //数据库上下文
             services.AddDbContext<MyDbContext>();
+            //缓存工具
+            services.AddTransient<CacheCommon>();
         }
     }
 }

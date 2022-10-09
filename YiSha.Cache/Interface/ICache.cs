@@ -1,102 +1,82 @@
 ﻿namespace YiSha.Cache.Interface
 {
     /// <summary>
-    /// 缓存抽象
+    /// 缓存抽象类
     /// </summary>
     public interface ICache
     {
         /// <summary>
-        /// 读取缓存
+        /// Key 是否存在
         /// </summary>
-        /// <typeparam name="T">类型</typeparam>
         /// <param name="key">键</param>
-        /// <returns></returns>
-        T GetCache<T>(string key);
+        /// <param name="db">数据库索引</param>
+        /// <returns>存在</returns>
+        bool Exists(string key, int db = -1);
 
         /// <summary>
-        /// 写入缓存
+        /// 设置缓存
         /// </summary>
         /// <typeparam name="T">类型</typeparam>
         /// <param name="key">键</param>
         /// <param name="value">值</param>
-        /// <param name="expireTime">过期时间</param>
-        /// <returns></returns>
-        bool SetCache<T>(string key, T value, DateTime? expireTime = null);
+        /// <param name="db">数据库索引</param>
+        /// <param name="timeSpan">时间差</param>
+        /// <returns>状态</returns>
+        bool Set<T>(string key, T value, int db = -1, TimeSpan timeSpan = default);
+
+        /// <summary>
+        /// 获取缓存
+        /// </summary>
+        /// <typeparam name="T">类型</typeparam>
+        /// <param name="key">键</param>
+        /// <param name="db">数据库索引</param>
+        /// <returns>数据</returns>
+        T Get<T>(string key, int db = -1);
 
         /// <summary>
         /// 删除缓存
         /// </summary>
         /// <param name="key">类型</param>
-        /// <returns></returns>
-        bool RemoveCache(string key);
+        /// <param name="db">数据库索引</param>
+        /// <returns>状态</returns>
+        bool Remove(string key, int db = -1);
 
         /// <summary>
-        /// 读取缓存
+        /// Key 是否存在(哈希)
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="fieldKey"></param>
-        /// <returns></returns>
-        T GetHashFieldCache<T>(string key, string fieldKey);
+        /// <param name="key">键</param>
+        /// <param name="hashKey">哈希键</param>
+        /// <param name="db">数据库索引</param>
+        /// <returns>存在</returns>
+        bool HashExists(string key, string hashKey, int db = -1);
 
         /// <summary>
-        /// 读取缓存
+        /// 设置缓存(哈希)
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        List<T> GetHashToListCache<T>(string key);
+        /// <param name="key">键</param>
+        /// <param name="hashKey">哈希键</param>
+        /// <param name="hashValue">哈希值</param>
+        /// <param name="db">数据库索引</param>
+        /// <returns>状态</returns>
+        bool HashSet<T>(string key, string hashKey, T hashValue, int db = -1);
 
         /// <summary>
-        /// 读取缓存
+        /// 获取缓存(哈希)
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="dict"></param>
-        /// <returns></returns>
-        Dictionary<string, T> GetHashFieldCache<T>(string key, Dictionary<string, T> dict);
+        /// <typeparam name="T">类型</typeparam>
+        /// <param name="key">键</param>
+        /// <param name="hashKey">哈希键</param>
+        /// <param name="db">数据库索引</param>
+        /// <returns>数据</returns>
+        T HashGet<T>(string key, string hashKey, int db = -1);
 
         /// <summary>
-        /// 读取缓存
+        /// 删除缓存(哈希)
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        Dictionary<string, T> GetHashCache<T>(string key);
-
-        /// <summary>
-        /// 写入缓存
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="fieldKey"></param>
-        /// <param name="fieldValue"></param>
-        /// <returns></returns>
-        int SetHashFieldCache<T>(string key, string fieldKey, T fieldValue);
-
-        /// <summary>
-        /// 写入缓存
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="dict"></param>
-        /// <returns></returns>
-        int SetHashFieldCache<T>(string key, Dictionary<string, T> dict);
-
-        /// <summary>
-        /// 删除缓存
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="fieldKey"></param>
-        /// <returns></returns>
-        bool RemoveHashFieldCache(string key, string fieldKey);
-
-        /// <summary>
-        /// 删除缓存
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="dict"></param>
-        /// <returns></returns>
-        Dictionary<string, bool> RemoveHashFieldCache(string key, Dictionary<string, bool> dict);
+        /// <param name="key">键</param>
+        /// <param name="hashKey">哈希键</param>
+        /// <param name="db">数据库索引</param>
+        /// <returns>状态</returns>
+        long HashRemove(string key, string hashKey, int db = -1);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Caching.Memory;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,151 +22,110 @@ namespace YiSha.Cache
         /// <summary>
         /// 缓存类型
         /// </summary>
-        private ICache Cache { get; }
-
-        /// <summary>
-        /// 实例时
-        /// </summary>
-        public CacheCommon()
+        private ICache Cache
         {
-            var cacheProvider = GlobalContext.SystemConfig.CacheProvider;
-            Cache = cacheProvider.ToLower() switch
+            get
             {
-                "redis" => new RedisCacheImp(),
-                _ => new MemoryCacheImp(),
-            };
+                return CacheFactory.Cache;
+            }
         }
 
         /// <summary>
-        /// 读取缓存
+        /// Key 是否存在
         /// </summary>
-        /// <typeparam name="T">类型</typeparam>
         /// <param name="key">键</param>
-        /// <returns></returns>
-        public T GetCache<T>(string key)
+        /// <param name="db">数据库索引</param>
+        /// <returns>存在</returns>
+        public bool Exists(string key, int db = -1)
         {
-            return Cache.GetCache<T>(key);
+            return Cache.Exists(key, db);
         }
 
         /// <summary>
-        /// 写入缓存
+        /// 设置缓存
         /// </summary>
         /// <typeparam name="T">类型</typeparam>
         /// <param name="key">键</param>
         /// <param name="value">值</param>
-        /// <param name="expireTime">过期时间</param>
+        /// <param name="db">数据库索引</param>
+        /// <param name="timeSpan">时间差</param>
         /// <returns></returns>
-        public bool SetCache<T>(string key, T value, DateTime? expireTime = null)
+        public bool Set<T>(string key, T value, int db = -1, TimeSpan timeSpan = default)
         {
-            return Cache.SetCache<T>(key, value, expireTime);
+            return Cache.Set(key, value, db, timeSpan);
+        }
+
+        /// <summary>
+        /// 获取缓存
+        /// </summary>
+        /// <typeparam name="T">类型</typeparam>
+        /// <param name="key">键</param>
+        /// <param name="db">数据库索引</param>
+        /// <returns></returns>
+        public T Get<T>(string key, int db = -1)
+        {
+            return Cache.Get<T>(key, db);
         }
 
         /// <summary>
         /// 删除缓存
         /// </summary>
         /// <param name="key">类型</param>
+        /// <param name="db">数据库索引</param>
         /// <returns></returns>
-        public bool RemoveCache(string key)
+        public bool Remove(string key, int db = -1)
         {
-            return Cache.RemoveCache(key);
+            return Cache.Remove(key, db);
         }
 
         /// <summary>
-        /// 读取缓存
+        /// Key 是否存在(哈希)
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="fieldKey"></param>
-        /// <returns></returns>
-        public T GetHashFieldCache<T>(string key, string fieldKey)
+        /// <param name="key">键</param>
+        /// <param name="hashKey">哈希键</param>
+        /// <param name="db">数据库索引</param>
+        /// <returns>存在</returns>
+        public bool HashExists(string key, string hashKey, int db = -1)
         {
-            var dic = new Dictionary<string, T> { { fieldKey, default } };
-            var dict = GetHashFieldCache(key, dic);
-            return dict[fieldKey];
+            return Cache.HashExists(key, hashKey, db);
         }
 
         /// <summary>
-        /// 读取缓存
+        /// 设置缓存(哈希)
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public List<T> GetHashToListCache<T>(string key)
+        /// <param name="key">键</param>
+        /// <param name="hashKey">哈希键</param>
+        /// <param name="hashValue">哈希值</param>
+        /// <param name="db">数据库索引</param>
+        /// <returns>状态</returns>
+        public bool HashSet<T>(string key, string hashKey, T hashValue, int db = -1)
         {
-            return Cache.GetHashToListCache<T>(key);
+            return Cache.HashSet<T>(key, hashKey, hashValue, db);
         }
 
         /// <summary>
-        /// 读取缓存
+        /// 获取缓存(哈希)
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="dict"></param>
-        /// <returns></returns>
-        public Dictionary<string, T> GetHashFieldCache<T>(string key, Dictionary<string, T> dict)
+        /// <typeparam name="T">类型</typeparam>
+        /// <param name="key">键</param>
+        /// <param name="hashKey">哈希键</param>
+        /// <param name="db">数据库索引</param>
+        /// <returns>数据</returns>
+        public T HashGet<T>(string key, string hashKey, int db = -1)
         {
-            return Cache.GetHashFieldCache<T>(key, dict);
+            return Cache.HashGet<T>(key, hashKey, db);
         }
 
         /// <summary>
-        /// 读取缓存
+        /// 删除缓存(哈希)
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public Dictionary<string, T> GetHashCache<T>(string key)
+        /// <param name="key">键</param>
+        /// <param name="hashKey">哈希键</param>
+        /// <param name="db">数据库索引</param>
+        /// <returns>状态</returns>
+        public long HashRemove(string key, string hashKey, int db = -1)
         {
-            return Cache.GetHashCache<T>(key);
+            return Cache.HashRemove(key, hashKey);
         }
-
-        /// <summary>
-        /// 写入缓存
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="fieldKey"></param>
-        /// <param name="fieldValue"></param>
-        /// <returns></returns>
-        public int SetHashFieldCache<T>(string key, string fieldKey, T fieldValue)
-        {
-            return SetHashFieldCache(key, new Dictionary<string, T> { { fieldKey, fieldValue } });
-        }
-
-        /// <summary>
-        /// 写入缓存
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="dict"></param>
-        /// <returns></returns>
-        public int SetHashFieldCache<T>(string key, Dictionary<string, T> dict)
-        {
-            return Cache.SetHashFieldCache<T>(key, dict);
-        }
-
-        /// <summary>
-        /// 删除缓存
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="fieldKey"></param>
-        /// <returns></returns>
-        public bool RemoveHashFieldCache(string key, string fieldKey)
-        {
-            var dict = new Dictionary<string, bool> { { fieldKey, false } };
-            dict = Cache.RemoveHashFieldCache(key, dict);
-            return dict[fieldKey];
-        }
-
-        ///// <summary>
-        ///// 删除缓存
-        ///// </summary>
-        ///// <param name="key"></param>
-        ///// <param name="dict"></param>
-        ///// <returns></returns>
-        //public Dictionary<string, bool> RemoveHashFieldCache(string key, Dictionary<string, bool> dict)
-        //{
-        //    if (dict == null) dict = new Dictionary<string, bool> { };
-        //    return Cache.RemoveHashFieldCache（key, dict);
-        //}
     }
 }

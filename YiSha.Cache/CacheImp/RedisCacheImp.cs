@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using StackExchange.Redis;
+﻿using StackExchange.Redis;
+using System.Text.Json;
 using YiSha.Cache.Interface;
 using YiSha.Util;
 
@@ -8,78 +8,73 @@ namespace YiSha.Cache.CacheImp
     /// <summary>
     /// Redis 缓存
     /// </summary>
-    public class RedisCacheImp : ICache
+    internal class RedisCacheImp : ICache
     {
         /// <summary>
         /// Redis 缓存
         /// </summary>
-        private ConnectionMultiplexer connection;
+        private static ConnectionMultiplexer multiplexer;
 
         /// <summary>
         /// Redis 缓存实例时
         /// </summary>
         public RedisCacheImp()
         {
-            if (connection == null)
+            if (multiplexer.IsNull())
             {
-                var redisConnectionString = GlobalContext.SystemConfig.RedisConnectionString;
-                var configuration = ConfigurationOptions.Parse(redisConnectionString, true);
+                var configuration = ConfigurationOptions.Parse(CacheFactory.Connect, true);
                 configuration.ResolveDns = true;
-                connection = ConnectionMultiplexer.Connect(configuration);
+                multiplexer = ConnectionMultiplexer.Connect(configuration);
             }
         }
 
         /// <summary>
-        /// 读取缓存
+        /// Key 是否存在
+        /// </summary>
+        /// <param name="key">键</param>
+        /// <param name="db">数据库索引</param>
+        /// <returns>存在</returns>
+        public bool Exists(string key, int db = -1)
+        {
+            var redisBase = multiplexer.GetDatabase(db);
+            return redisBase.KeyExists(key);
+        }
+
+        /// <summary>
+        /// 获取缓存
         /// </summary>
         /// <typeparam name="T">类型</typeparam>
         /// <param name="key">键</param>
-        /// <returns></returns>
-        public T GetCache<T>(string key)
+        /// <param name="db">数据库索引</param>
+        /// <returns>数据</returns>
+        public T Get<T>(string key, int db = -1)
         {
-            var t = default(T);
-            try
-            {
-                var cache = connection.GetDatabase();
-                var value = cache.StringGet(key);
-                if (string.IsNullOrEmpty(value)) return t;
-                //
-                t = JsonConvert.DeserializeObject<T>(value);
-            }
-            catch (Exception ex)
-            {
-                LogHelper.Error(ex);
-            }
-            return t;
+            var redisBase = multiplexer.GetDatabase(db);
+            var data = redisBase.StringGet(key);
+            return JsonSerializer.Deserialize<T>(data);
         }
 
         /// <summary>
-        /// 写入缓存
+        /// 设置缓存
         /// </summary>
         /// <typeparam name="T">类型</typeparam>
         /// <param name="key">键</param>
         /// <param name="value">值</param>
-        /// <param name="expireTime">过期时间</param>
-        /// <returns></returns>
-        public bool SetCache<T>(string key, T value, DateTime? expireTime = null)
+        /// <param name="db">数据库索引</param>
+        /// <param name="timeSpan">时间差</param>
+        /// <returns>状态</returns>
+        public bool Set<T>(string key, T value, int db = -1, TimeSpan timeSpan = default)
         {
+            var redisBase = multiplexer.GetDatabase(db);
             try
             {
-                var cache = connection.GetDatabase();
-                var jsonOption = new JsonSerializerSettings()
+                if (timeSpan == default)
                 {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                };
-                var strValue = JsonConvert.SerializeObject(value, jsonOption);
-                if (string.IsNullOrEmpty(strValue)) return false;
-                //
-                if (expireTime == null) return cache.StringSet(key, strValue);
-                else return cache.StringSet(key, strValue, expireTime.Value - DateTime.Now);
+                    return redisBase.StringSet(key, JsonSerializer.Serialize(value));
+                }
+                return redisBase.StringSet(key, JsonSerializer.Serialize(value), timeSpan);
             }
-            catch (Exception ex)
-            {
-                LogHelper.Error(ex);
-            }
+            catch { }
             return false;
         }
 
@@ -87,155 +82,68 @@ namespace YiSha.Cache.CacheImp
         /// 删除缓存
         /// </summary>
         /// <param name="key">类型</param>
-        /// <returns></returns>
-        public bool RemoveCache(string key)
+        /// <param name="db">数据库索引</param>
+        /// <returns>状态</returns>
+        public bool Remove(string key, int db = -1)
         {
-            var cache = connection.GetDatabase();
-            return cache.KeyDelete(key);
+            var redisBase = multiplexer.GetDatabase(db);
+            return redisBase.KeyDelete(key);
         }
 
         /// <summary>
-        /// 读取缓存
+        /// Key 是否存在(哈希)
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="fieldKey"></param>
-        /// <returns></returns>
-        public T GetHashFieldCache<T>(string key, string fieldKey)
+        /// <param name="key">键</param>
+        /// <param name="hashKey">哈希键</param>
+        /// <param name="db">数据库索引</param>
+        /// <returns>存在</returns>
+        public bool HashExists(string key, string hashKey, int db = -1)
         {
-            var dict = GetHashFieldCache(key, new Dictionary<string, T> { { fieldKey, default } });
-            return dict[fieldKey];
+            var redisBase = multiplexer.GetDatabase(db);
+            return redisBase.HashExists(key, hashKey);
         }
 
         /// <summary>
-        /// 读取缓存
+        /// 获取缓存(哈希)
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public List<T> GetHashToListCache<T>(string key)
+        /// <typeparam name="T">类型</typeparam>
+        /// <param name="key">键</param>
+        /// <param name="hashKey">哈希键</param>
+        /// <param name="db">数据库索引</param>
+        /// <returns>数据</returns>
+        public T HashGet<T>(string key, string hashKey, int db = -1)
         {
-            var list = new List<T>();
-            var cache = connection.GetDatabase();
-            var hashFields = cache.HashGetAll(key);
-            foreach (var field in hashFields)
-            {
-                list.Add(JsonConvert.DeserializeObject<T>(field.Value));
-            }
-            return list;
+            var redisBase = multiplexer.GetDatabase(db);
+            var data = redisBase.HashGet(key, hashKey);
+            return JsonSerializer.Deserialize<T>(data);
         }
 
         /// <summary>
-        /// 读取缓存
+        /// 设置缓存(哈希)
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="dict"></param>
-        /// <returns></returns>
-        public Dictionary<string, T> GetHashFieldCache<T>(string key, Dictionary<string, T> dict)
+        /// <param name="key">键</param>
+        /// <param name="hashKey">哈希键</param>
+        /// <param name="hashValue">哈希值</param>
+        /// <param name="db">数据库索引</param>
+        /// <returns>状态</returns>
+        public bool HashSet<T>(string key, string hashKey, T hashValue, int db = -1)
         {
-            var cache = connection.GetDatabase();
-            foreach (var fieldKey in dict.Keys)
-            {
-                var fieldValue = cache.HashGet(key, fieldKey);
-                dict[fieldKey] = JsonConvert.DeserializeObject<T>(fieldValue);
-            }
-            return dict;
+            var redisBase = multiplexer.GetDatabase(db);
+            return redisBase.HashSet(key, hashKey, JsonSerializer.Serialize(hashValue));
         }
 
         /// <summary>
-        /// 读取缓存
+        /// 删除缓存(哈希)
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public Dictionary<string, T> GetHashCache<T>(string key)
+        /// <param name="key">键</param>
+        /// <param name="hashKey">哈希键</param>
+        /// <param name="db">数据库索引</param>
+        /// <returns>状态</returns>
+        public long HashRemove(string key, string hashKey, int db = -1)
         {
-            var dict = new Dictionary<string, T>();
-            var cache = connection.GetDatabase();
-            var hashFields = cache.HashGetAll(key);
-            foreach (var field in hashFields)
-            {
-                dict[field.Name] = JsonConvert.DeserializeObject<T>(field.Value);
-            }
-            return dict;
-        }
-
-        /// <summary>
-        /// 写入缓存
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="fieldKey"></param>
-        /// <param name="fieldValue"></param>
-        /// <returns></returns>
-        public int SetHashFieldCache<T>(string key, string fieldKey, T fieldValue)
-        {
-            return SetHashFieldCache(key, new Dictionary<string, T> { { fieldKey, fieldValue } });
-        }
-
-        /// <summary>
-        /// 写入缓存
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="dict"></param>
-        /// <returns></returns>
-        public int SetHashFieldCache<T>(string key, Dictionary<string, T> dict)
-        {
-            var count = 0;
-            var cache = connection.GetDatabase();
-            var jsonOption = new JsonSerializerSettings()
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            };
-            foreach (var fieldKey in dict.Keys)
-            {
-                var fieldValue = JsonConvert.SerializeObject(dict[fieldKey], jsonOption);
-                count += cache.HashSet(key, fieldKey, fieldValue) ? 1 : 0;
-            }
-            return count;
-        }
-
-        /// <summary>
-        /// 删除缓存
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="fieldKey"></param>
-        /// <returns></returns>
-        public bool RemoveHashFieldCache(string key, string fieldKey)
-        {
-            var dict = new Dictionary<string, bool> { { fieldKey, false } };
-            dict = RemoveHashFieldCache(key, dict);
-            return dict[fieldKey];
-        }
-
-        /// <summary>
-        /// 删除缓存
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="dict"></param>
-        /// <returns></returns>
-        public Dictionary<string, bool> RemoveHashFieldCache(string key, Dictionary<string, bool> dict)
-        {
-            var cache = connection.GetDatabase();
-            foreach (var fieldKey in dict.Keys)
-            {
-                dict[fieldKey] = cache.HashDelete(key, fieldKey);
-            }
-            return dict;
-        }
-
-        /// <summary>
-        /// 释放对象
-        /// </summary>
-        public void Dispose()
-        {
-            if (connection != null)
-            {
-                connection.Close();
-            }
-            GC.SuppressFinalize(this);
+            var redisBase = multiplexer.GetDatabase(db);
+            var remove = redisBase.HashDelete(key, hashKey);
+            return remove ? 1 : 0;
         }
     }
 }

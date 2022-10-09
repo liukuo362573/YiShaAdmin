@@ -19,6 +19,39 @@ namespace YiSha.Entity.DefaultData
 
                 lists.Add(new SysUser()
                 {
+                    Id = 16508640061130151,
+                    BaseIsDelete = 0,
+                    BaseCreateTime = "2022-01-01 00:00:00".ToDate(),
+                    BaseModifyTime = "2022-01-01 00:00:00".ToDate(),
+                    BaseCreatorId = 0,
+                    BaseModifierId = 16508640061130151,
+                    BaseVersion = 0,
+                    UserName = "admin",
+                    Password = "dd78b910e8842cf7b42b6b0522a0b0ed",
+                    Salt = "28585",
+                    RealName = "管理员",
+                    DepartmentId = 16508640061124402,
+                    Gender = 0,
+                    Birthday = "2019-01-01",
+                    Portrait = "",
+                    Email = "admin@163.com",
+                    Mobile = "15766666666",
+                    QQ = "",
+                    WeChat = "",
+                    LoginCount = 525,
+                    UserStatus = 1,
+                    IsSystem = 1,
+                    IsOnline = 1,
+                    FirstVisit = "2022-01-01 00:00:00".ToDate(),
+                    PreviousVisit = "2022-01-01 00:00:00".ToDate(),
+                    LastVisit = "2022-01-01 00:00:00".ToDate(),
+                    Remark = "",
+                    WebToken = "265d8570ac504b588c85018c7974a431",
+                    ApiToken = "a5f3d50ab2084821953d4d45925a042a"
+                });
+
+                lists.Add(new SysUser()
+                {
                     Id = 16508640061130148,
                     BaseIsDelete = 0,
                     BaseCreateTime = "2022-01-01 00:00:00".ToDate(),
@@ -114,39 +147,6 @@ namespace YiSha.Entity.DefaultData
                     Remark = "",
                     WebToken = "a066e89f44894cb284c4dc2920234acb",
                     ApiToken = ""
-                });
-
-                lists.Add(new SysUser()
-                {
-                    Id = 16508640061130151,
-                    BaseIsDelete = 0,
-                    BaseCreateTime = "2022-01-01 00:00:00".ToDate(),
-                    BaseModifyTime = "2022-01-01 00:00:00".ToDate(),
-                    BaseCreatorId = 0,
-                    BaseModifierId = 16508640061130151,
-                    BaseVersion = 0,
-                    UserName = "admin",
-                    Password = "3f0ea22060c164bf4bdc3a67d0e12cdf",
-                    Salt = "28585",
-                    RealName = "管理员",
-                    DepartmentId = 16508640061124402,
-                    Gender = 0,
-                    Birthday = "2019-01-01",
-                    Portrait = "",
-                    Email = "admin@163.com",
-                    Mobile = "15766666666",
-                    QQ = "",
-                    WeChat = "",
-                    LoginCount = 525,
-                    UserStatus = 1,
-                    IsSystem = 1,
-                    IsOnline = 1,
-                    FirstVisit = "2022-01-01 00:00:00".ToDate(),
-                    PreviousVisit = "2022-01-01 00:00:00".ToDate(),
-                    LastVisit = "2022-01-01 00:00:00".ToDate(),
-                    Remark = "",
-                    WebToken = "265d8570ac504b588c85018c7974a431",
-                    ApiToken = "a5f3d50ab2084821953d4d45925a042a"
                 });
 
                 lists.Add(new SysUser()
