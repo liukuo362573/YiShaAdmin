@@ -1,5 +1,5 @@
-﻿/*  初始化数据 */;
-/* use YiShaAdmin; */;
+﻿/*  初始化数据 */
+/* use YiShaAdmin; */
 
 INSERT INTO `SysArea` (`Id`, `BaseIsDelete`, `BaseCreateTime`, `BaseModifyTime`, `BaseCreatorId`, `BaseModifierId`, `BaseVersion`, `AreaCode`, `ParentAreaCode`, `AreaName`, `ZipCode`, `AreaLevel`) VALUES
 	(16508640061120570, 0, '2018-12-24 16:33:59', '2018-12-24 16:33:59', 0, 0, 0, '110000', '0', '北京', '', 1),
