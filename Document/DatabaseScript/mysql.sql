@@ -1,5 +1,6 @@
-﻿/* 执行脚本前，请先选择数据库，脚本会先删除表，然后再创建表，请谨慎执行！！！ */;
-/* use YiShaAdmin; */;
+﻿/* 执行脚本前，请先选择数据库，脚本会先删除表，然后再创建表，请谨慎执行！！！ */
+
+/* use YiShaAdmin; */
 
 DROP TABLE IF EXISTS `SysArea`;
 CREATE TABLE IF NOT EXISTS `SysArea` (
