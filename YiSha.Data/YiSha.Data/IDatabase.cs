@@ -33,6 +33,13 @@ namespace YiSha.Data
         Task<int> ExecuteBySql(string strSql, params DbParameter[] dbParameter);
         Task<int> ExecuteByProc(string procName);
         Task<int> ExecuteByProc(string procName, DbParameter[] dbParameter);
+        /// <summary>
+        /// 执行有 out 参数的存储过程
+        /// </summary>
+        /// <param name="procName"></param>
+        /// <param name="dbParameter"></param>
+        /// <returns></returns>
+        Task<int> ExecuteByNativeProc(string procName, params DbParameter[] dbParameter);
 
         Task<int> Insert<T>(T entity) where T : class;
         Task<int> Insert<T>(IEnumerable<T> entities) where T : class;

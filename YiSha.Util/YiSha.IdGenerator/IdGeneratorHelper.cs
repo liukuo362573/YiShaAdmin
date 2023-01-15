@@ -23,6 +23,7 @@ namespace YiSha.IdGenerator
         {
             snowflake = new Snowflake(SnowFlakeWorkerId, 0, 0);
         }
+
         public static IdGeneratorHelper Instance
         {
             get
@@ -30,9 +31,19 @@ namespace YiSha.IdGenerator
                 return instance;
             }
         }
+
         public long GetId()
         {
             return snowflake.NextId();
+        }
+
+        public string GetGuid(string format="")
+        {
+            if(string.IsNullOrEmpty(format))
+            {
+                return Guid.NewGuid().ToString().ToUpper();
+            }
+            return Guid.NewGuid().ToString(format).ToUpper();
         }
     }
 }

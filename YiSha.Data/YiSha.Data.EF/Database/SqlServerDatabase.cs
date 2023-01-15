@@ -152,6 +152,37 @@ namespace YiSha.Data.EF
                 return dbContextTransaction == null ? await this.CommitTrans() : 0;
             }
         }
+
+        public async Task<int> ExecuteByNativeProc(string procName, params DbParameter[] dbParameter)
+        {
+            int result = 0;
+            if (dbContextTransaction == null)
+            {
+                using (DbConnection conn = dbContext.Database.GetDbConnection())
+                {
+                    conn.Open();
+                    DbCommand cmd = conn.CreateCommand();
+                    cmd.Parameters.AddRange(dbParameter);
+                    cmd.CommandText = procName;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    result = await cmd.ExecuteNonQueryAsync();
+                }
+            }
+            else
+            {
+                using (DbConnection conn = dbContext.Database.GetDbConnection())
+                {
+                    conn.Open();
+                    DbCommand cmd = conn.CreateCommand();
+                    cmd.Parameters.AddRange(dbParameter);
+                    cmd.CommandText = procName;
+                    cmd.Transaction = dbContextTransaction.GetDbTransaction();
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    result = await cmd.ExecuteNonQueryAsync();
+                }
+            }
+            return result;
+        }
         #endregion
 
         #region 对象实体 添加、修改、删除

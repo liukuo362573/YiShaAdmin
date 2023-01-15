@@ -65,22 +65,41 @@ namespace YiSha.Data.EF
 
         /// <summary>
         /// 存储过程语句
+        /// 
         /// </summary>
         /// <param name="procName">存储过程名称</param>
         /// <param name="dbParameter">执行命令所需的sql语句对应参数</param>
         /// <returns></returns>
         public static string BuilderProc(string procName, params DbParameter[] dbParameter)
         {
-            StringBuilder strSql = new StringBuilder("exec " + procName);
-            if (dbParameter != null)
+            string dbType = GlobalContext.SystemConfig.DBProvider;
+            if (dbType == "MySql")
             {
-                foreach (var item in dbParameter)
+                StringBuilder strSql = new StringBuilder("call " + procName + "(");
+                if (dbParameter != null)
                 {
-                    strSql.Append(" " + item + ",");
+                    foreach (var item in dbParameter)
+                    {
+                        strSql.Append(item.ParameterName + ",");
+                    }
+                    strSql = strSql.Remove(strSql.Length - 1, 1);
                 }
-                strSql = strSql.Remove(strSql.Length - 1, 1);
+                strSql.Append(")");
+                return strSql.ToString();
             }
-            return strSql.ToString();
+            else
+            {
+                StringBuilder strSql = new StringBuilder("exec " + procName);
+                if (dbParameter != null)
+                {
+                    foreach (var item in dbParameter)
+                    {
+                        strSql.Append(" " + item + ",");
+                    }
+                    strSql = strSql.Remove(strSql.Length - 1, 1);
+                }
+                return strSql.ToString();
+            }
         }
 
         public static void SetEntityDefaultValue(DbContext dbcontext)

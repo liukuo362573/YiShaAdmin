@@ -1,6 +1,15 @@
 ﻿@{
     Layout = "~/Views/Shared/_Index.cshtml";
 }
+
+
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
+
+@section header{
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/bootstrap.table/1.21.2/extensions/fixed-columns/bootstrap-table-fixed-columns.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/bootstrap.table/1.21.2/extensions/fixed-columns/bootstrap-table-fixed-columns.min.js"))
+}
+
 <div class="container-div">
     <div class="row">
         <div class="col-sm-12 select-table table-striped">
@@ -22,6 +31,29 @@
                 { checkbox: true, visible: true },
                 { field: 'Id', title: '用户编号' },
                 { field: 'RealName', title: '用户姓名' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Mobile', title: '手机' },
+                { field: 'Mobile', title: '手机' },
                 { field: 'Mobile', title: '手机' },
                 {
                     title: '图片',
@@ -51,7 +83,9 @@
                 var pagination = $('#gridTable').ysTable('getPagination', params);
                 var queryString = $('#searchDiv').getWebControls(pagination);
                 return queryString;
-            }
+            },
+            fixedColumns: true,
+            fixedNumber: 2,
         });
     }
 

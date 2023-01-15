@@ -3642,14 +3642,15 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     }
 
 .btn-primary {
-    background-color: #1ab394;
-    border-color: #1ab394;
+    background-color: #1c84c6;
+    border-color: #1c84c6;
     color: #FFFFFF;
 }
 
     .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
-        background-color: #18a689;
-        border-color: #18a689;
+        
+        background-color: #1a7bb9;
+        border-color: #1a7bb9;
         color: #FFFFFF;
     }
 
@@ -3663,14 +3664,14 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
         }
 
 .btn-success {
-    background-color: #1c84c6;
-    border-color: #1c84c6;
+    background-color: #1ab394;
+    border-color: #1ab394;
     color: #FFFFFF;
 }
 
     .btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, .open .dropdown-toggle.btn-success {
-        background-color: #1a7bb9;
-        border-color: #1a7bb9;
+        background-color: #18a689;
+        border-color: #18a689;
         color: #FFFFFF;
     }
 
@@ -3828,11 +3829,11 @@ button.dim {
     }
 
 button.btn-primary.dim {
-    box-shadow: inset 0px 0px 0px #16987e, 0px 5px 0px 0px #16987e, 0px 10px 5px #999999;
+    box-shadow: inset 0px 0px 0px #1872ab, 0px 5px 0px 0px #1872ab, 0px 10px 5px #999999;
 }
 
     button.btn-primary.dim:active {
-        box-shadow: inset 0px 0px 0px #16987e, 0px 2px 0px 0px #16987e, 0px 5px 3px #999999;
+        box-shadow: inset 0px 0px 0px #1872ab, 0px 2px 0px 0px #1872ab, 0px 5px 3px #999999;
     }
 
 button.btn-default.dim {
@@ -3860,11 +3861,11 @@ button.btn-info.dim {
     }
 
 button.btn-success.dim {
-    box-shadow: inset 0px 0px 0px #1872ab, 0px 5px 0px 0px #1872ab, 0px 10px 5px #999999;
+    box-shadow: inset 0px 0px 0px #16987e, 0px 5px 0px 0px #16987e, 0px 10px 5px #999999;
 }
 
     button.btn-success.dim:active {
-        box-shadow: inset 0px 0px 0px #1872ab, 0px 2px 0px 0px #1872ab, 0px 5px 3px #999999;
+        box-shadow: inset 0px 0px 0px #16987e, 0px 2px 0px 0px #16987e, 0px 5px 3px #999999;
     }
 
 button.btn-danger.dim {

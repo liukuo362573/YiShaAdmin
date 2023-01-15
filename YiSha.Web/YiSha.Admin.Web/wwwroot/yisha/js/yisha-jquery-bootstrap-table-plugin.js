@@ -57,6 +57,9 @@
         totalField: 'Total',
         dataField: 'Data',
         columns: [],
+        fixedColumns: false,                //是否固定列
+        fixedNumber: 1,                     //左边固定列数
+        fixedRightNumber: 0,                //右边固定列数
         queryParams: {},
         onLoadSuccess: function (obj) {
             if (obj) {

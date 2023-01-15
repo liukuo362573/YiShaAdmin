@@ -124,6 +124,8 @@
                     target.attr("data-value", wholeName);
 
                     targetInput.val(wholeName);
+                    //触发事件清除选择框状态
+                    targetInput.trigger('blur');
                     targetTree.hide();
 
                     if (customOnClick) {
