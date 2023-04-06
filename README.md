@@ -50,7 +50,7 @@
 2. 创建开发分支 (`git checkout -b dev`)
 3. 提交更改 (`git commit -m 'Add something'`)
 4. 推送到分支 (`git push origin dev`)
-5. 提[Pull Request](https://github.com/liukuo362573/YiShaAdmin/compare)
+5. 提[Pull Request](https://github.com/liukuo362573/YiShaAdmin/compare)，建议每一个小功能提一个 PR
 
 ## License
 
