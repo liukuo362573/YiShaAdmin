@@ -4,7 +4,8 @@
  
 | YiShaAdmin 版本 | .NET Core 版本 | 是否支持 | 链接 | Developer |
 |:-----|:-----|:-----|:-----|:-----|
-| 6.0 | 6.0 | 支持(开发中，不建议商用) | [YiShaAdmin-Net6.0](https://github.com/liukuo362573/YiShaAdmin/tree/YiShaAdmin-Net6) | [zgcwkj](https://github.com/zgcwkj) |
+| 7.0 | 7.0 | 支持 | [YiShaAdmin-Net7.0](https://github.com/liukuo362573/YiShaAdmin/tree/YiShaAdmin-Net7) | [luckearth](https://github.com/luckearth) |
+| 6.0 | 6.0 | 支持 | [YiShaAdmin-Net6.0](https://github.com/liukuo362573/YiShaAdmin/tree/YiShaAdmin-Net6) | [zgcwkj](https://github.com/zgcwkj) |
 | 3.1 | 3.1 | 支持 | [YiShaAdmin-Net3.1](https://github.com/liukuo362573/YiShaAdmin/tree/master) |  |
 | 2.2 | 2.2 | 支持 | [YiShaAdmin-Net2.2](https://github.com/liukuo362573/YiShaAdmin/releases/tag/v2.2)| |
 
