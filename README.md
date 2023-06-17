@@ -32,9 +32,11 @@
 
 文档地址：[https://www.toolhelper.cn/doc](http://www.toolhelper.cn/doc)  
 
+<!-- 
 ## QQ 交流群
 
 851661600
+-->
 
 ## 演示图
 
