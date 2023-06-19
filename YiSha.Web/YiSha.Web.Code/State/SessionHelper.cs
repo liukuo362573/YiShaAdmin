@@ -1,71 +1,97 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using Microsoft.AspNetCore.Session;
-using Microsoft.AspNetCore.Http.Extensions;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace YiSha.Util
 {
+    /// <summary>
+    /// Session 帮助
+    /// </summary>
     public class SessionHelper
     {
         /// <summary>
-        /// 写Session
+        /// 获取 Session 对象
+        /// </summary>
+        /// <returns></returns>
+        public static ISession? GetObj()
+        {
+            var hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
+            return hca?.HttpContext?.Session;
+        }
+
+        /// <summary>
+        /// 写入 Session
         /// </summary>
         /// <typeparam name="T">Session键值的类型</typeparam>
         /// <param name="key">Session的键名</param>
         /// <param name="value">Session的键值</param>
-        public void WriteSession<T>(string key, T value)
+        /// <returns>状态</returns>
+        public static bool Set<T>(string key, T value)
         {
-            if (string.IsNullOrEmpty(key))
-            {
-                return;
-            }
-            IHttpContextAccessor hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
-            hca?.HttpContext?.Session.SetString(key, JsonConvert.SerializeObject(value));
+            if (string.IsNullOrEmpty(key)) return false;
+            var hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
+            hca?.HttpContext?.Session.SetString(key, JsonSerializer.Serialize(value));
+            return true;
         }
 
         /// <summary>
-        /// 写Session
+        /// 写入 Session
         /// </summary>
         /// <param name="key">Session的键名</param>
         /// <param name="value">Session的键值</param>
-        public void WriteSession(string key, string value)
+        /// <returns>状态</returns>
+        public static bool Set(string key, string value)
         {
-            WriteSession<string>(key, value);
+            return Set<string>(key, value);
         }
 
         /// <summary>
-        /// 读取Session的值
-        /// </summary>
-        /// <param name="key">Session的键名</param>        
-        public string GetSession(string key)
-        {
-            if (string.IsNullOrEmpty(key))
-            {
-                return string.Empty;
-            }
-            IHttpContextAccessor hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
-            return hca?.HttpContext?.Session.GetString(key) as string;
-        }
-
-        /// <summary>
-        /// 删除指定Session
+        /// 读取 Session
         /// </summary>
         /// <param name="key">Session的键名</param>
-        public void RemoveSession(string key)
+        /// <returns>值</returns>
+        public static T? Get<T>(string key)
         {
-            if (string.IsNullOrEmpty(key))
-            {
-                return;
-            }
-            IHttpContextAccessor hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
+            if (string.IsNullOrEmpty(key)) return default;
+            var hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
+            var sessionStr = hca?.HttpContext?.Session.GetString(key);
+            if (string.IsNullOrEmpty(sessionStr)) return default;
+            return JsonSerializer.Deserialize<T>(sessionStr);
+        }
+
+        /// <summary>
+        /// 读取 Session
+        /// </summary>
+        /// <param name="key">Session的键名</param>
+        /// <returns>值</returns>
+        public static string Get(string key)
+        {
+            return Get<string>(key) ?? "";
+        }
+
+        /// <summary>
+        /// 删除 Session
+        /// </summary>
+        /// <param name="key">Session的键名</param>
+        /// <returns>状态</returns>
+        public static bool Remove(string key)
+        {
+            if (string.IsNullOrEmpty(key)) return false;
+            var hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
             hca?.HttpContext?.Session.Remove(key);
+            return true;
+        }
+
+        /// <summary>
+        /// 清空 Session
+        /// </summary>
+        /// <returns>状态</returns>
+        public static bool Clear()
+        {
+            var hca = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>();
+            hca?.HttpContext?.Session.Clear();
+            return true;
         }
     }
 }

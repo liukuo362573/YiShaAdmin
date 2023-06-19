@@ -10,12 +10,10 @@ namespace YiSha.Model.Result
 {
     public class MenuAuthorizeInfo
     {
-        [JsonConverter(typeof(StringJsonConverter))]
         public long? MenuId { get; set; }
         /// <summary>
         /// 用户Id或者角色Id
         /// </summary>
-        [JsonConverter(typeof(StringJsonConverter))]
         public long? AuthorizeId { get; set; }
         /// <summary>
         ///  用户或者角色

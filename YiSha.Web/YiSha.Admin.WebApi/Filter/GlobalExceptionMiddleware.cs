@@ -1,13 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Newtonsoft.Json;
 using System.Net;
-using System.Threading.Tasks;
 using YiSha.Util.Model;
 
-namespace YiSha.Admin.WebApi.Controllers
+namespace YiSha.Admin.WebApi.Filter
 {
     public class GlobalExceptionMiddleware
     {

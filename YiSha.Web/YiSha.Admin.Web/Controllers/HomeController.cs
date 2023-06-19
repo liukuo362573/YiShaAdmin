@@ -94,7 +94,7 @@ namespace YiSha.Admin.Web.Controllers
                 });
 
                 Operator.Instance.RemoveCurrent();
-                new CookieHelper().RemoveCookie("RememberMe");
+                CookieHelper.Remove("RememberMe");
 
                 return Json(new TData { Tag = 1 });
                 #endregion
@@ -128,11 +128,11 @@ namespace YiSha.Admin.Web.Controllers
         #region 获取数据
         public IActionResult GetCaptchaImage()
         {
-            string sessionId = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>().HttpContext.Session.Id;
+            //var sessionId = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>().HttpContext.Session.Id;
 
-            Tuple<string, int> captchaCode = CaptchaHelper.GetCaptchaCode();
-            byte[] bytes = CaptchaHelper.CreateCaptchaImage(captchaCode.Item1);
-            new SessionHelper().WriteSession("CaptchaCode", captchaCode.Item2);
+            var captchaCode = CaptchaHelper.GetCaptchaCode();
+            var bytes = CaptchaHelper.CreateCaptchaImage(captchaCode.Item1);
+            SessionHelper.Set("CaptchaCode", captchaCode.Item2);
             return File(bytes, @"image/jpeg");
         }
         #endregion
@@ -147,7 +147,7 @@ namespace YiSha.Admin.Web.Controllers
                 obj.Message = "验证码不能为空";
                 return Json(obj);
             }
-            if (captchaCode != new SessionHelper().GetSession("CaptchaCode").ParseToString())
+            if (captchaCode != SessionHelper.Get("CaptchaCode").ParseToString())
             {
                 obj.Message = "验证码错误，请重新输入";
                 return Json(obj);

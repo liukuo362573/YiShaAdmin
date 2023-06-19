@@ -14,6 +14,5 @@ namespace YiSha.Entity.SystemManage
         /// </summary>
         [NotMapped]
         public string MenuIds { get; set; }
-
     }
 }
