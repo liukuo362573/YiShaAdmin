@@ -1,47 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using YiSha.Business.OrganizationManage;
 using YiSha.Business.SystemManage;
+using YiSha.Entity.OrganizationManage;
 using YiSha.Entity.SystemManage;
 using YiSha.Enum;
-using YiSha.IdGenerator;
-using YiSha.Model.Result;
-using YiSha.Util.Extension;
-using YiSha.Web.Code;
-using YiSha.Util.Model;
 using YiSha.Util;
-using YiSha.Entity.OrganizationManage;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
+using YiSha.Util.Extension;
+using YiSha.Util.Model;
+using YiSha.Web.Code;
 
 namespace YiSha.Admin.Web.Controllers
 {
     public class HomeController : BaseController
     {
-        private MenuBLL menuBLL = new MenuBLL();
-        private UserBLL userBLL = new UserBLL();
-        private LogLoginBLL logLoginBLL = new LogLoginBLL();
-        private MenuAuthorizeBLL menuAuthorizeBLL = new MenuAuthorizeBLL();
+        private MenuBLL menuBLL { get; set; }
 
-        #region 视图功能
+        private UserBLL userBLL { get; set; }
+
+        private LogLoginBLL logLoginBLL { get; set; }
+
+        private MenuAuthorizeBLL menuAuthorizeBLL { get; set; }
+
+        public HomeController()
+        {
+            menuBLL = new MenuBLL();
+            userBLL = new UserBLL();
+            logLoginBLL = new LogLoginBLL();
+            menuAuthorizeBLL = new MenuAuthorizeBLL();
+        }
+
+        /// <summary>
+        /// Index
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [AuthorizeFilter]
         public async Task<IActionResult> Index()
         {
-            OperatorInfo operatorInfo = await Operator.Instance.Current();
+            var operatorInfo = await Operator.Instance.Current();
 
-            TData<List<MenuEntity>> objMenu = await menuBLL.GetList(null);
-            List<MenuEntity> menuList = objMenu.Data;
+            var objMenu = await menuBLL.GetList();
+            var menuList = objMenu.Data;
             menuList = menuList.Where(p => p.MenuStatus == StatusEnum.Yes.ParseToInt()).ToList();
 
             if (operatorInfo.IsSystem != 1)
             {
-                TData<List<MenuAuthorizeInfo>> objMenuAuthorize = await menuAuthorizeBLL.GetAuthorizeList(operatorInfo);
-                List<long?> authorizeMenuIdList = objMenuAuthorize.Data.Select(p => p.MenuId).ToList();
+                var objMenuAuthorize = await menuAuthorizeBLL.GetAuthorizeList(operatorInfo);
+                var authorizeMenuIdList = objMenuAuthorize.Data.Select(p => p.MenuId).ToList();
                 menuList = menuList.Where(p => authorizeMenuIdList.Contains(p.Id)).ToList();
             }
 
@@ -50,12 +55,20 @@ namespace YiSha.Admin.Web.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Welcome
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Welcome()
         {
             return View();
         }
 
+        /// <summary>
+        /// Login
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Login()
         {
@@ -67,13 +80,18 @@ namespace YiSha.Admin.Web.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 退出登录
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> LoginOffJson()
         {
-            OperatorInfo user = await Operator.Instance.Current();
+            var user = await Operator.Instance.Current();
             if (user != null)
             {
                 #region 退出系统
+
                 // 如果不允许同一个用户多次登录，当用户登出的时候，就不在线了
                 if (!GlobalContext.SystemConfig.LoginMultiple)
                 {
@@ -94,10 +112,11 @@ namespace YiSha.Admin.Web.Controllers
                 });
 
                 Operator.Instance.RemoveCurrent();
-                new CookieHelper().RemoveCookie("RememberMe");
+                CookieHelper.Remove("RememberMe");
 
                 return Json(new TData { Tag = 1 });
-                #endregion
+
+                #endregion 退出系统
             }
             else
             {
@@ -105,12 +124,20 @@ namespace YiSha.Admin.Web.Controllers
             }
         }
 
+        /// <summary>
+        /// NoPermission
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult NoPermission()
         {
             return View();
         }
 
+        /// <summary>
+        /// Error
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Error(string message)
         {
@@ -118,51 +145,60 @@ namespace YiSha.Admin.Web.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Skin
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Skin()
         {
             return View();
         }
-        #endregion
 
-        #region 获取数据
+        /// <summary>
+        /// 获取验证码
+        /// </summary>
+        /// <returns></returns>
         public IActionResult GetCaptchaImage()
         {
-            string sessionId = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>().HttpContext.Session.Id;
-
-            Tuple<string, int> captchaCode = CaptchaHelper.GetCaptchaCode();
-            byte[] bytes = CaptchaHelper.CreateCaptchaImage(captchaCode.Item1);
-            new SessionHelper().WriteSession("CaptchaCode", captchaCode.Item2);
+            var captchaCode = CaptchaHelper.GetCaptchaCode();
+            var bytes = CaptchaHelper.CreateCaptchaImage(captchaCode.Item1);
+            SessionHelper.Set("CaptchaCode", captchaCode.Item2);
             return File(bytes, @"image/jpeg");
         }
-        #endregion
 
-        #region 提交数据
+        /// <summary>
+        /// 登录帐号
+        /// </summary>
+        /// <param name="userName">帐号</param>
+        /// <param name="password">密码</param>
+        /// <param name="captchaCode">验证码</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> LoginJson(string userName, string password, string captchaCode)
         {
-            TData obj = new TData();
+            var obj = new TData();
             if (string.IsNullOrEmpty(captchaCode))
             {
                 obj.Message = "验证码不能为空";
                 return Json(obj);
             }
-            if (captchaCode != new SessionHelper().GetSession("CaptchaCode").ParseToString())
+            if (captchaCode != SessionHelper.Get("CaptchaCode").ParseToString())
             {
                 obj.Message = "验证码错误，请重新输入";
                 return Json(obj);
             }
-            TData<UserEntity> userObj = await userBLL.CheckLogin(userName, password, (int)PlatformEnum.Web);
+            var userObj = await userBLL.CheckLogin(userName, password, (int)PlatformEnum.Web);
             if (userObj.Tag == 1)
             {
                 await new UserBLL().UpdateUser(userObj.Data);
                 await Operator.Instance.AddCurrent(userObj.Data.WebToken);
             }
 
-            string ip = NetHelper.Ip;
-            string browser = NetHelper.Browser;
-            string os = NetHelper.GetOSVersion();
-            string userAgent = NetHelper.UserAgent;
+            var ip = NetHelper.Ip;
+            var browser = NetHelper.Browser;
+            var os = NetHelper.GetOSVersion();
+            var userAgent = NetHelper.UserAgent;
 
             Action taskAction = async () =>
             {
@@ -189,6 +225,5 @@ namespace YiSha.Admin.Web.Controllers
             obj.Message = userObj.Message;
             return Json(obj);
         }
-        #endregion
     }
 }

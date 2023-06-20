@@ -1,14 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using YiSha.Util;
-using YiSha.Util.Extension;
 using YiSha.Cache.Factory;
+using YiSha.Util;
 
 namespace YiSha.Web.Code
 {
@@ -27,11 +20,11 @@ namespace YiSha.Web.Code
             switch (LoginProvider)
             {
                 case "Cookie":
-                    new CookieHelper().WriteCookie(TokenName, token);
+                    CookieHelper.Set(TokenName, token);
                     break;
 
                 case "Session":
-                    new SessionHelper().WriteSession(TokenName, token);
+                    SessionHelper.Set(TokenName, token);
                     break;
 
                 case "WebApi":
@@ -56,11 +49,11 @@ namespace YiSha.Web.Code
             switch (LoginProvider)
             {
                 case "Cookie":
-                    new CookieHelper().RemoveCookie(TokenName);
+                    CookieHelper.Remove(TokenName);
                     break;
 
                 case "Session":
-                    new SessionHelper().RemoveSession(TokenName);
+                    SessionHelper.Remove(TokenName);
                     break;
 
                 case "WebApi":
@@ -87,14 +80,14 @@ namespace YiSha.Web.Code
                 case "Cookie":
                     if (hca.HttpContext != null)
                     {
-                        token = new CookieHelper().GetCookie(TokenName);
+                        token = CookieHelper.Get(TokenName);
                     }
                     break;
 
                 case "Session":
                     if (hca.HttpContext != null)
                     {
-                        token = new SessionHelper().GetSession(TokenName);
+                        token = SessionHelper.Get(TokenName);
                     }
                     break;
 

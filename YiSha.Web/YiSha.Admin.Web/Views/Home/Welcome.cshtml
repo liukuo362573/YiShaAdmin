@@ -1,7 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/_FormGray.cshtml";
 }
-
 <div class="wrapper wrapper-content">
     <div class="col-sm-12">
         <div class="row">
@@ -24,7 +23,7 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-5">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>框架介绍</h5>
@@ -42,25 +41,22 @@
                             <div class="col-sm-12" style="font-size:14px">
                                 <p>
                                     YiShaAdmin 借鉴了很多开源项目的优点，让你开发Web管理系统和移动端Api更简单，所以我也把她开源了（前端<code>CSS</code>样式主要参考<a href="http://demo.ruoyi.vip/" target="_blank">若依</a>，在此表示感谢 :）。<br />
-                                    她适用于开发 <b>网站管理后台</b>、<b>CMS</b>、<b>CRM</b>、<b>ERP</b>、<b>OA</b> 这类的系统和开发<a href="/api/api-doc" target="_blank"><b>移动端Api</b></a>。<br />
+                                    她适用于开发 <b>网站管理后台</b>、<b>CMS</b>、<b>CRM</b>、<b>ERP</b>、<b>OA</b> 这类的系统和开发<a href="/swagger" target="_blank"><b>移动端Api</b></a>。<br />
                                     代码完全免费开源，易读易懂、界面简洁美观，给你的项目多一种选择与参考。
                                 </p>
                                 <p>当前版本：@YiSha.Util.GlobalContext.GetVersion() &nbsp;&nbsp;<span class="label label-warning">¥免费开源</span></p>
-                                <p></p>
                                 <p>
-                                    <a class="btn btn-success btn-outline" href="https://github.com/liukuo362573/YiShaAdmin" target="_blank">
-                                        <i class="fa fa-github"> </i> 访问 github
-                                    </a>
-                                    @*<a class="btn btn-white btn-bitbucket" href="#" target="_blank">
-                                            <i class="fa fa-home"></i> 访问主页
-                                        </a>*@
+                                    <i class="fa fa-qq"></i> QQ群：<s>满 428703155</s> <a href="https://jq.qq.com/?_wv=1027&k=MQ6OdF8v" target="_blank">851661600</a>
+                                </p>
+                                <p>
+                                    <i class="fa fa-github"></i> GitHub：<a href="https://github.com/liukuo362573/YiShaAdmin" target="_blank">https://github.com/liukuo362573/YiShaAdmin</a>
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>技术选型</h5>
@@ -83,92 +79,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col-sm-4">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>联系信息</h5>
-                        <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                            <a class="close-link"><i class="fa fa-times"></i></a>
-                        </div>
-                    </div>
-                    <div class="ibox-content">
-                        @*<p>
-                                <i class="fa fa-send-o"></i> 官网：<a href="#" target="_blank"></a>
-                            </p>*@
-                        <p>
-                            <i class="fa fa-qq"></i> QQ群：<s>满 428703155</s> <a href="https://jq.qq.com/?_wv=1027&k=MQ6OdF8v" target="_blank">851661600</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>更新日志</h5>
-                        <div class="ibox-tools">
-                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                            <a class="close-link"><i class="fa fa-times"></i></a>
-                        </div>
-                    </div>
-                    <div class="ibox-content no-padding">
-                        <div class="panel-body">
-                            <div class="panel-group" id="version">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h5 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#version" href="#v310">v3.1.0</a><code class="pull-right">2020.02.20</code>
-                                        </h5>
-                                    </div>
-                                    <div id="v310" class="panel-collapse collapse in">
-                                        <div class="panel-body">
-                                            <ol>
-                                                <li>1. 框架由.NET Core 2.2升级到.NET Core 3.1</li>
-                                                <li>2. 导入文件支持xlsx格式</li>
-                                                <li>3. 菜单支持打开外部链接</li>
-                                                <li>4. 修复读取cookie样式bug</li>
-                                                <li>5. 部门和用户的数据权限修改，只能看到自己及以下</li>
-                                                <li>6. 菜单新增或编辑之后，显示对应的数据</li>
-                                                <li>7. 定时任务支持暂停和更新任务周期</li>
-                                                <li>8. 数据库和实体之间映射约定修改</li>
-                                                <li>9. 支持移动端</li>
-                                            </ol>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h5 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#version" href="#v220">v2.2.0</a><code class="pull-right">2019.09.27</code>
-                                        </h5>
-                                    </div>
-                                    <div id="v220" class="panel-collapse collapse">
-                                        <div class="panel-body">
-                                            <ol>
-                                                <li>1. 正式开源YiShaAdmin 2.2</li>
-                                                <li>2. 代码自动生成的时候，根据配置，生成对应菜单</li>
-                                                <li>3. 修复bootstrap tree table的expandFirst为true，tree展开的问题</li>
-                                                <li>4. 修复头像上传报错</li>
-                                                <li>5. 增加多个基类实体，根据业务按需继承</li>
-                                                <li>6. 调整项目文件结构，使代码结构更加清晰</li>
-                                                <li>7. 增加NUnit测试项目</li>
-                                                <li>8. 增加常用的前端组件示例</li>
-                                                <li>9. 增加用户导入示例</li>
-                                            </ol>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>捐赠</h5>

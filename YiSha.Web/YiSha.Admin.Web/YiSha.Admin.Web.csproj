@@ -2,13 +2,12 @@
 
   <PropertyGroup>
 	<TargetFramework>net6.0</TargetFramework>
-    <AssemblyVersion>6.0.0.0</AssemblyVersion>
-    <FileVersion>6.0.0.0</FileVersion>
-    <Company>YiSha.Admin.Web</Company>
-    <Authors>YiSha.Admin.Web</Authors>
-    <Product>YiShaAdmin</Product>
-    <Copyright>YiShaAdmin</Copyright>
+	<Nullable>enable</Nullable>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<ProduceReferenceAssembly>False</ProduceReferenceAssembly>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+	<AssemblyVersion>6.1.0.0</AssemblyVersion>
+	<FileVersion>6.1.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,7 +18,6 @@
 
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.435" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.0" />
   </ItemGroup>
 

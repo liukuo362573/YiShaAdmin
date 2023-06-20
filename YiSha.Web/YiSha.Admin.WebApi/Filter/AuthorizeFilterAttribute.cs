@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using System.Reflection;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
+using System.Diagnostics;
+using System.Reflection;
+using System.Text;
 using YiSha.Business.SystemManage;
 using YiSha.Entity.SystemManage;
 using YiSha.Enum;
 using YiSha.Util;
 using YiSha.Util.Extension;
-using YiSha.Util.Model;
 using YiSha.Web.Code;
 
-namespace YiSha.Admin.WebApi.Controllers
+namespace YiSha.Admin.WebApi.Filter
 {
     /// <summary>
     /// 验证token和记录日志
@@ -72,11 +66,13 @@ namespace YiSha.Admin.WebApi.Controllers
             sw.Stop();
 
             #region 保存日志
+
             LogApiEntity logApiEntity = new LogApiEntity();
             logApiEntity.ExecuteUrl = context.HttpContext.Request.Path;
             logApiEntity.LogStatus = OperateStatusEnum.Success.ParseToInt();
 
             #region 获取Post参数
+
             switch (context.HttpContext.Request.Method.ToUpper())
             {
                 case "GET":
@@ -95,11 +91,13 @@ namespace YiSha.Admin.WebApi.Controllers
                     }
                     break;
             }
-            #endregion
+
+            #endregion 获取Post参数
 
             if (resultContext.Exception != null)
             {
                 #region 异常获取
+
                 StringBuilder sbException = new StringBuilder();
                 Exception exception = resultContext.Exception;
                 sbException.AppendLine(exception.Message);
@@ -109,7 +107,8 @@ namespace YiSha.Admin.WebApi.Controllers
                     exception = exception.InnerException;
                 }
                 sbException.AppendLine(TextHelper.GetSubString(resultContext.Exception.StackTrace, 8000));
-                #endregion
+
+                #endregion 异常获取
 
                 logApiEntity.ExecuteResult = sbException.ToString();
                 logApiEntity.LogStatus = OperateStatusEnum.Fail.ParseToInt();
@@ -139,7 +138,8 @@ namespace YiSha.Admin.WebApi.Controllers
                  await new LogApiBLL().SaveForm(logApiEntity);
              };
             AsyncTaskHelper.StartTask(taskAction);
-            #endregion
+
+            #endregion 保存日志
         }
     }
 }

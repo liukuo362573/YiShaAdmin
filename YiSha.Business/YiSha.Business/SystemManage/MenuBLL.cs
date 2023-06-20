@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YiSha.Entity;
-using YiSha.Service;
-using YiSha.Service.SystemManage;
+﻿using YiSha.Business.Cache;
 using YiSha.Entity.SystemManage;
-using YiSha.Model.Result;
-using YiSha.Model;
-using YiSha.Util.Model;
-using YiSha.Business.Cache;
 using YiSha.Model.Param.SystemManage;
+using YiSha.Model.Result;
+using YiSha.Service.SystemManage;
 using YiSha.Util.Extension;
+using YiSha.Util.Model;
 
 namespace YiSha.Business.SystemManage
 {
@@ -23,11 +15,12 @@ namespace YiSha.Business.SystemManage
         private MenuCache menuCache = new MenuCache();
 
         #region 获取数据
-        public async Task<TData<List<MenuEntity>>> GetList(MenuListParam param)
+
+        public async Task<TData<List<MenuEntity>>> GetList(MenuListParam? param = default)
         {
             var obj = new TData<List<MenuEntity>>();
 
-            List<MenuEntity> list = await menuCache.GetList();
+            var list = await menuCache.GetList();
             list = ListFilter(param, list);
 
             obj.Data = list;
@@ -40,10 +33,10 @@ namespace YiSha.Business.SystemManage
             var obj = new TData<List<ZtreeInfo>>();
             obj.Data = new List<ZtreeInfo>();
 
-            List<MenuEntity> list = await menuCache.GetList();
+            var list = await menuCache.GetList();
             list = ListFilter(param, list);
 
-            foreach (MenuEntity menu in list)
+            foreach (var menu in list)
             {
                 obj.Data.Add(new ZtreeInfo
                 {
@@ -59,14 +52,14 @@ namespace YiSha.Business.SystemManage
 
         public async Task<TData<MenuEntity>> GetEntity(long id)
         {
-            TData<MenuEntity> obj = new TData<MenuEntity>();
+            var obj = new TData<MenuEntity>();
             obj.Data = await menuService.GetEntity(id);
             if (obj.Data != null)
             {
-                long parentId = obj.Data.ParentId.Value;
+                var parentId = obj.Data.ParentId.Value;
                 if (parentId > 0)
                 {
-                    MenuEntity parentMenu = await menuService.GetEntity(parentId);
+                    var parentMenu = await menuService.GetEntity(parentId);
                     if (parentMenu != null)
                     {
                         obj.Data.ParentName = parentMenu.MenuName;
@@ -83,17 +76,19 @@ namespace YiSha.Business.SystemManage
 
         public async Task<TData<int>> GetMaxSort(long parentId)
         {
-            TData<int> obj = new TData<int>();
+            var obj = new TData<int>();
             obj.Data = await menuService.GetMaxSort(parentId);
             obj.Tag = 1;
             return obj;
         }
-        #endregion
+
+        #endregion 获取数据
 
         #region 提交数据
+
         public async Task<TData<string>> SaveForm(MenuEntity entity)
         {
-            TData<string> obj = new TData<string>();
+            var obj = new TData<string>();
             if (!entity.Id.IsNullOrZero() && entity.Id == entity.ParentId)
             {
                 obj.Message = "不能选择自己作为上级菜单！";
@@ -115,17 +110,19 @@ namespace YiSha.Business.SystemManage
 
         public async Task<TData> DeleteForm(string ids)
         {
-            TData obj = new TData();
+            var obj = new TData();
             await menuService.DeleteForm(ids);
 
             menuCache.Remove();
             obj.Tag = 1;
             return obj;
         }
-        #endregion
+
+        #endregion 提交数据
 
         #region 私有方法
-        private List<MenuEntity> ListFilter(MenuListParam param, List<MenuEntity> list)
+
+        private List<MenuEntity> ListFilter(MenuListParam? param, List<MenuEntity> list)
         {
             if (param != null)
             {
@@ -140,6 +137,7 @@ namespace YiSha.Business.SystemManage
             }
             return list;
         }
-        #endregion
+
+        #endregion 私有方法
     }
 }
