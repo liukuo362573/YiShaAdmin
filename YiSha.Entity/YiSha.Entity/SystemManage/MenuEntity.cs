@@ -1,18 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YiSha.Util;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace YiSha.Entity.SystemManage
 {
     [Table("SysMenu")]
     public class MenuEntity : BaseExtensionEntity
     {
-        [JsonConverter(typeof(StringJsonConverter))]
         public long? ParentId { get; set; }
 
         public string MenuName { get; set; }

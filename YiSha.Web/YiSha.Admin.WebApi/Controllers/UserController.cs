@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using YiSha.Admin.WebApi.Filter;
 using YiSha.Business.OrganizationManage;
 using YiSha.Entity.OrganizationManage;
 using YiSha.Enum;
-using YiSha.Model.Result.SystemManage;
-using YiSha.Util;
 using YiSha.Util.Model;
 using YiSha.Web.Code;
 
@@ -21,10 +15,10 @@ namespace YiSha.Admin.WebApi.Controllers
     {
         private UserBLL userBLL = new UserBLL();
 
-        #region 获取数据       
-        #endregion
+
 
         #region 提交数据
+
         /// <summary>
         /// 用户登录
         /// </summary>
@@ -60,6 +54,7 @@ namespace YiSha.Admin.WebApi.Controllers
             obj.Message = "登出成功";
             return obj;
         }
-        #endregion
+
+        #endregion 提交数据
     }
 }

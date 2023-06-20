@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace YiSha.Web.Code
 {
@@ -36,9 +31,9 @@ namespace YiSha.Web.Code
         [NotMapped]
         public string RoleIds { get; set; }
     }
+
     public class RoleInfo
     {
         public long RoleId { get; set; }
     }
-
 }

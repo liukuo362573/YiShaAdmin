@@ -12,7 +12,7 @@ namespace YiSha.Util
         /// Tuple第一个值是表达式，第二个值是表达式结果
         /// </summary>
         /// <returns></returns>
-        public static Tuple<string, int> GetCaptchaCode()
+        public static Tuple<string, string> GetCaptchaCode()
         {
             int value = 0;
             char[] operators = { '+', '-', '*' };
@@ -44,7 +44,7 @@ namespace YiSha.Util
             code = (char)('0' + (char)second);
             randomCode += code;
             randomCode += "=?";
-            return new Tuple<string, int>(randomCode, value);
+            return new Tuple<string, string>(randomCode, value.ToString());
         }
         #endregion
 
