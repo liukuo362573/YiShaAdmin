@@ -418,6 +418,18 @@ namespace YiSha.Data.EF
             var list = await dbContext.SqlQuery<T>(strSql);
             return list.FirstOrDefault();
         }
+
+        /// <summary>
+        /// Linq惰性加载方式查询
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        public IEnumerable<T> FindListLinq<T>(Expression<Func<T, bool>> condition) where T : class, new()
+        {
+            IEnumerable<T> data = dbContext.Set<T>().Where(condition);
+            return data;
+        }
         #endregion
     }
 }
