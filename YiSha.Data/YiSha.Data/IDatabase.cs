@@ -73,6 +73,14 @@ namespace YiSha.Data
         Task<object> FindObject(string strSql);
         Task<object> FindObject(string strSql, DbParameter[] dbParameter);
         Task<T> FindObject<T>(string strSql) where T : class;
+
+        /// <summary>
+        /// 惰性加载查询
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        IEnumerable<T> FindListLinq<T>(Expression<Func<T, bool>> condition) where T : class, new();
         #endregion
     }
 }
