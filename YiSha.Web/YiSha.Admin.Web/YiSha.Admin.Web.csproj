@@ -33,4 +33,6 @@
     <ProjectReference Include="..\..\YiSha.Util\YiSha.Util\YiSha.Util.csproj" />
     <ProjectReference Include="..\YiSha.Web.Code\YiSha.Web.Code.csproj" />
   </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

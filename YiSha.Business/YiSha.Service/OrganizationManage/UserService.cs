@@ -166,26 +166,40 @@ namespace YiSha.Service.OrganizationManage
         #region 私有方法
         private Expression<Func<UserEntity, bool>> ListFilter(UserListParam param)
         {
-            var expression = LinqExtensions.True<UserEntity>();
+
+            //var expression = LinqExtensions.True<UserEntity>();
+
+            if (param.UserStatus == -1)
+            {
+                param.UserStatus = null;
+            }
+
+            //****根据查询字段自动过滤条件****
+            var expression = LinqExtensions.GetExpressionItems<UserEntity,UserListParam>(param);
+
             if (param != null)
             {
-                if (!string.IsNullOrEmpty(param.UserName))
-                {
-                    expression = expression.And(t => t.UserName.Contains(param.UserName));
-                }
+                //if (!string.IsNullOrEmpty(param.UserName))
+                //{
+                //    expression = expression.And(t => t.UserName.Contains(param.UserName));
+                //}
+
+
                 if (!string.IsNullOrEmpty(param.UserIds))
                 {
                     long[] userIdList = TextHelper.SplitToArray<long>(param.UserIds, ',');
                     expression = expression.And(t => userIdList.Contains(t.Id.Value));
                 }
-                if (!string.IsNullOrEmpty(param.Mobile))
-                {
-                    expression = expression.And(t => t.Mobile.Contains(param.Mobile));
-                }
-                if (param.UserStatus > -1)
-                {
-                    expression = expression.And(t => t.UserStatus == param.UserStatus);
-                }
+
+                //if (!string.IsNullOrEmpty(param.Mobile))
+                //{
+                //    expression = expression.And(t => t.Mobile.Contains(param.Mobile));
+                //}
+                //if (param.UserStatus > -1)
+                //{
+                //    expression = expression.And(t => t.UserStatus == param.UserStatus);
+                //}
+
                 if (!string.IsNullOrEmpty(param.StartTime.ParseToString()))
                 {
                     expression = expression.And(t => t.BaseModifyTime >= param.StartTime);
