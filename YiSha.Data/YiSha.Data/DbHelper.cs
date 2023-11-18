@@ -101,7 +101,7 @@ namespace YiSha.Data
                            dbContext,
                            Guid.NewGuid(),
                            connection.ConnectionId,
-                           startTime);
+                           startTime,CommandSource.ExecuteSqlRaw);
 
                     var reader = interceptionResult.HasResult
                         ? interceptionResult.Result
@@ -117,7 +117,7 @@ namespace YiSha.Data
                             connection.ConnectionId,
                             reader,
                             startTime,
-                            stopwatch.Elapsed);
+                            stopwatch.Elapsed,CommandSource.ExecuteSqlRaw);
                     }
                     return reader;
                 }
@@ -169,7 +169,7 @@ namespace YiSha.Data
                            dbContext,
                            Guid.NewGuid(),
                            connection.ConnectionId,
-                           startTime);
+                           startTime, CommandSource.ExecuteSqlRaw);
 
                     var obj = interceptionResult.HasResult
                         ? interceptionResult.Result
@@ -185,7 +185,7 @@ namespace YiSha.Data
                             connection.ConnectionId,
                             obj,
                             startTime,
-                            stopwatch.Elapsed);
+                            stopwatch.Elapsed, CommandSource.ExecuteSqlRaw);
                     }
                     return obj;
                 }
