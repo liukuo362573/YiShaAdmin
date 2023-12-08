@@ -28,7 +28,7 @@ namespace YiSha.DataTest
                 Sort = "RoleSort asc"
             };
             List<RoleEntity> list = await roleService.GetPageList(roleListParam, pagination);
-            Assert.IsTrue(list[0].RoleSort < list[1].RoleSort);
+            Assert.That(list[0].RoleSort < list[1].RoleSort);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace YiSha.DataTest
                 Sort = "Id desc,RoleSort asc"
             };
             List<RoleEntity> list = await roleService.GetPageList(roleListParam, pagination);
-            Assert.IsTrue(list[0].Id > list[1].Id);
+            Assert.That(list[0].Id > list[1].Id);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace YiSha.DataTest
             tempData = DatabasesExtension.AppendSort<RoleEntity>(tempData, sort, isAsc);
             tempData = tempData.Skip<RoleEntity>(pageSize * (pageIndex - 1)).Take<RoleEntity>(pageSize).AsQueryable();
             string strSql = DatabasesExtension.GetSql<RoleEntity>(tempData);
-            Assert.IsTrue(strSql.ToUpper().Contains("SELECT"));
+            Assert.That(strSql.ToUpper().Contains("SELECT"));
         }
     }
 }

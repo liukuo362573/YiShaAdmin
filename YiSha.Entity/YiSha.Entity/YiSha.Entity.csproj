@@ -5,7 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ToolManage\" />
+    <Compile Remove="ToolManage\**" />
+    <EmbeddedResource Remove="ToolManage\**" />
+    <None Remove="ToolManage\**" />
   </ItemGroup>
 
   <ItemGroup>
