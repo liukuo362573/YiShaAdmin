@@ -166,6 +166,21 @@ namespace YiSha.Service.OrganizationManage
         #region 私有方法
         private Expression<Func<UserEntity, bool>> ListFilter(UserListParam param)
         {
+            //新增/编辑部门时param为null，此时初始化默认实例以防异常
+            if (null == param)
+            {
+                param = new UserListParam();
+            }
+
+            //下面LinqExtensions.GetExpressionItems获取Expression时排除这些非表字段属性
+            var userIds = param.UserIds;
+            param.UserIds = null;
+            var startTime = param.StartTime;
+            param.StartTime = null;
+            var endTime = param.EndTime;
+            param.EndTime = null;
+            var childrenDepartmentIdList = param.ChildrenDepartmentIdList;
+            param.ChildrenDepartmentIdList = null;
 
             //var expression = LinqExtensions.True<UserEntity>();
 
@@ -175,45 +190,43 @@ namespace YiSha.Service.OrganizationManage
             }
 
             //****根据查询字段自动过滤条件****
-            var expression = LinqExtensions.GetExpressionItems<UserEntity,UserListParam>(param);
+            var expression = LinqExtensions.GetExpressionItems<UserEntity, UserListParam>(param);
 
-            if (param != null)
+            //if (!string.IsNullOrEmpty(param.UserName))
+            //{
+            //    expression = expression.And(t => t.UserName.Contains(param.UserName));
+            //}
+
+
+            if (!string.IsNullOrEmpty(userIds))
             {
-                //if (!string.IsNullOrEmpty(param.UserName))
-                //{
-                //    expression = expression.And(t => t.UserName.Contains(param.UserName));
-                //}
-
-
-                if (!string.IsNullOrEmpty(param.UserIds))
-                {
-                    long[] userIdList = TextHelper.SplitToArray<long>(param.UserIds, ',');
-                    expression = expression.And(t => userIdList.Contains(t.Id.Value));
-                }
-
-                //if (!string.IsNullOrEmpty(param.Mobile))
-                //{
-                //    expression = expression.And(t => t.Mobile.Contains(param.Mobile));
-                //}
-                //if (param.UserStatus > -1)
-                //{
-                //    expression = expression.And(t => t.UserStatus == param.UserStatus);
-                //}
-
-                if (!string.IsNullOrEmpty(param.StartTime.ParseToString()))
-                {
-                    expression = expression.And(t => t.BaseModifyTime >= param.StartTime);
-                }
-                if (!string.IsNullOrEmpty(param.EndTime.ParseToString()))
-                {
-                    param.EndTime = param.EndTime.Value.Date.Add(new TimeSpan(23, 59, 59));
-                    expression = expression.And(t => t.BaseModifyTime <= param.EndTime);
-                }
-                if (param.ChildrenDepartmentIdList != null && param.ChildrenDepartmentIdList.Count > 0)
-                {
-                    expression = expression.And(t => param.ChildrenDepartmentIdList.Contains(t.DepartmentId.Value));
-                }
+                long[] userIdList = TextHelper.SplitToArray<long>(userIds, ',');
+                expression = expression.And(t => userIdList.Contains(t.Id.Value));
             }
+
+            //if (!string.IsNullOrEmpty(param.Mobile))
+            //{
+            //    expression = expression.And(t => t.Mobile.Contains(param.Mobile));
+            //}
+            //if (param.UserStatus > -1)
+            //{
+            //    expression = expression.And(t => t.UserStatus == param.UserStatus);
+            //}
+
+            if (!string.IsNullOrEmpty(startTime.ParseToString()))
+            {
+                expression = expression.And(t => t.BaseModifyTime >= startTime);
+            }
+            if (!string.IsNullOrEmpty(endTime.ParseToString()))
+            {
+                endTime = endTime.Value.Date.Add(new TimeSpan(23, 59, 59));
+                expression = expression.And(t => t.BaseModifyTime <= endTime);
+            }
+            if (childrenDepartmentIdList != null && childrenDepartmentIdList.Count > 0)
+            {
+                expression = expression.And(t => childrenDepartmentIdList.Contains(t.DepartmentId.Value));
+            }
+
             return expression;
         }
         #endregion
