@@ -110,40 +110,40 @@ namespace YiSha.Data.EF
                                 prop.SetValue(entry.Entity, false);
                                 break;
                             case "Char":
-                                prop.SetValue(entry.Entity, 0);
+                                prop.SetValue(entry.Entity, '\0');
                                 break;
                             case "SByte":
-                                prop.SetValue(entry.Entity, 0);
+                                prop.SetValue(entry.Entity, (sbyte)0);
                                 break;
                             case "Byte":
-                                prop.SetValue(entry.Entity, 0);
+                                prop.SetValue(entry.Entity, (byte)0);
                                 break;
                             case "Int16":
-                                prop.SetValue(entry.Entity, 0);
+                                prop.SetValue(entry.Entity, (short)0);
                                 break;
                             case "UInt16":
-                                prop.SetValue(entry.Entity, 0);
+                                prop.SetValue(entry.Entity, (ushort)0);
                                 break;
                             case "Int32":
                                 prop.SetValue(entry.Entity, 0);
                                 break;
                             case "UInt32":
-                                prop.SetValue(entry.Entity, 0);
+                                prop.SetValue(entry.Entity, 0U);
                                 break;
                             case "Int64":
-                                prop.SetValue(entry.Entity, (Int64)0);
+                                prop.SetValue(entry.Entity, 0L);
                                 break;
                             case "UInt64":
-                                prop.SetValue(entry.Entity, 0);
+                                prop.SetValue(entry.Entity, 0LU);
                                 break;
                             case "Single":
-                                prop.SetValue(entry.Entity, 0);
+                                prop.SetValue(entry.Entity, 0F);
                                 break;
                             case "Double":
-                                prop.SetValue(entry.Entity, 0);
+                                prop.SetValue(entry.Entity, 0D);
                                 break;
                             case "Decimal":
-                                prop.SetValue(entry.Entity, (decimal)0);
+                                prop.SetValue(entry.Entity, 0M);
                                 break;
                             case "DateTime":
                                 prop.SetValue(entry.Entity, GlobalConstant.DefaultTime);
