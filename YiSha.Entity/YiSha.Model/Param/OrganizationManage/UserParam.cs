@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using YiSha.Entity.OrganizationManage;
+using YiSha.Util.Extension;
 
 namespace YiSha.Model.Param.OrganizationManage
 {
@@ -13,9 +14,9 @@ namespace YiSha.Model.Param.OrganizationManage
         public int? UserStatus { get; set; }
 
         public long? DepartmentId { get; set; }
-
+        [LinqExpressionXAttribute(IsIgnore = true)]
         public List<long> ChildrenDepartmentIdList { get; set; }
-
+        [LinqExpressionXAttribute(IsIgnore = true)]
         public string UserIds { get; set; }
     }
 

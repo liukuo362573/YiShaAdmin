@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -13,26 +14,32 @@ namespace YiSha.Util.Extension
         {
             return Expression.Property(expression, propertyName);
         }
+
         public static Expression AndAlso(this Expression left, Expression right)
         {
             return Expression.AndAlso(left, right);
         }
+
         public static Expression Call(this Expression instance, string methodName, params Expression[] arguments)
         {
             return Expression.Call(instance, instance.Type.GetMethod(methodName), arguments);
         }
+
         public static Expression GreaterThan(this Expression left, Expression right)
         {
             return Expression.GreaterThan(left, right);
         }
+
         public static Expression<T> ToLambda<T>(this Expression body, params ParameterExpression[] parameters)
         {
             return Expression.Lambda<T>(body, parameters);
         }
 
-        public static Expression<Func<T, bool>> True<T>() { return param => true; }
+        public static Expression<Func<T, bool>> True<T>()
+        { return param => true; }
 
-        public static Expression<Func<T, bool>> False<T>() { return param => false; }
+        public static Expression<Func<T, bool>> False<T>()
+        { return param => false; }
 
         /// <summary>
         /// 组合And
@@ -42,6 +49,7 @@ namespace YiSha.Util.Extension
         {
             return first.Compose(second, Expression.AndAlso);
         }
+
         /// <summary>
         /// 组合Or
         /// </summary>
@@ -54,7 +62,7 @@ namespace YiSha.Util.Extension
         /// <summary>
         /// Combines the first expression with the second using the specified merge function.
         /// </summary>
-        static Expression<T> Compose<T>(this Expression<T> first, Expression<T> second, Func<Expression, Expression, Expression> merge)
+        private static Expression<T> Compose<T>(this Expression<T> first, Expression<T> second, Func<Expression, Expression, Expression> merge)
         {
             var map = first.Parameters
                 .Select((f, i) => new { f, s = second.Parameters[i] })
@@ -73,135 +81,140 @@ namespace YiSha.Util.Extension
         {
             var parameter = Expression.Parameter(typeof(T), "entity");
             Expression expression = Expression.Constant(true);
-
-            var properties = typeof(TT).GetProperties();
-
-            var targetProperties = typeof(T).GetProperties();
-
-            foreach (var property in properties)
+            if (input != null)
             {
-                //字符类型筛选
-                if (property.PropertyType == typeof(string))
+                var properties = typeof(TT).GetProperties();
+                var targetProperties = typeof(T).GetProperties();
+                var linqXAttrType = typeof(LinqExpressionXAttribute);
+                foreach (var property in properties)
                 {
-
-
-                    var value = property.GetValue(input);
-
-                    if (value != null && !string.IsNullOrEmpty(value.ToString()))
+                    var attrName = property.Name;
+                    //判断属性是否有 LinqExpressionXAttribute 标识,并且如果有则判断是否有忽略标识以及Name名称
+                    var attrObjList = property.GetCustomAttributes(linqXAttrType, true);
+                    if (attrObjList.Length > 0)
                     {
-                        var propertyExpression = Expression.Property(parameter, property.Name);
-                        var valueExpression = Expression.Constant(value);
-                        var containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
-                        var containsExpression = Expression.Call(propertyExpression, containsMethod, valueExpression);
-                        expression = Expression.AndAlso(expression, containsExpression);
-                    }
-                }
-                //日期类型筛选
-                else if (property.PropertyType == typeof(DateTime) || property.PropertyType == typeof(DateTime?))
-                {
-                    var value = property.GetValue(input);
-
-                    if (value != null)
-                    {
-                        // 开始日期筛选
-                        if (property.Name.Contains("Start"))
+                        var attrObjData = attrObjList[0] as LinqExpressionXAttribute;
+                        if (attrObjData.IsIgnore)
                         {
-                            var realPropertyName = property.Name.Substring(0, property.Name.Length - "Start".Length);
-                            var propertyExpression = Expression.Property(parameter, realPropertyName);
-                            var entityfield = targetProperties.FirstOrDefault(s => s.Name == realPropertyName);
-                            var startDateTime = (DateTime)value;
+                            continue;
+                        }
+                        if (attrObjData.Name.Length > 0)
+                        {
+                            attrName = attrObjData.Name;
+                        }
+                    }
+                    //字符类型筛选
+                    if (property.PropertyType == typeof(string))
+                    {
+                        var value = property.GetValue(input);
+                        if (value != null && !string.IsNullOrEmpty(value.ToString()))
+                        {
+                            var propertyExpression = Expression.Property(parameter, attrName);
+                            //var valueExpression = Expression.Constant(value);
+                            var equalExpression = Expression.Equal(propertyExpression, Expression.Constant(value));
+                            // var containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
+                            // var containsExpression = Expression.Call(propertyExpression, containsMethod, valueExpression);
+                            expression = Expression.AndAlso(expression, equalExpression);
+                        }
+                    }
+                    //日期类型筛选
+                    else if (property.PropertyType == typeof(DateTime) || property.PropertyType == typeof(DateTime?))
+                    {
+                        var value = property.GetValue(input);
 
-                            if (entityfield.PropertyType == typeof(DateTime?))
+                        if (value != null)
+                        {
+                            // 开始日期筛选
+                            if (property.Name.Contains("Start"))
                             {
-                                var greaterThanOrEqualExpression = Expression.GreaterThanOrEqual(propertyExpression, Expression.Constant(startDateTime, typeof(DateTime?)));
-                                expression = Expression.AndAlso(expression, greaterThanOrEqualExpression);
+                                //var realPropertyName = attrName.Substring(0, attrName.Length - "Start".Length);
+                                var propertyExpression = Expression.Property(parameter, attrName);
+                                var entityfield = targetProperties.FirstOrDefault(s => s.Name == attrName);
+                                var startDateTime = (DateTime)value;
+
+                                if (entityfield.PropertyType == typeof(DateTime?))
+                                {
+                                    var greaterThanOrEqualExpression = Expression.GreaterThanOrEqual(propertyExpression, Expression.Constant(startDateTime, typeof(DateTime?)));
+                                    expression = Expression.AndAlso(expression, greaterThanOrEqualExpression);
+                                }
+                                else
+                                {
+                                    var greaterThanOrEqualExpression = Expression.GreaterThanOrEqual(propertyExpression, Expression.Constant(startDateTime));
+                                    expression = Expression.AndAlso(expression, greaterThanOrEqualExpression);
+                                }
+                            }
+                            // 结束日期筛选
+                            else if (property.Name.Contains("End"))
+                            {
+                                //var realPropertyName = attrName.Substring(0, attrName.Length - "End".Length);
+                                var propertyExpression = Expression.Property(parameter, attrName);
+                                var entityfield = targetProperties.FirstOrDefault(s => s.Name == attrName);
+                                var endDateTime = ((DateTime)value).Date.AddDays(1).AddTicks(-1);
+
+                                if (entityfield.PropertyType == typeof(DateTime?))
+                                {
+                                    var lessThanOrEqualExpression = Expression.LessThanOrEqual(propertyExpression, Expression.Constant(endDateTime, typeof(DateTime?)));
+                                    expression = Expression.AndAlso(expression, lessThanOrEqualExpression);
+                                }
+                                else
+                                {
+                                    var lessThanOrEqualExpression = Expression.LessThanOrEqual(propertyExpression, Expression.Constant(endDateTime));
+                                    expression = Expression.AndAlso(expression, lessThanOrEqualExpression);
+                                }
+                            }
+                            // 其他日期属性
+                            else
+                            {
+                                var propertyExpression = Expression.Property(parameter, attrName);
+                                var equalExpression = Expression.Equal(propertyExpression, Expression.Constant(value));
+                                expression = Expression.AndAlso(expression, equalExpression);
+                            }
+                        }
+                    }
+                    //数值类型
+                    else if (property.PropertyType == typeof(int?) || property.PropertyType == typeof(int))
+                    {
+                        var value = property.GetValue(input);
+                        var propertyExpression = Expression.Property(parameter, attrName);
+                        var entityfield = targetProperties.FirstOrDefault(s => s.Name == attrName);
+
+                        if (value != null)
+                        {
+                            if (entityfield.PropertyType == typeof(int?))
+                            {
+                                var equalExpression = Expression.Equal(propertyExpression, Expression.Constant(value, typeof(int?)));
+                                expression = Expression.AndAlso(expression, equalExpression);
                             }
                             else
                             {
-                                var greaterThanOrEqualExpression = Expression.GreaterThanOrEqual(propertyExpression, Expression.Constant(startDateTime));
-                                expression = Expression.AndAlso(expression, greaterThanOrEqualExpression);
+                                var equalExpression = Expression.Equal(propertyExpression, Expression.Constant(value));
+                                expression = Expression.AndAlso(expression, equalExpression);
                             }
-
                         }
-                        // 结束日期筛选
-                        else if (property.Name.Contains("End"))
-                        {
-                            var realPropertyName = property.Name.Substring(0, property.Name.Length - "End".Length);
-                            var propertyExpression = Expression.Property(parameter, realPropertyName);
-                            var entityfield = targetProperties.FirstOrDefault(s => s.Name == realPropertyName);
-                            var endDateTime = ((DateTime)value).Date.AddDays(1).AddTicks(-1);
+                    }
+                    //float
+                    else if (property.PropertyType == typeof(float?) || property.PropertyType == typeof(float))
+                    {
+                        var value = property.GetValue(input);
+                        var propertyExpression = Expression.Property(parameter, attrName);
+                        var entityfield = targetProperties.FirstOrDefault(s => s.Name == attrName);
 
-                            if (entityfield.PropertyType == typeof(DateTime?))
+                        if (value != null)
+                        {
+                            if (entityfield.PropertyType == typeof(float?))
                             {
-                                var lessThanOrEqualExpression = Expression.LessThanOrEqual(propertyExpression, Expression.Constant(endDateTime, typeof(DateTime?)));
-                                expression = Expression.AndAlso(expression, lessThanOrEqualExpression);
+                                var equalExpression = Expression.Equal(propertyExpression, Expression.Constant(value, typeof(float?)));
+                                expression = Expression.AndAlso(expression, equalExpression);
                             }
                             else
                             {
-                                var lessThanOrEqualExpression = Expression.LessThanOrEqual(propertyExpression, Expression.Constant(endDateTime));
-                                expression = Expression.AndAlso(expression, lessThanOrEqualExpression);
+                                var equalExpression = Expression.Equal(propertyExpression, Expression.Constant(value));
+                                expression = Expression.AndAlso(expression, equalExpression);
                             }
-
-                        }
-                        // 其他日期属性
-                        else
-                        {
-                            var propertyExpression = Expression.Property(parameter, property.Name);
-                            var equalExpression = Expression.Equal(propertyExpression, Expression.Constant(value));
-                            expression = Expression.AndAlso(expression, equalExpression);
                         }
                     }
-
                 }
-                //数值类型
-                else if (property.PropertyType == typeof(int?) || property.PropertyType == typeof(int))
-                {
-                    var value = property.GetValue(input);
-                    var propertyExpression = Expression.Property(parameter, property.Name);
-                    var entityfield = targetProperties.FirstOrDefault(s => s.Name == property.Name);
-
-                    if (value != null)
-                    {
-                        if (entityfield.PropertyType == typeof(int?))
-                        {
-                            var equalExpression = Expression.Equal(propertyExpression, Expression.Constant(value, typeof(int?)));
-                            expression = Expression.AndAlso(expression, equalExpression);
-                        }
-                        else
-                        {
-                            var equalExpression = Expression.Equal(propertyExpression, Expression.Constant(value));
-                            expression = Expression.AndAlso(expression, equalExpression);
-                        }
-
-                    }
-
-                }
-                //float
-                else if (property.PropertyType == typeof(float?) || property.PropertyType == typeof(float))
-                {
-                    var value = property.GetValue(input);
-                    var propertyExpression = Expression.Property(parameter, property.Name);
-                    var entityfield = targetProperties.FirstOrDefault(s => s.Name == property.Name);
-
-                    if (value != null)
-                    {
-                        if (entityfield.PropertyType == typeof(float?))
-                        {
-                            var equalExpression = Expression.Equal(propertyExpression, Expression.Constant(value, typeof(float?)));
-                            expression = Expression.AndAlso(expression, equalExpression);
-                        }
-                        else
-                        {
-                            var equalExpression = Expression.Equal(propertyExpression, Expression.Constant(value));
-                            expression = Expression.AndAlso(expression, equalExpression);
-                        }
-
-                    }
-
-                }
-
             }
-
             return Expression.Lambda<Func<T, bool>>(expression, parameter);
         }
 
@@ -213,15 +226,17 @@ namespace YiSha.Util.Extension
             /// <summary>
             /// The ParameterExpression map
             /// </summary>
-            readonly Dictionary<ParameterExpression, ParameterExpression> map;
+            private readonly Dictionary<ParameterExpression, ParameterExpression> map;
+
             /// <summary>
             /// Initializes a new instance of the <see cref="ParameterRebinder"/> class.
             /// </summary>
             /// <param name="map">The map.</param>
-            ParameterRebinder(Dictionary<ParameterExpression, ParameterExpression> map)
+            private ParameterRebinder(Dictionary<ParameterExpression, ParameterExpression> map)
             {
                 this.map = map ?? new Dictionary<ParameterExpression, ParameterExpression>();
             }
+
             /// <summary>
             /// Replaces the parameters.
             /// </summary>
@@ -232,6 +247,7 @@ namespace YiSha.Util.Extension
             {
                 return new ParameterRebinder(map).Visit(exp);
             }
+
             /// <summary>
             /// Visits the parameter.
             /// </summary>
@@ -247,7 +263,43 @@ namespace YiSha.Util.Extension
                 }
                 return base.VisitParameter(p);
             }
-
         }
+    }
+
+    /// <summary>
+    /// Linq表达式实体属性标识
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
+    public class LinqExpressionXAttribute : Attribute
+    {
+        /// <summary>
+        /// 属性名称
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// 操作符
+        /// </summary>
+        public Operation Operation { get; set; }
+
+        /// <summary>
+        /// 是否忽略该属性
+        /// </summary>
+        public bool IsIgnore { get; set; }
+    }
+
+    /// <summary>
+    /// 操作
+    /// </summary>
+    public enum Operation
+    {
+        GreaterThan,
+        LessThan,
+        GreaterThanOrEqual,
+        LessThanOrEqual,
+        NotEqual,
+        Equal,
+        Like,
+        In
     }
 }
