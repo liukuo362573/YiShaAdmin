@@ -8,16 +8,16 @@ namespace YiSha.Model.Param.OrganizationManage
     public class UserListParam : DateTimeParam
     {
         public string UserName { get; set; }
-
+        [QueryCompareAttribute(Compare = CompareEnum.Equals)]
         public string Mobile { get; set; }
-
+        [QueryCompareAttribute(Compare = CompareEnum.Equals)]
         public int? UserStatus { get; set; }
 
         public long? DepartmentId { get; set; }
-        [LinqExpressionXAttribute(IsIgnore = true)]
+        [QueryCompareAttribute(FieldName = "DepartmentId", Compare = CompareEnum.In)]
         public List<long> ChildrenDepartmentIdList { get; set; }
-        [LinqExpressionXAttribute(IsIgnore = true)]
-        public string UserIds { get; set; }
+        [QueryCompareAttribute(FieldName ="Id",Compare = CompareEnum.In)]
+        public long[] UserIds { get; set; }
     }
 
     public class ChangePasswordParam

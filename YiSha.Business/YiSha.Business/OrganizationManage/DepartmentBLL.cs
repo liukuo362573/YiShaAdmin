@@ -36,10 +36,10 @@ namespace YiSha.Business.OrganizationManage
             List<UserEntity> userList = new List<UserEntity>();
             if (obj.Data.Count > 0)
             {
-                var userIdsArr = obj.Data.Where(p => p.PrincipalId > 0).Select(p => p.PrincipalId).ToArray();
-                if (userIdsArr.Length > 0)
+                var userIdsArr = obj.Data.Where(p => p.PrincipalId > 0).Select(p => p.PrincipalId.Value);
+                if (userIdsArr.Count() > 0)
                 {
-                    userList = await userService.GetList(new UserListParam { UserIds = string.Join(",", userIdsArr) });
+                    userList = await userService.GetList(new UserListParam { UserIds = userIdsArr.ToArray() });
                 }
             }          
             foreach (DepartmentEntity entity in obj.Data)
