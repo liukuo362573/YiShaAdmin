@@ -168,6 +168,10 @@ namespace YiSha.Service.OrganizationManage
         {
             if(param != null)
             {
+                if (param.UserStatus == -1)
+                {
+                    param.UserStatus = null;
+                }
                 if (!string.IsNullOrEmpty(param.EndTime.ParseToString()))
                 {
                     param.EndTime = param.EndTime.Value.Date.Add(new TimeSpan(23, 59, 59));

@@ -7,12 +7,12 @@ namespace YiSha.Model.Param.OrganizationManage
 {
     public class UserListParam : DateTimeParam
     {
+        [QueryCompareAttribute(Compare = CompareEnum.Contains)]
         public string UserName { get; set; }
-        [QueryCompareAttribute(Compare = CompareEnum.Equals)]
+        [QueryCompareAttribute(Compare = CompareEnum.Contains)]
         public string Mobile { get; set; }
         [QueryCompareAttribute(Compare = CompareEnum.Equals)]
         public int? UserStatus { get; set; }
-
         public long? DepartmentId { get; set; }
         [QueryCompareAttribute(FieldName = "DepartmentId", Compare = CompareEnum.In)]
         public List<long> ChildrenDepartmentIdList { get; set; }
