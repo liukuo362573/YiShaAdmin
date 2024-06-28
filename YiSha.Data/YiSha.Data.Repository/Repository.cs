@@ -177,6 +177,18 @@ namespace YiSha.Data.Repository
             pagination.TotalCount = data.total;
             return data.Item2;
         }
+
+
+        /// <summary>
+        /// Linq查询
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        public IEnumerable<T> FindListLinq<T>(Expression<Func<T, bool>> condition) where T : class, new()
+        {
+            return db.FindListLinq<T>(condition);
+        }
         #endregion
 
         #region 数据源 查询
