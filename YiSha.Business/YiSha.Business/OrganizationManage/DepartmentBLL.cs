@@ -13,6 +13,7 @@ using YiSha.Util;
 using YiSha.Util.Model;
 using YiSha.Util.Extension;
 using YiSha.Web.Code;
+using NPOI.SS.Formula.Functions;
 
 namespace YiSha.Business.OrganizationManage
 {
@@ -32,10 +33,18 @@ namespace YiSha.Business.OrganizationManage
                 List<long> childrenDepartmentIdList = await GetChildrenDepartmentIdList(obj.Data, operatorInfo.DepartmentId.Value);
                 obj.Data = obj.Data.Where(p => childrenDepartmentIdList.Contains(p.Id.Value)).ToList();
             }
-            List<UserEntity> userList = await userService.GetList(new UserListParam { UserIds = string.Join(",", obj.Data.Select(p => p.PrincipalId).ToArray()) });
+            List<UserEntity> userList = new List<UserEntity>();
+            if (obj.Data.Count > 0)
+            {
+                var userIdsArr = obj.Data.Where(p => p.PrincipalId > 0).Select(p => p.PrincipalId.Value);
+                if (userIdsArr.Count() > 0)
+                {
+                    userList = await userService.GetList(new UserListParam { UserIds = userIdsArr.ToArray() });
+                }
+            }          
             foreach (DepartmentEntity entity in obj.Data)
             {
-                if (entity.PrincipalId > 0)
+                if (entity.PrincipalId > 0 && userList.Count > 0 )
                 {
                     entity.PrincipalName = userList.Where(p => p.Id == entity.PrincipalId).Select(p => p.RealName).FirstOrDefault();
                 }

@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using YiSha.Entity.OrganizationManage;
+using YiSha.Util.Extension;
 
 namespace YiSha.Model.Param.OrganizationManage
 {
     public class UserListParam : DateTimeParam
     {
+        [QueryCompareAttribute(Compare = CompareEnum.Contains)]
         public string UserName { get; set; }
-
+        [QueryCompareAttribute(Compare = CompareEnum.Contains)]
         public string Mobile { get; set; }
-
+        [QueryCompareAttribute(Compare = CompareEnum.Equals)]
         public int? UserStatus { get; set; }
-
         public long? DepartmentId { get; set; }
-
+        [QueryCompareAttribute(FieldName = "DepartmentId", Compare = CompareEnum.In)]
         public List<long> ChildrenDepartmentIdList { get; set; }
-
-        public string UserIds { get; set; }
+        [QueryCompareAttribute(FieldName ="Id",Compare = CompareEnum.In)]
+        public long[] UserIds { get; set; }
     }
 
     public class ChangePasswordParam

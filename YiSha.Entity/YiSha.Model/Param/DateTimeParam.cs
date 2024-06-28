@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using YiSha.Util.Extension;
 
 namespace YiSha.Model.Param
 {
@@ -11,11 +12,13 @@ namespace YiSha.Model.Param
         /// <summary>
         /// 搜索条件开始时间
         /// </summary>
-        public DateTime? StartTime { get; set; }
+        [QueryCompareAttribute(FieldName = "BaseModifyTime",Compare =CompareEnum.GreaterThanOrEquals)]
+        public virtual DateTime? StartTime { get; set; }
 
         /// <summary>
         /// 搜索条件结束时间
         /// </summary>
-        public DateTime? EndTime { get; set; }
+        [QueryCompareAttribute(FieldName = "BaseModifyTime", Compare = CompareEnum.LessThanOrEquals)]
+        public virtual DateTime? EndTime { get; set; }
     }
 }
