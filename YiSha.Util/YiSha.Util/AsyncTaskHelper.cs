@@ -14,20 +14,40 @@ namespace YiSha.Util
         /// 开始异步任务
         /// </summary>
         /// <param name="action"></param>
-        public static void StartTask(Action action)
-        {
-            try
-            {
-                Action newAction = () =>
-                { };
-                newAction += action;
-                Task task = new Task(newAction);
-                task.Start();
-            }
-            catch (Exception ex)
-            {
-                LogHelper.Error(ex);
-            }
-        }
+      public static void StartTask(Func<Task> action)
+      {
+          StartTaskWithTry(action);
+      }
+      /// <summary>
+      /// 开始异步任务
+      /// </summary>
+      /// <param name="action"></param>
+      public static void StartTask(Action action)
+      {
+          StartTaskWithTry(action);
+      } 
+      private static void StartTaskWithTry(Action action)
+      {
+          try
+          {
+              action();
+          }
+          catch (Exception ex)
+          {
+              LogHelper.Error(ex);  
+          }
+      }
+      
+      private async static void StartTaskWithTry(Func<Task> action)
+      {
+          try
+          {
+              await action();
+          }
+          catch (Exception ex)
+          {
+              LogHelper.Error(ex);  
+          }
+      }
     }
 }
