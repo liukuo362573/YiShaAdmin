@@ -104,20 +104,21 @@ namespace YiSha.Util
 
         private static string GetWebRemoteIp()
         {
+            if (null == HttpContext || null == HttpContext.Request)
+            {
+                return "";
+            }
+
             try
             {
-                string ip = HttpContext?.Connection?.RemoteIpAddress.ParseToString();
-                if (HttpContext != null && HttpContext.Request != null)
+                string ip = HttpContext.Connection.RemoteIpAddress.ParseToString();
+                if (string.IsNullOrWhiteSpace(ip) && HttpContext.Request.Headers.ContainsKey("X-Real-IP"))
                 {
-                    if (HttpContext.Request.Headers.ContainsKey("X-Real-IP"))
-                    {
-                        ip = HttpContext.Request.Headers["X-Real-IP"].ToString();
-                    }
-
-                    if (HttpContext.Request.Headers.ContainsKey("X-Forwarded-For"))
-                    {
-                        ip = HttpContext.Request.Headers["X-Forwarded-For"].ToString();
-                    }
+                    ip = HttpContext.Request.Headers["X-Real-IP"].ToString();
+                }
+                if (string.IsNullOrWhiteSpace(ip) && HttpContext.Request.Headers.ContainsKey("X-Forwarded-For"))
+                {
+                    ip = HttpContext.Request.Headers["X-Forwarded-For"].ToString();
                 }
                 return ip;
             }
