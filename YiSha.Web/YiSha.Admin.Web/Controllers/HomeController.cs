@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using YiSha.Business.OrganizationManage;
@@ -131,7 +132,15 @@ namespace YiSha.Admin.Web.Controllers
             string sessionId = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>().HttpContext.Session.Id;
 
             Tuple<string, int> captchaCode = CaptchaHelper.GetCaptchaCode();
-            byte[] bytes = CaptchaHelper.CreateCaptchaImage(captchaCode.Item1);
+            byte[] bytes;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                bytes = CaptchaHelper.CreateCaptchaImage(captchaCode.Item1);
+            }
+            else
+            {
+                bytes = CaptchaHelperSkiaSharp.CreateCaptchaImage(captchaCode.Item1);
+            }
             new SessionHelper().WriteSession("CaptchaCode", captchaCode.Item2);
             return File(bytes, @"image/jpeg");
         }
