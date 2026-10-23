@@ -2,6 +2,7 @@
 using System.Text;
 using System.Data.Common;
 using YiSha.Util;
+using System.Linq;
 
 namespace YiSha.Data
 {
@@ -18,23 +19,8 @@ namespace YiSha.Data
             }
             int startNum = (pageIndex - 1) * pageSize;
             int endNum = (pageIndex) * pageSize;
-            string orderBy = string.Empty;
+            string orderBy = BuildOrderBy(sort, isAsc);
 
-            if (!string.IsNullOrEmpty(sort))
-            {
-                if (sort.ToUpper().IndexOf("ASC") + sort.ToUpper().IndexOf("DESC") > 0)
-                {
-                    orderBy = " ORDER BY " + sort;
-                }
-                else
-                {
-                    orderBy = " ORDER BY " + sort + " " + (isAsc ? "ASC" : "DESC");
-                }
-            }
-            else
-            {
-                orderBy = "ORDERE BY (SELECT 0)";
-            }
             sb.Append("SELECT * FROM (SELECT ROW_NUMBER() Over (" + orderBy + ")");
             sb.Append(" AS ROWNUM, * From (" + strSql + ") t ) AS N WHERE ROWNUM > " + startNum + " AND ROWNUM <= " + endNum + "");
             return sb;
@@ -51,19 +37,8 @@ namespace YiSha.Data
             }
             int startNum = (pageIndex - 1) * pageSize;
             int endNum = (pageIndex) * pageSize;
-            string orderBy = string.Empty;
+            string orderBy = BuildOrderBy(sort, isAsc);
 
-            if (!string.IsNullOrEmpty(sort))
-            {
-                if (sort.ToUpper().IndexOf("ASC") + sort.ToUpper().IndexOf("DESC") > 0)
-                {
-                    orderBy = " ORDER BY " + sort;
-                }
-                else
-                {
-                    orderBy = " ORDER BY " + sort + " " + (isAsc ? "ASC" : "DESC");
-                }
-            }
             sb.Append("SELECT * From (SELECT ROWNUM AS n,");
             sb.Append(" T.* From (" + strSql + orderBy + ") t )  N WHERE n > " + startNum + " AND n <= " + endNum + "");
             return sb;
@@ -79,19 +54,8 @@ namespace YiSha.Data
                 pageIndex = 1;
             }
             int num = (pageIndex - 1) * pageSize;
-            string orderBy = string.Empty;
+            string orderBy = BuildOrderBy(sort, isAsc);
 
-            if (!string.IsNullOrEmpty(sort))
-            {
-                if (sort.ToUpper().IndexOf("ASC") + sort.ToUpper().IndexOf("DESC") > 0)
-                {
-                    orderBy = " ORDER BY " + sort;
-                }
-                else
-                {
-                    orderBy = " ORDER BY " + sort + " " + (isAsc ? "ASC" : "DESC");
-                }
-            }
             sb.Append(strSql + orderBy);
             sb.Append(" LIMIT " + num + "," + pageSize + "");
             return sb;
@@ -115,6 +79,37 @@ namespace YiSha.Data
             }
             countSql = "SELECT COUNT(1) FROM (" + strSql + ") t";
             return countSql;
+        }
+
+        private static string BuildOrderBy(string sort, bool isAsc)
+        {
+            string orderBy = string.Empty;
+            if (!string.IsNullOrEmpty(sort))
+            {
+                string sortUpper = sort.ToUpper();
+                CheckSort(sortUpper);
+
+                if (sortUpper.IndexOf("ASC") + sortUpper.IndexOf("DESC") > 0)
+                {
+                    orderBy = " ORDER BY " + sort;
+                }
+                else
+                {
+                    orderBy = " ORDER BY " + sort + " " + (isAsc ? "ASC" : "DESC");
+                }
+            }
+            return orderBy;
+        }
+
+        private static void CheckSort(string sort)
+        {
+            string[] sortArr = TextHelper.SplitToArray<string>(sort, new string[] { ",", " " });
+            int sortTypeCount = sortArr.Where(p => p == "ASC" || p == "DESC").Count();
+            int sortFieldCount = sortArr.Length - sortTypeCount;
+            if (sortFieldCount > 5)
+            {
+                throw new ArgumentException("排序字段过多");
+            }
         }
 
         private static void CheckSqlParam(string param)

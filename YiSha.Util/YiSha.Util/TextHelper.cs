@@ -60,5 +60,15 @@ namespace YiSha.Util
             T[] arr = value.Split(new string[] { split.ToString() }, StringSplitOptions.RemoveEmptyEntries).CastSuper<T>().ToArray();
             return arr;
         }
+
+        public static T[] SplitToArray<T>(string value, string[] split)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return default(T[]);
+            }
+            var arr = value.Split(split, StringSplitOptions.RemoveEmptyEntries).CastSuper<T>().ToArray();
+            return arr;
+        }
     }
 }
