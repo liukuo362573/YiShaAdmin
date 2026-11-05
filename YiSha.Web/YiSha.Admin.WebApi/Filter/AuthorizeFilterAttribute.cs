@@ -42,7 +42,11 @@ namespace YiSha.Admin.WebApi.Controllers
 
             string token = context.HttpContext.Request.Headers["ApiToken"].ParseToString();
             OperatorInfo user = await Operator.Instance.Current(token);
-            if (user != null)
+            if (user == null)
+            {
+                throw new Exception("请先登录");
+            }
+            else
             {
                 // 根据传入的Token，设置CustomerId
                 if (context.ActionArguments != null && context.ActionArguments.Count > 0)

@@ -11,11 +11,11 @@ using YiSha.Util.Model;
 
 namespace YiSha.Admin.Web.Controllers
 {
+    [AuthorizeFilter]
     public class FileController : BaseController
     {
         #region 上传单个文件
-        [HttpPost]
-        [AuthorizeFilter]
+        [HttpPost] 
         public async Task<TData<string>> UploadFile(int fileModule, IFormCollection fileList)
         {
             TData<string> obj = await FileHelper.UploadFile(fileModule, fileList.Files);
@@ -25,7 +25,6 @@ namespace YiSha.Admin.Web.Controllers
 
         #region 删除单个文件
         [HttpPost]
-        [AuthorizeFilter]
         public TData<string> DeleteFile(int fileModule, string filePath)
         {
             TData<string> obj = FileHelper.DeleteFile(fileModule, filePath);
