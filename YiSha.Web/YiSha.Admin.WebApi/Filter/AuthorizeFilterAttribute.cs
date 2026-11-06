@@ -23,12 +23,7 @@ namespace YiSha.Admin.WebApi.Controllers
     /// 验证token和记录日志
     /// </summary>
     public class AuthorizeFilterAttribute : ActionFilterAttribute
-    {
-        /// <summary>
-        /// 忽略token的方法
-        /// </summary>
-        public static readonly string[] IgnoreToken = { "GetWxOpenId", "Login", "LoginOff" };
-
+    { 
         /// <summary>
         /// 异步接口日志
         /// </summary>

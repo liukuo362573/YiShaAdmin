@@ -15,8 +15,7 @@ using YiSha.Web.Code;
 namespace YiSha.Admin.WebApi.Controllers
 {
     [Route("[controller]/[action]")]
-    [ApiController]
-    [AuthorizeFilter]
+    [ApiController] 
     public class UserController : ControllerBase
     {
         private UserBLL userBLL = new UserBLL();
@@ -56,6 +55,11 @@ namespace YiSha.Admin.WebApi.Controllers
         public TData LoginOff([FromQuery] string token)
         {
             var obj = new TData();
+            if (string.IsNullOrEmpty(token))
+            {
+                obj.Message = "Token 不能为空";
+                return obj;
+            }
             Operator.Instance.RemoveCurrent(token);
             obj.Message = "登出成功";
             return obj;

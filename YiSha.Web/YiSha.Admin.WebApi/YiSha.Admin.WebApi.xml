@@ -61,11 +61,6 @@
             验证token和记录日志
             </summary>
         </member>
-        <member name="F:YiSha.Admin.WebApi.Controllers.AuthorizeFilterAttribute.IgnoreToken">
-            <summary>
-            忽略token的方法
-            </summary>
-        </member>
         <member name="M:YiSha.Admin.WebApi.Controllers.AuthorizeFilterAttribute.OnActionExecutionAsync(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext,Microsoft.AspNetCore.Mvc.Filters.ActionExecutionDelegate)">
             <summary>
             异步接口日志
