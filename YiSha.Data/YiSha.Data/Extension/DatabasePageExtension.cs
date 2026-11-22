@@ -1,13 +1,16 @@
 ﻿using System;
-using System.Text;
 using System.Data.Common;
+using System.Text;
+using System.Text.RegularExpressions;
 using YiSha.Util;
-using System.Linq;
 
 namespace YiSha.Data
 {
     public class DatabasePageExtension
     {
+        private static readonly Regex SortRegex = new Regex(@"^[A-Za-z_][A-Za-z0-9_.]*(\s+(ASC|DESC))?(\s*,\s*[A-Za-z_][A-Za-z0-9_.]*(\s+(ASC|DESC))?)*$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        private static readonly Regex SortDirectionRegex = new Regex(@"\s+(ASC|DESC)(\s*,|\s*$)", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
         public static StringBuilder SqlServerPageSql(string strSql, DbParameter[] dbParameter, string sort, bool isAsc, int pageSize, int pageIndex)
         {
             CheckSqlParam(sort);
@@ -86,10 +89,10 @@ namespace YiSha.Data
             string orderBy = string.Empty;
             if (!string.IsNullOrEmpty(sort))
             {
-                string sortUpper = sort.ToUpper();
+                string sortUpper = sort.ToUpperInvariant();
                 CheckSort(sortUpper);
 
-                if (sortUpper.IndexOf("ASC") + sortUpper.IndexOf("DESC") > 0)
+                if (SortDirectionRegex.IsMatch(sortUpper))
                 {
                     orderBy = " ORDER BY " + sort;
                 }
@@ -103,16 +106,17 @@ namespace YiSha.Data
 
         private static void CheckSort(string sort)
         {
-            string[] sortArr = TextHelper.SplitToArray<string>(sort, new string[] { ",", " " });
-            int sortTypeCount = sortArr.Where(p => p == "ASC" || p == "DESC").Count();
-            int sortFieldCount = sortArr.Length - sortTypeCount;
-            if (sortFieldCount > 5)
+            if (!SortRegex.IsMatch(sort))
+            {
+                throw new ArgumentException("排序字段不合法");
+            }
+            if (sort.Split(',').Length > 5)
             {
                 throw new ArgumentException("排序字段过多");
             }
         }
 
-        private static void CheckSqlParam(string param)
+        public static void CheckSqlParam(string param)
         {
             if (!SecurityHelper.IsSafeSqlParam(param))
             {
