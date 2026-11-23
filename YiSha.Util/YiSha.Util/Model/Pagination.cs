@@ -56,5 +56,10 @@ namespace YiSha.Util.Model
                 }
             }
         }
+
+        /// <summary>
+        /// 需跳过的行数
+        /// </summary>
+        public int SkipCount => PageSize * (PageIndex > 0 ? PageIndex - 1 : 0);
     }
 }

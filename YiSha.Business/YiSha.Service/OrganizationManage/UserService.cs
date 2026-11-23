@@ -33,9 +33,19 @@ namespace YiSha.Service.OrganizationManage
 
         public async Task<List<UserEntity>> GetPageList(UserListParam param, Pagination pagination)
         {
+
             var expression = ListFilter(param);
-            var list = await this.BaseRepository().FindList(expression, pagination);
-            return list.ToList();
+            //var list = await this.BaseRepository().FindList(expression, pagination);
+
+            //jhzou120230902 *******惰性加载查询，可以使用join或left了***
+            var ilist = this.BaseRepository().FindListLinq(expression);
+            pagination.TotalCount = ilist.Count();
+            var pageData = (
+                            from i in ilist.OrderByDescending(s => s.BaseCreateTime).Skip(pagination.SkipCount).Take(pagination.PageSize)
+                            select i 
+                            ).ToList();
+
+            return pageData;
         }
 
         public async Task<UserEntity> GetEntity(long id)

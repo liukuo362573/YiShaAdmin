@@ -421,5 +421,16 @@ namespace YiSha.Data.EF
             return list.FirstOrDefault();
         }
         #endregion
+
+
+        #region Linq惰性加载方式查询
+
+        public IEnumerable<T> FindListLinq<T>(Expression<Func<T, bool>> condition) where T : class, new()
+        {
+            IEnumerable<T> data = dbContext.Set<T>().Where(condition);
+            return data;
+        }
+
+        #endregion
     }
 }
