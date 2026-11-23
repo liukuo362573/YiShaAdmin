@@ -17,6 +17,8 @@ using YiSha.Util;
 using YiSha.Entity.OrganizationManage;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Lazy.Captcha.Core;
+using System.IO;
 
 namespace YiSha.Admin.Web.Controllers
 {
@@ -26,6 +28,12 @@ namespace YiSha.Admin.Web.Controllers
         private UserBLL userBLL = new UserBLL();
         private LogLoginBLL logLoginBLL = new LogLoginBLL();
         private MenuAuthorizeBLL menuAuthorizeBLL = new MenuAuthorizeBLL();
+        private readonly ICaptcha _captcha;
+
+        public HomeController(ICaptcha captcha)
+        {
+            _captcha = captcha;
+        }
 
         #region 视图功能
         [HttpGet]
@@ -129,11 +137,14 @@ namespace YiSha.Admin.Web.Controllers
         public IActionResult GetCaptchaImage()
         {
             string sessionId = GlobalContext.ServiceProvider?.GetService<IHttpContextAccessor>().HttpContext.Session.Id;
-
-            Tuple<string, int> captchaCode = CaptchaHelper.GetCaptchaCode();
-            byte[] bytes = CaptchaHelper.CreateCaptchaImage(captchaCode.Item1);
-            new SessionHelper().WriteSession("CaptchaCode", captchaCode.Item2);
-            return File(bytes, @"image/jpeg");
+            //Tuple<string, int> captchaCode = CaptchaHelper.GetCaptchaCode();
+            //byte[] bytes = CaptchaHelper.CreateCaptchaImage(captchaCode.Item1);
+            //new SessionHelper().WriteSession("CaptchaCode", captchaCode.Item2);
+            //return File(bytes, @"image/jpeg");
+            var info = _captcha.Generate(sessionId);
+            var stream = new MemoryStream(info.Bytes);
+            new SessionHelper().WriteSession("CaptchaCode", Convert.ToInt32(info.Code));
+            return File(stream, "image/jpeg");
         }
         #endregion
 
